@@ -1,0 +1,179 @@
+/** banner section **/
+
+.banner_main {
+    background: url(../images/banner.jpg);
+    background-repeat: no-repeat;
+    padding-top: 190px;
+    background-size: 100% 100%;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+}
+
+.text-bg {
+    text-align: left;
+    padding-left: 100px;
+}
+
+.text-bg h1 {
+    text-transform: uppercase;
+    color: #fff;
+    font-size: 140px;
+    line-height: 140px;
+    padding-bottom: 35px;
+    font-weight: bold;
+}
+
+.text-bg span {
+    text-transform: uppercase;
+    color: #fff;
+    font-size: 52px;
+    line-height: 68px;
+    font-weight: 700;
+    display: block;
+}
+
+.text-bg p {
+    line-height: 28px;
+    font-weight: 500;
+    padding-bottom: 20px;
+    display: block;
+}
+
+.text-bg figure img {
+    width: 100%;
+    padding-top: 70px;
+    padding-left: 40px;
+}
+
+.text_img figure {
+    margin: 0;
+}
+
+.text_img figure img {
+    width: 100%;
+}
+
+.carousel-caption {
+    position: inherit;
+    padding: 0;
+}
+
+#banner1 .carousel-indicators {
+    display: none;
+}
+
+#banner1 .carousel-control-prev {
+    left: 0;
+}
+
+#banner1 .carousel-control-next {
+    right: inherit;
+    left: 5%;
+}
+
+#banner1 a.carousel-control-next,
+#banner1 a.carousel-control-prev {
+    opacity: 1;
+    top: 100%;
+}
+
+#banner1 .carousel-control-next i,
+#banner1 .carousel-control-prev i {
+    width: 50px;
+    height: 50px;
+    border-radius: 30px;
+    background: #1a1824;
+    opacity: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+}
+
+#banner1 .carousel-control-next i:focus,
+#banner1 .carousel-control-next i:hover,
+#banner1 .carousel-control-prev i:focus,
+#banner1 .carousel-control-prev i:hover {
+    background: #eb2d52;
+    color: #fff;
+}
+
+.text-bg a {
+    font-size: 17px;
+    background-color: #fff;
+    color: #000;
+    font-weight: 600;
+    padding: 13px 0px;
+    width: 100%;
+    max-width: 190px;
+    text-align: center;
+    display: inline-block;
+    transition: ease-in all 0.5s;
+    margin-right: 10px;
+}
+
+.text-bg a:hover {
+    background-color: #1a1824;
+    color: #fff;
+    transition: ease-in all 0.5s;
+}
+
+#banner_2, #banner_3{
+    display: flex;
+    flex-direction: row;
+    width: 80%;
+    margin-top: 150px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#img_banner_2,#img_banner_3{
+    width: 600px;
+    max-height: 400px;
+}
+
+#sub_banner_2{
+    padding-top: 30px;
+    margin-left: 50px;
+}
+
+.line {
+    display: inline-block; /* Hiển thị như một khối inline */
+    width: 60px; /* Chiều dài của dấu - */
+    height: 3px; /* Độ dày của dấu - */
+    background-color: #F1BD8E; /* Màu sắc của dấu - */
+    margin-right: 10px; /* Khoảng cách giữa dấu - và tiêu đề */
+    vertical-align: middle; /* Căn chỉnh dọc giữa */
+}
+
+.title_sub_banner_2 {
+    display: inline; /* Hiển thị thẻ h1 như một inline element */
+    font-family: 'Satisfy';
+    font-size: 25px;
+}
+
+.text_sub_banner_2{
+    color: #242220;
+    font-family: "Marcellus", Sans-serif;
+    font-size: 35px;
+    font-weight: 400;
+    line-height: 1.1em;
+    margin-top: 15px;
+}
+
+p{
+    text-align: justify;
+}
+
+#sub_banner_3{
+    margin-right: 50px;
+}
+
+.img_main_banner{
+    max-height: 570px;
+    object-fit: cover;
+    object-position: top; 
+}
+/** end banner section **/

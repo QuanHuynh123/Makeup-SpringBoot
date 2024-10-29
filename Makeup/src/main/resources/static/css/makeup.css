@@ -1,0 +1,181 @@
+.width_100{
+    width: 100%;
+}
+
+.center{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.center_column{
+    display: flex;
+    align-items: center;
+}
+
+.center_row{
+    display: flex;
+    justify-content: center;
+}
+
+.row{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+}
+
+
+.flex_end div{
+    justify-content: flex-end;
+}
+
+#main_function{
+    width: 100%;
+    padding-top: 100px;
+    margin-bottom: 20px;
+}
+
+#title_makeup{
+    font-family: "Arsenal", Sans-serif;
+    font-size: 40px;
+    font-weight: normal;
+    text-transform: uppercase;
+    line-height: 50px;
+    text-align: center;
+    margin-top: 20px;
+}
+
+#sub_title_makeup{
+    width: 50%;
+    margin-top: 30px;
+}
+
+/* Căn giữa nút bằng Flexbox */
+.button-container {
+    display: flex;
+    justify-content: center; /* Căn giữa theo chiều ngang */
+    align-items: center; /* Căn giữa theo chiều dọc */
+    height: 70px; /* Chiều cao toàn màn hình hoặc phần tử cha */
+    margin-top: 10px;
+  }
+  
+  /* CSS cho nút */
+.custom-button {
+    background-color: white;
+    color: black;
+    border: 2px solid black;
+    padding: 5px 10px;
+    font-size: 16px;
+    font-family: 'Arial', sans-serif;
+    cursor: pointer;
+    text-transform: capitalize;
+    border-radius: 5px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    transition: all 0.3s ease;
+}
+
+.custom-button .arrow {
+transition: transform 0.3s ease;
+}
+
+.custom-button:hover {
+background-color: black;
+color: white;
+}
+
+.custom-button:hover .arrow {
+transform: translateX(5px);
+}
+
+#title_outstanding_service{
+    font-size: 25px;
+    margin-top: 100px;
+    text-align: center;
+    color: #f98908;
+}
+
+#list_option_makeup{
+    margin-top: 50px;
+    margin-bottom: 50px;
+}
+
+.makeup-section{
+    max-width: 100%;
+    margin-top: 40px;
+}
+
+.btn_title_makeup{
+    text-align: left;
+    margin-left: 60px;
+    display: inline-block;
+    margin-bottom: 10px; /* Khoảng cách dưới tiêu đề */
+    background-color: rgb(255, 255, 255);
+    color: rgb(0, 0, 0); /* Màu chữ trắng */
+    border: none; /* Bỏ viền mặc định */
+    font-weight: 600;
+    padding: 10px 20px; /* Khoảng đệm trong */
+    font-size: 16px; /* Cỡ chữ */
+    cursor: pointer; /* Con trỏ hiển thị khi hover */
+    text-transform: uppercase; /* Chữ in hoa */
+    outline: none; /* Bỏ khung outline khi nhấn vào button */
+    
+    /* Thêm viền trên và viền dưới */
+    border-top: 2px solid #f98908; /* Màu viền trên xanh đậm hơn */
+    border-bottom: 2px solid #f72015; /* Màu viền dưới giống viền trên */
+    
+    /* Bỏ tất cả hiệu ứng mặc định */
+    box-shadow: none; /* Bỏ đổ bóng */
+    transition: none; /* Bỏ chuyển động */
+}
+
+.btn_title_makeup:hover {
+    background-color: #fa2201; /* Tô đậm màu khi hover */
+    color: aliceblue;
+  }
+
+.row-container {
+    display: flex;
+    flex-grow: 1;
+}
+
+.row-container ul {
+    justify-content: flex-end;
+    margin-right: 100px;
+}
+
+.ul_option li{
+    margin-right: 10px;
+}
+
+.ul_option li img {
+    width: 250px; /* Chiều rộng cố định cho hình ảnh */
+    height: 350px; /* Chiều cao cố định cho hình ảnh */
+    object-fit: cover; /* Đảm bảo hình ảnh được cắt vừa khung */
+    display: block; /* Đảm bảo hình ảnh không có khoảng trắng dưới cùng */
+}
+
+.banner{
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 30px;
+    width: 850px; /* Chiều rộng cố định cho hình ảnh */
+    height: 650px; /* Chiều cao cố định cho hình ảnh */
+    object-fit: cover; /* Đảm bảo hình ảnh được cắt vừa khung */
+    display: block; /* Đảm bảo hình ảnh không có khoảng trắng dưới cùng */
+}
+
+.icon-container{
+    display: flex;
+    justify-content: center;
+}
+
+.icon_1{
+    width: 150px;
+}
+
+#service{
+    margin-top: 100px;
+}

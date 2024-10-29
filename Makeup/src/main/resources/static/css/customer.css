@@ -1,0 +1,92 @@
+/** customer section **/
+
+.customer {
+    padding: 90px 0px 90px 0px;
+    background: #fff;
+}
+
+.customer .titlepage p {
+    color: #141629;
+    line-height: 28px;
+    font-weight: 500;
+    font-size: 17px;
+    padding-top: 20px;
+}
+
+.customer_Carousel .carousel-caption {
+    position: inherit;
+    padding: 0;
+}
+
+.customer_box {
+    text-align: center;
+}
+
+.customer_Carousel .test_box h4 {
+    font-size: 24px;
+    color: #1d1b28;
+    line-height: 20px;
+    display: block;
+    text-align: center;
+    text-transform: uppercase;
+    font-weight: 600;
+    padding: 40px 0px 10px 0px;
+}
+
+.customer_Carousel .test_box span {
+    color: #bc1939;
+    display: block;
+    font-size: 17px;
+    padding-bottom: 20px;
+}
+
+.customer_Carousel .test_box i {
+    font-size: 17px;
+    line-height: 28px;
+    margin-bottom: -12px;
+    padding-right: 20px;
+}
+
+.fa-quote-left{
+    color: #fac369 !important;
+    font-size: 70px !important ;
+}
+
+.customer_Carousel .test_box p {
+    font-size: 17px;
+    line-height: 28px;
+    color: #1d1b28;
+    margin-bottom: 30px;
+}
+
+#myCarousel .carousel-indicators {
+    display: none;
+}
+
+#myCarousel .carousel-control-next,
+#myCarousel .carousel-control-prev {
+    opacity: 1;
+}
+
+#myCarousel .carousel-control-next i,
+#myCarousel .carousel-control-prev i {
+    width: 60px;
+    height: 60px;
+    background: #242220;
+    opacity: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+}
+
+#myCarousel .carousel-control-next i:focus,
+#myCarousel .carousel-control-next i:hover,
+#myCarousel .carousel-control-prev i:focus,
+#myCarousel .carousel-control-prev i:hover {
+    background: #000;
+    color: #fff;
+}
+
+
+/** end customer section **/

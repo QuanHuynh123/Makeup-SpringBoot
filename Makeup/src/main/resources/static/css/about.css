@@ -1,0 +1,53 @@
+/** about section **/
+
+.about {
+    background: url(../images/about_bg.png);
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    position: relative;
+    overflow: hidden;
+}
+
+.about .container {
+    position: absolute;
+    top : 90px ;
+    left: 100px;
+    z-index: 10;
+}
+
+.about .titlepage {
+    text-align: left;
+}
+
+.about .titlepage h2 {
+    color: #000000;
+}
+
+.about .titlepage p {
+    color: #000000;
+    font-size: 17px;
+    line-height: 30px;
+    font-weight: 500;
+    margin-bottom: 30px;
+}
+
+.about .titlepage .read_more:hover {
+    background: #fff;
+    color: #bc1939 !important;
+}
+
+#img_artist_about{
+    position: absolute;
+    right: 0;
+    bottom: -120px;
+    width: 50%; /* Ảnh sẽ chiếm 50% chiều rộng của phần tử cha */
+    height: auto;
+}
+
+
+/** end about section **/

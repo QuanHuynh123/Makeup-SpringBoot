@@ -1,0 +1,84 @@
+/** contact **/
+
+.contact {
+    background: url(../images/contact.jpg);
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    padding: 90px 0;
+}
+
+.contact .titlepage h2 {
+    color: #080707;
+}
+
+.white {
+    color: #fff;
+}
+
+.main_form .contactus {
+    padding: 0px 30px;
+    margin-bottom: 30px;
+    width: 100%;
+    height: 60px;
+    background: #fff;
+    color: #777977;
+    font-size: 17px;
+    font-weight: normal;
+    border-radius: 30px;
+    border: #ddd solid 1px;
+}
+
+.main_form .textarea {
+    padding: 0px 30px;
+    margin-bottom: 30px;
+    width: 100%;
+    background: #fff;
+    color: #777977;
+    font-size: 17px;
+    font-weight: normal;
+    border-radius: 30px;
+    border: #ddd solid 1px;
+    padding-top: 60px;
+    height: 160px;
+}
+
+.main_form .send_btn {
+    font-size: 17px;
+    transition: ease-in all 0.5s;
+    background-color: #000000;
+    text-transform: uppercase;
+    color: #fff;
+    padding: 13px 0px;
+    max-width: 190px;
+    width: 100%;
+    display: block;
+    margin-top: 10px;
+    border-radius: 30px;
+}
+
+.main_form .send_btn:hover {
+    background-color: #fff;
+    transition: ease-in all 0.5s;
+    color: #bc1939;
+}
+
+#request *::placeholder {
+    color: #777977;
+    opacity: 1;
+}
+
+#map {
+    height: 100%;
+    min-height: 432px;
+}
+
+.center_row{
+    display: flex;
+    flex-direction: row;
+}
+
+.login_btn{
+    margin-left: 50px;
+}
+
+/** end contact **/

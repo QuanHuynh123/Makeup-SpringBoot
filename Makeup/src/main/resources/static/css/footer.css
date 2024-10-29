@@ -1,0 +1,127 @@
+/** footer **/
+
+.footer {
+    background: #191919;
+    padding-top: 85px;
+    text-align: center;
+}
+
+.footer .titlepage {
+    text-align: left;
+    padding-bottom: 0px;
+}
+
+.footer .titlepage h2 {
+    color: #fff;
+    margin: inherit;
+    border-bottom: #fff solid 1px;
+}
+
+.bottom_form {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 50px;
+}
+
+.bottom_form h3 {
+    font-weight: 600;
+    font-size: 25px;
+    text-align: left;
+    color: #fff;
+    text-transform: uppercase;
+    line-height: 47px;
+    padding-right: 100px;
+}
+
+.bottom_form .enter {
+    border: inherit;
+    padding: 0px 19px;
+    width: 45%;
+    height: 53px;
+    background: #fff;
+    color: #000;
+    font-size: 18px;
+    font-weight: 600;
+    border-radius: 30px;
+    float: left;
+}
+
+.sub_btn {
+    font-size: 16px;
+    transition: ease-in all 0.5s;
+    background-color: #a4152d;
+    color: #fff;
+    padding: 9px 0px;
+    max-width: 174px;
+    border: #fff solid 3px;
+    width: 100%;
+    display: block;
+    font-weight: 500;
+    text-transform: uppercase;
+    border-radius: 30px;
+    margin-left: -45px;
+}
+
+.sub_btn:hover {
+    background-color: #000;
+    transition: ease-in all 0.5s;
+    color: #fff;
+}
+
+.heading3 {
+    text-align: left;
+}
+
+.heading3 h3 {
+    text-transform: uppercase;
+    color: #fff;
+    font-size: 25px;
+    line-height: 25px;
+    font-weight: bold;
+    padding-bottom: 20px;
+}
+
+.heading3 img {
+    padding-bottom: 9px;
+}
+
+.heading3 p {
+    color: #fff;
+    font-size: 17px;
+    padding-right: 10px;
+}
+
+ul.infometion li a {
+    color: #fff;
+    font-size: 17px;
+}
+
+ul.infometion li a:hover {
+    color: #a4152d;
+}
+
+.copyright {
+    background: #fac369 !important;
+    margin-top: 70px;
+    padding: 20px 0px;
+}
+
+.copyright p {
+    color: #fff;
+    font-size: 18px;
+    line-height: 22px;
+    text-align: center;
+}
+
+.copyright a {
+    color: #fff;
+}
+
+.copyright a:hover {
+    color: #000;
+}
+
+
+/** end footer **/
