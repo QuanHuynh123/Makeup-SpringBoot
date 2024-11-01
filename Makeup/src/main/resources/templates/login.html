@@ -66,6 +66,7 @@
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="js/popper.min.js"></script>
   <script src="js/bootstrap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script defer src="https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015" integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ==" data-cf-beacon='{"rayId":"8d4e98d0aadfa906","serverTiming":{"name":{"cfExtPri":true,"cfL4":true,"cfSpeedBrain":true,"cfCacheStatus":true}},"version":"2024.10.1","token":"cd0b4b3a733644fc843ef0b185f98241"}' crossorigin="anonymous"></script>
 
   <script>
@@ -81,11 +82,24 @@
                 contentType: 'application/json',
                 data: JSON.stringify({ username: username, password: password }),
                 success: function(response) {
-                    alert(response);
-                    window.location.href = '/home'; // Redirect sau khi đăng nhập thành công
+                  Swal.fire({
+                      position: "mid",
+                      icon: "success",
+                      title: response,
+                      showConfirmButton: false,
+                      timer: 1500
+                  }).then(() => {
+                      // Chuyển hướng sau khi thông báo đã hiển thị
+                      window.location.href = '/home';
+                  });
                 },
                 error: function(xhr) {
-                    alert("Login failed: " + xhr.responseText);
+                    Swal.fire({
+					  icon: "error",
+					  title: "Oops...",
+					  text: xhr.responseText,
+					  footer: '<a href="#">Why do I have this issue?</a>'
+					});
                 }
             });
         });

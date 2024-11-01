@@ -29,7 +29,16 @@ public class SecurityConfiguration {
         return httpSecurity
         .csrf(AbstractHttpConfigurer::disable)
         .authorizeHttpRequests(registry->{
-            registry.requestMatchers("/register/**","/home","/api/**", "/css/**", "/js/**", "/images/**", "/fonts", "/icon").permitAll();
+            registry.requestMatchers(
+                    "/register/**",
+                    "/home",
+                    "/api/**",
+                    "/js/**",
+                    "/css/**",
+                    "/images/**",
+                    "/fonts/**",
+                    "/icon/**"
+            ).permitAll();
             registry.requestMatchers("/admin/**").hasRole("ADMIN");
             registry.requestMatchers("/user**").hasRole("USER");
             registry.anyRequest().authenticated();
@@ -39,6 +48,15 @@ public class SecurityConfiguration {
                 .loginPage("/login") // Chỉ định URL của trang login
                 //.successHandler()
                 .permitAll()         // Cho phép tất cả mọi người truy cập trang login
+        )
+        .logout(logout -> logout
+            .logoutUrl("/logout")              // URL cho logout
+            .logoutSuccessUrl("/login?logout=true") // Đường dẫn khi logout thành công
+            .permitAll()
+        )
+        .sessionManagement(session -> session
+            .maximumSessions(1) // Giới hạn số phiên đăng nhập cùng lúc (tùy chọn)
+            .expiredUrl("/login?expired=true") // URL khi phiên hết hạn (tùy chọn)
         )
         .build();
     }
