@@ -40,8 +40,7 @@ public class DataLoader {
             Role staffRole = new Role(3,"STAFF");
             roleRepository.saveAll(List.of(adminRole, userRole,staffRole));
 
-            */
-/* //////////////////////SERVICEMAKEUP////////////////////////*//*
+ //////////////////////SERVICEMAKEUP////////////////////////
 
             ServiceMakeup serviceMakeup = new ServiceMakeup("Makeup Đám Cưới","s",500);
             ServiceMakeup serviceMakeup1 = new ServiceMakeup("Makeup Đi Chơi/Event","s",500);
@@ -51,8 +50,7 @@ public class DataLoader {
             ServiceMakeup serviceMakeup5 = new ServiceMakeup("Makeup Sexy","s",500);
             serviceMakeupRepository.saveAll(List.of(serviceMakeup,serviceMakeup1,serviceMakeup2,serviceMakeup3,serviceMakeup4,serviceMakeup5));
 
-            */
-/* /////////////////////////CATEGORY////////////////////*//*
+ /////////////////////////CATEGORY////////////////////
 
             Category anime = new Category("ANIME");
             Category movie = new Category("MOVIE");
@@ -60,8 +58,7 @@ public class DataLoader {
             Category festival = new Category("FESTIVAL");
             categoryRepository.saveAll(List.of(anime,movie,game,festival));
 
-            */
-/* ///////////////////////SUBCATEGORY/////////////////////////*//*
+ ///////////////////////SUBCATEGORY/////////////////////////
 
             SubCategory dragonBall = new SubCategory("DRAGON BALL",1);
             SubCategory attackOnTitan = new SubCategory("ATTACK ON TITAN",1);
