@@ -1,11 +1,18 @@
 package com.example.Makeup.service;
 
+import com.example.Makeup.dto.AccountDTO;
 import com.example.Makeup.entity.Account;
+import com.example.Makeup.entity.Role;
+import com.example.Makeup.enums.AppException;
+import com.example.Makeup.enums.ErrorCode;
+import com.example.Makeup.mapper.AccountMapper;
 import com.example.Makeup.repository.AccountRepository;
+import com.example.Makeup.repository.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -15,6 +22,12 @@ public class AccountService implements UserDetailsService {
 
     @Autowired
     AccountRepository accountRepository;
+
+    @Autowired
+    RoleRepository roleRepository;
+
+    @Autowired
+    AccountMapper accountMapper;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -38,7 +51,15 @@ public class AccountService implements UserDetailsService {
         return account.getRole().getNameRole().split(",");
     }
 
-    public Account save(Account account){
-        return accountRepository.save(account);
+    public void save(AccountDTO account){
+        Role role = roleRepository.findById(account.getRoleId())
+                .orElseThrow(()-> new AppException(ErrorCode.CANT_FOUND));
+        Account saveAccount = accountMapper.toEntity(account);
+        saveAccount.setRole(role);
+        accountRepository.save(saveAccount);
+    }
+
+    public boolean checkExists(String userName){
+        return accountRepository.existsByUserName(userName);
     }
 }
