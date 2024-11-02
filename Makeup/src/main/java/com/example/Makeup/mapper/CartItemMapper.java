@@ -10,9 +10,11 @@ import org.mapstruct.factory.Mappers;
 
 public interface CartItemMapper {
     @Mapping(source = "cart.id", target = "cartId")
+    @Mapping(source = "product.id", target = "productId")
     CartItemDTO toCartItemDTO(CartItem cartItem);
 
     @Mapping(source = "cartId", target = "cart.id")
+    @Mapping(source = "productId", target = "product.id")
     CartItem toCartItemEntity(CartItemDTO cartItemDTO);
 
 }
