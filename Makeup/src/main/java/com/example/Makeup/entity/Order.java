@@ -36,9 +36,6 @@ public class Order {
     @JoinColumn(name = "user_id", nullable = false)
     User user;
 
-    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    List<OrderItem> orderItems;
-
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "payment_id", nullable = false)
     Payment payment;
