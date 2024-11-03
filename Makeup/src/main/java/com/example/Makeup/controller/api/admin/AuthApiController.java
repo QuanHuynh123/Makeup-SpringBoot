@@ -38,7 +38,7 @@ public class AuthApiController {
     @Autowired
     private AuthenticationManager authenticationManager;
 
-    @PostMapping("/register")
+    @PostMapping("/register/user")
     public ResponseEntity<String> createAccount(@RequestBody AccountDTO account) {
         // Kiểm tra xem số điện thoại đã tồn tại hay chưa
         if (accountService.checkExists(account.getUserName())) {
@@ -52,7 +52,7 @@ public class AuthApiController {
 
 
 
-    @PostMapping("/login")
+    @PostMapping("/login/user")
     public ResponseEntity<String> login(@RequestBody LoginRequest loginRequest) {
         try {
             Authentication authentication = authenticationManager.authenticate(

@@ -1,110 +1,110 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400&display=swap" rel="stylesheet">
-    <link rel="stylesheet"  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet"  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="css/bootstrap/bootstrap.min.css">
-    
-    <!-- Style -->
-    <link rel="stylesheet" href="css/login.css">
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="css/bootstrap/bootstrap.min.css">
 
-    <title>Login #2</title>
-  </head>
-  <body>
-  
+  <!-- Style -->
+  <link rel="stylesheet" href="css/login.css">
 
-  <div class="d-lg-flex half">
-    <div class="bg order-1 order-md-2" style="background-image: url('images/login.jpg');"></div>
-    <div class="contents order-2 order-md-1">
+  <title>Login #2</title>
+</head>
+<body>
 
-      <a id="home" href="index.html"><button id="btn_home"><i class="fa-solid fa-house"></i> Home</button></a>
 
-      <div class="container">
-        <div class="row align-items-center justify-content-center">
-          <div class="col-md-7">
-            <h3>Login to <strong>BeautySGU</strong></h3>
-            <p class="mb-4">Đăng nhập để sử dụng dịch vụ 1 cách thuận tiện hơn!</p>
+<div class="d-lg-flex half">
+  <div class="bg order-1 order-md-2" style="background-image: url('images/login.jpg');"></div>
+  <div class="contents order-2 order-md-1">
 
-            <form action="#" method="post">
-              <div class="form-group first">
-                <label for="username">Username</label>
-                <input type="text" class="form-control" placeholder="your-email@gmail.com" id="username">
-              </div>
-              <div class="form-group last mb-3">
-                <label for="password">Password</label>
-                <input type="password" class="form-control" placeholder="Your Password" id="password">
-              </div>
-              
-              <div class="d-flex mb-5 align-items-center">
-                <label class="control control--checkbox mb-0"><span class="caption">Remember me</span>
-                  <input type="checkbox" checked="checked"/>
-                  <div class="control__indicator"></div>
-                </label>
-                <span class="ml-auto"><a href="#" class="forgot-pass">Forgot Password</a></span> 
-              </div>
+    <a id="home" href="index.html"><button id="btn_home"><i class="fa-solid fa-house"></i> Home</button></a>
 
-              <span class="row center"><h6 id="ask_account">Do not have account ? </h6> <a id="register" href="/register">Sign up</a> </span>
+    <div class="container">
+      <div class="row align-items-center justify-content-center">
+        <div class="col-md-7">
+          <h3>Login to <strong>BeautySGU</strong></h3>
+          <p class="mb-4">Đăng nhập để sử dụng dịch vụ 1 cách thuận tiện hơn!</p>
 
-              <input id="btn_login" type="submit" value="Log In" class="btn btn-block btn-primary">
+          <form action="#" method="post">
+            <div class="form-group first">
+              <label for="username">Username</label>
+              <input type="text" class="form-control" placeholder="your-email@gmail.com" id="username">
+            </div>
+            <div class="form-group last mb-3">
+              <label for="password">Password</label>
+              <input type="password" class="form-control" placeholder="Your Password" id="password">
+            </div>
 
-            </form>
+            <div class="d-flex mb-5 align-items-center">
+              <label class="control control--checkbox mb-0"><span class="caption">Remember me</span>
+                <input type="checkbox" checked="checked"/>
+                <div class="control__indicator"></div>
+              </label>
+              <span class="ml-auto"><a href="#" class="forgot-pass">Forgot Password</a></span>
+            </div>
 
-          </div>
+            <span class="row center"><h6 id="ask_account">Do not have account ? </h6> <a id="register" href="/register">Sign up</a> </span>
+
+            <input id="btn_login" type="submit" value="Log In" class="btn btn-block btn-primary">
+
+          </form>
+
         </div>
       </div>
     </div>
-
-    
   </div>
 
 
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script src="js/popper.min.js"></script>
-  <script src="js/bootstrap.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <script defer src="https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015" integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ==" data-cf-beacon='{"rayId":"8d4e98d0aadfa906","serverTiming":{"name":{"cfExtPri":true,"cfL4":true,"cfSpeedBrain":true,"cfCacheStatus":true}},"version":"2024.10.1","token":"cd0b4b3a733644fc843ef0b185f98241"}' crossorigin="anonymous"></script>
+</div>
 
-  <script>
-    $(document).ready(function() {
-        $('#btn_login').on('click', function(event) {
-            event.preventDefault(); // Ngăn chặn form submit mặc định
-            const username = $('#username').val();
-            const password = $('#password').val();
 
-            $.ajax({
-                url: '/api/login',
-                type: 'POST',
-                contentType: 'application/json',
-                data: JSON.stringify({ username: username, password: password }),
-                success: function(response) {
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="js/popper.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015" integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ==" data-cf-beacon='{"rayId":"8d4e98d0aadfa906","serverTiming":{"name":{"cfExtPri":true,"cfL4":true,"cfSpeedBrain":true,"cfCacheStatus":true}},"version":"2024.10.1","token":"cd0b4b3a733644fc843ef0b185f98241"}' crossorigin="anonymous"></script>
+
+<script>
+  $(document).ready(function() {
+      $('#btn_login').on('click', function(event) {
+          event.preventDefault(); // Ngăn chặn form submit mặc định
+          const username = $('#username').val();
+          const password = $('#password').val();
+
+          $.ajax({
+              url: '/api/login/user',
+              type: 'POST',
+              contentType: 'application/json',
+              data: JSON.stringify({ username: username, password: password }),
+              success: function(response) {
+                Swal.fire({
+                    position: "mid",
+                    icon: "success",
+                    title: response,
+                    showConfirmButton: false,
+                    timer: 1500
+                }).then(() => {
+                    // Chuyển hướng sau khi thông báo đã hiển thị
+                    //window.location.href = '/home';
+                });
+              },
+              error: function(xhr) {
                   Swal.fire({
-                      position: "mid",
-                      icon: "success",
-                      title: response,
-                      showConfirmButton: false,
-                      timer: 1500
-                  }).then(() => {
-                      // Chuyển hướng sau khi thông báo đã hiển thị
-                      window.location.href = '/home';
+                    icon: "error",
+                    title: "Oops...",
+                    text: xhr.responseText,
+                    footer: '<a href="#">Why do I have this issue?</a>'
                   });
-                },
-                error: function(xhr) {
-                    Swal.fire({
-					  icon: "error",
-					  title: "Oops...",
-					  text: xhr.responseText,
-					  footer: '<a href="#">Why do I have this issue?</a>'
-					});
-                }
-            });
-        });
-    });
-  </script>
+              }
+          });
+      });
+  });
+</script>
 
-  </body>
+</body>
 </html>

@@ -16,7 +16,7 @@ public class UserDTO {
     String email; // Địa chỉ email
     String address; // Địa chỉ
     String phone; // Số điện thoại
-    List<OrderDTO> orders; // Danh sách đơn hàng
-    List<AppointmentDTO> appointments; // Danh sách cuộc hẹn
-    CartDTO cart; // Giỏ hàng của người dùng
+    //List<OrderDTO> orders; // Danh sách đơn hàng
+    //List<AppointmentDTO> appointments; // Danh sách cuộc hẹn
+    int cartId;
 }

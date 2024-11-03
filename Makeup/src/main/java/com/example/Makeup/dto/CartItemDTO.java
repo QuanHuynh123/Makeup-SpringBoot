@@ -13,4 +13,5 @@ public class CartItemDTO {
     int quantity;
     double price;
     int cartId; // ID giỏ hàng
+    int productId;
 }

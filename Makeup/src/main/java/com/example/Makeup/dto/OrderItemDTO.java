@@ -16,4 +16,5 @@ public class OrderItemDTO {
     double price;
     Date useDate; // Ngày sử dụng dịch vụ
     int orderId; // ID của đơn hàng
+    int productId;
 }

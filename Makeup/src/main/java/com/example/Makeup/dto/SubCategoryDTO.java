@@ -13,6 +13,6 @@ import java.util.List;
 public class SubCategoryDTO {
     int id;
     String name;
-    List<ProductDTO> products; // Nếu bạn muốn bao gồm danh sách sản phẩm
+    //List<ProductDTO> products; // Nếu bạn muốn bao gồm danh sách sản phẩm
     int categoryId; // Chứa ID của danh mục cha
 }
