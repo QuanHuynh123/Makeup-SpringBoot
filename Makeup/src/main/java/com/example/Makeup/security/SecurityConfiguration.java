@@ -40,24 +40,22 @@ public class SecurityConfiguration {
                     "/icon/**"
             ).permitAll();
             registry.requestMatchers("/admin/**").hasRole("ADMIN");
-            registry.requestMatchers("/user**").hasRole("USER");
+            registry.requestMatchers("/user/**").hasRole("USER");
             registry.anyRequest().authenticated();
         })
-        .formLogin(form ->
-            form
-                .loginPage("/login") // Chỉ định URL của trang login
-                //.successHandler()
-                .permitAll()         // Cho phép tất cả mọi người truy cập trang login
+        .formLogin(form -> form
+                .loginPage("/login")
+                //.successHandler(new AuthenticationSuccessHandler()) // Sử dụng Bean
+                .permitAll()
         )
-        .logout(logout -> logout
-            .logoutUrl("/logout")              // URL cho logout
-            .logoutSuccessUrl("/login?logout=true") // Đường dẫn khi logout thành công
-            .permitAll()
-        )
-        .sessionManagement(session -> session
-            .maximumSessions(1) // Giới hạn số phiên đăng nhập cùng lúc (tùy chọn)
-            .expiredUrl("/login?expired=true") // URL khi phiên hết hạn (tùy chọn)
-        )
+//        .logout(logout -> logout
+//            .logoutUrl("/logout")
+//            .permitAll()
+//        )
+//        .sessionManagement(session -> session
+//            .maximumSessions(1) // Giới hạn số phiên đăng nhập cùng lúc (tùy chọn)
+//            .expiredUrl("/login?expired=true") // URL khi phiên hết hạn (tùy chọn)
+//        )
         .build();
     }
 
@@ -66,21 +64,6 @@ public class SecurityConfiguration {
         return authenticationConfiguration.getAuthenticationManager();
     }
 
-
-//    @Bean
-//    public UserDetailsService userDetailsService(){
-//        UserDetails normalUser = User.builder()
-//                .username("user")
-//                .password("$2a$12$cO0n/RjOyVf8UNlFIivRVuMxjSSEdwM.iWb7PCnLKBaEYHAP4vzlO")
-//                .roles("USER")
-//                .build();
-//        UserDetails adminUser = User.builder()
-//                .username("admin")
-//                .password("$2a$12$cO0n/RjOyVf8UNlFIivRVuMxjSSEdwM.iWb7PCnLKBaEYHAP4vzlO")
-//                .roles("ADMIN","USER")
-//                .build();
-//        return new InMemoryUserDetailsManager(normalUser,adminUser);
-//    }
 
     @Bean
     public UserDetailsService userDetailsService(){
@@ -99,5 +82,20 @@ public class SecurityConfiguration {
     public PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
     }
+
+    //    @Bean
+//    public UserDetailsService userDetailsService(){
+//        UserDetails normalUser = User.builder()
+//                .username("user")
+//                .password("$2a$12$cO0n/RjOyVf8UNlFIivRVuMxjSSEdwM.iWb7PCnLKBaEYHAP4vzlO")
+//                .roles("USER")
+//                .build();
+//        UserDetails adminUser = User.builder()
+//                .username("admin")
+//                .password("$2a$12$cO0n/RjOyVf8UNlFIivRVuMxjSSEdwM.iWb7PCnLKBaEYHAP4vzlO")
+//                .roles("ADMIN","USER")
+//                .build();
+//        return new InMemoryUserDetailsManager(normalUser,adminUser);
+//    }
 
 }
