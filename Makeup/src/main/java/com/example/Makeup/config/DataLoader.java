@@ -42,12 +42,12 @@ public class DataLoader {
 
  //////////////////////SERVICEMAKEUP////////////////////////
 
-            ServiceMakeup serviceMakeup = new ServiceMakeup("Makeup Đám Cưới","s",500);
-            ServiceMakeup serviceMakeup1 = new ServiceMakeup("Makeup Đi Chơi/Event","s",500);
-            ServiceMakeup serviceMakeup2 = new ServiceMakeup("Makeup Mẫu Ảnh","s",500);
-            ServiceMakeup serviceMakeup3 = new ServiceMakeup("Makeup Model","s",500);
-            ServiceMakeup serviceMakeup4 = new ServiceMakeup("Makeup Công Sở","s",500);
-            ServiceMakeup serviceMakeup5 = new ServiceMakeup("Makeup Sexy","s",500);
+            ServiceMakeup serviceMakeup = new ServiceMakeup("Makeup Đám Cưới","s",500,2);
+            ServiceMakeup serviceMakeup1 = new ServiceMakeup("Makeup Đi Chơi/Event","s",500,2);
+            ServiceMakeup serviceMakeup2 = new ServiceMakeup("Makeup Mẫu Ảnh","s",500,2);
+            ServiceMakeup serviceMakeup3 = new ServiceMakeup("Makeup Model","s",500,2);
+            ServiceMakeup serviceMakeup4 = new ServiceMakeup("Makeup Công Sở","s",500,2);
+            ServiceMakeup serviceMakeup5 = new ServiceMakeup("Makeup Sexy","s",500,2);
             serviceMakeupRepository.saveAll(List.of(serviceMakeup,serviceMakeup1,serviceMakeup2,serviceMakeup3,serviceMakeup4,serviceMakeup5));
 
  /////////////////////////CATEGORY////////////////////
