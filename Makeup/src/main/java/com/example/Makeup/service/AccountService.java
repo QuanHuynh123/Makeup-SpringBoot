@@ -45,11 +45,11 @@ public class AccountService implements UserDetailsService {
     }
 
     public String[] getRoles(Account account){
-        if (account.getRole() == null) {
-            return new String[]{"USER"};
-        }
-        return account.getRole().getNameRole().split(",");
+        return (account.getRole() != null && account.getRole().getNameRole() != null)
+                ? account.getRole().getNameRole().split(",")
+                : new String[]{"USER"};
     }
+
 
     public void save(AccountDTO account){
         Role role = roleRepository.findById(account.getRoleId())
