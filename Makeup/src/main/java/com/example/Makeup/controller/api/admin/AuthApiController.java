@@ -4,21 +4,22 @@ import com.example.Makeup.dto.AccountDTO;
 import com.example.Makeup.dto.ApiResponse;
 import com.example.Makeup.dto.LoginRequest;
 import com.example.Makeup.enums.ErrorCode;
+import com.example.Makeup.security.AuthenticationSuccessHandler;
 import com.example.Makeup.service.AccountService;
 import com.example.Makeup.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+
+import java.util.Map;
 
 import static com.fasterxml.jackson.core.JsonFactory.builder;
 
@@ -38,7 +39,11 @@ public class AuthApiController {
     @Autowired
     private AuthenticationManager authenticationManager;
 
-    @PostMapping("/register/user")
+    @Autowired
+    private AuthenticationProvider authenticationProvider ;
+
+
+    @PostMapping("/registerUser")
     public ResponseEntity<String> createAccount(@RequestBody AccountDTO account) {
         // Kiểm tra xem số điện thoại đã tồn tại hay chưa
         if (accountService.checkExists(account.getUserName())) {
@@ -52,8 +57,8 @@ public class AuthApiController {
 
 
 
-    @PostMapping("/login/user")
-    public ResponseEntity<String> login(@RequestBody LoginRequest loginRequest) {
+    @PostMapping("/loginUser")
+    public ResponseEntity<Map<String, String>> login(@RequestBody LoginRequest loginRequest) {
         try {
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
@@ -61,10 +66,45 @@ public class AuthApiController {
                             loginRequest.getPassword()
                     )
             );
+
             SecurityContextHolder.getContext().setAuthentication(authentication);
-            return ResponseEntity.ok("Login successful");
+            authentication = SecurityContextHolder.getContext().getAuthentication();
+            System.out.println("Login success : " + authentication.getName());
+            System.out.println("Login success : " + authentication.getPrincipal());
+            System.out.println("Login success : " + authentication.isAuthenticated());
+
+
+            SecurityContextHolder.getContext().setAuthentication(SecurityContextHolder.getContext().getAuthentication());
+            System.out.println("Set securityContextHolder  : "  + SecurityContextHolder.getContext().getAuthentication());
+
+            boolean isAdmin = authentication.getAuthorities().stream()
+                    .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ROLE_ADMIN"));
+
+            Map<String, String> response = Map.of(
+                    "status", "Login success",
+                    "redirectUrl", isAdmin ? "/admin" : "/home"
+            );
+            return ResponseEntity.ok(response);
+
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
+            Map<String, String> errorResponse = Map.of(
+                    "status", "error",
+                    "message", "Invalid credentials"
+            );
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
         }
     }
+
+
+    @GetMapping("/status")
+    public String getStatus() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.isAuthenticated()) {
+            return "User is authenticated: " + authentication.getPrincipal() + " " + authentication.getName();
+        } else {
+            return "User is not authenticated";
+        }
+    }
+
+
 }

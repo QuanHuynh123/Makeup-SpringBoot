@@ -24,38 +24,43 @@ public class SecurityConfiguration {
     @Autowired
     private AccountService accountService;
 
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
         .csrf(AbstractHttpConfigurer::disable)
         .authorizeHttpRequests(registry->{
             registry.requestMatchers(
-                    "/register/**",
+                    "/register",
+                    "/login/**",
+                    "/home/**",
+                    "/cosplay/**",
+                    "/cosplay/**",
                     "/home",
                     "/api/**",
-                    "/js/**",
+                    "/js/**",  /* static resource */
                     "/css/**",
                     "/images/**",
                     "/fonts/**",
-                    "/icon/**"
+                    "/icon/**",
+                    "/status" // test
             ).permitAll();
+            //registry.a
             registry.requestMatchers("/admin/**").hasRole("ADMIN");
             registry.requestMatchers("/user/**").hasRole("USER");
             registry.anyRequest().authenticated();
         })
         .formLogin(form -> form
                 .loginPage("/login")
-                //.successHandler(new AuthenticationSuccessHandler()) // Sử dụng Bean
-                .permitAll()
         )
-//        .logout(logout -> logout
-//            .logoutUrl("/logout")
-//            .permitAll()
-//        )
-//        .sessionManagement(session -> session
-//            .maximumSessions(1) // Giới hạn số phiên đăng nhập cùng lúc (tùy chọn)
-//            .expiredUrl("/login?expired=true") // URL khi phiên hết hạn (tùy chọn)
-//        )
+        .logout(logout -> logout
+            .logoutUrl("/logout")
+            .permitAll()
+        )
+        .sessionManagement(session -> session
+            .maximumSessions(1) // Giới hạn số phiên đăng nhập cùng lúc (tùy chọn)
+            .expiredUrl("/login?expired=true") // URL khi phiên hết hạn (tùy chọn)
+        )
         .build();
     }
 
@@ -83,19 +88,5 @@ public class SecurityConfiguration {
         return new BCryptPasswordEncoder();
     }
 
-    //    @Bean
-//    public UserDetailsService userDetailsService(){
-//        UserDetails normalUser = User.builder()
-//                .username("user")
-//                .password("$2a$12$cO0n/RjOyVf8UNlFIivRVuMxjSSEdwM.iWb7PCnLKBaEYHAP4vzlO")
-//                .roles("USER")
-//                .build();
-//        UserDetails adminUser = User.builder()
-//                .username("admin")
-//                .password("$2a$12$cO0n/RjOyVf8UNlFIivRVuMxjSSEdwM.iWb7PCnLKBaEYHAP4vzlO")
-//                .roles("ADMIN","USER")
-//                .build();
-//        return new InMemoryUserDetailsManager(normalUser,adminUser);
-//    }
 
 }
