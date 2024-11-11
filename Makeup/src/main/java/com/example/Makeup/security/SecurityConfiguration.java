@@ -25,44 +25,83 @@ public class SecurityConfiguration {
     private AccountService accountService;
 
 
+//    @Bean
+//    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
+//        return httpSecurity
+//        .csrf(AbstractHttpConfigurer::disable)
+//        .authorizeHttpRequests(registry->{
+//            registry.requestMatchers(
+//                    "/register",
+//                    "/login/**",
+//                    "/home/**",
+//                    "/cosplay/**",
+//                    "/cosplay/**",
+//                    "/home",
+//                    "/api/**",
+//                    "/js/**",  /* static resource */
+//                    "/css/**",
+//                    "/images/**",
+//                    "/fonts/**",
+//                    "/icon/**",
+//                    "/status" // test
+//            ).permitAll();
+//            //registry.a
+//            registry.requestMatchers("/admin/**").hasRole("ADMIN");
+//            registry.requestMatchers("/user/**").hasRole("USER");
+//            registry.anyRequest().authenticated();
+//        })
+//        .formLogin(form -> form
+//                .loginPage("/login")
+//        )
+//        .logout(logout -> logout
+//            .logoutUrl("/logout")
+//            .permitAll()
+//        )
+//        .sessionManagement(session -> session
+//            .maximumSessions(1) // Giới hạn số phiên đăng nhập cùng lúc (tùy chọn)
+//            .expiredUrl("/login?expired=true") // URL khi phiên hết hạn (tùy chọn)
+//        )
+//        .build();
+//    }
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
-        .csrf(AbstractHttpConfigurer::disable)
-        .authorizeHttpRequests(registry->{
-            registry.requestMatchers(
-                    "/register",
-                    "/login/**",
-                    "/home/**",
-                    "/cosplay/**",
-                    "/cosplay/**",
-                    "/home",
-                    "/api/**",
-                    "/js/**",  /* static resource */
-                    "/css/**",
-                    "/images/**",
-                    "/fonts/**",
-                    "/icon/**",
-                    "/status" // test
-            ).permitAll();
-            //registry.a
-            registry.requestMatchers("/admin/**").hasRole("ADMIN");
-            registry.requestMatchers("/user/**").hasRole("USER");
-            registry.anyRequest().authenticated();
-        })
-        .formLogin(form -> form
-                .loginPage("/login")
-        )
-        .logout(logout -> logout
-            .logoutUrl("/logout")
-            .permitAll()
-        )
-        .sessionManagement(session -> session
-            .maximumSessions(1) // Giới hạn số phiên đăng nhập cùng lúc (tùy chọn)
-            .expiredUrl("/login?expired=true") // URL khi phiên hết hạn (tùy chọn)
-        )
-        .build();
+                .csrf(AbstractHttpConfigurer::disable)
+                .authorizeHttpRequests(registry -> {
+                    registry.requestMatchers(
+                            "/register",
+                            "/login/**",
+                            "/home/**",
+                            "/cosplay/**",
+                            "/cosplay/**",
+                            "/home",
+                            "/api/**",  /* Cho phép tất cả yêu cầu tới các API */
+                            "/js/**",   /* tài nguyên tĩnh */
+                            "/css/**",
+                            "/images/**",
+                            "/fonts/**",
+                            "/icon/**",
+                            "/status"   // test
+                    ).permitAll(); // Cung cấp quyền truy cập không cần xác thực
+                    registry.requestMatchers("/admin/**").hasRole("ADMIN");
+                    registry.requestMatchers("/user/**").hasRole("USER");
+                    registry.anyRequest().authenticated(); // Các yêu cầu khác cần xác thực
+                })
+                .formLogin(form -> form
+                        .loginPage("/login")
+                )
+                .logout(logout -> logout
+                        .logoutUrl("/logout")
+                        .permitAll()
+                )
+                .sessionManagement(session -> session
+                        .maximumSessions(1) // Giới hạn số phiên đăng nhập cùng lúc
+                        .expiredUrl("/login?expired=true") // URL khi phiên hết hạn
+                )
+                .build();
     }
+
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
