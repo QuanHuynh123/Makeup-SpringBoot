@@ -3,10 +3,14 @@ package com.example.Makeup.controller.api.admin;
 import com.example.Makeup.dto.AccountDTO;
 import com.example.Makeup.dto.ApiResponse;
 import com.example.Makeup.dto.LoginRequest;
+import com.example.Makeup.dto.UserDTO;
+import com.example.Makeup.entity.Account;
 import com.example.Makeup.enums.ErrorCode;
 import com.example.Makeup.security.AuthenticationSuccessHandler;
 import com.example.Makeup.service.AccountService;
 import com.example.Makeup.service.RoleService;
+import com.example.Makeup.service.UserService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -42,6 +46,8 @@ public class AuthApiController {
     @Autowired
     private AuthenticationProvider authenticationProvider ;
 
+    @Autowired
+    UserService userService ;
 
     @PostMapping("/registerUser")
     public ResponseEntity<String> createAccount(@RequestBody AccountDTO account) {
@@ -51,14 +57,15 @@ public class AuthApiController {
         }
         account.setPassWord(passwordEncoder.encode(account.getPassWord()));
         account.setRoleId(2);
-        accountService.save(account);
+        Account accountEntity =  accountService.save(account);
+        userService.createInforUser(account,accountEntity);
         return ResponseEntity.ok("Create Success!");
     }
 
 
 
     @PostMapping("/loginUser")
-    public ResponseEntity<Map<String, String>> login(@RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<Map<String, String>> login(@RequestBody LoginRequest loginRequest , HttpSession session) {
         try {
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
@@ -68,14 +75,8 @@ public class AuthApiController {
             );
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
-            authentication = SecurityContextHolder.getContext().getAuthentication();
-            System.out.println("Login success : " + authentication.getName());
-            System.out.println("Login success : " + authentication.getPrincipal());
-            System.out.println("Login success : " + authentication.isAuthenticated());
-
-
-            SecurityContextHolder.getContext().setAuthentication(SecurityContextHolder.getContext().getAuthentication());
-            System.out.println("Set securityContextHolder  : "  + SecurityContextHolder.getContext().getAuthentication());
+            UserDTO userDTO = userService.getInforUser(loginRequest.getUsername());
+            session.setAttribute("user", userDTO);
 
             boolean isAdmin = authentication.getAuthorities().stream()
                     .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ROLE_ADMIN"));
@@ -99,12 +100,13 @@ public class AuthApiController {
     @GetMapping("/status")
     public String getStatus() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        System.out.println( "User is authenticated: " + authentication.getPrincipal() + " " + authentication.getName());
         if (authentication != null && authentication.isAuthenticated()) {
-            return "User is authenticated: " + authentication.getPrincipal() + " " + authentication.getName();
+            System.out.println( "User is authenticated: " + authentication.getPrincipal() + " " + authentication.getName());
+            return "User is authenticated" ;
         } else {
-            return "User is not authenticated";
+            return "User is not authenticated" ;
         }
     }
-
 
 }

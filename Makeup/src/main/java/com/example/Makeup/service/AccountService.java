@@ -51,12 +51,12 @@ public class AccountService implements UserDetailsService {
     }
 
 
-    public void save(AccountDTO account){
+    public Account save(AccountDTO account){
         Role role = roleRepository.findById(account.getRoleId())
                 .orElseThrow(()-> new AppException(ErrorCode.CANT_FOUND));
         Account saveAccount = accountMapper.toEntity(account);
         saveAccount.setRole(role);
-        accountRepository.save(saveAccount);
+        return accountRepository.save(saveAccount);
     }
 
     public boolean checkExists(String userName){

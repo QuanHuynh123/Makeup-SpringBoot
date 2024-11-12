@@ -19,10 +19,10 @@ public class Staff {
     @Column(name = "id", nullable = false)
     int id;
 
-    @Column(name = "name", length = 40, nullable = false)
+    @Column(name = "name", length = 40)
     String nameStaff;
 
-    @Column(name = "phone", length = 20, nullable = false)
+    @Column(name = "phone", length = 20)
     String phone;
 
     @OneToMany(mappedBy = "staff", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
