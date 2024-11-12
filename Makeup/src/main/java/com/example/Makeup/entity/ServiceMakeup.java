@@ -29,11 +29,11 @@ public class ServiceMakeup {
     @Column(name = "price" , nullable = false)
     double price  ;
 
-    @Column(name = "time", nullable = false)
+    @Column(name = "time")
     int time  ;
 
 
-    public ServiceMakeup(String nameService, String description, double price) {
+    public ServiceMakeup(String nameService, String description, double price , int time) {
         this.nameService = nameService;
         this.description = description;
         this.price = price;

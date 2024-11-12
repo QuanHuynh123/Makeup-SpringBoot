@@ -19,7 +19,7 @@ public class FeedBack {
     @Column(name = "id", nullable = false)
     int id;
 
-    @Column(name = "rating", nullable = false)
+    @Column(name = "rating")
     int rating  ;
 
     @Column(name = "comment", length = 250, nullable = false)

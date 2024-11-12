@@ -1,5 +1,6 @@
 package com.example.Makeup.controller.web.web;
 
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -17,13 +18,14 @@ public class LoginController {
 
     @GetMapping("/login")
     public String login(){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication instanceof AnonymousAuthenticationToken) {
-            System.out.println("anonymous");
-        } else {
-            System.out.println("not anonymous");
-        }
         return "/login";
+    }
+
+    @GetMapping("/logout")
+    public String logout(HttpSession session){
+        session.setAttribute("user",null);
+        session.removeAttribute("user");
+        return "redirect:/login";
     }
 
     @GetMapping("/register")

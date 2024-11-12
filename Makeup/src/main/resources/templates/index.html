@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<html lang="en">
-   <head>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
       <!-- basic -->
       <meta charset="utf-8">
       <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -25,8 +25,6 @@
       <link rel="stylesheet" href="css/responsive.css">
       <!-- fevicon -->
       <link rel="icon" href="images/fevicon.png" type="image/gif" />
-      <!-- Scrollbar Custom CSS -->
-      <link rel="stylesheet" href="css/jquery.mCustomScrollbar.min.css">
       <!-- Tweaks for older IEs-->
       <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.css" media="screen">
@@ -72,13 +70,13 @@
                                  <a class="nav-link" href="#contact">Contact</a>
                               </li>
                               <li class="nav-item">
-                                 <a class="nav-link" href="login.html">Login</a>
+                                 <a class="nav-link" href="/login">Login</a>
                               </li>
                            </ul>
                         </div>
                      </nav>
                   </div>
-                  <div class="col-xl-2 col-lg-2 col-md-3 col-sm-3 col logo_section">
+                  <div class="col-xl-2 col-lg-2 col-md-2 col-sm-2 col logo_section">
                      <div class="full">
                         <div class="center-desk">
                            <div class="logo">
@@ -87,12 +85,32 @@
                         </div>
                      </div>
                   </div>
-                  <div class="col-xl-5 col-lg-5 col-md-5 col-sm-5">
+                  <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4">
                      <ul class="email">
-                        <li><a href="#">Call: (+71) 1234567890</a></li>
-                        <li><a href="#">Email: huynhminhquan07072002@gmail.com</a></li>
+                        <li ><a href="#" style="font-size: 14px;">Call: (+71) 1234567890</a></li>
+                        <li ><a href="#" style="font-size: 14px;">Email: huynhminhquan07072002@gmail.com</a></li>
                      </ul>
+                     <!-- Thêm phần thông tin profile -->
                   </div>
+                  <div class="col-xl-1 col-lg-1 col-md-2 col-sm-2 col profile_container">
+                     <i class="fa-solid fa-user icon_function" id="profile-icon" style="cursor: pointer;">
+                        <th:block th:if="${user == null }">
+                           <ul class="profile_menu">
+                              <li><a href="/login">Đăng nhập</a></li>
+                           </ul>
+                        </th:block>
+
+                        <th:block th:if="${user != null}">
+                           <ul class="profile_menu">
+                              <li><a href="/profile">Thông tin  </a></li>
+                              <li><a href="/myOder">Đơn hàng của tôi</a></li>
+                              <li><a href="/myCart">Giỏ hàng</a></li>
+                              <li><a href="/logout">Đăng xuất</a></li>
+                           </ul>
+                        </th:block>
+                     </i>
+                  </div>
+
                </div>
             </div>
          </div>
@@ -223,7 +241,7 @@
             <div class="row">
                <div class="col-md-4">
                   <a href="makeup.html">
-                     <div id="hover_chang" class="service_box">
+                     <div  class="hover_chang service_box">
                         <i><img src="images/thr1.png" alt="#"/></i>
                         <h3>Makeup</h3>
                         <p>Tận hưởng dịch vụ trang điểm chuyên nghiệp, giúp bạn tỏa sáng trong mọi sự kiện từ tiệc cưới đến những buổi hẹn hò đầy phong cách.</p>
@@ -232,7 +250,7 @@
                </div>
                <div class="col-md-4">
                   <a href="cosplay.html">
-                  <div id="hover_chang" class="service_box">
+                  <div class="hover_chang service_box">
                      <i><img src="images/thr2.png" alt="#" style="width: 89px ; height: 89px;"/></i>
                      <h3>Clothing Rental</h3>
                      <p>Khám phá bộ sưu tập trang phục đa dạng, từ đồ cosplay đến váy dạ tiệc sang trọng, giúp bạn tự tin và nổi bật trong mọi dịp.</p>
@@ -240,7 +258,7 @@
                   </a>
                </div>
                <div class="col-md-4">
-                  <div id="hover_chang" class="service_box">
+                  <div class="hover_chang service_box">
                      <i><img src="images/thr3.png" alt="#" style="width: 89px ; height: 89px;"/></i>
                      <h3>nails</h3>
                      <p>Sớm ra mắt........</p>
@@ -343,7 +361,7 @@
       </div>
 
       <!--  contact -->
-      <div id="contact" class="contact">
+      <div class="contact">
          <div class="container">
             <div class="row">
                <div class="col-md-12">
@@ -400,15 +418,7 @@
 
                </div>
                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
-                    <div class="map-responsive">
-                        <iframe src="https://www.google.com/maps/embed/v1/place?key=AIzaSyA0s1a7phLN0iaD6-UE7m4qP-z21pH0eSc&q=Truong+Dai+hoc+Sai+Gon+273+An+Duong+Vuong+Phuong+3+Quan+5+Ho+Chi+Minh+700000" 
-                           width="600" 
-                           height="432" 
-                           frameborder="0" 
-                           style="border:0; width: 100%;" 
-                           allowfullscreen>
-                        </iframe>
-                     </div>
+                  <div id="map" style="height: 432px; width: 100%;"></div>
                </div>
             </div>
          </div>
@@ -500,8 +510,6 @@
       <script src="js/popper.min.js"></script>
       <script src="js/bootstrap.bundle.min.js"></script>
       <script src="js/jquery-3.0.0.min.js"></script>
-      <!-- sidebar -->
-      <script src="js/jquery.mCustomScrollbar.concat.min.js"></script>
       <script src="js/custom.js"></script>
       <script>
          $('a[href^="#"]').on('click', function(event) {
@@ -518,14 +526,12 @@
          });
       </script>
       <script>
-         // This example adds a marker to indicate the position of Bondi Beach in Sydney,
-         // Australia.
          function initMap() {
            var map = new google.maps.Map(document.getElementById('map'), {
              zoom: 11,
              center: {lat: 40.645037, lng: -73.880224},
              });
-         
+
          var image = 'images/maps-and-flags.png';
          var beachMarker = new google.maps.Marker({
              position: {lat: 40.645037, lng: -73.880224},
@@ -535,7 +541,7 @@
          }
       </script>
       <!-- google map js -->
-      <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA8eaHt9Dh5H57Zh0xVTqxVdBFCvFMqFjQ&callback=initMap"></script>
+      <script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA8eaHt9Dh5H57Zh0xVTqxVdBFCvFMqFjQ&callback=initMap"></script>
       <!-- end google map js --> 
    </body>
 </html>

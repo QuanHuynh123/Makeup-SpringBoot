@@ -12,10 +12,12 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractAuthenticationFilterConfigurer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.context.NullSecurityContextRepository;
 
 @Configuration
 @EnableWebSecurity
@@ -29,38 +31,29 @@ public class SecurityConfiguration {
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
         .csrf(AbstractHttpConfigurer::disable)
-        .authorizeHttpRequests(registry->{
-            registry.requestMatchers(
-                    "/register",
-                    "/login/**",
-                    "/home/**",
-                    "/cosplay/**",
-                    "/cosplay/**",
-                    "/home",
-                    "/api/**",
-                    "/js/**",  /* static resource */
-                    "/css/**",
-                    "/images/**",
-                    "/fonts/**",
-                    "/icon/**",
-                    "/status" // test
-            ).permitAll();
-            //registry.a
-            registry.requestMatchers("/admin/**").hasRole("ADMIN");
-            registry.requestMatchers("/user/**").hasRole("USER");
-            registry.anyRequest().authenticated();
-        })
+        .authorizeHttpRequests(auth -> auth
+                .requestMatchers("/admin/**").hasRole("ADMIN")
+                .requestMatchers("/user/**").hasRole("USER")
+                .requestMatchers("/error").permitAll()
+
+                // Cho phép tất cả các request khác mà không cần xác thực
+                .anyRequest().permitAll()
+        )
         .formLogin(form -> form
                 .loginPage("/login")
         )
+
         .logout(logout -> logout
             .logoutUrl("/logout")
             .permitAll()
         )
+
         .sessionManagement(session -> session
-            .maximumSessions(1) // Giới hạn số phiên đăng nhập cùng lúc (tùy chọn)
-            .expiredUrl("/login?expired=true") // URL khi phiên hết hạn (tùy chọn)
+                .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED) // Tạo session nếu cần
+//                .maximumSessions(1) // Giới hạn số phiên đăng nhập cùng lúc
+//                .expiredUrl("/login?expired=true") // URL khi phiên hết hạn
         )
+        .anonymous(AbstractHttpConfigurer::disable)
         .build();
     }
 
@@ -90,3 +83,23 @@ public class SecurityConfiguration {
 
 
 }
+
+//
+//        .authorizeHttpRequests(auth -> auth
+//        .requestMatchers("images/**", "js/**", "css/**", "icon/**","fonts/**","cdn-cgi/**").permitAll()
+//        )
+//
+//                .authorizeHttpRequests(registry->{
+//        registry.requestMatchers(
+//                    "/register",
+//                            "/login/**",
+//                            "/home/**",
+//                            "/cosplay/**",
+//                            "/cosplay/**",
+//                            "/home",
+//                            "/api/**"
+//).permitAll();
+//            registry.requestMatchers("/admin/**").hasRole("ADMIN");
+//            registry.requestMatchers("/user/**").hasRole("USER");
+//            registry.anyRequest().authenticated();
+//        })

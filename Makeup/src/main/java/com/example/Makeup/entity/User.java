@@ -19,13 +19,13 @@ public class User {
     @Column(name = "id", nullable = false)
     int id;
 
-    @Column(name = "fullname", length = 40, nullable = false)
+    @Column(name = "fullname", length = 40)
     String fullName;
 
-    @Column(name = "email", length = 40, nullable = false)
+    @Column(name = "email", length = 40)
     String email;
 
-    @Column(name = "address", length = 50, nullable = false)
+    @Column(name = "address", length = 50)
     String address;
 
     @Column(name = "phone", length = 20, nullable = false)
@@ -38,7 +38,7 @@ public class User {
     List<Appointment> appointments;
 
     @OneToOne(mappedBy ="user" ,fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "cart_id", nullable = false)
+    @JoinColumn(name = "cart_id")
     Cart cart;
 
     @OneToOne(fetch = FetchType.LAZY)
