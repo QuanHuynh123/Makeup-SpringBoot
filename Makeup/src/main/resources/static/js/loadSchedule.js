@@ -68,11 +68,21 @@ function getRandomColorHSL() {
 	return `hsl(${hue}, ${saturation}%, ${lightness}%)`;
 }
 
+function formatDateStringToDDMMYYYY(dateString) {
+    const date = new Date(dateString);
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
+}
+
 // Hàm render lịch cho một tuần nhất định
 function renderScheduleForWeek(data, weekNumber) {
 	const selectedWeek = data.find(week => week.weekNumber === weekNumber);
-	document.getElementById('dateOfWeek').innerHTML = selectedWeek.startDate + " - " + selectedWeek.endDate;
-
+document.getElementById('dateOfWeek').innerHTML =
+    "Week " + weekNumber + ": " +
+    formatDateStringToDDMMYYYY(selectedWeek.startDate) + " - " +
+    formatDateStringToDDMMYYYY(selectedWeek.endDate);
 	// Xóa tất cả các sự kiện lịch cũ mà không xóa cấu trúc lịch
 	document.querySelectorAll('.cd-schedule__event').forEach(event => event.remove());
 
