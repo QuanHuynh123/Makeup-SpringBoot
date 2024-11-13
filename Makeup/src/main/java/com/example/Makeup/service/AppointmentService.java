@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import java.sql.Date;
 import java.util.*;
 import java.util.stream.Collectors;
-
 @Service
 public class AppointmentService {
 
@@ -44,7 +43,7 @@ public class AppointmentService {
     private List<WeekAppointmentsDTO> groupAppointmentsByWeek(List<AppointmentDTO> appointments, int month, int year) {
         Map<Integer, List<AppointmentDTO>> weeklyAppointments = new HashMap<>();
 
-        // Lấy các lịch hẹn và nhóm theo tuần trong tháng
+        // Nhóm các lịch hẹn theo tuần trong tháng
         for (AppointmentDTO appointment : appointments) {
             int weekOfMonth = getWeekOfMonth(appointment.getMakeupDate());
             weeklyAppointments
@@ -52,11 +51,13 @@ public class AppointmentService {
                     .add(appointment);
         }
 
-        // Trả về danh sách các tuần, mỗi tuần có thêm thông tin ngày bắt đầu và kết thúc
+        // Xác định tổng số tuần trong tháng
+        int totalWeeks = getWeeksInMonth(month, year);
+
+        // Trả về danh sách các tuần, bao gồm cả tuần không có lịch hẹn
         List<WeekAppointmentsDTO> weekAppointmentsDTOList = new ArrayList<>();
-        for (Map.Entry<Integer, List<AppointmentDTO>> entry : weeklyAppointments.entrySet()) {
-            int weekNumber = entry.getKey();
-            List<AppointmentDTO> appointmentsInWeek = entry.getValue();
+        for (int weekNumber = 1; weekNumber <= totalWeeks; weekNumber++) {
+            List<AppointmentDTO> appointmentsInWeek = weeklyAppointments.getOrDefault(weekNumber, new ArrayList<>());
 
             // Tính ngày bắt đầu và kết thúc của tuần
             Date startDate = getStartDateOfWeek(weekNumber, month, year);
@@ -98,17 +99,62 @@ public class AppointmentService {
     private Date getStartDateOfWeek(int weekNumber, int month, int year) {
         Calendar calendar = Calendar.getInstance();
         calendar.set(year, month - 1, 1); // Set to the first day of the month
-        int firstDayOfMonth = calendar.get(Calendar.DAY_OF_WEEK); // Find the first day of the month
-        calendar.add(Calendar.DAY_OF_MONTH, (weekNumber - 1) * 7 - firstDayOfMonth + 2); // Adjust to the start of the week
+
+        // Tuần đầu tiên luôn bắt đầu từ ngày 1
+        if (weekNumber == 1) {
+            return new Date(calendar.getTimeInMillis());
+        }
+
+        // Các tuần sau tính theo thứ tự
+        calendar.add(Calendar.DAY_OF_MONTH, (weekNumber - 1) * 7);
         return new Date(calendar.getTimeInMillis());
     }
 
     // Tính ngày kết thúc của tuần
     private Date getEndDateOfWeek(int weekNumber, int month, int year) {
         Calendar calendar = Calendar.getInstance();
-        calendar.set(year, month - 1, 1);
-        int firstDayOfMonth = calendar.get(Calendar.DAY_OF_WEEK);
-        calendar.add(Calendar.DAY_OF_MONTH, (weekNumber - 1) * 7 - firstDayOfMonth + 2 + 6); // Add 6 to get the end of the week
+        calendar.set(year, month - 1, 1); // Set to the first day of the month
+
+        // Tuần đầu tiên sẽ kết thúc vào cuối tuần của tháng (7 ngày sau ngày 1)
+        if (weekNumber == 1) {
+            calendar.add(Calendar.DAY_OF_MONTH, 6);
+            return new Date(calendar.getTimeInMillis());
+        }
+
+        // Lấy ngày cuối của tháng
+
+        // Các tuần sau kết thúc vào cuối tuần của từng tuần
+        calendar.add(Calendar.DAY_OF_MONTH, (weekNumber - 1) * 7 + 6);
+
+//        // Nếu ngày kết thúc của tuần vượt quá ngày cuối của tháng, điều chỉnh lại
+//        if (calendar.get(Calendar.DAY_OF_MONTH) > lastDayOfMonth) {
+//            calendar.set(Calendar.DAY_OF_MONTH, lastDayOfMonth);
+//        }
+
+        // Kiểm tra lại nếu ngày kết thúc không phải trong tháng này
+        if (calendar.get(Calendar.MONTH) == (month)) {
+            calendar.add(Calendar.DAY_OF_MONTH, -((weekNumber - 1) * 7 + 6));
+            int lastDayOfMonth = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
+            calendar.set(Calendar.DAY_OF_MONTH, lastDayOfMonth);
+        }
+
+
+
+
+
         return new Date(calendar.getTimeInMillis());
+    }
+
+
+
+
+
+
+    // Tính tổng số tuần trong tháng
+    private int getWeeksInMonth(int month, int year) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(year, month - 1, 1);
+        int daysInMonth = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
+        return (int) Math.ceil(daysInMonth / 7.0);
     }
 }
