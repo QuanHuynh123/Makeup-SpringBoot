@@ -3692,7 +3692,9 @@ a {
 }
 
 .cd-schedule {
-    position: relative
+    position: relative;
+    overflow: auto;
+        height: 400px;
 }
 
 .cd-schedule::before {
@@ -3858,7 +3860,12 @@ a {
 .cd-schedule__top-info {
     width: 100%;
     padding: 0 1.25em;
-    padding: 0 var(--component-padding)
+    padding: 0 var(--component-padding);
+        position: sticky;
+        top: 0;
+        left: 0;
+        z-index: 99;
+        background: white;
 }
 
 .cd-schedule__top-info>span {
