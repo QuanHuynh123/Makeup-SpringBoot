@@ -253,6 +253,7 @@
     max-width: 0;
     z-index: 999;
     background-color: #fff;
+     transition: max-width 0.3s ease-in-out;
 }
 
 .Sidebar.showSidebar {
@@ -370,23 +371,29 @@
     opacity: 0;
     max-height: 0;
     max-width: 0;
-    transition: max-height 0.1s ease, opacity 0.3s ease;
+    transition: max-height 0.3s ease-in-out, opacity 0.2s ease-in-out;
 }
 
 .Submenu-item-content.show {
-    max-height: 10000000000px;
+    max-height: 500px;
     max-width: 240px;
     opacity: 1;
-    transition: max-height 0.3s ease, opacity 0.3s ease;
+    transition: max-height 0.3s ease-in-out, opacity 0.2s ease-in-out;
 }
 
 .Submenu-item-content-object {
     font-weight: 500;
-    padding: 12px 16px;
+    margin: 12px 16px !important;
     color: #212832;
     cursor: pointer;
     transition: color 0.3s ease;
     font-size: 14px;
+    height:0 !important;
+}
+
+.Submenu-item-content .Submenu-item-content-object {
+margin: 0;
+    height:auto !important;
 }
 
 .Submenu-item-content-object .Submenu-title {
@@ -422,6 +429,7 @@
     height: 100vh;
     margin-bottom: 50px;
     width: calc(100vw - 240px);
+    transition: margin-left 0.3s ease-in-out;
 }
 
 @media screen and (max-width: 992px) {
