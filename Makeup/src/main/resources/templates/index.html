@@ -33,6 +33,7 @@
       <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script><![endif]-->
+      <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
    </head>
    <!-- body -->
    <body class="main-layout">
@@ -389,12 +390,34 @@
 
                         <!-- Phần chọn với select -->
                         <div class="col-md-12">
-                           <select class="contactus" id="options" name="Option">
-                              <option value="">--Choose an service--</option>
-                              <option value="Option1">Option 1</option>
-                              <option value="Option2">Option 2</option>
-                              <option value="Option3">Option 3</option>
+                           <select class="contactus" id="optionsMakeup" name="Option">
+                              <option value="">--Choose a service--</option>
                            </select>
+                           <script>
+                              $(document).ready(function() {
+                                  // Sử dụng AJAX để lấy dữ liệu từ API
+                                  $.ajax({
+                                      url: "/api/serviceMakeups/services",
+                                      type: "GET",
+                                      success: function(data) {
+                                          const serviceSelect = $("#optionsMakeup");
+
+                                          // Duyệt qua mỗi dịch vụ và thêm vào <select>
+                                          $.each(data, function(index, service) {
+                                              const option = $("<option>")
+                                                 .val(service.id)
+                                                 .text(service.nameService)
+                                                 .data('time', parseInt(service.time, 10)); // Đảm bảo chuyển đổi thành số nguyên
+
+                                              serviceSelect.append(option);
+                                          });
+                                      },
+                                      error: function(xhr, status, error) {
+                                          console.error("Error fetching services:", error);
+                                      }
+                                  });
+                              });
+                           </script>
                         </div>
 
                            <div class="col-md-12 d-flex gap-3">
@@ -511,6 +534,7 @@
       <script src="js/bootstrap.bundle.min.js"></script>
       <script src="js/jquery-3.0.0.min.js"></script>
       <script src="js/custom.js"></script>
+      <script src="js/bookService.js"></script>
       <script>
          $('a[href^="#"]').on('click', function(event) {
          

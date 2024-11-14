@@ -33,9 +33,10 @@ public class ServiceMakeup {
     int time  ;
 
 
-    public ServiceMakeup(String nameService, String description, double price , int time) {
+    public ServiceMakeup(String nameService, String description, double price, int time) {
         this.nameService = nameService;
         this.description = description;
         this.price = price;
+        this.time=time;
     }
 }

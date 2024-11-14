@@ -30,31 +30,31 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
-        .csrf(AbstractHttpConfigurer::disable)
-        .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/admin/**").hasRole("ADMIN")
-                .requestMatchers("/user/**").hasRole("USER")
-                .requestMatchers("/error").permitAll()
+                .csrf(AbstractHttpConfigurer::disable)
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/user/**").hasRole("USER")
+                        .requestMatchers("/error").permitAll()
 
-                // Cho phép tất cả các request khác mà không cần xác thực
-                .anyRequest().permitAll()
-        )
-        .formLogin(form -> form
-                .loginPage("/login")
-        )
+                        // Cho phép tất cả các request khác mà không cần xác thực
+                        .anyRequest().permitAll()
+                )
+                .formLogin(form -> form
+                        .loginPage("/login")
+                )
 
-        .logout(logout -> logout
-            .logoutUrl("/logout")
-            .permitAll()
-        )
+                .logout(logout -> logout
+                        .logoutUrl("/logout")
+                        .permitAll()
+                )
 
-        .sessionManagement(session -> session
-                .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED) // Tạo session nếu cần
+                .sessionManagement(session -> session
+                                .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED) // Tạo session nếu cần
 //                .maximumSessions(1) // Giới hạn số phiên đăng nhập cùng lúc
 //                .expiredUrl("/login?expired=true") // URL khi phiên hết hạn
-        )
-        .anonymous(AbstractHttpConfigurer::disable)
-        .build();
+                )
+                .anonymous(AbstractHttpConfigurer::disable)
+                .build();
     }
 
     @Bean
