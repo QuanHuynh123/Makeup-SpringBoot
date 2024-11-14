@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet"  href="css/profile.css">
+    <link rel="stylesheet"  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
+    <title>SINGED-SHOP</title>
+</head>
+<body>
+<div id="div_home">
+    <a id="home" href="/login"><button id="btn_home"><i class="fa-solid fa-house"></i> Home</button></a>
+</div>
+<div class='container'>
+    <div class='avatar'>
+        <img src="images/avt_girl.jpg'>
+    </div>
+
+
+    <div class='button' >
+        <div class='button__icon'><i class="fa-solid fa-diamond"></i></div>
+        <div class='button__text'>Tên :  </div>
+        <input type="text" class="input" id="name" th:value="${user != null ? user.fullName : ''}" />
+    </div>
+
+    <div class='button' >
+        <div class='button__icon'><i class='fa-solid fa-phone'></i></div>
+        <div class='button__text'> Số điện thoại :  </div>
+        <input type="text" class="input" id="phone" th:value="${user.phone}" />
+    </div>
+
+
+    <div class='button' >
+        <div class='button__icon'><i class="fa-solid fa-location-dot"></i></div>
+        <div class='button__text'> Địa chỉ :</div>
+        <input type="text" class="input" id="address" th:value="${user != null ? user.address : ''}" />
+    </div>
+
+    <div class='button' >
+        <div class='button__icon'><i class="fa-solid fa-envelope"></i></div>
+        <div class='button__text'>Email :</div>
+        <input type="text" class="input" id="email" th:value="${user != null ? user.email : ''}" />
+    </div>
+
+<!--    <div class='button' >-->
+<!--        <div class='button__icon'><i class="fa-solid fa-venus-mars"></i></div>-->
+<!--        <div class='button__text'>Giới tính : </div>-->
+<!--        <select id="gender" name="gender">-->
+<!--            <option value="Nam" th:selected="${user.gender == 'Nam'}">Nam</option>-->
+<!--            <option value="Nữ" th:selected="${user.gender == 'Nữ'}">Nữ</option>-->
+<!--            <option value="Khác"  th:selected="${user.gender == 'Khác'}">Khác</option>-->
+<!--        </select>-->
+<!--    </div>-->
+    <div id="div_button">
+        <button class="btn_save" onclick="getData()">CẬP NHẬT THÔNG TIN</button>
+    </div>
+</div>
+
+
+<script>
+
+    function getData() {
+        var email = document.getElementById('email').value;
+        var phone = document.getElementById('phone').value;
+        var address = document.getElementById('address').value;
+        var name = document.getElementById('name').value;
+
+        // Gọi hàm để thực hiện AJAX
+        fetchData(name,email, phone, address);
+    }
+
+    function fetchData(name,email, phone, address) {
+        fetch('https://example.com/api', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                name: name,
+                email: email,
+                phone: phone,
+                address: address,
+            }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+
+        alert("email: " + email + "\nphone: " + phone + "\naddress: " + address);
+    }
+
+</script>
+
+</body>
+
+</html>     

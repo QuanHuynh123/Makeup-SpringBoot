@@ -11,7 +11,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class StaffDTO {
-    int id; // ID của nhân viên
-    String nameStaff; // Tên nhân viên
-    String phone; // Số điện thoại
+    int id;
+    String nameStaff;
+    String phone;
 }

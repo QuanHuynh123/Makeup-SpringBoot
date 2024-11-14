@@ -153,3 +153,53 @@ ul.email li a {
     line-height: 40px;
 }
 
+
+.profile_container {
+    position: relative; /* Đảm bảo menu hiển thị đúng vị trí */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.profile_menu {
+    position: absolute;
+    width: 200px;
+    border-top: 5px solid rgba(0, 0, 0, 0.90);
+    background: rgba(255, 255, 255, 0.95);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.7);
+    z-index: 1000;
+    color: #000000;
+    font-size: 17px;
+    font-family: Roboto;
+    line-height: 40px;
+    top: 80px; /* Điều chỉnh vị trí menu nếu cần */
+    left: 0; /* Đặt vị trí bên trái để nó thẳng hàng với icon */
+    display: none; /* Ẩn menu mặc định */
+}
+
+.profile_menu li {
+    width: 100%;
+}
+
+.profile_menu li a {
+    padding: 5px;
+    display: block; /* Đảm bảo link chiếm toàn bộ chiều rộng */
+    color: black; /* Màu chữ cho link */
+    text-decoration: none;
+    font-size: 18px;
+}
+
+.profile_menu li:hover {
+    background: rgba(0, 0, 0, 0.50);
+    color: #FFFAFA;
+}
+
+.icon_function {
+    font-size: 30px;
+}
+
+/* Hiển thị menu khi hover vào icon */
+.profile_container:hover  .profile_menu {
+    display: block;
+}
+

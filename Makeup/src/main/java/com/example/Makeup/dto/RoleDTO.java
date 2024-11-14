@@ -9,6 +9,6 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @AllArgsConstructor
 public class RoleDTO {
-    int id; // ID của vai trò
-    String nameRole; // Tên vai trò
+    int id;
+    String nameRole;
 }

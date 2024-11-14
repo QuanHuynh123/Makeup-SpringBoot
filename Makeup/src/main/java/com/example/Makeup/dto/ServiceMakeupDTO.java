@@ -11,8 +11,8 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ServiceMakeupDTO {
-    int id; // ID của dịch vụ makeup
-    String nameService; // Tên dịch vụ
-    String description; // Mô tả dịch vụ
-    double price; // Giá dịch vụ
+    int id;
+    String nameService;
+    String description;
+    double price;
 }
