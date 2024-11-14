@@ -20,4 +20,6 @@ public class AppointmentDTO {
     int userId; // ID người dùng
     int serviceMakeupId; // ID dịch vụ makeup
     int staffId; // ID nhân viên
+
+
 }
