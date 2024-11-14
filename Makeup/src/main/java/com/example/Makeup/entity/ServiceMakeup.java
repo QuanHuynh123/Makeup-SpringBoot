@@ -29,7 +29,7 @@ public class ServiceMakeup {
     @Column(name = "price" , nullable = false)
     double price  ;
 
-    @Column(name = "time", nullable = false)
+    @Column(name = "time")
     int time  ;
 
 

@@ -1,6 +1,10 @@
 package com.example.Makeup.controller.web.web;
 
+import com.example.Makeup.dto.UserDTO;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -10,7 +14,17 @@ import org.springframework.web.bind.annotation.RestController;
 public class HomeController {
 
     @GetMapping("/home")
-    public String home(){
-        return "schedule";
+    public String home(ModelMap model , HttpSession session ){
+        UserDTO userDTO = (UserDTO) session.getAttribute("user");
+        System.out.println("Session User: " + userDTO); // Kiểm tra giá trị của userDTO
+        if (userDTO != null) {
+            model.addAttribute("user", userDTO);
+        }
+        return "index";
+    }
+
+    @GetMapping("/")
+    public String redirectToHome() {
+        return "redirect:/home"; // Chuyển hướng đến /home
     }
 }

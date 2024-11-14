@@ -11,6 +11,6 @@ import lombok.experimental.FieldDefaults;
 public class AccountDTO {
     int id;
     String userName;
-    String passWord; // Có thể đổi tên thành password nếu cần thiết
+    String passWord;
     int roleId;
 }
