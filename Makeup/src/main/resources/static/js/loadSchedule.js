@@ -11,8 +11,8 @@ var data = null;
 // Hàm lấy thời gian hiện tại theo múi giờ Việt Nam
 function getCurrentVietnamTime() {
 	const now = new Date();
-	const vietnamOffset = 7 * 60; // UTC+7, tính bằng phút
-	const localOffset = now.getTimezoneOffset(); // Độ lệch so với UTC, tính bằng phút
+	const vietnamOffset = 7 * 60; // UTC+7, in minutes
+	const localOffset = now.getTimezoneOffset(); // Difference from UTC, in minutes
 	const vietnamTime = new Date(now.getTime() + (vietnamOffset + localOffset) * 60000);
 	return vietnamTime;
 }
@@ -20,9 +20,9 @@ function getCurrentVietnamTime() {
 function getWeekOfMonth(date) {
 	const startOfMonth = new Date(date.getFullYear(), date.getMonth(), 1);
 	const dayOfMonth = date.getDate();
-	const startDay = startOfMonth.getDay(); // Lấy thứ của ngày đầu tháng
+	const startDay = (startOfMonth.getDay() + 6) % 7; // Adjust to make Monday the first day of the week
 
-	// Tính tuần trong tháng
+	// Calculate the week number based on the adjusted start day
 	return Math.ceil((dayOfMonth + startDay) / 7);
 }
 
