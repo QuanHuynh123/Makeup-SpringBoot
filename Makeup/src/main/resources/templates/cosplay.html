@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
    <head>
       <!-- basic -->
       <meta charset="utf-8">
@@ -42,57 +42,77 @@
       <!-- end loader -->
       <!-- header -->
       <header>
-         <!-- header inner -->
-         <div class="header">
-            <div class="container">
-               <div class="row nowrap">
-                  <div class="col-xl-5 col-lg-5 col-md-9 col-sm-9">
-                     <nav class="navigation navbar navbar-expand-md navbar-dark ">
-                        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample04" aria-controls="navbarsExample04" aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                        </button>
-                        <div class="collapse navbar-collapse" id="navbarsExample04">
-                           <ul class="navbar-nav mr-auto">
-                              <li class="nav-item active">
-                                 <a class="nav-link" href="/home"> Home  </a>
-                              </li>
-                              <li class="nav-item">
-                                 <a class="nav-link" href="#about">About</a>
-                              </li>
-                              <li class="nav-item">
-                                 <a class="nav-link" href="#service">Service</a>
-                              </li>
-                              <li class="nav-item">
-                                 <a class="nav-link" href="#customer">Customer</a>
-                              </li>
-                              <li class="nav-item">
-                                 <a class="nav-link" href="#contact">Contact</a>
-                              </li>
-                              <li class="nav-item">
-                                 <a class="nav-link" href="login.html">Login</a>
-                              </li>
-                           </ul>
-                        </div>
-                     </nav>
+          <!-- header inner -->
+          <div class="header">
+              <div class="container">
+                  <div class="row nowrap">
+                      <div class="col-xl-5 col-lg-5 col-md-9 col-sm-9">
+                          <nav class="navigation navbar navbar-expand-md navbar-dark ">
+                              <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample04" aria-controls="navbarsExample04" aria-expanded="false" aria-label="Toggle navigation">
+                                  <span class="navbar-toggler-icon"></span>
+                              </button>
+                              <div class="collapse navbar-collapse" id="navbarsExample04">
+                                  <ul class="navbar-nav mr-auto">
+                                      <li class="nav-item active">
+                                          <a class="nav-link" href="/home"> Home  </a>
+                                      </li>
+                                      <li class="nav-item">
+                                          <a class="nav-link" href="#about">About</a>
+                                      </li>
+                                      <li class="nav-item">
+                                          <a class="nav-link" href="#service">Service</a>
+                                      </li>
+                                      <li class="nav-item">
+                                          <a class="nav-link" href="#customer">Customer</a>
+                                      </li>
+                                      <li class="nav-item">
+                                          <a class="nav-link" href="#contact">Contact</a>
+                                      </li>
+                                      <li class="nav-item">
+                                          <a class="nav-link" href="/login">Login</a>
+                                      </li>
+                                  </ul>
+                              </div>
+                          </nav>
+                      </div>
+                      <div class="col-xl-2 col-lg-2 col-md-2 col-sm-2 col logo_section">
+                          <div class="full">
+                              <div class="center-desk">
+                                  <div class="logo">
+                                      <a href="index.html"><img src="images/logo.png" alt="#" style="width: 100px;" /></a>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4">
+                          <ul class="email">
+                              <li ><a href="#" style="font-size: 14px;">Call: (+71) 1234567890</a></li>
+                              <li ><a href="#" style="font-size: 14px;">Email: huynhminhquan07072002@gmail.com</a></li>
+                          </ul>
+                          <!-- Thêm phần thông tin profile -->
+                      </div>
+                      <div class="col-xl-1 col-lg-1 col-md-2 col-sm-2 col profile_container">
+                          <i class="fa-solid fa-user icon_function" id="profile-icon" style="cursor: pointer;">
+                              <th:block th:if="${user == null }">
+                                  <ul class="profile_menu">
+                                      <li><a href="/login">Đăng nhập</a></li>
+                                  </ul>
+                              </th:block>
+
+                              <th:block th:if="${user != null}">
+                                  <ul class="profile_menu">
+                                      <li><a href="/profile">Thông tin  </a></li>
+                                      <li><a href="/myOder">Đơn hàng của tôi</a></li>
+                                      <li><a href="/myCart">Giỏ hàng</a></li>
+                                      <li><a href="/logout">Đăng xuất</a></li>
+                                  </ul>
+                              </th:block>
+                          </i>
+                      </div>
+
                   </div>
-                  <div class="col-xl-2 col-lg-2 col-md-3 col-sm-3 col logo_section">
-                     <div class="full">
-                        <div class="center-desk">
-                           <div class="logo">
-                              <a href="index.html"><img src="images/logo.png" alt="#" style="width: 100px;" /></a>
-                           </div>
-                        </div>
-                     </div>
-                  </div>
-                  <div class="col-xl-5 col-lg-5 col-md-5 col-sm-5">
-                     <ul class="email">
-                        <li><a href="#">Call: (+71) 1234567890</a></li>
-                        <li><a href="#">Email: huynhminhquan07072002@gmail.com</a></li>
-                     </ul>
-                  </div>
-               </div>
-            </div>
-         </div>
+              </div>
+          </div>
       </header>
       <!-- end header inner -->
 

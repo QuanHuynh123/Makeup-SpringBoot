@@ -12,8 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Controller
 public class ProfileController {
-    @Autowired
-    UserService userService;
     @RequestMapping("/profile")
     public String profile(ModelMap modelMap, HttpSession session){
         UserDTO userDTO = (UserDTO) session.getAttribute("user");
