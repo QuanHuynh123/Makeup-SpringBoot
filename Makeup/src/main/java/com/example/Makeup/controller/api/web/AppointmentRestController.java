@@ -1,6 +1,5 @@
 package com.example.Makeup.controller.api.web;
 
-import com.example.Makeup.dto.AppointmentDTO;
 import com.example.Makeup.dto.WeekAppointmentsDTO;
 import com.example.Makeup.service.AppointmentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +9,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/appointments")
-public class AppointmentController {
+public class AppointmentRestController {
 
     @Autowired
     private AppointmentService appointmentService;

@@ -1,12 +1,9 @@
 package com.example.Makeup.controller.api.admin;
 
 import com.example.Makeup.dto.AccountDTO;
-import com.example.Makeup.dto.ApiResponse;
 import com.example.Makeup.dto.LoginRequest;
 import com.example.Makeup.dto.UserDTO;
 import com.example.Makeup.entity.Account;
-import com.example.Makeup.enums.ErrorCode;
-import com.example.Makeup.security.AuthenticationSuccessHandler;
 import com.example.Makeup.service.AccountService;
 import com.example.Makeup.service.RoleService;
 import com.example.Makeup.service.UserService;
@@ -21,16 +18,13 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Map;
-
-import static com.fasterxml.jackson.core.JsonFactory.builder;
 
 
 @RestController
 @RequestMapping("/api")
-public class AuthApiController {
+public class AuthApiRestController {
     @Autowired
     private AccountService accountService;
 
@@ -82,7 +76,7 @@ public class AuthApiController {
                     .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ROLE_ADMIN"));
 
             Map<String, String> response = Map.of(
-                    "status", "Login success",
+                    "status", "Đăng nhập thành công!",
                     "redirectUrl", isAdmin ? "/admin" : "/home"
             );
             return ResponseEntity.ok(response);
@@ -90,7 +84,7 @@ public class AuthApiController {
         } catch (Exception e) {
             Map<String, String> errorResponse = Map.of(
                     "status", "error",
-                    "message", "Invalid credentials"
+                    "message", "Đăng nhập thất bại!"
             );
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
         }
