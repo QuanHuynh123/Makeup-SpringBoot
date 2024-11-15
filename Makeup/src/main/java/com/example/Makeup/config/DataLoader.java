@@ -73,7 +73,7 @@
 //            SubCategory it = new SubCategory("IT",2);
 //            SubCategory captain = new SubCategory("CAPTAIN MAVEL",2);
 //
-//            SubCategory fateGrandOrder = new SubCategory("FATE GRAND ORDER",3);
+//            SubCategory fateGrandOrder = new SubCategory("HONKAI IMPACT 3RD",3);
 //            SubCategory league = new SubCategory("LEAGUE OF LEGION",3);
 //            SubCategory honkaiStarRail = new SubCategory("HONKAI STAR RAIL",3);
 //            SubCategory genshinImpact = new SubCategory("GENSHIN IMPACT ",3);
