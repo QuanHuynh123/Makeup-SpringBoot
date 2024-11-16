@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
    <head>
       <!-- basic -->
       <meta charset="utf-8">
@@ -43,11 +43,11 @@
          <!-- header inner -->
          <div class="header">
             <div class="container">
-               <div class="row">
+               <div class="row nowrap">
                   <div class="col-xl-5 col-lg-5 col-md-9 col-sm-9">
                      <nav class="navigation navbar navbar-expand-md navbar-dark ">
                         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample04" aria-controls="navbarsExample04" aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
+                           <span class="navbar-toggler-icon"></span>
                         </button>
                         <div class="collapse navbar-collapse" id="navbarsExample04">
                            <ul class="navbar-nav mr-auto">
@@ -67,27 +67,47 @@
                                  <a class="nav-link" href="#contact">Contact</a>
                               </li>
                               <li class="nav-item">
-                                 <a class="nav-link" href="login.html">Login</a>
+                                 <a class="nav-link" href="/login">Login</a>
                               </li>
                            </ul>
                         </div>
                      </nav>
                   </div>
-                  <div class="col-xl-2 col-lg-2 col-md-3 col-sm-3 col logo_section">
+                  <div class="col-xl-2 col-lg-2 col-md-2 col-sm-2 col logo_section">
                      <div class="full">
                         <div class="center-desk">
                            <div class="logo">
-                              <a href="index.html"><img src="images/logo.png" alt="#" /></a>
+                              <a href="index.html"><img src="images/logo.png" alt="#" style="width: 100px;" /></a>
                            </div>
                         </div>
                      </div>
                   </div>
-                  <div class="col-xl-5 col-lg-5 col-md-5 col-sm-5">
+                  <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4">
                      <ul class="email">
-                        <li><a href="#">Call: (+71) 1234567890</a></li>
-                        <li><a href="#">Email: huynhminhquan07072002@gmail.com</a></li>
+                        <li ><a href="#" style="font-size: 14px;">Call: (+71) 1234567890</a></li>
+                        <li ><a href="#" style="font-size: 14px;">Email: huynhminhquan07072002@gmail.com</a></li>
                      </ul>
+                     <!-- Thêm phần thông tin profile -->
                   </div>
+                  <div class="col-xl-1 col-lg-1 col-md-2 col-sm-2 col profile_container">
+                     <i class="fa-solid fa-user icon_function" id="profile-icon" style="cursor: pointer;">
+                        <th:block th:if="${user == null }">
+                           <ul class="profile_menu">
+                              <li><a href="/login">Đăng nhập</a></li>
+                           </ul>
+                        </th:block>
+
+                        <th:block th:if="${user != null}">
+                           <ul class="profile_menu">
+                              <li><a href="/profile">Thông tin  </a></li>
+                              <li><a href="/myOder">Đơn hàng của tôi</a></li>
+                              <li><a href="/myCart">Giỏ hàng</a></li>
+                              <li><a href="/logout">Đăng xuất</a></li>
+                           </ul>
+                        </th:block>
+                     </i>
+                  </div>
+
                </div>
             </div>
          </div>
@@ -97,7 +117,7 @@
          <h2 id="title_makeup">MAKE-UP</h2>
          <hr style="border: 1px solid black; width: 15%;">
          <div class="width_100 center_row center_column">
-            <p id="sub_title_makeup">
+            <p class="sub_title_makeup">
                Ngoài việc lựa chọn váy cưới thì với mỗi cô dâu lớp trang điểm cũng vô cùng quan trọng. Để nàng xuất hiện với diện mạo lung linh nhất, tôn nên đường nét thanh tú và thần thái rạng ngời hãy trao trọn niềm tin cho các Makeup Artist được đào tạo chuyên nghiệp của chúng mình.
             </p>
          </div>
@@ -109,7 +129,7 @@
           </div>
 
 
-          <h6 id="title_outstanding_service">Các dịch vụ makeup nổi bật</h2>
+          <h6 id="title_outstanding_service">Các dịch vụ makeup nổi bật</h6>
 
          <div id="list_option_makeup">
 
@@ -199,7 +219,7 @@
          </div>
 
          <div class="width_100 center_row center_column">
-            <p id="sub_title_makeup">
+            <p class="sub_title_makeup">
                Makeup đám cưới là một phần quan trọng giúp cô dâu tỏa sáng trong ngày trọng đại. Phong cách trang điểm cho ngày cưới thường được lựa chọn kỹ lưỡng, kết hợp giữa nét đẹp tự nhiên và sự sang trọng để cô dâu trông rạng rỡ nhưng vẫn giữ được vẻ thanh thoát. Lớp nền cần được chăm chút cẩn thận, tạo độ mịn màng, che khuyết điểm nhưng không quá dày, giúp da sáng khỏe và tự nhiên suốt cả ngày. Màu mắt và môi thường được lựa chọn phù hợp với váy cưới và phong cách chung của buổi lễ, có thể là tông màu nhẹ nhàng, thanh lịch hoặc quyến rũ, nổi bật. Đặc biệt, sự bền màu và khả năng giữ lâu của lớp trang điểm là yếu tố quan trọng để cô dâu luôn tự tin suốt cả ngày dài, từ lễ cưới cho đến tiệc tối.
             </p>
          </div>
@@ -207,7 +227,7 @@
          <img class="banner" src="./images/wedding_banner.jpg">
 
          <div class="width_100 center_row center_column">
-            <p id="sub_title_makeup">
+            <p class="sub_title_makeup">
                Makeup chụp ảnh cosplay kết hợp giữa việc tạo sự sắc nét để lên hình đẹp và tái hiện chân thực nhân vật cosplay. Lớp nền cần mịn màng, bền màu, trong khi mắt, môi và các chi tiết khác được trang điểm đậm và sáng tạo, giúp gương mặt nổi bật và thể hiện đúng tinh thần của nhân vật. Kỹ thuật trang điểm này không chỉ tạo ấn tượng mạnh mẽ trước ống kính mà còn mang lại sự sống động, chân thực cho mỗi shot hình
             </p>
          </div>
@@ -215,7 +235,7 @@
          <img class="banner" src="./images/cosplay_banner.jpg">
 
          <div class="width_100 center_row center_column">
-            <p id="sub_title_makeup">
+            <p class="sub_title_makeup">
                Makeup đi chơi thường nhẹ nhàng, tự nhiên nhưng vẫn đủ tươi tắn và rạng rỡ. Lớp nền mỏng nhẹ giúp da trông khỏe khoắn và tự nhiên, kết hợp với chút phấn má hồng, màu son tươi tắn như hồng hoặc cam đào. Phần mắt có thể sử dụng tông màu trung tính hoặc nhũ nhẹ để tạo điểm nhấn, kết hợp với mascara để đôi mắt thêm cuốn hút. Kiểu makeup này giúp gương mặt sáng bừng, trẻ trung nhưng vẫn giữ được sự thoải mái cho cả ngày dài.
             </p>
          </div>
@@ -229,7 +249,7 @@
       </div>
 
       <!--  contact -->
-      <div id="contact" class="contact">
+      <div class="contact">
          <div class="container">
             <div class="row">    
                <div class="col-md-12">
