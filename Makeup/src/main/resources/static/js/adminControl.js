@@ -1,8 +1,10 @@
 const sidebar = document.querySelector('.Sidebar');
+const main = document.querySelector('.admin-main');
 const submenuTitles = document.querySelectorAll('.Submenu-title');
 
 function toggleSidebar() {
     sidebar.classList.toggle('showSidebar');
+    main.classList.toggle('showSidebar');
 }
 
 document.addEventListener('DOMContentLoaded', () => {
