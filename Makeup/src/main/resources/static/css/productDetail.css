@@ -1,0 +1,211 @@
+#container_bottom_header{
+    top: 0;
+}
+/* Toàn bộ trang */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f8f8f8;
+    color: #333;
+}
+
+/* Container tổng */
+#container_product {
+    max-width: 1200px;
+    margin: 90px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Container top */
+#container_product_top {
+    display: flex;
+    margin-bottom: 20px; /* Tạo khoảng cách với container bottom */
+    border-bottom: 2px solid #e5e5e5;
+    padding-bottom: 20px;
+}
+
+/* Cột bên trái */
+.left-column {
+    flex: 1;
+    padding: 20px;
+}
+
+.image-gallery {
+    text-align: center;
+}
+
+.main-image {
+    width: 100%;
+    max-width: 400px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+}
+
+.thumbnail-gallery img {
+    width: 60px;
+    height: 60px;
+    margin: 5px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: transform 0.2s, border-color 0.2s;
+}
+
+.thumbnail-gallery img:hover {
+    transform: scale(1.1);
+    border-color: #000;
+}
+
+/* Cột bên phải */
+.right-column {
+    flex: 1;
+    padding: 20px;
+}
+
+.right-column h1 {
+    font-size: 24px;
+    margin-bottom: 10px;
+    color: #444;
+}
+
+.price {
+    color: #e67e22;
+    font-size: 20px;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+form {
+    margin-top: 20px;
+}
+
+form label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #555;
+}
+
+form select,
+form input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+}
+
+.add-to-cart {
+    background-color: #e67e22;
+    color: #fff;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+.add-to-cart:hover {
+    background-color: #d35400;
+}
+
+/* Container bottom */
+#container_product_bottom {
+    margin-top: 20px;
+    padding: 20px;
+    border-top: 2px solid #e5e5e5;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+}
+
+/* Tiêu đề accordion */
+.product-data-items-menu .data.item.title {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+    padding: 10px 0;
+    border-bottom: 1px solid #ddd;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.product-data-items-menu .data.item.title:hover {
+    color: #e67e22;
+}
+
+/* Nội dung accordion */
+.product-data-items-content .data.item.content {
+    padding: 15px 0;
+    font-size: 14px;
+    line-height: 1.6;
+    color: #555;
+    display: flex;
+    flex-direction: column; /* Xếp các phần tử theo cột */
+    gap: 20px; /* Tạo khoảng cách giữa các ảnh */
+}
+
+.product-data-items-content img {
+    width: auto; /* Kích thước thật của ảnh */
+    height: auto;
+    max-width: 70%; /* Giữ nguyên kích thước thật nhưng không vượt quá chiều rộng của container */
+    border: none;
+    margin: 0 auto; /* Căn giữa ảnh trong cột */
+}
+
+.product-data-items-content img:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+#list_img{
+    margin-top: 100px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+
+/* DANH MỤC LIÊN QUAN */
+.related-products-container{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#list_related_product{
+    margin-top: 50px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-bottom: 50px;
+    width: 80%;
+}
+
+.related-product {
+    width: 25%; /* Hoặc điều chỉnh theo giao diện */
+    padding: 10px;
+    text-align: center;
+    box-sizing: border-box;
+}
+
+.related-product img {
+    max-width: 80%;
+    height: auto;
+    border-radius: 8px; /* Nếu cần thêm hiệu ứng bo góc */
+}
+
+.related-product h4 {
+    font-size: 16px;
+    margin: 10px 0;
+    color: #333;
+}
+
+/* END - DANH MỤC LIÊN QUAN */
