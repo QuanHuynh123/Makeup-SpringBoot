@@ -20,6 +20,13 @@ public class UserDTO {
     int cartId;
     int accountId;
 
+    public UserDTO(String fullName , String email , String address , String phone){
+        this.fullName = fullName;
+        this.email = email;
+        this.address = address;
+        this.phone = phone;
+    }
+
     //List<OrderDTO> orders; // Danh sách đơn hàng
     //List<AppointmentDTO> appointments; // Danh sách cuộc hẹn
 }

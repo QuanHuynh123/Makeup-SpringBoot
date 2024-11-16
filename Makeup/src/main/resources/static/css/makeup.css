@@ -45,7 +45,7 @@
     margin-top: 20px;
 }
 
-#sub_title_makeup{
+.sub_title_makeup{
     width: 50%;
     margin-top: 30px;
 }
@@ -134,7 +134,12 @@ transform: translateX(5px);
 .btn_title_makeup:hover {
     background-color: #fa2201; /* Tô đậm màu khi hover */
     color: aliceblue;
-  }
+}
+
+.btn_title_makeup:hover::after{
+    display: block;
+    content: "Đặt lịch ngay ";
+}
 
 .row-container {
     display: flex;
