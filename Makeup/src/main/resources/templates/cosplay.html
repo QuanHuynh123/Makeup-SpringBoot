@@ -14,7 +14,6 @@
       <!-- style css -->
       <link rel="stylesheet" href="css/style.css">
       <link rel="stylesheet" href="css/cosplay.css">
-      <link rel="stylesheet" href="css/header.css">
       <link rel="stylesheet" href="css/footer.css">
       <link rel="stylesheet" href="css/contact.css">
       <!-- Responsive-->
@@ -35,154 +34,91 @@
    </head>
    <!-- body -->
    <body class="main-layout" >
-      <!-- loader  -->
-      <div class="loader_bg">
-         <div class="loader"><img src="images/loading.gif" alt="#" /></div>
-      </div>
-      <!-- end loader -->
-      <!-- header -->
-      <header>
-          <!-- header inner -->
-          <div class="header">
-              <div class="container">
-                  <div class="row nowrap">
-                      <div class="col-xl-5 col-lg-5 col-md-9 col-sm-9">
-                          <nav class="navigation navbar navbar-expand-md navbar-dark ">
-                              <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample04" aria-controls="navbarsExample04" aria-expanded="false" aria-label="Toggle navigation">
-                                  <span class="navbar-toggler-icon"></span>
-                              </button>
-                              <div class="collapse navbar-collapse" id="navbarsExample04">
-                                  <ul class="navbar-nav mr-auto">
-                                      <li class="nav-item active">
-                                          <a class="nav-link" href="/home"> Home  </a>
-                                      </li>
-                                      <li class="nav-item">
-                                          <a class="nav-link" href="#about">About</a>
-                                      </li>
-                                      <li class="nav-item">
-                                          <a class="nav-link" href="#service">Service</a>
-                                      </li>
-                                      <li class="nav-item">
-                                          <a class="nav-link" href="#customer">Customer</a>
-                                      </li>
-                                      <li class="nav-item">
-                                          <a class="nav-link" href="#contact">Contact</a>
-                                      </li>
-                                      <li class="nav-item">
-                                          <a class="nav-link" href="/login">Login</a>
-                                      </li>
-                                  </ul>
-                              </div>
-                          </nav>
-                      </div>
-                      <div class="col-xl-2 col-lg-2 col-md-2 col-sm-2 col logo_section">
-                          <div class="full">
-                              <div class="center-desk">
-                                  <div class="logo">
-                                      <a href="index.html"><img src="images/logo.png" alt="#" style="width: 100px;" /></a>
-                                  </div>
-                              </div>
-                          </div>
-                      </div>
-                      <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4">
-                          <ul class="email">
-                              <li ><a href="#" style="font-size: 14px;">Call: (+71) 1234567890</a></li>
-                              <li ><a href="#" style="font-size: 14px;">Email: huynhminhquan07072002@gmail.com</a></li>
-                          </ul>
-                          <!-- Thêm phần thông tin profile -->
-                      </div>
-                      <div class="col-xl-1 col-lg-1 col-md-2 col-sm-2 col profile_container">
-                          <i class="fa-solid fa-user icon_function" id="profile-icon" style="cursor: pointer;">
-                              <th:block th:if="${user == null }">
-                                  <ul class="profile_menu">
-                                      <li><a href="/login">Đăng nhập</a></li>
-                                  </ul>
-                              </th:block>
+   <!-- header -->
+   <div id="header">
+       <!-- header inner -->
+       <div class="container_top_header">
+           <div class="custom-header">
+               <div class="header-left">
+                   <a href="/home" class="header-link">Home</a>
+                   <a href="/login" class="header-link">Login</a>
+               </div>
+               <div class="header-right">
+                   <a href="/contact-us" class="header-link">Contact Us</a>
+                   <a href="/account" class="header-link">Account</a>
+               </div>
+           </div>
+       </div>
+       <!-- end header inner -->
 
-                              <th:block th:if="${user != null}">
-                                  <ul class="profile_menu">
-                                      <li><a href="/profile">Thông tin  </a></li>
-                                      <li><a href="/myOder">Đơn hàng của tôi</a></li>
-                                      <li><a href="/myCart">Giỏ hàng</a></li>
-                                      <li><a href="/logout">Đăng xuất</a></li>
-                                  </ul>
-                              </th:block>
-                          </i>
-                      </div>
+       <!-- bottom header-->
+       <div id="container_bottom_header" class="row">
+           <div id="left_bottom_header">
+               <a href="cosplay.html"><img src="images/logo_cosplay.png"></a>
+           </div>
+           <div id="middle_bottom_header">
+               <ul class="nav_main">
+                   <li class="center">
+                       <a class="title_category_cosplay" href="#"> ANIMES </a>
+                       <ul class="dropdown_submenu">
+                           <li><a>DRAGON BALL </a></li>
+                           <li><a>ATTACK ON TITAN </a></li>
+                           <li><a>NARUTO </a></li>
+                           <li><a>ONE PEACE </a></li>
+                           <li><a>ONE PUNCH MAN</a></li>
+                           <li><a>JUJUTSU KAISEN</a></li>
+                       </ul>
+                       <i class="fa-solid fa-caret-down"></i>
+                   </li>
+                   <li class="center">
+                       <a class="title_category_cosplay" href="#"> MOVIE   </a>
+                       <ul class="dropdown_submenu">
+                           <li><a>RESIDENT EVIL </a></li>
+                           <li><a>SUPERMAN</a></li>
+                           <li><a>SPIDER-MAN </a></li>
+                           <li><a>AQUAMAN</a></li>
+                           <li><a>IT</a></li>
+                           <li><a>CAPTAIN MAVEL</a></li>
+                       </ul>
+                       <i class="fa-solid fa-caret-down"></i>
+                   </li>
+                   <li class="center">
+                       <a class="title_category_cosplay" href="#"> GAME   </a>
+                       <ul class="dropdown_submenu">
+                           <li><a>FATE GRAND ORDER</a></li>
+                           <li><a>LEAGUE OF LEGION </a></li>
+                           <li><a>HONKAI STAR RAIL</a></li>
+                           <li><a>GENSHIN IMPACT </a></li>
+                           <li><a>VANLORANT</a></li>
+                       </ul>
+                       <i class="fa-solid fa-caret-down"></i>
+                   </li>
+                   <li class="center">
+                       <a class="title_category_cosplay" href="#"> FESTIVAL   </a>
+                       <ul class="dropdown_submenu">
+                           <li><a>HALLOWEEN </a></li>
+                           <li><a>MERRY CHRISTMAS</a></li>
+                       </ul>
+                       <i class="fa-solid fa-caret-down"></i>
+                   </li>
 
-                  </div>
-              </div>
-          </div>
-      </header>
-      <!-- end header inner -->
+               </ul>
+           </div>
+           <div id="right_bottom_header">
+               <div class="search-bar">
+                   <input type="text" placeholder="Tìm kiếm...">
+                   <button><i class="fa fa-search"></i></button>
+               </div>
+               <div class="cart-icon">
+                   <i class="fa fa-shopping-cart"></i>
+                   <span class="cart-count">0</span>
+               </div>
+           </div>
+       </div>
+   </div>
+   <!-- end bottom header-->
 
-      <!-- bottom header-->
-            <div id="container_bottom_header" class="row">
-                <div id="left_bottom_header">
-                    <img src="./images/logo_cosplay.png">
-                </div>
-                <div id="middle_bottom_header">
-                    <ul class="nav_main">
-                        <li class="center">
-                            <a class="title_category_cosplay" href="#"> ANIME </a>
-                                <ul class="dropdown_submenu">
-                                    <li><a>DRAGON BALL </a></li>
-                                    <li><a>ATTACK ON TITAN </a></li>
-                                    <li><a>NARUTO </a></li>
-                                    <li><a>ONE PEACE </a></li>
-                                    <li><a>ONE PUNCH MAN</a></li>
-                                    <li><a>JUJUTSU KAISEN</a></li>
-                                </ul>
-                            <i class="fa-solid fa-caret-down"></i>
-                        </li>
-                        <li class="center">
-                            <a class="title_category_cosplay" href="#"> MOVIE   </a>
-                                <ul class="dropdown_submenu">
-                                    <li><a>RESIDENT EVIL </a></li>
-                                    <li><a>SUPERMAN</a></li>
-                                    <li><a>SPIDER-MAN </a></li>
-                                    <li><a>AQUAMAN</a></li>
-                                    <li><a>IT</a></li>
-                                    <li><a>CAPTAIN MAVEL</a></li>
-                                </ul>
-                            <i class="fa-solid fa-caret-down"></i>
-                        </li>
-                        <li class="center">
-                            <a class="title_category_cosplay" href="#"> GAME  </a>
-                                <ul class="dropdown_submenu">
-                                    <li><a>FATE GRAND ORDER</a></li>
-                                    <li><a>LEAGUE OF LEGION </a></li>
-                                    <li><a>HONKAI STAR RAIL</a></li>
-                                    <li><a>GENSHIN IMPACT </a></li>
-                                    <li><a>VANLORANT</a></li>
-                                </ul>
-                            <i class="fa-solid fa-caret-down"></i>
-                        </li>
-                         <li class="center">
-                            <a class="title_category_cosplay" href="#"> FESTIVAL   </a>
-                                <ul class="dropdown_submenu">
-                                    <li><a>HALLOWEEN </a></li>
-                                    <li><a>MERRY CHRISTMAS</a></li>
-                                </ul>
-                            <i class="fa-solid fa-caret-down"></i>
-                        </li>
-
-                    </ul>
-                </div>
-                <div id="right_bottom_header">
-                    <div class="search-bar">
-                        <input type="text" placeholder="Tìm kiếm...">
-                        <button><i class="fa fa-search"></i></button>
-                    </div>
-                    <div class="cart-icon">
-                        <i class="fa fa-shopping-cart"></i>
-                        <span class="cart-count">0</span>
-                    </div>
-                </div>
-            </div>
-      <!-- end bottom header-->
-
-      <!-- end header -->
+   <!-- end header -->
        
     <!-- banner -->
     <div id="banner_cosplay">
