@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+   <head>
+      <!-- basic -->
+      <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <!-- mobile metas -->
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+      <!-- site metas -->
+      <title>beautySGU</title>
+      <!-- bootstrap css -->
+      <link rel="stylesheet" href="css/bootstrap/bootstrap.min.css">
+      <!-- style css -->
+      <link rel="stylesheet" href="css/style.css">
+      <link rel="stylesheet" href="css/cosplay.css">
+      <link rel="stylesheet" href="css/footer.css">
+      <link rel="stylesheet" href="css/contact.css">
+      <!-- Responsive-->
+      <link rel="stylesheet" href="css/responsive.css">
+      <!-- fevicon -->
+      <link rel="icon" href="images/fevicon.png" type="image/gif" />
+      <!-- Scrollbar Custom CSS -->
+      <link rel="stylesheet" href="css/jquery.mCustomScrollbar.min.css">
+      <!-- Tweaks for older IEs-->
+      <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.css" media="screen">
+      <link rel="stylesheet"  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
+      <link href='https://fonts.googleapis.com/css?family=Satisfy' rel='stylesheet'>
+
+      <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script><![endif]-->
+   </head>
+   <!-- body -->
+   <body class="main-layout" >
+   <!-- header -->
+   <div id="header">
+       <!-- header inner -->
+       <div class="container_top_header">
+           <div class="custom-header">
+               <div class="header-left">
+                   <a href="/home" class="header-link">Home</a>
+                   <a href="/login" class="header-link">Login</a>
+               </div>
+               <div class="header-right">
+                   <a href="/contact-us" class="header-link">Contact Us</a>
+                   <a href="/account" class="header-link">Account</a>
+               </div>
+           </div>
+       </div>
+       <!-- end header inner -->
+
+       <!-- bottom header-->
+       <div id="container_bottom_header" class="row">
+           <div id="left_bottom_header">
+               <a href="cosplay.html"><img src="images/logo_cosplay.png"></a>
+           </div>
+           <div id="middle_bottom_header">
+               <ul class="nav_main">
+                   <li class="center">
+                       <a class="title_category_cosplay" href="#"> ANIMES </a>
+                       <ul class="dropdown_submenu">
+                           <li><a>DRAGON BALL </a></li>
+                           <li><a>ATTACK ON TITAN </a></li>
+                           <li><a>NARUTO </a></li>
+                           <li><a>ONE PEACE </a></li>
+                           <li><a>ONE PUNCH MAN</a></li>
+                           <li><a>JUJUTSU KAISEN</a></li>
+                       </ul>
+                       <i class="fa-solid fa-caret-down"></i>
+                   </li>
+                   <li class="center">
+                       <a class="title_category_cosplay" href="#"> MOVIE   </a>
+                       <ul class="dropdown_submenu">
+                           <li><a>RESIDENT EVIL </a></li>
+                           <li><a>SUPERMAN</a></li>
+                           <li><a>SPIDER-MAN </a></li>
+                           <li><a>AQUAMAN</a></li>
+                           <li><a>IT</a></li>
+                           <li><a>CAPTAIN MAVEL</a></li>
+                       </ul>
+                       <i class="fa-solid fa-caret-down"></i>
+                   </li>
+                   <li class="center">
+                       <a class="title_category_cosplay" href="#"> GAME   </a>
+                       <ul class="dropdown_submenu">
+                           <li><a>FATE GRAND ORDER</a></li>
+                           <li><a>LEAGUE OF LEGION </a></li>
+                           <li><a>HONKAI STAR RAIL</a></li>
+                           <li><a>GENSHIN IMPACT </a></li>
+                           <li><a>VANLORANT</a></li>
+                       </ul>
+                       <i class="fa-solid fa-caret-down"></i>
+                   </li>
+                   <li class="center">
+                       <a class="title_category_cosplay" href="#"> FESTIVAL   </a>
+                       <ul class="dropdown_submenu">
+                           <li><a>HALLOWEEN </a></li>
+                           <li><a>MERRY CHRISTMAS</a></li>
+                       </ul>
+                       <i class="fa-solid fa-caret-down"></i>
+                   </li>
+
+               </ul>
+           </div>
+           <div id="right_bottom_header">
+               <div class="search-bar">
+                   <input type="text" placeholder="Tìm kiếm...">
+                   <button><i class="fa fa-search"></i></button>
+               </div>
+               <div class="cart-icon">
+                   <i class="fa fa-shopping-cart"></i>
+                   <span class="cart-count">0</span>
+               </div>
+           </div>
+       </div>
+   </div>
+   <!-- end bottom header-->
+
+   <!-- end header -->
+       
+    <!-- banner -->
+    <div id="banner_cosplay">
+        <div class="carousel">
+            <div class="slides">
+                <div class="slide active">
+                    <img class="img_banner_cosplay" src="/images/banner_cosplay_1.jpg" alt="Cosplay 1">
+                </div>
+                <div class="slide">
+                    <img class="img_banner_cosplay" src="/images/banner_cosplay_2.jpg" alt="Cosplay 2">
+                </div>
+                <div class="slide">
+                    <img class="img_banner_cosplay" src="/images/banner_cosplay_3.png" alt="Cosplay 2">
+                </div>
+                <button class="prev" onclick="prevSlide()">&#10094;</button>
+                <button class="next" onclick="nextSlide()">&#10095;</button>
+            </div>
+        </div>
+    </div>
+
+    <hr class="line">
+
+    <div id="small_banner" class="row">
+        <a href="#"> <img class="img_small_banner" src="/images/small_banner_anime.jpg"> </a>
+        <a href="#"> <img class="img_small_banner" src="/images/small_banner_movie.png"> </a>
+        <a href="#"> <img class="img_small_banner" src="/images/small_banner_game.png"> </a>
+        <a href="#"> <img class="img_small_banner" src="/images/small_banner_festival.jpg"> </a>
+    </div>
+    <!-- end banner -->
+
+    <!-- product-->
+     <div id="container_product">
+        <div id="new">
+            <h1 class="title_product">New</h1>
+            <ul class="row">
+                <li class="product-card" th:each="product : ${products}">   
+                    <div class="product-image">
+                        <img th:src="${product.firstImage}" alt="Magilumiere Co Ltd Kana Sakuragi Cosplay">
+                    </div>
+                    <div class="product-info">
+                        <h4 class="product-title" th:text="${product.nameProduct}">Tên sản phẩm</h4>
+                        <p class="product-price" th:text="${product.price}">Giá</p>
+                    </div>
+                </li>
+            </ul>
+            <ul class="row">
+                <li class="product-card">   
+                    <div class="product-image">
+                    <img src="/images/banner_cosplay_1.jpg" alt="Magilumiere Co Ltd Kana Sakuragi Cosplay">
+                    </div>
+                    <div class="product-info">
+                        <h4 class="product-title">【IN STOCK】 Magilumiere Co Ltd Kana Sakuragi Cosplay</h4>
+                        <p class="product-price">$62.00</p>
+                    </div>
+                </li>
+                <li class="product-card">   
+                    <div class="product-image">
+                    <img src="/images/banner_cosplay_1.jpg" alt="Magilumiere Co Ltd Kana Sakuragi Cosplay">
+                    </div>
+                    <div class="product-info">
+                        <h4 class="product-title">【IN STOCK】 Magilumiere Co Ltd Kana Sakuragi Cosplay</h4>
+                        <p class="product-price">$62.00</p>
+                    </div>
+                </li>
+                <li class="product-card">   
+                    <div class="product-image">
+                    <img src="/images/banner_cosplay_1.jpg" alt="Magilumiere Co Ltd Kana Sakuragi Cosplay">
+                    </div>
+                    <div class="product-info">
+                        <h4 class="product-title">【IN STOCK】 Magilumiere Co Ltd Kana Sakuragi Cosplay</h4>
+                        <p class="product-price">$62.00</p>
+                    </div>
+                </li>
+                <li class="product-card">   
+                    <div class="product-image">
+                    <img src="/images/banner_cosplay_1.jpg" alt="Magilumiere Co Ltd Kana Sakuragi Cosplay">
+                    </div>
+                    <div class="product-info">
+                        <h4 class="product-title">【IN STOCK】 Magilumiere Co Ltd Kana Sakuragi Cosplay</h4>
+                        <p class="product-price">$62.00</p>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <div id="hot">
+            <h1 class="title_product">Hot</h1>
+            <ul class="row">
+                <li class="product-card">   
+                    <div class="product-image">
+                    <img src="/images/banner_cosplay_1.jpg" alt="Magilumiere Co Ltd Kana Sakuragi Cosplay">
+                    </div>
+                    <div class="product-info">
+                        <h4 class="product-title">【IN STOCK】 Magilumiere Co Ltd Kana Sakuragi Cosplay</h4>
+                        <p class="product-price">$62.00</p>
+                    </div>
+                </li>
+                <li class="product-card">   
+                    <div class="product-image">
+                    <img src="/images/banner_cosplay_1.jpg" alt="Magilumiere Co Ltd Kana Sakuragi Cosplay">
+                    </div>
+                    <div class="product-info">
+                        <h4 class="product-title">【IN STOCK】 Magilumiere Co Ltd Kana Sakuragi Cosplay</h4>
+                        <p class="product-price">$62.00</p>
+                    </div>
+                </li>
+                <li class="product-card">   
+                    <div class="product-image">
+                    <img src="/images/banner_cosplay_1.jpg" alt="Magilumiere Co Ltd Kana Sakuragi Cosplay">
+                    </div>
+                    <div class="product-info">
+                        <h4 class="product-title">【IN STOCK】 Magilumiere Co Ltd Kana Sakuragi Cosplay</h4>
+                        <p class="product-price">$62.00</p>
+                    </div>
+                </li>
+                <li class="product-card">   
+                    <div class="product-image">
+                    <img src="/images/banner_cosplay_1.jpg" alt="Magilumiere Co Ltd Kana Sakuragi Cosplay">
+                    </div>
+                    <div class="product-info">
+                        <h4 class="product-title">【IN STOCK】 Magilumiere Co Ltd Kana Sakuragi Cosplay</h4>
+                        <p class="product-price">$62.00</p>
+                    </div>
+                </li>
+            </ul>
+            <ul class="row">
+                <li class="product-card">   
+                    <div class="product-image">
+                    <img src="/images/banner_cosplay_1.jpg" alt="Magilumiere Co Ltd Kana Sakuragi Cosplay">
+                    </div>
+                    <div class="product-info">
+                        <h4 class="product-title">【IN STOCK】 Magilumiere Co Ltd Kana Sakuragi Cosplay</h4>
+                        <p class="product-price">$62.00</p>
+                    </div>
+                </li>
+                <li class="product-card">   
+                    <div class="product-image">
+                    <img src="/images/banner_cosplay_1.jpg" alt="Magilumiere Co Ltd Kana Sakuragi Cosplay">
+                    </div>
+                    <div class="product-info">
+                        <h4 class="product-title">【IN STOCK】 Magilumiere Co Ltd Kana Sakuragi Cosplay</h4>
+                        <p class="product-price">$62.00</p>
+                    </div>
+                </li>
+                <li class="product-card">   
+                    <div class="product-image">
+                    <img src="/images/banner_cosplay_1.jpg" alt="Magilumiere Co Ltd Kana Sakuragi Cosplay">
+                    </div>
+                    <div class="product-info">
+                        <h4 class="product-title">【IN STOCK】 Magilumiere Co Ltd Kana Sakuragi Cosplay</h4>
+                        <p class="product-price">$62.00</p>
+                    </div>
+                </li>
+                <li class="product-card">   
+                    <div class="product-image">
+                    <img src="/images/banner_cosplay_1.jpg" alt="Magilumiere Co Ltd Kana Sakuragi Cosplay">
+                    </div>
+                    <div class="product-info">
+                        <h4 class="product-title">【IN STOCK】 Magilumiere Co Ltd Kana Sakuragi Cosplay</h4>
+                        <p class="product-price">$62.00</p>
+                    </div>
+                </li>
+            </ul>
+        </div>
+     </div>
+     <!-- end product -->
+
+           <!-- bottom slider -->
+           <div class="bottom-slider-container">
+            <h2>Customer Show</h2>
+            <div class="bottom-slider-wrapper">
+                <button class="bottom-prev" onclick="moveSlide(-1)">&#10094;</button>
+                
+                <div class="bottom-slider">
+                    <div class="bottom-slide">
+                        <img src="/images/item1.jpg" alt="Item 1">
+                        <div class="bottom-caption">
+                            <h3>LOL</h3>
+                            <p>Foxfire Ahri</p>
+                            <span>Pre-Sale</span>
+                        </div>
+                    </div>
+                    <div class="bottom-slide">
+                        <img src="/images/item2.jpg" alt="Item 2">
+                        <div class="bottom-caption">
+                            <h3>Zenless Zone Zero</h3>
+                            <p>Tsukishiro Yanagi</p>
+                            <span>Pre-Sale</span>
+                        </div>
+                    </div>
+                    <div class="bottom-slide">
+                        <img src="/images/item3.jpg" alt="Item 3">
+                        <div class="bottom-caption">
+                            <h3>Battle Academia Lux</h3>
+                            <span>Officially on Sale</span>
+                        </div>
+                    </div>
+                    <div class="bottom-slide">
+                        <img src="/images/item3.jpg" alt="Item 3">
+                        <div class="bottom-caption">
+                            <h3>Battle Academia Lux</h3>
+                            <span>Officially on Sale</span>
+                        </div>
+                    </div>
+                    <div class="bottom-slide">
+                        <img src="/images/item3.jpg" alt="Item 3">
+                        <div class="bottom-caption">
+                            <h3>Battle Academia Lux</h3>
+                            <span>Officially on Sale</span>
+                        </div>
+                    </div>
+                    <div class="bottom-slide">
+                        <img src="/images/item3.jpg" alt="Item 3">
+                        <div class="bottom-caption">
+                            <h3>Battle Academia Lux</h3>
+                            <span>Officially on Sale</span>
+                        </div>
+                    </div>
+                    <!-- Thêm slide nếu cần -->
+                </div>
+        
+                <button class="bottom-next" onclick="moveSlide(1)">&#10095;</button>
+            </div>
+        </div>
+
+        <div class="bottom-intro-section">
+            <h2>ROLECOSPLAY COSTUMES - YOUR ANIME COSTUME STORE</h2>
+            <p>We cherish every single dream and looking forward to exploring the exciting world!</p>
+            <button class="bottom-about-btn">about us</button>
+        </div>
+        
+        
+        
+          <!-- end bottom slider -->
+
+      <!--  contact -->
+      <div id="contact" class="contact">
+         <div class="container">
+            <div class="row">
+               <div class="col-md-12">
+                  <div class="titlepage">
+                     <h2> <i class="fa-solid fa-snowflake"></i> Liên hệ <span class="white"> Với chúng tôi</span></h2>
+                  </div>
+               </div>
+            </div>
+            <div class="row">
+               <div class="col-md-6">
+                  <form id="request" class="main_form">
+                     <div class="row">
+                        <div class="col-md-12 ">
+                           <input class="contactus" placeholder="Name" type="type" name="Name"> 
+                        </div>
+                        <div class="col-md-12">
+                           <input class="contactus" placeholder="Email" type="type" name="Email"> 
+                        </div>
+                        <div class="col-md-12">
+                           <input class="contactus" placeholder="Phone Number" type="type" name="Phone Number">                          
+                        </div>
+                        <div class="col-md-12">
+                           <textarea class="textarea" placeholder="Message" type="type" Message="Name">Message </textarea>
+                        </div>
+                        <div class="col-sm-col-xl-6 col-lg-6 col-md-6 col-sm-12 center_row">
+                           <button class="send_btn">Send</button>
+                        </div>
+                     </div>
+                  </form>
+               </div>
+               <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
+                    <div class="map-responsive">
+                        <iframe src="https://www.google.com/maps/embed/v1/place?key=AIzaSyA0s1a7phLN0iaD6-UE7m4qP-z21pH0eSc&q=Truong+Dai+hoc+Sai+Gon+273+An+Duong+Vuong+Phuong+3+Quan+5+Ho+Chi+Minh+700000" 
+                           width="600" 
+                           height="432" 
+                           frameborder="0" 
+                           style="border:0; width: 100%;" 
+                           allowfullscreen>
+                        </iframe>
+                     </div>
+               </div>
+            </div>
+         </div>
+      </div>
+      <!-- end contact -->
+
+      <!--  footer -->
+      <footer id="contact">
+         <div class="footer">
+            <div class="container">
+               <div class="row">
+                  <div class="col-md-8 offset-md-4">
+                     <form class="bottom_form">
+                        <h3>Newsletter</h3>
+                        <input class="enter" placeholder="Enter your email" type="text" name="Enter your email">
+                        <button class="sub_btn">subscribe</button>
+                     </form>
+                  </div>
+               </div>
+               <div class="row">
+                  <div class="col-xl-6 col-md-12">
+                     <div class="row">
+                        <div class="col-md-7 padd_bottom">
+                           <div class="heading3">
+                              <a href="#"><img src="images/logo.png" alt="#" style="width: 80px;"/></a>
+                              <p>Chào mừng bạn đến với trang web của chúng tôi. Chúng tôi chuyên cung cấp các dịch vụ và sản phẩm làm đẹp, đặc biệt là trang điểm cho các sự kiện như đám cưới, tiệc, và các dịp đặc biệt khác. Liên hệ với chúng tôi để biết thêm thông tin chi tiết.</p>
+                           </div>
+                        </div>
+                        <div class="col-md-5 padd_bottom padd_bott">
+                           <div class="heading3">
+                              <h3>Contact Us</h3>
+                              <ul class="infometion">
+                                 <li><a href="#">273 Đ. An Dương Vương, Quận 5, Hồ Chí Minh</a></li>
+                                 <li><a href="#">Điện thoại: 0123 456 789</a></li>
+                                 <li><a href="#">Email: huynhminhquan07072002@gmail.com</a></li>
+                                 <li><a href="#">Giờ làm việc: 8:00 - 18:00</a></li>
+                              </ul>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="col-xl-6 col-md-12">
+                     <div class="row">
+                        <div class="col-md-6 offset-md-1 padd_bottom">
+                           <div class="heading3">
+                              <h3>INFORMATION</h3>
+                              <ul class="infometion">
+                                 <li><a href="#">Dịch vụ trang điểm chuyên nghiệp</a></li>
+                                 <li><a href="#">Sản phẩm mỹ phẩm chất lượng cao</a></li>
+                                 <li><a href="#">Chương trình ưu đãi</a></li>
+                                 <li><a href="#">Hướng dẫn mua hàng</a></li>
+                                 <li><a href="#">Chính sách bảo hành</a></li>
+                                 <li><a href="#">Hỗ trợ khách hàng 24/7</a></li>
+                              </ul>
+                           </div>
+                        </div>
+                        <div class="col-md-5">
+                           <div class="heading3">
+                              <h3>MY ACCOUNT</h3>
+                              <ul class="infometion">
+                                 <li><a href="#">Quản lý đơn hàng</a></li>
+                                 <li><a href="#">Lịch sử mua hàng</a></li>
+                                 <li><a href="#">Đổi trả sản phẩm</a></li>
+                                 <li><a href="#">Cập nhật thông tin cá nhân</a></li>
+                                 <li><a href="#">Ưu đãi thành viên</a></li>
+                                 <li><a href="#">Hỗ trợ tài khoản</a></li>
+                              </ul>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <div class="copyright">
+               <div class="container">
+                  <div class="row">
+                     <div class="col-md-12">
+                        <p>2024 Website makeup</a></p>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </footer>
+      <!-- end footer -->
+
+      <!-- Javascript files-->
+      <script src="js/jquery.min.js"></script>
+      <script src="js/popper.min.js"></script>
+      <script src="js/bootstrap.bundle.min.js"></script>
+      <script src="js/jquery-3.0.0.min.js"></script>
+      <!-- sidebar -->
+      <!--<script src="js/jquery.mCustomScrollbar.concat.min.js"></script>-->
+      <script src="js/custom.js"></script>
+      <script>
+         $('a[href^="#"]').on('click', function(event) {
+         
+          var target = $(this.getAttribute('href'));
+         
+          if( target.length ) {
+              event.preventDefault();
+              $('html, body').stop().animate({
+                  scrollTop: target.offset().top
+              }, 2000);
+          }
+         
+         });
+      </script>
+      <script>
+         // This example adds a marker to indicate the position of Bondi Beach in Sydney,
+         // Australia.
+         function initMap() {
+           var map = new google.maps.Map(document.getElementById('map'), {
+             zoom: 11,
+             center: {lat: 40.645037, lng: -73.880224},
+             });
+         
+         var image = 'images/maps-and-flags.png';
+         var beachMarker = new google.maps.Marker({
+             position: {lat: 40.645037, lng: -73.880224},
+             map: map,
+             icon: image
+           });
+         }
+      </script>
+
+      <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+
+        function showSlide(index) {
+            slides.forEach((slide, i) => {
+                slide.classList.remove('active');
+                if (i === index) {
+                    slide.classList.add('active');
+                }
+            });
+        }
+
+        function nextSlide() {
+            currentSlide = (currentSlide + 1) % slides.length;
+            showSlide(currentSlide);
+        }
+
+        function prevSlide() {
+            currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+            showSlide(currentSlide);
+        }
+
+        // Auto slide every 5 seconds
+        setInterval(nextSlide, 5000);
+      </script>
+
+      <script>
+        let currentSlide1 = 0;
+
+        function moveSlide(direction) {
+            const slides = document.querySelectorAll('.bottom-slide');
+            const totalSlides = slides.length;
+            const slider = document.querySelector('.bottom-slider');
+            
+            // Update current slide index
+            currentSlide1 += direction;
+
+            // Loop slide index if it's out of range
+            if (currentSlide1 < 0) {
+                currentSlide1 = totalSlides - 1;
+            } else if (currentSlide1 >= totalSlides) {
+                currentSlide1 = 0;
+            }
+
+        // Calculate the new position
+        const offset = -currentSlide1 * (slides[0].offsetWidth + 20); // 20 là khoảng cách giữa các slide
+        slider.style.transform = `translateX(${offset}px)`;
+}
+
+// Tự động chuyển slide sau mỗi 3 giây
+setInterval(() => {
+    moveSlide(1);
+}, 3000);
+
+      </script>
+      <!-- google map js -->
+      <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA8eaHt9Dh5H57Zh0xVTqxVdBFCvFMqFjQ&callback=initMap"></script>
+      <!-- end google map js --> 
+   </body>
+</html>
+
