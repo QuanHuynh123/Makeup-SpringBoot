@@ -1,15 +1,23 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Import CSS Example</title>
-    <link rel="stylesheet" href="../static/css/testcss/adminStyle.css">
+    <link rel="stylesheet" href="css/adminStyle.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
+
+
+    <script>document.getElementsByTagName("html")[0].className += " js";</script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="js/loadSchedule.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+</head>
 </head>
 
 <body>
@@ -446,483 +454,483 @@
                     </div>
                 </div>
             </div>
-            <div class="admin-main showSidebar">
-                <div class="AdminBanner">
-                    <div class="AdminBanner-container">
-                        <div class="AdminBanner-container-content">
-                            <div class="AdminBanner-container-content-text">
-                                <div class="AdminBanner-container-content-text-title"><svg stroke="currentColor"
-                                        fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round"
-                                        stroke-linejoin="round" color="rgba(255, 255, 255, 0.5)" height="1em"
-                                        width="1em" xmlns="http://www.w3.org/2000/svg"
-                                        style="color: rgba(255, 255, 255, 0.5); margin-right: 8px;">
-                                        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
-                                    </svg>Dashboard</div>
-                                <div class="AdminBanner-container-content-text-subtitle">Example dashboard overview and
-                                    content
-                                    summary</div>
-                            </div>
-                            <div class="AdminBanner-container-content-calendar">
-                                <div class="AdminBanner-container-content-calendar-container"><span><svg
-                                            stroke="currentColor" fill="currentColor" stroke-width="0"
-                                            viewBox="0 0 24 24" font-weight="400" height="18px" width="18px"
-                                            xmlns="http://www.w3.org/2000/svg">
-                                            <g id="Calendar">
-                                                <path
-                                                    d="M18.438,4.954H16.5c0-0.346,0-0.691,0-1.036c0-0.124,0-0.248,0-0.372c0-0.262-0.23-0.512-0.5-0.5
-                        c-0.271,0.012-0.5,0.22-0.5,0.5c0,0.469,0,0.939,0,1.408h-7c0-0.346,0-0.691,0-1.036c0-0.124,0-0.248,0-0.372
-                        c0-0.262-0.23-0.512-0.5-0.5c-0.271,0.012-0.5,0.22-0.5,0.5c0,0.469,0,0.939,0,1.408H5.562c-1.378,0-2.5,1.122-2.5,2.5v11
-                        c0,1.379,1.122,2.5,2.5,2.5h12.875c1.379,0,2.5-1.121,2.5-2.5v-11C20.938,6.076,19.816,4.954,18.438,4.954z M5.562,5.954H7.5
-                        c0,0.073,0,0.147,0,0.22c0,0.124,0,0.248,0,0.372c0,0.262,0.23,0.512,0.5,0.5c0.271-0.012,0.5-0.22,0.5-0.5c0-0.197,0-0.394,0-0.592
-                        h7c0,0.073,0,0.147,0,0.22c0,0.124,0,0.248,0,0.372c0,0.262,0.23,0.512,0.5,0.5c0.271-0.012,0.5-0.22,0.5-0.5
-                        c0-0.197,0-0.394,0-0.592h1.937c0.827,0,1.5,0.673,1.5,1.5v1.584H4.062V7.454C4.062,6.627,4.735,5.954,5.562,5.954z M18.438,19.954
-                        H5.562c-0.827,0-1.5-0.673-1.5-1.5v-8.416h15.875v8.416C19.938,19.281,19.265,19.954,18.438,19.954z">
-                                                </path>
-                                            </g>
-                                        </svg></span><input type="text" value="Oct 04, 2022 - Oct 04, 2024"
-                                        fdprocessedid="1rfxk7">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="admin-main-content">
-                    <div class="admin-main-content-overlay show-overlay"></div>
-                    <div class="AdminActivity">
-                        <div class="AdminActivity-item item1">
-                            <div class="Card">
-                                <div class="CardBody">
-                                    <div class="AdminActivity-item-welcome">
-                                        <div class="AdminActivity-item-welcome-text">
-                                            <h1 class="AdminActivity-item-welcome-text-main">Welcome to SB Admin Pro!
-                                            </h1>
-                                            <p class="AdminActivity-item-welcome-text-sub">Browse our fully designed UI
-                                                toolkit!
-                                                Browse our prebuilt app pages, components, and utilites, and be sure to
-                                                look at our
-                                                full documentation!</p>
-                                        </div>
-                                        <div class="AdminActivity-item-welcome-image"><img
-                                                src="https://sb-admin-pro.startbootstrap.com/assets/img/illustrations/at-work.svg">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="AdminActivity-item item2">
-                            <div class="Card">
-                                <div class="CardHeader">Recent Activity<div><svg stroke="currentColor"
-                                            fill="currentColor" stroke-width="0" viewBox="0 0 512 512" color="gray"
-                                            height="16px" width="16px" xmlns="http://www.w3.org/2000/svg"
-                                            style="color: gray;">
-                                            <path
-                                                d="M296 136c0-22.002-17.998-40-40-40s-40 17.998-40 40 17.998 40 40 40 40-17.998 40-40zm0 240c0-22.002-17.998-40-40-40s-40 17.998-40 40 17.998 40 40 40 40-17.998 40-40zm0-120c0-22.002-17.998-40-40-40s-40 17.998-40 40 17.998 40 40 40 40-17.998 40-40z">
-                                            </path>
-                                        </svg></div>
-                                </div>
-                                <div class="CardBody">
-                                    <div class="timeline">
-                                        <div class="timeline-item">
-                                            <div class="timeline-item-marker">
-                                                <div class="timeline-item-marker-text">27 min</div>
-                                                <div class="timeline-item-marker-indicator"></div>
-                                            </div>
-                                            <div class="timeline-item-content">New order placed!<a
-                                                    class="fw-bold text-dark text-decoration-none" href="#!"> Order
-                                                    #2912 </a>has
-                                                been successfully placed.</div>
-                                        </div>
-                                        <div class="timeline-item">
-                                            <div class="timeline-item-marker">
-                                                <div class="timeline-item-marker-text">27 min</div>
-                                                <div class="timeline-item-marker-indicator bg-green"></div>
-                                            </div>
-                                            <div class="timeline-item-content">New order placed!<a
-                                                    class="fw-bold text-dark text-decoration-none" href="#!"> Order
-                                                    #2912 </a>has
-                                                been successfully placed.</div>
-                                        </div>
-                                        <div class="timeline-item">
-                                            <div class="timeline-item-marker">
-                                                <div class="timeline-item-marker-text">27 min</div>
-                                                <div class="timeline-item-marker-indicator"></div>
-                                            </div>
-                                            <div class="timeline-item-content">New order placed!<a
-                                                    class="fw-bold text-dark text-decoration-none" href="#!"> Order
-                                                    #2912 </a>has
-                                                been successfully placed.</div>
-                                        </div>
-                                        <div class="timeline-item">
-                                            <div class="timeline-item-marker">
-                                                <div class="timeline-item-marker-text">27 min</div>
-                                                <div class="timeline-item-marker-indicator"></div>
-                                            </div>
-                                            <div class="timeline-item-content">New order placed!<a
-                                                    class="fw-bold text-dark text-decoration-none" href="#!"> Order
-                                                    #2912 </a>has
-                                                been successfully placed.</div>
-                                        </div>
-                                        <div class="timeline-item">
-                                            <div class="timeline-item-marker">
-                                                <div class="timeline-item-marker-text">27 min</div>
-                                                <div class="timeline-item-marker-indicator"></div>
-                                            </div>
-                                            <div class="timeline-item-content">New order placed!<a
-                                                    class="fw-bold text-dark text-decoration-none" href="#!"> Order
-                                                    #2912 </a>has
-                                                been successfully placed.</div>
-                                        </div>
-                                        <div class="timeline-item">
-                                            <div class="timeline-item-marker">
-                                                <div class="timeline-item-marker-text">27 min</div>
-                                                <div class="timeline-item-marker-indicator"></div>
-                                            </div>
-                                            <div class="timeline-item-content">New order placed!<a
-                                                    class="fw-bold text-dark text-decoration-none" href="#!"> Order
-                                                    #2912 </a>has
-                                                been successfully placed.</div>
-                                        </div>
-                                        <div class="timeline-item">
-                                            <div class="timeline-item-marker">
-                                                <div class="timeline-item-marker-text">27 min</div>
-                                                <div class="timeline-item-marker-indicator"></div>
-                                            </div>
-                                            <div class="timeline-item-content">New order placed!<a
-                                                    class="fw-bold text-dark text-decoration-none" href="#!"> Order
-                                                    #2912 </a>has
-                                                been successfully placed.</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="AdminActivity-item item3">
-                            <div class="Card">
-                                <div class="CardHeader">Progress Tracker<div><svg stroke="currentColor"
-                                            fill="currentColor" stroke-width="0" viewBox="0 0 512 512" color="gray"
-                                            height="16px" width="16px" xmlns="http://www.w3.org/2000/svg"
-                                            style="color: gray;">
-                                            <path
-                                                d="M296 136c0-22.002-17.998-40-40-40s-40 17.998-40 40 17.998 40 40 40 40-17.998 40-40zm0 240c0-22.002-17.998-40-40-40s-40 17.998-40 40 17.998 40 40 40 40-17.998 40-40zm0-120c0-22.002-17.998-40-40-40s-40 17.998-40 40 17.998 40 40 40 40-17.998 40-40z">
-                                            </path>
-                                        </svg></div>
-                                </div>
-                                <div class="CardBody">
-                                    <h4>Server Migration<span style="margin-left: auto;">20%</span></h4>
-                                    <div class="Progress">
-                                        <div class="Progress-bar" style="width: 20%;"></div>
-                                    </div>
-                                    <h4> Sale Tracking<span style="margin-left: auto;">40%</span></h4>
-                                    <div class="Progress">
-                                        <div class="Progress-bar"
-                                            style="width: 40%; background-color: rgb(244, 161, 0);"></div>
-                                    </div>
-                                    <h4> Customer Database<span style="margin-left: auto;">60%</span></h4>
-                                    <div class="Progress">
-                                        <div class="Progress-bar"
-                                            style="width: 60%; background-color: rgb(0, 97, 242);"></div>
-                                    </div>
-                                    <h4> Payout Details<span style="margin-left: auto;">80%</span></h4>
-                                    <div class="Progress">
-                                        <div class="Progress-bar"
-                                            style="width: 80%; background-color: rgb(0, 207, 213);"></div>
-                                    </div>
-                                    <h4> Account Setup<span style="margin-left: auto;">Complete!</span></h4>
-                                    <div class="Progress">
-                                        <div class="Progress-bar"
-                                            style="width: 100%; background-color: rgb(0, 172, 105);"></div>
-                                    </div>
-                                </div>
-                                <div class="CardFooter">
-                                    <div class="CardFooter-container">
-                                        <div class="AdminActivity-item-footer">View Task Center</div><svg
-                                            stroke="currentColor" fill="currentColor" stroke-width="0"
-                                            viewBox="0 0 512 512" height="1em" width="1em"
-                                            xmlns="http://www.w3.org/2000/svg">
-                                            <path
-                                                d="M294.1 256L167 129c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.3 34 0L345 239c9.1 9.1 9.3 23.7.7 33.1L201.1 417c-4.7 4.7-10.9 7-17 7s-12.3-2.3-17-7c-9.4-9.4-9.4-24.6 0-33.9l127-127.1z">
-                                            </path>
-                                        </svg>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="AdminMemo">
-                        <div class="AdminMemo-item">
-                            <div class="Card" style="background: rgb(0, 97, 242);">
-                                <div class="CardBody">
-                                    <div class="AdminMemo-item-content">
-                                        <div class="AdminMemo-item-content-text">
-                                            <div class="AdminMemo-item-content-text-title">Earnings (Monthly)</div>
-                                            <div class="AdminMemo-item-content-text-detail">$40,000</div>
-                                        </div><svg stroke="currentColor" fill="currentColor" stroke-width="0"
-                                            viewBox="0 0 24 24" color="rgba(255, 255, 255, 0.5)" height="40px"
-                                            width="40px" xmlns="http://www.w3.org/2000/svg"
-                                            style="color: rgba(255, 255, 255, 0.5);">
-                                            <g id="Calendar">
-                                                <path
-                                                    d="M18.438,4.954H16.5c0-0.346,0-0.691,0-1.036c0-0.124,0-0.248,0-0.372c0-0.262-0.23-0.512-0.5-0.5
-                        c-0.271,0.012-0.5,0.22-0.5,0.5c0,0.469,0,0.939,0,1.408h-7c0-0.346,0-0.691,0-1.036c0-0.124,0-0.248,0-0.372
-                        c0-0.262-0.23-0.512-0.5-0.5c-0.271,0.012-0.5,0.22-0.5,0.5c0,0.469,0,0.939,0,1.408H5.562c-1.378,0-2.5,1.122-2.5,2.5v11
-                        c0,1.379,1.122,2.5,2.5,2.5h12.875c1.379,0,2.5-1.121,2.5-2.5v-11C20.938,6.076,19.816,4.954,18.438,4.954z M5.562,5.954H7.5
-                        c0,0.073,0,0.147,0,0.22c0,0.124,0,0.248,0,0.372c0,0.262,0.23,0.512,0.5,0.5c0.271-0.012,0.5-0.22,0.5-0.5c0-0.197,0-0.394,0-0.592
-                        h7c0,0.073,0,0.147,0,0.22c0,0.124,0,0.248,0,0.372c0,0.262,0.23,0.512,0.5,0.5c0.271-0.012,0.5-0.22,0.5-0.5
-                        c0-0.197,0-0.394,0-0.592h1.937c0.827,0,1.5,0.673,1.5,1.5v1.584H4.062V7.454C4.062,6.627,4.735,5.954,5.562,5.954z M18.438,19.954
-                        H5.562c-0.827,0-1.5-0.673-1.5-1.5v-8.416h15.875v8.416C19.938,19.281,19.265,19.954,18.438,19.954z">
-                                                </path>
-                                            </g>
-                                        </svg>
-                                    </div>
-                                </div>
-                                <div class="CardFooter">
-                                    <div class="CardFooter-container">
-                                        <div class="AdminMemo-item-footer">View Report</div><svg stroke="currentColor"
-                                            fill="currentColor" stroke-width="0" viewBox="0 0 512 512" height="1em"
-                                            width="1em" xmlns="http://www.w3.org/2000/svg">
-                                            <path
-                                                d="M294.1 256L167 129c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.3 34 0L345 239c9.1 9.1 9.3 23.7.7 33.1L201.1 417c-4.7 4.7-10.9 7-17 7s-12.3-2.3-17-7c-9.4-9.4-9.4-24.6 0-33.9l127-127.1z">
-                                            </path>
-                                        </svg>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="AdminMemo-item">
-                            <div class="Card" style="background: rgb(244, 161, 0);">
-                                <div class="CardBody">
-                                    <div class="AdminMemo-item-content">
-                                        <div class="AdminMemo-item-content-text">
-                                            <div class="AdminMemo-item-content-text-title">Earnings (Anually)</div>
-                                            <div class="AdminMemo-item-content-text-detail">$40,000</div>
-                                        </div><svg stroke="currentColor" fill="currentColor" stroke-width="0"
-                                            viewBox="0 0 24 24" color="rgba(255, 255, 255, 0.5)" height="40px"
-                                            width="40px" xmlns="http://www.w3.org/2000/svg"
-                                            style="color: rgba(255, 255, 255, 0.5);">
-                                            <g id="Calendar">
-                                                <path
-                                                    d="M18.438,4.954H16.5c0-0.346,0-0.691,0-1.036c0-0.124,0-0.248,0-0.372c0-0.262-0.23-0.512-0.5-0.5
-                        c-0.271,0.012-0.5,0.22-0.5,0.5c0,0.469,0,0.939,0,1.408h-7c0-0.346,0-0.691,0-1.036c0-0.124,0-0.248,0-0.372
-                        c0-0.262-0.23-0.512-0.5-0.5c-0.271,0.012-0.5,0.22-0.5,0.5c0,0.469,0,0.939,0,1.408H5.562c-1.378,0-2.5,1.122-2.5,2.5v11
-                        c0,1.379,1.122,2.5,2.5,2.5h12.875c1.379,0,2.5-1.121,2.5-2.5v-11C20.938,6.076,19.816,4.954,18.438,4.954z M5.562,5.954H7.5
-                        c0,0.073,0,0.147,0,0.22c0,0.124,0,0.248,0,0.372c0,0.262,0.23,0.512,0.5,0.5c0.271-0.012,0.5-0.22,0.5-0.5c0-0.197,0-0.394,0-0.592
-                        h7c0,0.073,0,0.147,0,0.22c0,0.124,0,0.248,0,0.372c0,0.262,0.23,0.512,0.5,0.5c0.271-0.012,0.5-0.22,0.5-0.5
-                        c0-0.197,0-0.394,0-0.592h1.937c0.827,0,1.5,0.673,1.5,1.5v1.584H4.062V7.454C4.062,6.627,4.735,5.954,5.562,5.954z M18.438,19.954
-                        H5.562c-0.827,0-1.5-0.673-1.5-1.5v-8.416h15.875v8.416C19.938,19.281,19.265,19.954,18.438,19.954z">
-                                                </path>
-                                            </g>
-                                        </svg>
-                                    </div>
-                                </div>
-                                <div class="CardFooter">
-                                    <div class="CardFooter-container">
-                                        <div class="AdminMemo-item-footer">View Report</div><svg stroke="currentColor"
-                                            fill="currentColor" stroke-width="0" viewBox="0 0 512 512" height="1em"
-                                            width="1em" xmlns="http://www.w3.org/2000/svg">
-                                            <path
-                                                d="M294.1 256L167 129c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.3 34 0L345 239c9.1 9.1 9.3 23.7.7 33.1L201.1 417c-4.7 4.7-10.9 7-17 7s-12.3-2.3-17-7c-9.4-9.4-9.4-24.6 0-33.9l127-127.1z">
-                                            </path>
-                                        </svg>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="AdminMemo-item">
-                            <div class="Card" style="background: rgb(0, 172, 105);">
-                                <div class="CardBody">
-                                    <div class="AdminMemo-item-content">
-                                        <div class="AdminMemo-item-content-text">
-                                            <div class="AdminMemo-item-content-text-title">Task Completion</div>
-                                            <div class="AdminMemo-item-content-text-detail">24</div>
-                                        </div><svg stroke="currentColor" fill="currentColor" stroke-width="0"
-                                            viewBox="0 0 24 24" color="rgba(255, 255, 255, 0.5)" height="40px"
-                                            width="40px" xmlns="http://www.w3.org/2000/svg"
-                                            style="color: rgba(255, 255, 255, 0.5);">
-                                            <g id="Calendar">
-                                                <path
-                                                    d="M18.438,4.954H16.5c0-0.346,0-0.691,0-1.036c0-0.124,0-0.248,0-0.372c0-0.262-0.23-0.512-0.5-0.5
-                        c-0.271,0.012-0.5,0.22-0.5,0.5c0,0.469,0,0.939,0,1.408h-7c0-0.346,0-0.691,0-1.036c0-0.124,0-0.248,0-0.372
-                        c0-0.262-0.23-0.512-0.5-0.5c-0.271,0.012-0.5,0.22-0.5,0.5c0,0.469,0,0.939,0,1.408H5.562c-1.378,0-2.5,1.122-2.5,2.5v11
-                        c0,1.379,1.122,2.5,2.5,2.5h12.875c1.379,0,2.5-1.121,2.5-2.5v-11C20.938,6.076,19.816,4.954,18.438,4.954z M5.562,5.954H7.5
-                        c0,0.073,0,0.147,0,0.22c0,0.124,0,0.248,0,0.372c0,0.262,0.23,0.512,0.5,0.5c0.271-0.012,0.5-0.22,0.5-0.5c0-0.197,0-0.394,0-0.592
-                        h7c0,0.073,0,0.147,0,0.22c0,0.124,0,0.248,0,0.372c0,0.262,0.23,0.512,0.5,0.5c0.271-0.012,0.5-0.22,0.5-0.5
-                        c0-0.197,0-0.394,0-0.592h1.937c0.827,0,1.5,0.673,1.5,1.5v1.584H4.062V7.454C4.062,6.627,4.735,5.954,5.562,5.954z M18.438,19.954
-                        H5.562c-0.827,0-1.5-0.673-1.5-1.5v-8.416h15.875v8.416C19.938,19.281,19.265,19.954,18.438,19.954z">
-                                                </path>
-                                            </g>
-                                        </svg>
-                                    </div>
-                                </div>
-                                <div class="CardFooter">
-                                    <div class="CardFooter-container">
-                                        <div class="AdminMemo-item-footer">View Tasks</div><svg stroke="currentColor"
-                                            fill="currentColor" stroke-width="0" viewBox="0 0 512 512" height="1em"
-                                            width="1em" xmlns="http://www.w3.org/2000/svg">
-                                            <path
-                                                d="M294.1 256L167 129c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.3 34 0L345 239c9.1 9.1 9.3 23.7.7 33.1L201.1 417c-4.7 4.7-10.9 7-17 7s-12.3-2.3-17-7c-9.4-9.4-9.4-24.6 0-33.9l127-127.1z">
-                                            </path>
-                                        </svg>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="AdminMemo-item">
-                            <div class="Card" style="background: rgb(232, 21, 0);">
-                                <div class="CardBody">
-                                    <div class="AdminMemo-item-content">
-                                        <div class="AdminMemo-item-content-text">
-                                            <div class="AdminMemo-item-content-text-title">Pending Requests</div>
-                                            <div class="AdminMemo-item-content-text-detail">17</div>
-                                        </div><svg stroke="currentColor" fill="currentColor" stroke-width="0"
-                                            viewBox="0 0 24 24" color="rgba(255, 255, 255, 0.5)" height="40px"
-                                            width="40px" xmlns="http://www.w3.org/2000/svg"
-                                            style="color: rgba(255, 255, 255, 0.5);">
-                                            <g id="Calendar">
-                                                <path
-                                                    d="M18.438,4.954H16.5c0-0.346,0-0.691,0-1.036c0-0.124,0-0.248,0-0.372c0-0.262-0.23-0.512-0.5-0.5
-                        c-0.271,0.012-0.5,0.22-0.5,0.5c0,0.469,0,0.939,0,1.408h-7c0-0.346,0-0.691,0-1.036c0-0.124,0-0.248,0-0.372
-                        c0-0.262-0.23-0.512-0.5-0.5c-0.271,0.012-0.5,0.22-0.5,0.5c0,0.469,0,0.939,0,1.408H5.562c-1.378,0-2.5,1.122-2.5,2.5v11
-                        c0,1.379,1.122,2.5,2.5,2.5h12.875c1.379,0,2.5-1.121,2.5-2.5v-11C20.938,6.076,19.816,4.954,18.438,4.954z M5.562,5.954H7.5
-                        c0,0.073,0,0.147,0,0.22c0,0.124,0,0.248,0,0.372c0,0.262,0.23,0.512,0.5,0.5c0.271-0.012,0.5-0.22,0.5-0.5c0-0.197,0-0.394,0-0.592
-                        h7c0,0.073,0,0.147,0,0.22c0,0.124,0,0.248,0,0.372c0,0.262,0.23,0.512,0.5,0.5c0.271-0.012,0.5-0.22,0.5-0.5
-                        c0-0.197,0-0.394,0-0.592h1.937c0.827,0,1.5,0.673,1.5,1.5v1.584H4.062V7.454C4.062,6.627,4.735,5.954,5.562,5.954z M18.438,19.954
-                        H5.562c-0.827,0-1.5-0.673-1.5-1.5v-8.416h15.875v8.416C19.938,19.281,19.265,19.954,18.438,19.954z">
-                                                </path>
-                                            </g>
-                                        </svg>
-                                    </div>
-                                </div>
-                                <div class="CardFooter">
-                                    <div class="CardFooter-container">
-                                        <div class="AdminMemo-item-footer">View Requests</div><svg stroke="currentColor"
-                                            fill="currentColor" stroke-width="0" viewBox="0 0 512 512" height="1em"
-                                            width="1em" xmlns="http://www.w3.org/2000/svg">
-                                            <path
-                                                d="M294.1 256L167 129c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.3 34 0L345 239c9.1 9.1 9.3 23.7.7 33.1L201.1 417c-4.7 4.7-10.9 7-17 7s-12.3-2.3-17-7c-9.4-9.4-9.4-24.6 0-33.9l127-127.1z">
-                                            </path>
-                                        </svg>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="AdminChart">
-                        <div class="AdminChart-item">
-                            <div class="Card">
-                                <div class="CardHeader">Earnings Breakdown<div><svg stroke="currentColor"
-                                            fill="currentColor" stroke-width="0" viewBox="0 0 512 512" color="gray"
-                                            height="16px" width="16px" xmlns="http://www.w3.org/2000/svg"
-                                            style="color: gray;">
-                                            <path
-                                                d="M296 136c0-22.002-17.998-40-40-40s-40 17.998-40 40 17.998 40 40 40 40-17.998 40-40zm0 240c0-22.002-17.998-40-40-40s-40 17.998-40 40 17.998 40 40 40 40-17.998 40-40zm0-120c0-22.002-17.998-40-40-40s-40 17.998-40 40 17.998 40 40 40 40-17.998 40-40z">
-                                            </path>
-                                        </svg></div>
-                                </div>
-                                <div class="CardBody"><canvas style="height: 276px;" id="earningsChart"></canvas>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="AdminChart-item">
-                            <div class="Card">
-                                <div class="CardHeader">Monthly Revenue<div><svg stroke="currentColor"
-                                            fill="currentColor" stroke-width="0" viewBox="0 0 512 512" color="gray"
-                                            height="16px" width="16px" xmlns="http://www.w3.org/2000/svg"
-                                            style="color: gray;">
-                                            <path
-                                                d="M296 136c0-22.002-17.998-40-40-40s-40 17.998-40 40 17.998 40 40 40 40-17.998 40-40zm0 240c0-22.002-17.998-40-40-40s-40 17.998-40 40 17.998 40 40 40 40-17.998 40-40zm0-120c0-22.002-17.998-40-40-40s-40 17.998-40 40 17.998 40 40 40 40-17.998 40-40z">
-                                            </path>
-                                        </svg></div>
-                                </div>
-                                <div class="CardBody"><canvas style="height: 276px;" id="revenueChart"></canvas>
-                                </div>
-                            </div>
-                        </div>
+            <div id="admin-content" class="admin-main showSidebar">
+<!--                <div class="AdminBanner">-->
+<!--                    <div class="AdminBanner-container">-->
+<!--                        <div class="AdminBanner-container-content">-->
+<!--                            <div class="AdminBanner-container-content-text">-->
+<!--                                <div class="AdminBanner-container-content-text-title"><svg stroke="currentColor"-->
+<!--                                        fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round"-->
+<!--                                        stroke-linejoin="round" color="rgba(255, 255, 255, 0.5)" height="1em"-->
+<!--                                        width="1em" xmlns="http://www.w3.org/2000/svg"-->
+<!--                                        style="color: rgba(255, 255, 255, 0.5); margin-right: 8px;">-->
+<!--                                        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>-->
+<!--                                    </svg>Dashboard</div>-->
+<!--                                <div class="AdminBanner-container-content-text-subtitle">Example dashboard overview and-->
+<!--                                    content-->
+<!--                                    summary</div>-->
+<!--                            </div>-->
+<!--                            <div class="AdminBanner-container-content-calendar">-->
+<!--                                <div class="AdminBanner-container-content-calendar-container"><span><svg-->
+<!--                                            stroke="currentColor" fill="currentColor" stroke-width="0"-->
+<!--                                            viewBox="0 0 24 24" font-weight="400" height="18px" width="18px"-->
+<!--                                            xmlns="http://www.w3.org/2000/svg">-->
+<!--                                            <g id="Calendar">-->
+<!--                                                <path-->
+<!--                                                    d="M18.438,4.954H16.5c0-0.346,0-0.691,0-1.036c0-0.124,0-0.248,0-0.372c0-0.262-0.23-0.512-0.5-0.5-->
+<!--                        c-0.271,0.012-0.5,0.22-0.5,0.5c0,0.469,0,0.939,0,1.408h-7c0-0.346,0-0.691,0-1.036c0-0.124,0-0.248,0-0.372-->
+<!--                        c0-0.262-0.23-0.512-0.5-0.5c-0.271,0.012-0.5,0.22-0.5,0.5c0,0.469,0,0.939,0,1.408H5.562c-1.378,0-2.5,1.122-2.5,2.5v11-->
+<!--                        c0,1.379,1.122,2.5,2.5,2.5h12.875c1.379,0,2.5-1.121,2.5-2.5v-11C20.938,6.076,19.816,4.954,18.438,4.954z M5.562,5.954H7.5-->
+<!--                        c0,0.073,0,0.147,0,0.22c0,0.124,0,0.248,0,0.372c0,0.262,0.23,0.512,0.5,0.5c0.271-0.012,0.5-0.22,0.5-0.5c0-0.197,0-0.394,0-0.592-->
+<!--                        h7c0,0.073,0,0.147,0,0.22c0,0.124,0,0.248,0,0.372c0,0.262,0.23,0.512,0.5,0.5c0.271-0.012,0.5-0.22,0.5-0.5-->
+<!--                        c0-0.197,0-0.394,0-0.592h1.937c0.827,0,1.5,0.673,1.5,1.5v1.584H4.062V7.454C4.062,6.627,4.735,5.954,5.562,5.954z M18.438,19.954-->
+<!--                        H5.562c-0.827,0-1.5-0.673-1.5-1.5v-8.416h15.875v8.416C19.938,19.281,19.265,19.954,18.438,19.954z">-->
+<!--                                                </path>-->
+<!--                                            </g>-->
+<!--                                        </svg></span><input type="text" value="Oct 04, 2022 - Oct 04, 2024"-->
+<!--                                        fdprocessedid="1rfxk7">-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <div class="admin-main-content">-->
+<!--                    <div class="admin-main-content-overlay show-overlay"></div>-->
+<!--                    <div class="AdminActivity">-->
+<!--                        <div class="AdminActivity-item item1">-->
+<!--                            <div class="Card">-->
+<!--                                <div class="CardBody">-->
+<!--                                    <div class="AdminActivity-item-welcome">-->
+<!--                                        <div class="AdminActivity-item-welcome-text">-->
+<!--                                            <h1 class="AdminActivity-item-welcome-text-main">Welcome to SB Admin Pro!-->
+<!--                                            </h1>-->
+<!--                                            <p class="AdminActivity-item-welcome-text-sub">Browse our fully designed UI-->
+<!--                                                toolkit!-->
+<!--                                                Browse our prebuilt app pages, components, and utilites, and be sure to-->
+<!--                                                look at our-->
+<!--                                                full documentation!</p>-->
+<!--                                        </div>-->
+<!--                                        <div class="AdminActivity-item-welcome-image"><img-->
+<!--                                                src="https://sb-admin-pro.startbootstrap.com/assets/img/illustrations/at-work.svg">-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                        <div class="AdminActivity-item item2">-->
+<!--                            <div class="Card">-->
+<!--                                <div class="CardHeader">Recent Activity<div><svg stroke="currentColor"-->
+<!--                                            fill="currentColor" stroke-width="0" viewBox="0 0 512 512" color="gray"-->
+<!--                                            height="16px" width="16px" xmlns="http://www.w3.org/2000/svg"-->
+<!--                                            style="color: gray;">-->
+<!--                                            <path-->
+<!--                                                d="M296 136c0-22.002-17.998-40-40-40s-40 17.998-40 40 17.998 40 40 40 40-17.998 40-40zm0 240c0-22.002-17.998-40-40-40s-40 17.998-40 40 17.998 40 40 40 40-17.998 40-40zm0-120c0-22.002-17.998-40-40-40s-40 17.998-40 40 17.998 40 40 40 40-17.998 40-40z">-->
+<!--                                            </path>-->
+<!--                                        </svg></div>-->
+<!--                                </div>-->
+<!--                                <div class="CardBody">-->
+<!--                                    <div class="timeline">-->
+<!--                                        <div class="timeline-item">-->
+<!--                                            <div class="timeline-item-marker">-->
+<!--                                                <div class="timeline-item-marker-text">27 min</div>-->
+<!--                                                <div class="timeline-item-marker-indicator"></div>-->
+<!--                                            </div>-->
+<!--                                            <div class="timeline-item-content">New order placed!<a-->
+<!--                                                    class="fw-bold text-dark text-decoration-none" href="#!"> Order-->
+<!--                                                    #2912 </a>has-->
+<!--                                                been successfully placed.</div>-->
+<!--                                        </div>-->
+<!--                                        <div class="timeline-item">-->
+<!--                                            <div class="timeline-item-marker">-->
+<!--                                                <div class="timeline-item-marker-text">27 min</div>-->
+<!--                                                <div class="timeline-item-marker-indicator bg-green"></div>-->
+<!--                                            </div>-->
+<!--                                            <div class="timeline-item-content">New order placed!<a-->
+<!--                                                    class="fw-bold text-dark text-decoration-none" href="#!"> Order-->
+<!--                                                    #2912 </a>has-->
+<!--                                                been successfully placed.</div>-->
+<!--                                        </div>-->
+<!--                                        <div class="timeline-item">-->
+<!--                                            <div class="timeline-item-marker">-->
+<!--                                                <div class="timeline-item-marker-text">27 min</div>-->
+<!--                                                <div class="timeline-item-marker-indicator"></div>-->
+<!--                                            </div>-->
+<!--                                            <div class="timeline-item-content">New order placed!<a-->
+<!--                                                    class="fw-bold text-dark text-decoration-none" href="#!"> Order-->
+<!--                                                    #2912 </a>has-->
+<!--                                                been successfully placed.</div>-->
+<!--                                        </div>-->
+<!--                                        <div class="timeline-item">-->
+<!--                                            <div class="timeline-item-marker">-->
+<!--                                                <div class="timeline-item-marker-text">27 min</div>-->
+<!--                                                <div class="timeline-item-marker-indicator"></div>-->
+<!--                                            </div>-->
+<!--                                            <div class="timeline-item-content">New order placed!<a-->
+<!--                                                    class="fw-bold text-dark text-decoration-none" href="#!"> Order-->
+<!--                                                    #2912 </a>has-->
+<!--                                                been successfully placed.</div>-->
+<!--                                        </div>-->
+<!--                                        <div class="timeline-item">-->
+<!--                                            <div class="timeline-item-marker">-->
+<!--                                                <div class="timeline-item-marker-text">27 min</div>-->
+<!--                                                <div class="timeline-item-marker-indicator"></div>-->
+<!--                                            </div>-->
+<!--                                            <div class="timeline-item-content">New order placed!<a-->
+<!--                                                    class="fw-bold text-dark text-decoration-none" href="#!"> Order-->
+<!--                                                    #2912 </a>has-->
+<!--                                                been successfully placed.</div>-->
+<!--                                        </div>-->
+<!--                                        <div class="timeline-item">-->
+<!--                                            <div class="timeline-item-marker">-->
+<!--                                                <div class="timeline-item-marker-text">27 min</div>-->
+<!--                                                <div class="timeline-item-marker-indicator"></div>-->
+<!--                                            </div>-->
+<!--                                            <div class="timeline-item-content">New order placed!<a-->
+<!--                                                    class="fw-bold text-dark text-decoration-none" href="#!"> Order-->
+<!--                                                    #2912 </a>has-->
+<!--                                                been successfully placed.</div>-->
+<!--                                        </div>-->
+<!--                                        <div class="timeline-item">-->
+<!--                                            <div class="timeline-item-marker">-->
+<!--                                                <div class="timeline-item-marker-text">27 min</div>-->
+<!--                                                <div class="timeline-item-marker-indicator"></div>-->
+<!--                                            </div>-->
+<!--                                            <div class="timeline-item-content">New order placed!<a-->
+<!--                                                    class="fw-bold text-dark text-decoration-none" href="#!"> Order-->
+<!--                                                    #2912 </a>has-->
+<!--                                                been successfully placed.</div>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                        <div class="AdminActivity-item item3">-->
+<!--                            <div class="Card">-->
+<!--                                <div class="CardHeader">Progress Tracker<div><svg stroke="currentColor"-->
+<!--                                            fill="currentColor" stroke-width="0" viewBox="0 0 512 512" color="gray"-->
+<!--                                            height="16px" width="16px" xmlns="http://www.w3.org/2000/svg"-->
+<!--                                            style="color: gray;">-->
+<!--                                            <path-->
+<!--                                                d="M296 136c0-22.002-17.998-40-40-40s-40 17.998-40 40 17.998 40 40 40 40-17.998 40-40zm0 240c0-22.002-17.998-40-40-40s-40 17.998-40 40 17.998 40 40 40 40-17.998 40-40zm0-120c0-22.002-17.998-40-40-40s-40 17.998-40 40 17.998 40 40 40 40-17.998 40-40z">-->
+<!--                                            </path>-->
+<!--                                        </svg></div>-->
+<!--                                </div>-->
+<!--                                <div class="CardBody">-->
+<!--                                    <h4>Server Migration<span style="margin-left: auto;">20%</span></h4>-->
+<!--                                    <div class="Progress">-->
+<!--                                        <div class="Progress-bar" style="width: 20%;"></div>-->
+<!--                                    </div>-->
+<!--                                    <h4> Sale Tracking<span style="margin-left: auto;">40%</span></h4>-->
+<!--                                    <div class="Progress">-->
+<!--                                        <div class="Progress-bar"-->
+<!--                                            style="width: 40%; background-color: rgb(244, 161, 0);"></div>-->
+<!--                                    </div>-->
+<!--                                    <h4> Customer Database<span style="margin-left: auto;">60%</span></h4>-->
+<!--                                    <div class="Progress">-->
+<!--                                        <div class="Progress-bar"-->
+<!--                                            style="width: 60%; background-color: rgb(0, 97, 242);"></div>-->
+<!--                                    </div>-->
+<!--                                    <h4> Payout Details<span style="margin-left: auto;">80%</span></h4>-->
+<!--                                    <div class="Progress">-->
+<!--                                        <div class="Progress-bar"-->
+<!--                                            style="width: 80%; background-color: rgb(0, 207, 213);"></div>-->
+<!--                                    </div>-->
+<!--                                    <h4> Account Setup<span style="margin-left: auto;">Complete!</span></h4>-->
+<!--                                    <div class="Progress">-->
+<!--                                        <div class="Progress-bar"-->
+<!--                                            style="width: 100%; background-color: rgb(0, 172, 105);"></div>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                                <div class="CardFooter">-->
+<!--                                    <div class="CardFooter-container">-->
+<!--                                        <div class="AdminActivity-item-footer">View Task Center</div><svg-->
+<!--                                            stroke="currentColor" fill="currentColor" stroke-width="0"-->
+<!--                                            viewBox="0 0 512 512" height="1em" width="1em"-->
+<!--                                            xmlns="http://www.w3.org/2000/svg">-->
+<!--                                            <path-->
+<!--                                                d="M294.1 256L167 129c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.3 34 0L345 239c9.1 9.1 9.3 23.7.7 33.1L201.1 417c-4.7 4.7-10.9 7-17 7s-12.3-2.3-17-7c-9.4-9.4-9.4-24.6 0-33.9l127-127.1z">-->
+<!--                                            </path>-->
+<!--                                        </svg>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    <div class="AdminMemo">-->
+<!--                        <div class="AdminMemo-item">-->
+<!--                            <div class="Card" style="background: rgb(0, 97, 242);">-->
+<!--                                <div class="CardBody">-->
+<!--                                    <div class="AdminMemo-item-content">-->
+<!--                                        <div class="AdminMemo-item-content-text">-->
+<!--                                            <div class="AdminMemo-item-content-text-title">Earnings (Monthly)</div>-->
+<!--                                            <div class="AdminMemo-item-content-text-detail">$40,000</div>-->
+<!--                                        </div><svg stroke="currentColor" fill="currentColor" stroke-width="0"-->
+<!--                                            viewBox="0 0 24 24" color="rgba(255, 255, 255, 0.5)" height="40px"-->
+<!--                                            width="40px" xmlns="http://www.w3.org/2000/svg"-->
+<!--                                            style="color: rgba(255, 255, 255, 0.5);">-->
+<!--                                            <g id="Calendar">-->
+<!--                                                <path-->
+<!--                                                    d="M18.438,4.954H16.5c0-0.346,0-0.691,0-1.036c0-0.124,0-0.248,0-0.372c0-0.262-0.23-0.512-0.5-0.5-->
+<!--                        c-0.271,0.012-0.5,0.22-0.5,0.5c0,0.469,0,0.939,0,1.408h-7c0-0.346,0-0.691,0-1.036c0-0.124,0-0.248,0-0.372-->
+<!--                        c0-0.262-0.23-0.512-0.5-0.5c-0.271,0.012-0.5,0.22-0.5,0.5c0,0.469,0,0.939,0,1.408H5.562c-1.378,0-2.5,1.122-2.5,2.5v11-->
+<!--                        c0,1.379,1.122,2.5,2.5,2.5h12.875c1.379,0,2.5-1.121,2.5-2.5v-11C20.938,6.076,19.816,4.954,18.438,4.954z M5.562,5.954H7.5-->
+<!--                        c0,0.073,0,0.147,0,0.22c0,0.124,0,0.248,0,0.372c0,0.262,0.23,0.512,0.5,0.5c0.271-0.012,0.5-0.22,0.5-0.5c0-0.197,0-0.394,0-0.592-->
+<!--                        h7c0,0.073,0,0.147,0,0.22c0,0.124,0,0.248,0,0.372c0,0.262,0.23,0.512,0.5,0.5c0.271-0.012,0.5-0.22,0.5-0.5-->
+<!--                        c0-0.197,0-0.394,0-0.592h1.937c0.827,0,1.5,0.673,1.5,1.5v1.584H4.062V7.454C4.062,6.627,4.735,5.954,5.562,5.954z M18.438,19.954-->
+<!--                        H5.562c-0.827,0-1.5-0.673-1.5-1.5v-8.416h15.875v8.416C19.938,19.281,19.265,19.954,18.438,19.954z">-->
+<!--                                                </path>-->
+<!--                                            </g>-->
+<!--                                        </svg>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                                <div class="CardFooter">-->
+<!--                                    <div class="CardFooter-container">-->
+<!--                                        <div class="AdminMemo-item-footer">View Report</div><svg stroke="currentColor"-->
+<!--                                            fill="currentColor" stroke-width="0" viewBox="0 0 512 512" height="1em"-->
+<!--                                            width="1em" xmlns="http://www.w3.org/2000/svg">-->
+<!--                                            <path-->
+<!--                                                d="M294.1 256L167 129c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.3 34 0L345 239c9.1 9.1 9.3 23.7.7 33.1L201.1 417c-4.7 4.7-10.9 7-17 7s-12.3-2.3-17-7c-9.4-9.4-9.4-24.6 0-33.9l127-127.1z">-->
+<!--                                            </path>-->
+<!--                                        </svg>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                        <div class="AdminMemo-item">-->
+<!--                            <div class="Card" style="background: rgb(244, 161, 0);">-->
+<!--                                <div class="CardBody">-->
+<!--                                    <div class="AdminMemo-item-content">-->
+<!--                                        <div class="AdminMemo-item-content-text">-->
+<!--                                            <div class="AdminMemo-item-content-text-title">Earnings (Anually)</div>-->
+<!--                                            <div class="AdminMemo-item-content-text-detail">$40,000</div>-->
+<!--                                        </div><svg stroke="currentColor" fill="currentColor" stroke-width="0"-->
+<!--                                            viewBox="0 0 24 24" color="rgba(255, 255, 255, 0.5)" height="40px"-->
+<!--                                            width="40px" xmlns="http://www.w3.org/2000/svg"-->
+<!--                                            style="color: rgba(255, 255, 255, 0.5);">-->
+<!--                                            <g id="Calendar">-->
+<!--                                                <path-->
+<!--                                                    d="M18.438,4.954H16.5c0-0.346,0-0.691,0-1.036c0-0.124,0-0.248,0-0.372c0-0.262-0.23-0.512-0.5-0.5-->
+<!--                        c-0.271,0.012-0.5,0.22-0.5,0.5c0,0.469,0,0.939,0,1.408h-7c0-0.346,0-0.691,0-1.036c0-0.124,0-0.248,0-0.372-->
+<!--                        c0-0.262-0.23-0.512-0.5-0.5c-0.271,0.012-0.5,0.22-0.5,0.5c0,0.469,0,0.939,0,1.408H5.562c-1.378,0-2.5,1.122-2.5,2.5v11-->
+<!--                        c0,1.379,1.122,2.5,2.5,2.5h12.875c1.379,0,2.5-1.121,2.5-2.5v-11C20.938,6.076,19.816,4.954,18.438,4.954z M5.562,5.954H7.5-->
+<!--                        c0,0.073,0,0.147,0,0.22c0,0.124,0,0.248,0,0.372c0,0.262,0.23,0.512,0.5,0.5c0.271-0.012,0.5-0.22,0.5-0.5c0-0.197,0-0.394,0-0.592-->
+<!--                        h7c0,0.073,0,0.147,0,0.22c0,0.124,0,0.248,0,0.372c0,0.262,0.23,0.512,0.5,0.5c0.271-0.012,0.5-0.22,0.5-0.5-->
+<!--                        c0-0.197,0-0.394,0-0.592h1.937c0.827,0,1.5,0.673,1.5,1.5v1.584H4.062V7.454C4.062,6.627,4.735,5.954,5.562,5.954z M18.438,19.954-->
+<!--                        H5.562c-0.827,0-1.5-0.673-1.5-1.5v-8.416h15.875v8.416C19.938,19.281,19.265,19.954,18.438,19.954z">-->
+<!--                                                </path>-->
+<!--                                            </g>-->
+<!--                                        </svg>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                                <div class="CardFooter">-->
+<!--                                    <div class="CardFooter-container">-->
+<!--                                        <div class="AdminMemo-item-footer">View Report</div><svg stroke="currentColor"-->
+<!--                                            fill="currentColor" stroke-width="0" viewBox="0 0 512 512" height="1em"-->
+<!--                                            width="1em" xmlns="http://www.w3.org/2000/svg">-->
+<!--                                            <path-->
+<!--                                                d="M294.1 256L167 129c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.3 34 0L345 239c9.1 9.1 9.3 23.7.7 33.1L201.1 417c-4.7 4.7-10.9 7-17 7s-12.3-2.3-17-7c-9.4-9.4-9.4-24.6 0-33.9l127-127.1z">-->
+<!--                                            </path>-->
+<!--                                        </svg>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                        <div class="AdminMemo-item">-->
+<!--                            <div class="Card" style="background: rgb(0, 172, 105);">-->
+<!--                                <div class="CardBody">-->
+<!--                                    <div class="AdminMemo-item-content">-->
+<!--                                        <div class="AdminMemo-item-content-text">-->
+<!--                                            <div class="AdminMemo-item-content-text-title">Task Completion</div>-->
+<!--                                            <div class="AdminMemo-item-content-text-detail">24</div>-->
+<!--                                        </div><svg stroke="currentColor" fill="currentColor" stroke-width="0"-->
+<!--                                            viewBox="0 0 24 24" color="rgba(255, 255, 255, 0.5)" height="40px"-->
+<!--                                            width="40px" xmlns="http://www.w3.org/2000/svg"-->
+<!--                                            style="color: rgba(255, 255, 255, 0.5);">-->
+<!--                                            <g id="Calendar">-->
+<!--                                                <path-->
+<!--                                                    d="M18.438,4.954H16.5c0-0.346,0-0.691,0-1.036c0-0.124,0-0.248,0-0.372c0-0.262-0.23-0.512-0.5-0.5-->
+<!--                        c-0.271,0.012-0.5,0.22-0.5,0.5c0,0.469,0,0.939,0,1.408h-7c0-0.346,0-0.691,0-1.036c0-0.124,0-0.248,0-0.372-->
+<!--                        c0-0.262-0.23-0.512-0.5-0.5c-0.271,0.012-0.5,0.22-0.5,0.5c0,0.469,0,0.939,0,1.408H5.562c-1.378,0-2.5,1.122-2.5,2.5v11-->
+<!--                        c0,1.379,1.122,2.5,2.5,2.5h12.875c1.379,0,2.5-1.121,2.5-2.5v-11C20.938,6.076,19.816,4.954,18.438,4.954z M5.562,5.954H7.5-->
+<!--                        c0,0.073,0,0.147,0,0.22c0,0.124,0,0.248,0,0.372c0,0.262,0.23,0.512,0.5,0.5c0.271-0.012,0.5-0.22,0.5-0.5c0-0.197,0-0.394,0-0.592-->
+<!--                        h7c0,0.073,0,0.147,0,0.22c0,0.124,0,0.248,0,0.372c0,0.262,0.23,0.512,0.5,0.5c0.271-0.012,0.5-0.22,0.5-0.5-->
+<!--                        c0-0.197,0-0.394,0-0.592h1.937c0.827,0,1.5,0.673,1.5,1.5v1.584H4.062V7.454C4.062,6.627,4.735,5.954,5.562,5.954z M18.438,19.954-->
+<!--                        H5.562c-0.827,0-1.5-0.673-1.5-1.5v-8.416h15.875v8.416C19.938,19.281,19.265,19.954,18.438,19.954z">-->
+<!--                                                </path>-->
+<!--                                            </g>-->
+<!--                                        </svg>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                                <div class="CardFooter">-->
+<!--                                    <div class="CardFooter-container">-->
+<!--                                        <div class="AdminMemo-item-footer">View Tasks</div><svg stroke="currentColor"-->
+<!--                                            fill="currentColor" stroke-width="0" viewBox="0 0 512 512" height="1em"-->
+<!--                                            width="1em" xmlns="http://www.w3.org/2000/svg">-->
+<!--                                            <path-->
+<!--                                                d="M294.1 256L167 129c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.3 34 0L345 239c9.1 9.1 9.3 23.7.7 33.1L201.1 417c-4.7 4.7-10.9 7-17 7s-12.3-2.3-17-7c-9.4-9.4-9.4-24.6 0-33.9l127-127.1z">-->
+<!--                                            </path>-->
+<!--                                        </svg>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                        <div class="AdminMemo-item">-->
+<!--                            <div class="Card" style="background: rgb(232, 21, 0);">-->
+<!--                                <div class="CardBody">-->
+<!--                                    <div class="AdminMemo-item-content">-->
+<!--                                        <div class="AdminMemo-item-content-text">-->
+<!--                                            <div class="AdminMemo-item-content-text-title">Pending Requests</div>-->
+<!--                                            <div class="AdminMemo-item-content-text-detail">17</div>-->
+<!--                                        </div><svg stroke="currentColor" fill="currentColor" stroke-width="0"-->
+<!--                                            viewBox="0 0 24 24" color="rgba(255, 255, 255, 0.5)" height="40px"-->
+<!--                                            width="40px" xmlns="http://www.w3.org/2000/svg"-->
+<!--                                            style="color: rgba(255, 255, 255, 0.5);">-->
+<!--                                            <g id="Calendar">-->
+<!--                                                <path-->
+<!--                                                    d="M18.438,4.954H16.5c0-0.346,0-0.691,0-1.036c0-0.124,0-0.248,0-0.372c0-0.262-0.23-0.512-0.5-0.5-->
+<!--                        c-0.271,0.012-0.5,0.22-0.5,0.5c0,0.469,0,0.939,0,1.408h-7c0-0.346,0-0.691,0-1.036c0-0.124,0-0.248,0-0.372-->
+<!--                        c0-0.262-0.23-0.512-0.5-0.5c-0.271,0.012-0.5,0.22-0.5,0.5c0,0.469,0,0.939,0,1.408H5.562c-1.378,0-2.5,1.122-2.5,2.5v11-->
+<!--                        c0,1.379,1.122,2.5,2.5,2.5h12.875c1.379,0,2.5-1.121,2.5-2.5v-11C20.938,6.076,19.816,4.954,18.438,4.954z M5.562,5.954H7.5-->
+<!--                        c0,0.073,0,0.147,0,0.22c0,0.124,0,0.248,0,0.372c0,0.262,0.23,0.512,0.5,0.5c0.271-0.012,0.5-0.22,0.5-0.5c0-0.197,0-0.394,0-0.592-->
+<!--                        h7c0,0.073,0,0.147,0,0.22c0,0.124,0,0.248,0,0.372c0,0.262,0.23,0.512,0.5,0.5c0.271-0.012,0.5-0.22,0.5-0.5-->
+<!--                        c0-0.197,0-0.394,0-0.592h1.937c0.827,0,1.5,0.673,1.5,1.5v1.584H4.062V7.454C4.062,6.627,4.735,5.954,5.562,5.954z M18.438,19.954-->
+<!--                        H5.562c-0.827,0-1.5-0.673-1.5-1.5v-8.416h15.875v8.416C19.938,19.281,19.265,19.954,18.438,19.954z">-->
+<!--                                                </path>-->
+<!--                                            </g>-->
+<!--                                        </svg>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                                <div class="CardFooter">-->
+<!--                                    <div class="CardFooter-container">-->
+<!--                                        <div class="AdminMemo-item-footer">View Requests</div><svg stroke="currentColor"-->
+<!--                                            fill="currentColor" stroke-width="0" viewBox="0 0 512 512" height="1em"-->
+<!--                                            width="1em" xmlns="http://www.w3.org/2000/svg">-->
+<!--                                            <path-->
+<!--                                                d="M294.1 256L167 129c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.3 34 0L345 239c9.1 9.1 9.3 23.7.7 33.1L201.1 417c-4.7 4.7-10.9 7-17 7s-12.3-2.3-17-7c-9.4-9.4-9.4-24.6 0-33.9l127-127.1z">-->
+<!--                                            </path>-->
+<!--                                        </svg>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    <div class="AdminChart">-->
+<!--                        <div class="AdminChart-item">-->
+<!--                            <div class="Card">-->
+<!--                                <div class="CardHeader">Earnings Breakdown<div><svg stroke="currentColor"-->
+<!--                                            fill="currentColor" stroke-width="0" viewBox="0 0 512 512" color="gray"-->
+<!--                                            height="16px" width="16px" xmlns="http://www.w3.org/2000/svg"-->
+<!--                                            style="color: gray;">-->
+<!--                                            <path-->
+<!--                                                d="M296 136c0-22.002-17.998-40-40-40s-40 17.998-40 40 17.998 40 40 40 40-17.998 40-40zm0 240c0-22.002-17.998-40-40-40s-40 17.998-40 40 17.998 40 40 40 40-17.998 40-40zm0-120c0-22.002-17.998-40-40-40s-40 17.998-40 40 17.998 40 40 40 40-17.998 40-40z">-->
+<!--                                            </path>-->
+<!--                                        </svg></div>-->
+<!--                                </div>-->
+<!--                                <div class="CardBody"><canvas style="height: 276px;" id="earningsChart"></canvas>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                        <div class="AdminChart-item">-->
+<!--                            <div class="Card">-->
+<!--                                <div class="CardHeader">Monthly Revenue<div><svg stroke="currentColor"-->
+<!--                                            fill="currentColor" stroke-width="0" viewBox="0 0 512 512" color="gray"-->
+<!--                                            height="16px" width="16px" xmlns="http://www.w3.org/2000/svg"-->
+<!--                                            style="color: gray;">-->
+<!--                                            <path-->
+<!--                                                d="M296 136c0-22.002-17.998-40-40-40s-40 17.998-40 40 17.998 40 40 40 40-17.998 40-40zm0 240c0-22.002-17.998-40-40-40s-40 17.998-40 40 17.998 40 40 40 40-17.998 40-40zm0-120c0-22.002-17.998-40-40-40s-40 17.998-40 40 17.998 40 40 40 40-17.998 40-40z">-->
+<!--                                            </path>-->
+<!--                                        </svg></div>-->
+<!--                                </div>-->
+<!--                                <div class="CardBody"><canvas style="height: 276px;" id="revenueChart"></canvas>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
 
-                        <script>
-                            // Dữ liệu cho biểu đồ Earnings Breakdown
-                            const earningsData = {
-                                labels: ['Jan', '', 'Mar', '', 'May', '', 'Jul', '', 'Sep', '', 'Nov', ''],
-                                datasets: [{
-                                    label: 'Earnings Breakdown',
-                                    data: [0, 10000, 5000, 15000, 10000, 20000, 15000, 25000, 20000, 30000, 25000, 40000],
-                                    borderColor: 'rgba(0, 97, 242, 1)',
-                                    backgroundColor: 'rgba(0, 97, 242, 0.1)',
-                                    fill: true,
-                                    tension: 0.4,
-                                    pointRadius: 5,
-                                    pointBackgroundColor: 'rgba(0, 97, 242, 1)',
-                                }],
-                            };
+<!--                        <script>-->
+<!--                            // Dữ liệu cho biểu đồ Earnings Breakdown-->
+<!--                            const earningsData = {-->
+<!--                                labels: ['Jan', '', 'Mar', '', 'May', '', 'Jul', '', 'Sep', '', 'Nov', ''],-->
+<!--                                datasets: [{-->
+<!--                                    label: 'Earnings Breakdown',-->
+<!--                                    data: [0, 10000, 5000, 15000, 10000, 20000, 15000, 25000, 20000, 30000, 25000, 40000],-->
+<!--                                    borderColor: 'rgba(0, 97, 242, 1)',-->
+<!--                                    backgroundColor: 'rgba(0, 97, 242, 0.1)',-->
+<!--                                    fill: true,-->
+<!--                                    tension: 0.4,-->
+<!--                                    pointRadius: 5,-->
+<!--                                    pointBackgroundColor: 'rgba(0, 97, 242, 1)',-->
+<!--                                }],-->
+<!--                            };-->
 
-                            // Dữ liệu cho biểu đồ Monthly Revenue
-                            const revenueData = {
-                                labels: ['January', 'February', 'March', 'April', 'May', 'June'],
-                                datasets: [{
-                                    label: 'Monthly Revenue',
-                                    data: [5000, 10000, 8000, 12000, 15000, 14000],
-                                    backgroundColor: 'blue',
-                                }],
-                            };
+<!--                            // Dữ liệu cho biểu đồ Monthly Revenue-->
+<!--                            const revenueData = {-->
+<!--                                labels: ['January', 'February', 'March', 'April', 'May', 'June'],-->
+<!--                                datasets: [{-->
+<!--                                    label: 'Monthly Revenue',-->
+<!--                                    data: [5000, 10000, 8000, 12000, 15000, 14000],-->
+<!--                                    backgroundColor: 'blue',-->
+<!--                                }],-->
+<!--                            };-->
 
-                            // Tùy chọn cho biểu đồ Earnings Breakdown
-                            const optionsLine = {
-                                responsive: true,
-                                maintainAspectRatio: false,
-                                scales: {
-                                    x: {
-                                        grid: {
-                                            display: false,
-                                        },
-                                    },
-                                    y: {
-                                        ticks: {
-                                            beginAtZero: true,
-                                            stepSize: 10000,
-                                            callback: function (value) {
-                                                return '$' + value.toLocaleString(); // Định dạng số với ký hiệu $
-                                            },
-                                        },
-                                        grid: {
-                                            color: 'rgba(0, 0, 0, 0.1)',
-                                        },
-                                    },
-                                },
-                            };
+<!--                            // Tùy chọn cho biểu đồ Earnings Breakdown-->
+<!--                            const optionsLine = {-->
+<!--                                responsive: true,-->
+<!--                                maintainAspectRatio: false,-->
+<!--                                scales: {-->
+<!--                                    x: {-->
+<!--                                        grid: {-->
+<!--                                            display: false,-->
+<!--                                        },-->
+<!--                                    },-->
+<!--                                    y: {-->
+<!--                                        ticks: {-->
+<!--                                            beginAtZero: true,-->
+<!--                                            stepSize: 10000,-->
+<!--                                            callback: function (value) {-->
+<!--                                                return '$' + value.toLocaleString(); // Định dạng số với ký hiệu $-->
+<!--                                            },-->
+<!--                                        },-->
+<!--                                        grid: {-->
+<!--                                            color: 'rgba(0, 0, 0, 0.1)',-->
+<!--                                        },-->
+<!--                                    },-->
+<!--                                },-->
+<!--                            };-->
 
-                            // Tùy chọn cho biểu đồ Monthly Revenue
-                            const optionsBar = {
-                                responsive: true,
-                                maintainAspectRatio: false,
-                                scales: {
-                                    x: {
-                                        grid: {
-                                            display: false,
-                                        },
-                                    },
-                                    y: {
-                                        beginAtZero: true,
-                                    },
-                                },
-                            };
+<!--                            // Tùy chọn cho biểu đồ Monthly Revenue-->
+<!--                            const optionsBar = {-->
+<!--                                responsive: true,-->
+<!--                                maintainAspectRatio: false,-->
+<!--                                scales: {-->
+<!--                                    x: {-->
+<!--                                        grid: {-->
+<!--                                            display: false,-->
+<!--                                        },-->
+<!--                                    },-->
+<!--                                    y: {-->
+<!--                                        beginAtZero: true,-->
+<!--                                    },-->
+<!--                                },-->
+<!--                            };-->
 
-                            // Khởi tạo biểu đồ Earnings Breakdown
-                            const earningsChartContext = document.getElementById('earningsChart').getContext('2d');
-                            const earningsChart = new Chart(earningsChartContext, {
-                                type: 'line',
-                                data: earningsData,
-                                options: optionsLine,
-                            });
+<!--                            // Khởi tạo biểu đồ Earnings Breakdown-->
+<!--                            const earningsChartContext = document.getElementById('earningsChart').getContext('2d');-->
+<!--                            const earningsChart = new Chart(earningsChartContext, {-->
+<!--                                type: 'line',-->
+<!--                                data: earningsData,-->
+<!--                                options: optionsLine,-->
+<!--                            });-->
 
-                            // Khởi tạo biểu đồ Monthly Revenue
-                            const revenueChartContext = document.getElementById('revenueChart').getContext('2d');
-                            const revenueChart = new Chart(revenueChartContext, {
-                                type: 'bar',
-                                data: revenueData,
-                                options: optionsBar,
-                            });
-                        </script>
-                    </div>
-                </div>
+<!--                            // Khởi tạo biểu đồ Monthly Revenue-->
+<!--                            const revenueChartContext = document.getElementById('revenueChart').getContext('2d');-->
+<!--                            const revenueChart = new Chart(revenueChartContext, {-->
+<!--                                type: 'bar',-->
+<!--                                data: revenueData,-->
+<!--                                options: optionsBar,-->
+<!--                            });-->
+<!--                        </script>-->
+<!--                    </div>-->
+<!--                </div>-->
                 <!-- <div class="admin-footer">
                     <div class="admin-footer-container"><span class="admin-footer-container-copyright">Copyright © Your
                             Website
@@ -930,10 +938,23 @@
                                 href="#">Terms
                                 &amp; Conditions</a></span></div>
                 </div> -->
+                <script>
+                    // Load nội dung của file header.html vào div có id "header"
+                    fetch('/test2')
+                        .then(response => response.text())
+                        .then(data => {
+                            document.getElementById('admin-content').innerHTML = data;
+loadAppointment(11, 2024);
+                        })
+                        .catch(error => console.error('Error loading HTML:', error));
+                </script>
             </div>
         </div>
     </div>
-    <script src="../static/js/adminControl.js"></script>
+    <script src="js/adminControl.js"></script>
+    <script src="js/util.js"></script>
+    <!-- util functions included in the CodyHouse framework -->
+    <script src="js/main.js"></script>
 </body>
 
 </html>

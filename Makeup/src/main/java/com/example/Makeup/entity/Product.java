@@ -29,10 +29,10 @@ public class Product {
     @Column(name = "price", nullable = false)
     double price  ;
 
-    @Column(name = "status", nullable = false)
+    @Column(name = "status")
     boolean status  ;
 
-    @Column(name = "image" ,nullable = false)
+    @Column(name = "image" )
     String image;
 
     @ManyToOne

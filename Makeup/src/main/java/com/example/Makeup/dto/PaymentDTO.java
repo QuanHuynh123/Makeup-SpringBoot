@@ -10,6 +10,6 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 public class PaymentDTO {
     int id;
-    String namePaymentMethod; // Tên phương thức thanh toán
-    boolean status; // Trạng thái của phương thức thanh toán
+    String namePaymentMethod;
+    boolean status;
 }

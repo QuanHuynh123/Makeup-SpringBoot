@@ -35,19 +35,19 @@
     display: block;
 }
 
-#hover_chang:hover.service_box {
+.hover_chang:hover.service_box {
     background: #f7722b;
     transition: ease-in all 0.5s;
     border-radius: 20px;
     cursor: pointer;
 }
 
-#hover_chang:hover.service_box h3 {
+.hover_chang:hover.service_box h3 {
     color: #fff;
     transition: ease-in all 0.5s;
 }
 
-#hover_chang:hover.service_box p {
+.hover_chang:hover.service_box p {
     color: #fff;
     transition: ease-in all 0.5s;
 }
