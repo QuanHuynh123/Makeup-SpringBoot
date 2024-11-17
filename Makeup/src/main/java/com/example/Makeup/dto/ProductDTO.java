@@ -1,5 +1,6 @@
 package com.example.Makeup.dto;
 
+import java.util.List;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -15,6 +16,10 @@ public class ProductDTO {
     String size;
     double price;
     boolean status;
-    String image;
-    int categoryId;
+    List<String> imageList;
+    int subCategoryId;
+    
+    public String getFirstImage() {
+        return (imageList != null && !imageList.isEmpty()) ? imageList.get(0) : null;
+    }
 }
