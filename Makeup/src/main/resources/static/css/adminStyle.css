@@ -368,7 +368,7 @@
     border-left-style: solid;
     border-left-width: thin;
     border-left-color: #d4dae3;
-    opacity: 0;
+    display: none;
     max-height: 0;
     max-width: 0;
     transition: max-height 0.3s ease-in-out, opacity 0.2s ease-in-out;
@@ -377,8 +377,8 @@
 .Submenu-item-content.show {
     max-height: 500px;
     max-width: 240px;
-    opacity: 1;
-    transition: max-height 0.3s ease-in-out, opacity 0.2s ease-in-out;
+    display: flex;
+    transition: max-height 0.3s ease, opacity 0.3s ease;
 }
 
 .Submenu-item-content-object {
@@ -394,6 +394,11 @@
 .Submenu-item-content .Submenu-item-content-object {
 margin: 0;
     height:auto !important;
+}
+
+.Submenu-item-content-object:hover {
+    color: #212832;
+    text-decoration: none;
 }
 
 .Submenu-item-content-object .Submenu-title {
@@ -592,7 +597,7 @@ margin: 0;
 
 .AdminActivity-item-welcome-text-main {
     font-weight: 500;
-    color: rgba(0, 97, 242, ) !important;
+    color: rgba(0, 97, 242) !important;
     font-size: 24px;
 }
 
