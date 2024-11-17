@@ -8,9 +8,7 @@ import org.mapstruct.factory.Mappers;
 
 @Mapper(componentModel = "spring")
 public interface PaymentMapper {
-    @Mapping(source = "order.id", target = "orderId")
     PaymentDTO toPaymentDTO(Payment payment);
 
-    @Mapping(source = "orderId", target = "order.id")
     Payment toPaymentEntity(PaymentDTO paymentDTO);
 }

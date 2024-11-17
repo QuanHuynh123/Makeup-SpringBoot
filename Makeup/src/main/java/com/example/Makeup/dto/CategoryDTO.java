@@ -13,5 +13,4 @@ import java.util.List;
 public class CategoryDTO {
     int id;
     String name;
-    List<Integer> productIds; // Danh sách ID của các sản phẩm thuộc danh mục
 }

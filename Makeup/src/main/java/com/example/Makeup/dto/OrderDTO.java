@@ -17,7 +17,6 @@ public class OrderDTO {
     int totalQuantity;
     Date orderDate;
     boolean status;
-    int userId; // ID của người dùng
-    List<OrderItemDTO> orderItems; // Danh sách các mặt hàng trong đơn hàng
-    int paymentId; // ID của phương thức thanh toán
+    int userId;
+    int paymentId;
 }

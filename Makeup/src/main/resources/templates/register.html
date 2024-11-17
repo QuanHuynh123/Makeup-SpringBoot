@@ -35,7 +35,7 @@
 			</div>
 			<div class="form-login">
 				<button id="btn_register" type="submit">Sign up</button>
-				<p>Already Have account? <a href="login.html">Login</a></p>
+				<p>Already Have account? <a href="/login">Login</a></p>
 			</div>
 		</form>
 
@@ -78,7 +78,7 @@
 			}
 
 			$.ajax({
-				url: '/api/register', // Đường dẫn API
+				url: '/api/registerUser', // Đường dẫn API
 				type: 'POST',
 				contentType: 'application/json',
 				data: JSON.stringify({

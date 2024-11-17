@@ -12,52 +12,44 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractAuthenticationFilterConfigurer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.context.NullSecurityContextRepository;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfiguration {
-
     @Autowired
     private AccountService accountService;
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
         .csrf(AbstractHttpConfigurer::disable)
-        .authorizeHttpRequests(registry->{
-            registry.requestMatchers(
-                    "/register/**",
-                    "/home",
-                    "/api/**",
-                    "/js/**",
-                    "/css/**",
-                    "/images/**",
-                    "/fonts/**",
-                    "/icon/**"
-            ).permitAll();
-            registry.requestMatchers("/admin/**").hasRole("ADMIN");
-            registry.requestMatchers("/user**").hasRole("USER");
-            registry.anyRequest().authenticated();
-        })
-        .formLogin(form ->
-            form
-                .loginPage("/login") // Chỉ định URL của trang login
-                //.successHandler()
-                .permitAll()         // Cho phép tất cả mọi người truy cập trang login
+        .authorizeHttpRequests(auth -> auth
+                .requestMatchers("/adminT/**").hasRole("ADMIN")
+                .requestMatchers("/userT/**").hasRole("USER")
+                .requestMatchers("/error").permitAll()
+
+                .anyRequest().permitAll()
         )
+        .formLogin(form -> form
+                .loginPage("/login")
+        )
+
         .logout(logout -> logout
-            .logoutUrl("/logout")              // URL cho logout
-            .logoutSuccessUrl("/login?logout=true") // Đường dẫn khi logout thành công
-            .permitAll()
+                .logoutUrl("/logout")
+                .permitAll()
         )
+
         .sessionManagement(session -> session
-            .maximumSessions(1) // Giới hạn số phiên đăng nhập cùng lúc (tùy chọn)
-            .expiredUrl("/login?expired=true") // URL khi phiên hết hạn (tùy chọn)
+                        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED) // Tạo session nếu cần
+//                .maximumSessions(1) // Giới hạn số phiên đăng nhập cùng lúc
+//                .expiredUrl("/login?expired=true") // URL khi phiên hết hạn
         )
+        .anonymous(AbstractHttpConfigurer::disable)
         .build();
     }
 
@@ -66,21 +58,6 @@ public class SecurityConfiguration {
         return authenticationConfiguration.getAuthenticationManager();
     }
 
-
-//    @Bean
-//    public UserDetailsService userDetailsService(){
-//        UserDetails normalUser = User.builder()
-//                .username("user")
-//                .password("$2a$12$cO0n/RjOyVf8UNlFIivRVuMxjSSEdwM.iWb7PCnLKBaEYHAP4vzlO")
-//                .roles("USER")
-//                .build();
-//        UserDetails adminUser = User.builder()
-//                .username("admin")
-//                .password("$2a$12$cO0n/RjOyVf8UNlFIivRVuMxjSSEdwM.iWb7PCnLKBaEYHAP4vzlO")
-//                .roles("ADMIN","USER")
-//                .build();
-//        return new InMemoryUserDetailsManager(normalUser,adminUser);
-//    }
 
     @Bean
     public UserDetailsService userDetailsService(){
@@ -100,4 +77,25 @@ public class SecurityConfiguration {
         return new BCryptPasswordEncoder();
     }
 
+
 }
+
+//
+//        .authorizeHttpRequests(auth -> auth
+//        .requestMatchers("images/**", "js/**", "css/**", "icon/**","fonts/**","cdn-cgi/**").permitAll()
+//        )
+//
+//                .authorizeHttpRequests(registry->{
+//        registry.requestMatchers(
+//                    "/register",
+//                            "/login/**",
+//                            "/home/**",
+//                            "/cosplay/**",
+//                            "/cosplay/**",
+//                            "/home",
+//                            "/api/**"
+//).permitAll();
+//            registry.requestMatchers("/admin/**").hasRole("ADMIN");
+//            registry.requestMatchers("/user/**").hasRole("USER");
+//            registry.anyRequest().authenticated();
+//        })

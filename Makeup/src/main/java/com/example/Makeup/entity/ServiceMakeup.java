@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.sql.Time;
 import java.util.List;
 
 @Entity
@@ -28,9 +29,14 @@ public class ServiceMakeup {
     @Column(name = "price" , nullable = false)
     double price  ;
 
-    public ServiceMakeup(String nameService, String description, double price) {
+    @Column(name = "time")
+    int time  ;
+
+
+    public ServiceMakeup(String nameService, String description, double price, int time) {
         this.nameService = nameService;
         this.description = description;
         this.price = price;
+        this.time=time;
     }
 }

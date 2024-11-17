@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -45,18 +44,18 @@ public class AccountService implements UserDetailsService {
     }
 
     public String[] getRoles(Account account){
-        if (account.getRole() == null) {
-            return new String[]{"USER"};
-        }
-        return account.getRole().getNameRole().split(",");
+        return (account.getRole() != null && account.getRole().getNameRole() != null)
+                ? account.getRole().getNameRole().split(",")
+                : new String[]{"USER"};
     }
 
-    public void save(AccountDTO account){
+
+    public Account save(AccountDTO account){
         Role role = roleRepository.findById(account.getRoleId())
                 .orElseThrow(()-> new AppException(ErrorCode.CANT_FOUND));
         Account saveAccount = accountMapper.toEntity(account);
         saveAccount.setRole(role);
-        accountRepository.save(saveAccount);
+        return accountRepository.save(saveAccount);
     }
 
     public boolean checkExists(String userName){

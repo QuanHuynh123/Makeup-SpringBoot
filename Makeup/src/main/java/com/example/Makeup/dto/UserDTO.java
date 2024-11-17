@@ -11,12 +11,22 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserDTO {
-    int id; // ID của người dùng
-    String fullName; // Tên đầy đủ
-    String email; // Địa chỉ email
-    String address; // Địa chỉ
-    String phone; // Số điện thoại
-    List<OrderDTO> orders; // Danh sách đơn hàng
-    List<AppointmentDTO> appointments; // Danh sách cuộc hẹn
-    CartDTO cart; // Giỏ hàng của người dùng
+    int id;
+    String fullName;
+    String email;
+    String address;
+    String phone;
+    int role ;
+    int cartId;
+    int accountId;
+
+    public UserDTO(String fullName , String email , String address , String phone){
+        this.fullName = fullName;
+        this.email = email;
+        this.address = address;
+        this.phone = phone;
+    }
+
+    //List<OrderDTO> orders; // Danh sách đơn hàng
+    //List<AppointmentDTO> appointments; // Danh sách cuộc hẹn
 }

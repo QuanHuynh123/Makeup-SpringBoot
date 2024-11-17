@@ -1,17 +1,49 @@
+/*top header*/
+#header{
+    position: fixed;
+    z-index: 2;
+    width: 100%;
+}
+.custom-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #333; /* Màu nền */
+    padding: 10px 20px;
+    color: white; /* Màu chữ */
+    font-family: Arial, sans-serif;
+    width: 100%;
+  }
+
+  .header-left, .header-right {
+    display: flex;
+    gap: 15px; /* Khoảng cách giữa các mục */
+  }
+
+  .header-link {
+    text-decoration: none; /* Xóa gạch chân */
+    color: white;
+    font-size: 14px; /* Kích thước chữ */
+    transition: color 0.3s;
+  }
+
+  .header-link:hover {
+    color: #ff9900; /* Màu khi hover */
+  }
+
+/* end-top-header*/
+
+
 /* bottom-header */
 /* Container bottom header */
 #container_bottom_header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px 20px;
     width: 100%;
     background-color: #ffffff;
     border-bottom: 1px solid #fcaaaa;
-    position: absolute;
-    top: 90px;
-    z-index: 2;
-    position: fixed;
+    margin: 0;
 }
 
 /* Left bottom header (logo) */
@@ -154,7 +186,7 @@
 /* banner */
 #banner_cosplay{
     width: 100%;
-    padding-top: 160px;
+    padding-top: 115px;
     display: flex;
     justify-content: center;
     align-content: center;
