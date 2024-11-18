@@ -154,40 +154,13 @@
         <div id="new">
             <h1 class="title_product">New</h1>
             <ul class="row">
-                <li class="product-card">   
+                <li class="product-card" th:each="product : ${products}">   
                     <div class="product-image">
-                    <img src="/images/banner_cosplay_1.jpg" alt="Magilumiere Co Ltd Kana Sakuragi Cosplay">
+                        <img th:src="${product.firstImage}" alt="Magilumiere Co Ltd Kana Sakuragi Cosplay">
                     </div>
                     <div class="product-info">
-                        <h4 class="product-title">【IN STOCK】 Magilumiere Co Ltd Kana Sakuragi Cosplay</h4>
-                        <p class="product-price">$62.00</p>
-                    </div>
-                </li>
-                <li class="product-card">   
-                    <div class="product-image">
-                    <img src="/images/banner_cosplay_1.jpg" alt="Magilumiere Co Ltd Kana Sakuragi Cosplay">
-                    </div>
-                    <div class="product-info">
-                        <h4 class="product-title">【IN STOCK】 Magilumiere Co Ltd Kana Sakuragi Cosplay</h4>
-                        <p class="product-price">$62.00</p>
-                    </div>
-                </li>
-                <li class="product-card">   
-                    <div class="product-image">
-                    <img src="/images/banner_cosplay_1.jpg" alt="Magilumiere Co Ltd Kana Sakuragi Cosplay">
-                    </div>
-                    <div class="product-info">
-                        <h4 class="product-title">【IN STOCK】 Magilumiere Co Ltd Kana Sakuragi Cosplay</h4>
-                        <p class="product-price">$62.00</p>
-                    </div>
-                </li>
-                <li class="product-card">   
-                    <div class="product-image">
-                    <img src="/images/banner_cosplay_1.jpg" alt="Magilumiere Co Ltd Kana Sakuragi Cosplay">
-                    </div>
-                    <div class="product-info">
-                        <h4 class="product-title">【IN STOCK】 Magilumiere Co Ltd Kana Sakuragi Cosplay</h4>
-                        <p class="product-price">$62.00</p>
+                        <h4 class="product-title" th:text="${product.nameProduct}">Tên sản phẩm</h4>
+                        <p class="product-price" th:text="${product.price}">Giá</p>
                     </div>
                 </li>
             </ul>
@@ -514,7 +487,7 @@
       <script src="js/bootstrap.bundle.min.js"></script>
       <script src="js/jquery-3.0.0.min.js"></script>
       <!-- sidebar -->
-      <script src="js/jquery.mCustomScrollbar.concat.min.js"></script>
+      <!--<script src="js/jquery.mCustomScrollbar.concat.min.js"></script>-->
       <script src="js/custom.js"></script>
       <script>
          $('a[href^="#"]').on('click', function(event) {
