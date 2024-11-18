@@ -1,6 +1,8 @@
 package com.example.Makeup.entity;
 
 import jakarta.persistence.*;
+import java.util.Arrays;
+import java.util.List;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -32,10 +34,17 @@ public class Product {
     @Column(name = "status")
     boolean status  ;
 
-    @Column(name = "image" )
+    @Column(name = "image")
     String image;
-
+    
     @ManyToOne
     @JoinColumn(name = "subCategory_id")
     private SubCategory subCategory;
+    
+    public List<String> getImageList(){
+        if (image != null && !image.isEmpty()) {
+            return Arrays.asList(image.split(","));
+        }
+        return List.of();
+    }
 }
