@@ -40,6 +40,7 @@ $(document).ready(function() {
         var phoneNumber = $('input[name="PhoneNumber"]').val();
         var message = $('textarea[name="Message"]').val();
         var serviceOption = $('#optionsMakeup').val(); // Lấy từ #optionsMakeup
+         var serviceStaff = $('#optionsStaff').val();
         var date = $('#date').val();
         var startTime = $('#time').val();
         var endTime = null;
@@ -88,7 +89,7 @@ $(document).ready(function() {
                     "id": serviceOption
                   },
                   "staff": {
-                    "id": 1
+                    "id": serviceStaff
                   }
 
             }),
