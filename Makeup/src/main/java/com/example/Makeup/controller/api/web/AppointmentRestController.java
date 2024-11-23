@@ -4,6 +4,8 @@ import com.example.Makeup.dto.AppointmentDTO;
 import com.example.Makeup.dto.WeekAppointmentsDTO;
 import com.example.Makeup.service.AppointmentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -51,4 +53,16 @@ public class AppointmentRestController {
     public void deleteAppointment(@PathVariable int id) {
         appointmentService.deleteAppointment(id);
     }
+
+    @PostMapping("/create")
+    public ResponseEntity<?> addAppointment(@RequestBody AppointmentDTO appointmentDTO) {
+        try {
+            AppointmentDTO savedAppointment = appointmentService.addAppointment(appointmentDTO);
+            return ResponseEntity.ok(savedAppointment);
+        } catch (RuntimeException e) {
+            // Trả về thông báo lỗi dưới dạng chuỗi
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+        }
+    }
+
 }
