@@ -206,4 +206,27 @@ public class AppointmentService {
         }
         appointmentRepository.deleteById(id);
     }
+
+    public AppointmentDTO addAppointment(AppointmentDTO appointmentDTO) {
+        // Chuyển đổi DTO sang entity
+        Appointment appointment = appointmentMapper.toAppointmentEntity(appointmentDTO);
+
+        // Kiểm tra trùng lịch hẹn
+        List<Appointment> conflictingAppointments = appointmentRepository.findConflictingAppointments(
+                appointment.getStaff().getId(),
+                appointment.getMakeupDate(),
+                appointment.getStartTime(),
+                appointment.getEndTime()
+        );
+
+        if (!conflictingAppointments.isEmpty()) {
+            // Ném ngoại lệ với thông báo chi tiết
+            throw new RuntimeException("The selected staff is already booked during this time slot.");
+        }
+
+        // Lưu lịch hẹn nếu không có xung đột
+        Appointment savedAppointment = appointmentRepository.save(appointment);
+        return appointmentMapper.toAppointmentDTO(savedAppointment);
+    }
+
 }
