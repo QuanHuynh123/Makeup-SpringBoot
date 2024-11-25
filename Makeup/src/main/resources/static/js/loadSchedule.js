@@ -5,7 +5,7 @@ const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Fri
 // Lấy tháng và tuần hiện tại theo múi giờ Việt Nam
 const vietnamTime = getCurrentVietnamTime();
 const currentMonth = vietnamTime.getMonth(); // Tháng hiện tại (0 - 11)
-let currentWeekNumber = getWeekOfMonth(vietnamTime);
+let currentWeekNumber = getWeekOfMonth(vietnamTime)-1;
 var data = null;
 
 // Hàm lấy thời gian hiện tại theo múi giờ Việt Nam

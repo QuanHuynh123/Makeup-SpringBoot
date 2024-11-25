@@ -28,4 +28,24 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Intege
             @Param("startTime") Time startTime,
             @Param("endTime") Time endTime
     );
+
+    // Truy vấn số lượng appointment theo từng tháng trong năm
+    @Query("SELECT MONTH(a.makeupDate) AS month, COUNT(a) AS count " +
+            "FROM Appointment a " +
+            "WHERE YEAR(a.makeupDate) = :year " +
+            "GROUP BY MONTH(a.makeupDate) " +
+            "ORDER BY month")
+    List<Object[]> findAppointmentsCountByMonth(int year);
+
+    @Query("SELECT DATE_FORMAT(a.makeupDate, '%Y-%m-%d'), COUNT(a) FROM Appointment a WHERE a.makeupDate BETWEEN :startDate AND :endDate GROUP BY DATE(a.makeupDate)")
+    List<Object[]> findAppointmentsCountByDateRange(@Param("startDate") Date startDate, @Param("endDate") Date endDate);
+
+
+    @Query("SELECT DAY(a.makeupDate) AS day, COUNT(a) AS count " +
+            "FROM Appointment a " +
+            "WHERE MONTH(a.makeupDate) = :month AND YEAR(a.makeupDate) = :year " +
+            "GROUP BY DAY(a.makeupDate) " +
+            "ORDER BY day")
+    List<Object[]> findAppointmentsCountByCurrentMonth(@Param("month") int month, @Param("year") int year);
+
 }
