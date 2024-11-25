@@ -9,14 +9,14 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 
     <script>document.getElementsByTagName("html")[0].className += " js";</script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="js/loadSchedule.js"></script>
+    <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 </head>
 </head>
 
@@ -96,78 +96,24 @@
                                 <div class="Sidebar-menu-item-header">General</div>
                                 <div class="Sidebar-menu-item-main">
                                     <div class="Submenu">
-                                        <div class="Submenu-title">
+                                        <div class="Submenu-title active">
                                             <span style="margin-right: 8px; padding-right: 8px;">
-                                                <svg stroke="currentColor" fill="none" stroke-width="2"
-                                                    viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"
-                                                    height="16px" width="16px" xmlns="http://www.w3.org/2000/svg">
-                                                    <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
-                                                </svg>
+                                                <i class="fa-solid fa-gauge"></i>
                                             </span>Dashboards
-                                            <svg class="arrow-icon" stroke="currentColor" fill="currentColor"
-                                                stroke-width="0" viewBox="0 0 512 512" height="16px" width="16px"
-                                                xmlns="http://www.w3.org/2000/svg" style="margin-left: auto;">
-                                                <path
-                                                    d="M256 294.1L383 167c9.4-9.4 24.6-9.4 33.9 0s9.3 24.6 0 34L273 345c-9.1 9.1-23.7 9.3-33.1.7L95 201.1c-4.7-4.7-7-10.9-7-17s2.3-12.3 7-17c9.4-9.4 24.6-9.4 33.9 0l127.1 127z">
-                                                </path>
-                                            </svg>
-                                        </div>
-                                        <div class="Submenu-item">
-                                            <div class="Submenu-item-content show">
-                                                <div class="Submenu-item-content-object">Default</div>
-                                                <div class="Submenu-item-content-object">Multipurpose</div>
-                                                <div class="Submenu-item-content-object">Affiliate</div>
-                                            </div>
                                         </div>
                                     </div>
                                     <div class="Submenu">
                                         <div class="Submenu-title">
                                             <span style="margin-right: 8px; padding-right: 8px;">
-                                                <svg stroke="currentColor" fill="none" stroke-width="2"
-                                                    viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"
-                                                    height="16px" width="16px" xmlns="http://www.w3.org/2000/svg">
-                                                    <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
-                                                </svg>
+                                                <i class="fa-solid fa-calendar-days"></i>
                                             </span>Schedule
-                                            <svg class="arrow-icon" stroke="currentColor" fill="currentColor"
-                                                stroke-width="0" viewBox="0 0 512 512" height="16px" width="16px"
-                                                xmlns="http://www.w3.org/2000/svg" style="margin-left: auto;">
-                                                <path
-                                                    d="M256 294.1L383 167c9.4-9.4 24.6-9.4 33.9 0s9.3 24.6 0 34L273 345c-9.1 9.1-23.7 9.3-33.1.7L95 201.1c-4.7-4.7-7-10.9-7-17s2.3-12.3 7-17c9.4-9.4 24.6-9.4 33.9 0l127.1 127z">
-                                                </path>
-                                            </svg>
-                                        </div>
-                                        <div class="Submenu-item">
-                                            <div class="Submenu-item-content">
-                                                <div class="Submenu-item-content-object">Default</div>
-                                                <div class="Submenu-item-content-object">Multipurpose</div>
-                                                <div class="Submenu-item-content-object">Affiliate</div>
-                                            </div>
                                         </div>
                                     </div>
                                     <div class="Submenu">
                                         <div class="Submenu-title">
                                             <span style="margin-right: 8px; padding-right: 8px;">
-                                                <svg stroke="currentColor" fill="none" stroke-width="2"
-                                                    viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"
-                                                    height="16px" width="16px" xmlns="http://www.w3.org/2000/svg">
-                                                    <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
-                                                </svg>
+                                                <i class="fa-regular fa-comment"></i>
                                             </span>Feedback
-                                            <svg class="arrow-icon" stroke="currentColor" fill="currentColor"
-                                                stroke-width="0" viewBox="0 0 512 512" height="16px" width="16px"
-                                                xmlns="http://www.w3.org/2000/svg" style="margin-left: auto;">
-                                                <path
-                                                    d="M256 294.1L383 167c9.4-9.4 24.6-9.4 33.9 0s9.3 24.6 0 34L273 345c-9.1 9.1-23.7 9.3-33.1.7L95 201.1c-4.7-4.7-7-10.9-7-17s2.3-12.3 7-17c9.4-9.4 24.6-9.4 33.9 0l127.1 127z">
-                                                </path>
-                                            </svg>
-                                        </div>
-                                        <div class="Submenu-item">
-                                            <div class="Submenu-item-content">
-                                                <div class="Submenu-item-content-object">Default</div>
-                                                <div class="Submenu-item-content-object">Multipurpose</div>
-                                                <div class="Submenu-item-content-object">Affiliate</div>
-                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -176,130 +122,24 @@
                                 <div class="Sidebar-menu-item-header">Sales</div>
                                 <div class="Sidebar-menu-item-main">
                                     <div class="Submenu">
-                                        <div class="Submenu-title"><span
-                                                style="margin-right: 8px; padding-right: 8px;"><svg
-                                                    stroke="currentColor" fill="currentColor" stroke-width="0"
-                                                    viewBox="0 0 1024 1024" color="#a7aeb8" height="16px" width="16px"
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                    style="color: rgb(167, 174, 184);">
-                                                    <path
-                                                        d="M464 144H160c-8.8 0-16 7.2-16 16v304c0 8.8 7.2 16 16 16h304c8.8 0 16-7.2 16-16V160c0-8.8-7.2-16-16-16zm-52 268H212V212h200v200zm452-268H560c-8.8 0-16 7.2-16 16v304c0 8.8 7.2 16 16 16h304c8.8 0 16-7.2 16-16V160c0-8.8-7.2-16-16-16zm-52 268H612V212h200v200zM464 544H160c-8.8 0-16 7.2-16 16v304c0 8.8 7.2 16 16 16h304c8.8 0 16-7.2 16-16V560c0-8.8-7.2-16-16-16zm-52 268H212V612h200v200zm452-268H560c-8.8 0-16 7.2-16 16v304c0 8.8 7.2 16 16 16h304c8.8 0 16-7.2 16-16V560c0-8.8-7.2-16-16-16zm-52 268H612V612h200v200z">
-                                                    </path>
-                                                </svg></span>Order<svg stroke="currentColor" fill="currentColor"
-                                                stroke-width="0" viewBox="0 0 512 512" height="16px" width="16px"
-                                                xmlns="http://www.w3.org/2000/svg" style="margin-left: auto;">
-                                                <path
-                                                    d="M294.1 256L167 129c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.3 34 0L345 239c9.1 9.1 9.3 23.7.7 33.1L201.1 417c-4.7 4.7-10.9 7-17 7s-12.3-2.3-17-7c-9.4-9.4-9.4-24.6 0-33.9l127-127.1z">
-                                                </path>
-                                            </svg></div>
-                                        <div class="Submenu-item">
-                                            <div class="Submenu-item-content ">
-                                                <div class="Submenu-item-content-object">
-                                                    <div class="Sidebar-menu-item-main">
-                                                        <div class="Submenu">
-                                                            <div class="Submenu-title">Account<svg stroke="currentColor"
-                                                                    fill="currentColor" stroke-width="0"
-                                                                    viewBox="0 0 512 512" height="16px" width="16px"
-                                                                    xmlns="http://www.w3.org/2000/svg"
-                                                                    style="margin-left: auto;">
-                                                                    <path
-                                                                        d="M294.1 256L167 129c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.3 34 0L345 239c9.1 9.1 9.3 23.7.7 33.1L201.1 417c-4.7 4.7-10.9 7-17 7s-12.3-2.3-17-7c-9.4-9.4-9.4-24.6 0-33.9l127-127.1z">
-                                                                    </path>
-                                                                </svg></div>
-                                                            <div class="Submenu-item">
-                                                                <div class="Submenu-item-content ">
-                                                                    <div class="Submenu-item-content-object">Profile
-                                                                    </div>
-                                                                    <div class="Submenu-item-content-object">Billing
-                                                                    </div>
-                                                                    <div class="Submenu-item-content-object">Security
-                                                                    </div>
-                                                                    <div class="Submenu-item-content-object">
-                                                                        Notifications
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="Submenu-item-content-object">
-                                                    <div class="Sidebar-menu-item-main">
-                                                        <div class="Submenu">
-                                                            <div class="Submenu-title">Authentication<svg
-                                                                    stroke="currentColor" fill="currentColor"
-                                                                    stroke-width="0" viewBox="0 0 512 512" height="16px"
-                                                                    width="16px" xmlns="http://www.w3.org/2000/svg"
-                                                                    style="margin-left: auto;">
-                                                                    <path
-                                                                        d="M294.1 256L167 129c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.3 34 0L345 239c9.1 9.1 9.3 23.7.7 33.1L201.1 417c-4.7 4.7-10.9 7-17 7s-12.3-2.3-17-7c-9.4-9.4-9.4-24.6 0-33.9l127-127.1z">
-                                                                    </path>
-                                                                </svg></div>
-                                                            <div class="Submenu-item">
-                                                                <div class="Submenu-item-content ">
-                                                                    <div class="Submenu-item-content-object">Default
-                                                                    </div>
-                                                                    <div class="Submenu-item-content-object">
-                                                                        Multipurpose
-                                                                    </div>
-                                                                    <div class="Submenu-item-content-object">Affiliate
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="Submenu-item-content-object">
-                                                    <div class="Sidebar-menu-item-main">
-                                                        <div class="Submenu">
-                                                            <div class="Submenu-title">Error<svg stroke="currentColor"
-                                                                    fill="currentColor" stroke-width="0"
-                                                                    viewBox="0 0 512 512" height="16px" width="16px"
-                                                                    xmlns="http://www.w3.org/2000/svg"
-                                                                    style="margin-left: auto;">
-                                                                    <path
-                                                                        d="M294.1 256L167 129c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.3 34 0L345 239c9.1 9.1 9.3 23.7.7 33.1L201.1 417c-4.7 4.7-10.9 7-17 7s-12.3-2.3-17-7c-9.4-9.4-9.4-24.6 0-33.9l127-127.1z">
-                                                                    </path>
-                                                                </svg></div>
-                                                            <div class="Submenu-item">
-                                                                <div class="Submenu-item-content ">
-                                                                    <div class="Submenu-item-content-object">Default
-                                                                    </div>
-                                                                    <div class="Submenu-item-content-object">
-                                                                        Multipurpose
-                                                                    </div>
-                                                                    <div class="Submenu-item-content-object">Affiliate
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="Submenu-item-content-object">Pricing</div>
-                                                <div class="Submenu-item-content-object">Invoice</div>
-                                            </div>
+                                        <div class="Submenu-title">
+                                            <span style="margin-right: 8px; padding-right: 8px;">
+                                                <i class="fa-solid fa-cart-shopping"></i>
+                                            </span>Order
                                         </div>
                                     </div>
                                     <div class="Submenu">
-                                        <div class="Submenu-title"><span
-                                                style="margin-right: 8px; padding-right: 8px;"><svg
-                                                    stroke="currentColor" fill="currentColor" stroke-width="0"
-                                                    viewBox="0 0 24 24" color="#a7aeb8" height="16px" width="16px"
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                    style="color: rgb(167, 174, 184);">
-                                                    <path
-                                                        d="M12 1c6.075 0 11 4.925 11 11s-4.925 11-11 11S1 18.075 1 12 5.925 1 12 1Zm3.241 10.5v-.001c-.1-2.708-.992-4.904-1.89-6.452a13.919 13.919 0 0 0-1.304-1.88L12 3.11l-.047.059c-.354.425-.828 1.06-1.304 1.88-.898 1.547-1.79 3.743-1.89 6.451Zm-12.728 0h4.745c.1-3.037 1.1-5.49 2.093-7.204.39-.672.78-1.233 1.119-1.673C6.11 3.329 2.746 7 2.513 11.5Zm18.974 0C21.254 7 17.89 3.329 13.53 2.623c.339.44.729 1.001 1.119 1.673.993 1.714 1.993 4.167 2.093 7.204ZM8.787 13c.182 2.478 1.02 4.5 1.862 5.953.382.661.818 1.29 1.304 1.88l.047.057.047-.059c.354-.425.828-1.06 1.304-1.88.842-1.451 1.679-3.471 1.862-5.951Zm-1.504 0H2.552a9.505 9.505 0 0 0 7.918 8.377 15.773 15.773 0 0 1-1.119-1.673C8.413 18.085 7.47 15.807 7.283 13Zm9.434 0c-.186 2.807-1.13 5.085-2.068 6.704-.39.672-.78 1.233-1.118 1.673A9.506 9.506 0 0 0 21.447 13Z">
-                                                    </path>
-                                                </svg></span>Product<svg stroke="currentColor" fill="currentColor"
-                                                stroke-width="0" viewBox="0 0 512 512" height="16px" width="16px"
-                                                xmlns="http://www.w3.org/2000/svg" style="margin-left: auto;">
-                                                <path
-                                                    d="M294.1 256L167 129c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.3 34 0L345 239c9.1 9.1 9.3 23.7.7 33.1L201.1 417c-4.7 4.7-10.9 7-17 7s-12.3-2.3-17-7c-9.4-9.4-9.4-24.6 0-33.9l127-127.1z">
-                                                </path>
-                                            </svg></div>
+                                        <div class="Submenu-title">
+                                            <span style="margin-right: 8px; padding-right: 8px;">
+                                                <i class="fa-solid fa-box"></i>
+                                            </span>Product
+                                        </div>
                                         <div class="Submenu-item">
                                             <div class="Submenu-item-content">
-                                                <a class="Submenu-item-content-object" href="/admin/products/create">Create New Product</a>
-                                                <a class="Submenu-item-content-object" href="/admin/products">Products</a>
+                                                <a class="Submenu-item-content-object"
+                                                    href="/admin/products/create">Create New Product</a>
+                                                <a class="Submenu-item-content-object"
+                                                    href="/admin/products">Products</a>
                                             </div>
                                         </div>
                                     </div>
@@ -309,53 +149,18 @@
                                 <div class="Sidebar-menu-item-header">Human Resources</div>
                                 <div class="Sidebar-menu-item-main">
                                     <div class="Submenu">
-                                        <div class="Submenu-title"><span
-                                                style="margin-right: 8px; padding-right: 8px;"><svg
-                                                    stroke="currentColor" fill="currentColor" stroke-width="0"
-                                                    viewBox="0 0 1024 1024" color="#a7aeb8" height="16px" width="16px"
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                    style="color: rgb(167, 174, 184);">
-                                                    <path
-                                                        d="M464 144H160c-8.8 0-16 7.2-16 16v304c0 8.8 7.2 16 16 16h304c8.8 0 16-7.2 16-16V160c0-8.8-7.2-16-16-16zm-52 268H212V212h200v200zm452-268H560c-8.8 0-16 7.2-16 16v304c0 8.8 7.2 16 16 16h304c8.8 0 16-7.2 16-16V160c0-8.8-7.2-16-16-16zm-52 268H612V212h200v200zM464 544H160c-8.8 0-16 7.2-16 16v304c0 8.8 7.2 16 16 16h304c8.8 0 16-7.2 16-16V560c0-8.8-7.2-16-16-16zm-52 268H212V612h200v200zm452-268H560c-8.8 0-16 7.2-16 16v304c0 8.8 7.2 16 16 16h304c8.8 0 16-7.2 16-16V560c0-8.8-7.2-16-16-16zm-52 268H612V612h200v200z">
-                                                    </path>
-                                                </svg></span>Staff<svg stroke="currentColor" fill="currentColor"
-                                                stroke-width="0" viewBox="0 0 512 512" height="16px" width="16px"
-                                                xmlns="http://www.w3.org/2000/svg" style="margin-left: auto;">
-                                                <path
-                                                    d="M294.1 256L167 129c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.3 34 0L345 239c9.1 9.1 9.3 23.7.7 33.1L201.1 417c-4.7 4.7-10.9 7-17 7s-12.3-2.3-17-7c-9.4-9.4-9.4-24.6 0-33.9l127-127.1z">
-                                                </path>
-                                            </svg></div>
-                                        <div class="Submenu-item">
-                                            <div class="Submenu-item-content ">
-                                                <div class="Submenu-item-content-object">Default</div>
-                                                <div class="Submenu-item-content-object">Multipurpose</div>
-                                                <div class="Submenu-item-content-object">Affiliate</div>
-                                            </div>
+                                        <div class="Submenu-title">
+                                            <span style="margin-right: 8px; padding-right: 8px;">
+                                                <i class="fa-solid fa-user"></i>
+                                            </span>
+                                            Staff
                                         </div>
                                     </div>
                                     <div class="Submenu">
-                                        <div class="Submenu-title"><span
-                                                style="margin-right: 8px; padding-right: 8px;"><svg
-                                                    stroke="currentColor" fill="currentColor" stroke-width="0"
-                                                    viewBox="0 0 24 24" color="#a7aeb8" height="16px" width="16px"
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                    style="color: rgb(167, 174, 184);">
-                                                    <path
-                                                        d="M12 1c6.075 0 11 4.925 11 11s-4.925 11-11 11S1 18.075 1 12 5.925 1 12 1Zm3.241 10.5v-.001c-.1-2.708-.992-4.904-1.89-6.452a13.919 13.919 0 0 0-1.304-1.88L12 3.11l-.047.059c-.354.425-.828 1.06-1.304 1.88-.898 1.547-1.79 3.743-1.89 6.451Zm-12.728 0h4.745c.1-3.037 1.1-5.49 2.093-7.204.39-.672.78-1.233 1.119-1.673C6.11 3.329 2.746 7 2.513 11.5Zm18.974 0C21.254 7 17.89 3.329 13.53 2.623c.339.44.729 1.001 1.119 1.673.993 1.714 1.993 4.167 2.093 7.204ZM8.787 13c.182 2.478 1.02 4.5 1.862 5.953.382.661.818 1.29 1.304 1.88l.047.057.047-.059c.354-.425.828-1.06 1.304-1.88.842-1.451 1.679-3.471 1.862-5.951Zm-1.504 0H2.552a9.505 9.505 0 0 0 7.918 8.377 15.773 15.773 0 0 1-1.119-1.673C8.413 18.085 7.47 15.807 7.283 13Zm9.434 0c-.186 2.807-1.13 5.085-2.068 6.704-.39.672-.78 1.233-1.118 1.673A9.506 9.506 0 0 0 21.447 13Z">
-                                                    </path>
-                                                </svg></span>Account<svg stroke="currentColor" fill="currentColor"
-                                                stroke-width="0" viewBox="0 0 512 512" height="16px" width="16px"
-                                                xmlns="http://www.w3.org/2000/svg" style="margin-left: auto;">
-                                                <path
-                                                    d="M294.1 256L167 129c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.3 34 0L345 239c9.1 9.1 9.3 23.7.7 33.1L201.1 417c-4.7 4.7-10.9 7-17 7s-12.3-2.3-17-7c-9.4-9.4-9.4-24.6 0-33.9l127-127.1z">
-                                                </path>
-                                            </svg></div>
-                                        <div class="Submenu-item">
-                                            <div class="Submenu-item-content ">
-                                                <div class="Submenu-item-content-object">Default</div>
-                                                <div class="Submenu-item-content-object">Multipurpose</div>
-                                                <div class="Submenu-item-content-object">Affiliate</div>
-                                            </div>
+                                        <div class="Submenu-title">
+                                            <span style="margin-right: 8px; padding-right: 8px;">
+                                                <i class="fa-solid fa-lock"></i>
+                                            </span>Account
                                         </div>
                                     </div>
                                 </div>
@@ -373,506 +178,420 @@
                 </div>
             </div>
             <div id="admin-content" class="admin-main showSidebar">
-<!--                <div class="AdminBanner">-->
-<!--                    <div class="AdminBanner-container">-->
-<!--                        <div class="AdminBanner-container-content">-->
-<!--                            <div class="AdminBanner-container-content-text">-->
-<!--                                <div class="AdminBanner-container-content-text-title"><svg stroke="currentColor"-->
-<!--                                        fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round"-->
-<!--                                        stroke-linejoin="round" color="rgba(255, 255, 255, 0.5)" height="1em"-->
-<!--                                        width="1em" xmlns="http://www.w3.org/2000/svg"-->
-<!--                                        style="color: rgba(255, 255, 255, 0.5); margin-right: 8px;">-->
-<!--                                        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>-->
-<!--                                    </svg>Dashboard</div>-->
-<!--                                <div class="AdminBanner-container-content-text-subtitle">Example dashboard overview and-->
-<!--                                    content-->
-<!--                                    summary</div>-->
-<!--                            </div>-->
-<!--                            <div class="AdminBanner-container-content-calendar">-->
-<!--                                <div class="AdminBanner-container-content-calendar-container"><span><svg-->
-<!--                                            stroke="currentColor" fill="currentColor" stroke-width="0"-->
-<!--                                            viewBox="0 0 24 24" font-weight="400" height="18px" width="18px"-->
-<!--                                            xmlns="http://www.w3.org/2000/svg">-->
-<!--                                            <g id="Calendar">-->
-<!--                                                <path-->
-<!--                                                    d="M18.438,4.954H16.5c0-0.346,0-0.691,0-1.036c0-0.124,0-0.248,0-0.372c0-0.262-0.23-0.512-0.5-0.5-->
-<!--                        c-0.271,0.012-0.5,0.22-0.5,0.5c0,0.469,0,0.939,0,1.408h-7c0-0.346,0-0.691,0-1.036c0-0.124,0-0.248,0-0.372-->
-<!--                        c0-0.262-0.23-0.512-0.5-0.5c-0.271,0.012-0.5,0.22-0.5,0.5c0,0.469,0,0.939,0,1.408H5.562c-1.378,0-2.5,1.122-2.5,2.5v11-->
-<!--                        c0,1.379,1.122,2.5,2.5,2.5h12.875c1.379,0,2.5-1.121,2.5-2.5v-11C20.938,6.076,19.816,4.954,18.438,4.954z M5.562,5.954H7.5-->
-<!--                        c0,0.073,0,0.147,0,0.22c0,0.124,0,0.248,0,0.372c0,0.262,0.23,0.512,0.5,0.5c0.271-0.012,0.5-0.22,0.5-0.5c0-0.197,0-0.394,0-0.592-->
-<!--                        h7c0,0.073,0,0.147,0,0.22c0,0.124,0,0.248,0,0.372c0,0.262,0.23,0.512,0.5,0.5c0.271-0.012,0.5-0.22,0.5-0.5-->
-<!--                        c0-0.197,0-0.394,0-0.592h1.937c0.827,0,1.5,0.673,1.5,1.5v1.584H4.062V7.454C4.062,6.627,4.735,5.954,5.562,5.954z M18.438,19.954-->
-<!--                        H5.562c-0.827,0-1.5-0.673-1.5-1.5v-8.416h15.875v8.416C19.938,19.281,19.265,19.954,18.438,19.954z">-->
-<!--                                                </path>-->
-<!--                                            </g>-->
-<!--                                        </svg></span><input type="text" value="Oct 04, 2022 - Oct 04, 2024"-->
-<!--                                        fdprocessedid="1rfxk7">-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--                <div class="admin-main-content">-->
-<!--                    <div class="admin-main-content-overlay show-overlay"></div>-->
-<!--                    <div class="AdminActivity">-->
-<!--                        <div class="AdminActivity-item item1">-->
-<!--                            <div class="Card">-->
-<!--                                <div class="CardBody">-->
-<!--                                    <div class="AdminActivity-item-welcome">-->
-<!--                                        <div class="AdminActivity-item-welcome-text">-->
-<!--                                            <h1 class="AdminActivity-item-welcome-text-main">Welcome to SB Admin Pro!-->
-<!--                                            </h1>-->
-<!--                                            <p class="AdminActivity-item-welcome-text-sub">Browse our fully designed UI-->
-<!--                                                toolkit!-->
-<!--                                                Browse our prebuilt app pages, components, and utilites, and be sure to-->
-<!--                                                look at our-->
-<!--                                                full documentation!</p>-->
-<!--                                        </div>-->
-<!--                                        <div class="AdminActivity-item-welcome-image"><img-->
-<!--                                                src="https://sb-admin-pro.startbootstrap.com/assets/img/illustrations/at-work.svg">-->
-<!--                                        </div>-->
-<!--                                    </div>-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                        <div class="AdminActivity-item item2">-->
-<!--                            <div class="Card">-->
-<!--                                <div class="CardHeader">Recent Activity<div><svg stroke="currentColor"-->
-<!--                                            fill="currentColor" stroke-width="0" viewBox="0 0 512 512" color="gray"-->
-<!--                                            height="16px" width="16px" xmlns="http://www.w3.org/2000/svg"-->
-<!--                                            style="color: gray;">-->
-<!--                                            <path-->
-<!--                                                d="M296 136c0-22.002-17.998-40-40-40s-40 17.998-40 40 17.998 40 40 40 40-17.998 40-40zm0 240c0-22.002-17.998-40-40-40s-40 17.998-40 40 17.998 40 40 40 40-17.998 40-40zm0-120c0-22.002-17.998-40-40-40s-40 17.998-40 40 17.998 40 40 40 40-17.998 40-40z">-->
-<!--                                            </path>-->
-<!--                                        </svg></div>-->
-<!--                                </div>-->
-<!--                                <div class="CardBody">-->
-<!--                                    <div class="timeline">-->
-<!--                                        <div class="timeline-item">-->
-<!--                                            <div class="timeline-item-marker">-->
-<!--                                                <div class="timeline-item-marker-text">27 min</div>-->
-<!--                                                <div class="timeline-item-marker-indicator"></div>-->
-<!--                                            </div>-->
-<!--                                            <div class="timeline-item-content">New order placed!<a-->
-<!--                                                    class="fw-bold text-dark text-decoration-none" href="#!"> Order-->
-<!--                                                    #2912 </a>has-->
-<!--                                                been successfully placed.</div>-->
-<!--                                        </div>-->
-<!--                                        <div class="timeline-item">-->
-<!--                                            <div class="timeline-item-marker">-->
-<!--                                                <div class="timeline-item-marker-text">27 min</div>-->
-<!--                                                <div class="timeline-item-marker-indicator bg-green"></div>-->
-<!--                                            </div>-->
-<!--                                            <div class="timeline-item-content">New order placed!<a-->
-<!--                                                    class="fw-bold text-dark text-decoration-none" href="#!"> Order-->
-<!--                                                    #2912 </a>has-->
-<!--                                                been successfully placed.</div>-->
-<!--                                        </div>-->
-<!--                                        <div class="timeline-item">-->
-<!--                                            <div class="timeline-item-marker">-->
-<!--                                                <div class="timeline-item-marker-text">27 min</div>-->
-<!--                                                <div class="timeline-item-marker-indicator"></div>-->
-<!--                                            </div>-->
-<!--                                            <div class="timeline-item-content">New order placed!<a-->
-<!--                                                    class="fw-bold text-dark text-decoration-none" href="#!"> Order-->
-<!--                                                    #2912 </a>has-->
-<!--                                                been successfully placed.</div>-->
-<!--                                        </div>-->
-<!--                                        <div class="timeline-item">-->
-<!--                                            <div class="timeline-item-marker">-->
-<!--                                                <div class="timeline-item-marker-text">27 min</div>-->
-<!--                                                <div class="timeline-item-marker-indicator"></div>-->
-<!--                                            </div>-->
-<!--                                            <div class="timeline-item-content">New order placed!<a-->
-<!--                                                    class="fw-bold text-dark text-decoration-none" href="#!"> Order-->
-<!--                                                    #2912 </a>has-->
-<!--                                                been successfully placed.</div>-->
-<!--                                        </div>-->
-<!--                                        <div class="timeline-item">-->
-<!--                                            <div class="timeline-item-marker">-->
-<!--                                                <div class="timeline-item-marker-text">27 min</div>-->
-<!--                                                <div class="timeline-item-marker-indicator"></div>-->
-<!--                                            </div>-->
-<!--                                            <div class="timeline-item-content">New order placed!<a-->
-<!--                                                    class="fw-bold text-dark text-decoration-none" href="#!"> Order-->
-<!--                                                    #2912 </a>has-->
-<!--                                                been successfully placed.</div>-->
-<!--                                        </div>-->
-<!--                                        <div class="timeline-item">-->
-<!--                                            <div class="timeline-item-marker">-->
-<!--                                                <div class="timeline-item-marker-text">27 min</div>-->
-<!--                                                <div class="timeline-item-marker-indicator"></div>-->
-<!--                                            </div>-->
-<!--                                            <div class="timeline-item-content">New order placed!<a-->
-<!--                                                    class="fw-bold text-dark text-decoration-none" href="#!"> Order-->
-<!--                                                    #2912 </a>has-->
-<!--                                                been successfully placed.</div>-->
-<!--                                        </div>-->
-<!--                                        <div class="timeline-item">-->
-<!--                                            <div class="timeline-item-marker">-->
-<!--                                                <div class="timeline-item-marker-text">27 min</div>-->
-<!--                                                <div class="timeline-item-marker-indicator"></div>-->
-<!--                                            </div>-->
-<!--                                            <div class="timeline-item-content">New order placed!<a-->
-<!--                                                    class="fw-bold text-dark text-decoration-none" href="#!"> Order-->
-<!--                                                    #2912 </a>has-->
-<!--                                                been successfully placed.</div>-->
-<!--                                        </div>-->
-<!--                                    </div>-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                        <div class="AdminActivity-item item3">-->
-<!--                            <div class="Card">-->
-<!--                                <div class="CardHeader">Progress Tracker<div><svg stroke="currentColor"-->
-<!--                                            fill="currentColor" stroke-width="0" viewBox="0 0 512 512" color="gray"-->
-<!--                                            height="16px" width="16px" xmlns="http://www.w3.org/2000/svg"-->
-<!--                                            style="color: gray;">-->
-<!--                                            <path-->
-<!--                                                d="M296 136c0-22.002-17.998-40-40-40s-40 17.998-40 40 17.998 40 40 40 40-17.998 40-40zm0 240c0-22.002-17.998-40-40-40s-40 17.998-40 40 17.998 40 40 40 40-17.998 40-40zm0-120c0-22.002-17.998-40-40-40s-40 17.998-40 40 17.998 40 40 40 40-17.998 40-40z">-->
-<!--                                            </path>-->
-<!--                                        </svg></div>-->
-<!--                                </div>-->
-<!--                                <div class="CardBody">-->
-<!--                                    <h4>Server Migration<span style="margin-left: auto;">20%</span></h4>-->
-<!--                                    <div class="Progress">-->
-<!--                                        <div class="Progress-bar" style="width: 20%;"></div>-->
-<!--                                    </div>-->
-<!--                                    <h4> Sale Tracking<span style="margin-left: auto;">40%</span></h4>-->
-<!--                                    <div class="Progress">-->
-<!--                                        <div class="Progress-bar"-->
-<!--                                            style="width: 40%; background-color: rgb(244, 161, 0);"></div>-->
-<!--                                    </div>-->
-<!--                                    <h4> Customer Database<span style="margin-left: auto;">60%</span></h4>-->
-<!--                                    <div class="Progress">-->
-<!--                                        <div class="Progress-bar"-->
-<!--                                            style="width: 60%; background-color: rgb(0, 97, 242);"></div>-->
-<!--                                    </div>-->
-<!--                                    <h4> Payout Details<span style="margin-left: auto;">80%</span></h4>-->
-<!--                                    <div class="Progress">-->
-<!--                                        <div class="Progress-bar"-->
-<!--                                            style="width: 80%; background-color: rgb(0, 207, 213);"></div>-->
-<!--                                    </div>-->
-<!--                                    <h4> Account Setup<span style="margin-left: auto;">Complete!</span></h4>-->
-<!--                                    <div class="Progress">-->
-<!--                                        <div class="Progress-bar"-->
-<!--                                            style="width: 100%; background-color: rgb(0, 172, 105);"></div>-->
-<!--                                    </div>-->
-<!--                                </div>-->
-<!--                                <div class="CardFooter">-->
-<!--                                    <div class="CardFooter-container">-->
-<!--                                        <div class="AdminActivity-item-footer">View Task Center</div><svg-->
-<!--                                            stroke="currentColor" fill="currentColor" stroke-width="0"-->
-<!--                                            viewBox="0 0 512 512" height="1em" width="1em"-->
-<!--                                            xmlns="http://www.w3.org/2000/svg">-->
-<!--                                            <path-->
-<!--                                                d="M294.1 256L167 129c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.3 34 0L345 239c9.1 9.1 9.3 23.7.7 33.1L201.1 417c-4.7 4.7-10.9 7-17 7s-12.3-2.3-17-7c-9.4-9.4-9.4-24.6 0-33.9l127-127.1z">-->
-<!--                                            </path>-->
-<!--                                        </svg>-->
-<!--                                    </div>-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                    <div class="AdminMemo">-->
-<!--                        <div class="AdminMemo-item">-->
-<!--                            <div class="Card" style="background: rgb(0, 97, 242);">-->
-<!--                                <div class="CardBody">-->
-<!--                                    <div class="AdminMemo-item-content">-->
-<!--                                        <div class="AdminMemo-item-content-text">-->
-<!--                                            <div class="AdminMemo-item-content-text-title">Earnings (Monthly)</div>-->
-<!--                                            <div class="AdminMemo-item-content-text-detail">$40,000</div>-->
-<!--                                        </div><svg stroke="currentColor" fill="currentColor" stroke-width="0"-->
-<!--                                            viewBox="0 0 24 24" color="rgba(255, 255, 255, 0.5)" height="40px"-->
-<!--                                            width="40px" xmlns="http://www.w3.org/2000/svg"-->
-<!--                                            style="color: rgba(255, 255, 255, 0.5);">-->
-<!--                                            <g id="Calendar">-->
-<!--                                                <path-->
-<!--                                                    d="M18.438,4.954H16.5c0-0.346,0-0.691,0-1.036c0-0.124,0-0.248,0-0.372c0-0.262-0.23-0.512-0.5-0.5-->
-<!--                        c-0.271,0.012-0.5,0.22-0.5,0.5c0,0.469,0,0.939,0,1.408h-7c0-0.346,0-0.691,0-1.036c0-0.124,0-0.248,0-0.372-->
-<!--                        c0-0.262-0.23-0.512-0.5-0.5c-0.271,0.012-0.5,0.22-0.5,0.5c0,0.469,0,0.939,0,1.408H5.562c-1.378,0-2.5,1.122-2.5,2.5v11-->
-<!--                        c0,1.379,1.122,2.5,2.5,2.5h12.875c1.379,0,2.5-1.121,2.5-2.5v-11C20.938,6.076,19.816,4.954,18.438,4.954z M5.562,5.954H7.5-->
-<!--                        c0,0.073,0,0.147,0,0.22c0,0.124,0,0.248,0,0.372c0,0.262,0.23,0.512,0.5,0.5c0.271-0.012,0.5-0.22,0.5-0.5c0-0.197,0-0.394,0-0.592-->
-<!--                        h7c0,0.073,0,0.147,0,0.22c0,0.124,0,0.248,0,0.372c0,0.262,0.23,0.512,0.5,0.5c0.271-0.012,0.5-0.22,0.5-0.5-->
-<!--                        c0-0.197,0-0.394,0-0.592h1.937c0.827,0,1.5,0.673,1.5,1.5v1.584H4.062V7.454C4.062,6.627,4.735,5.954,5.562,5.954z M18.438,19.954-->
-<!--                        H5.562c-0.827,0-1.5-0.673-1.5-1.5v-8.416h15.875v8.416C19.938,19.281,19.265,19.954,18.438,19.954z">-->
-<!--                                                </path>-->
-<!--                                            </g>-->
-<!--                                        </svg>-->
-<!--                                    </div>-->
-<!--                                </div>-->
-<!--                                <div class="CardFooter">-->
-<!--                                    <div class="CardFooter-container">-->
-<!--                                        <div class="AdminMemo-item-footer">View Report</div><svg stroke="currentColor"-->
-<!--                                            fill="currentColor" stroke-width="0" viewBox="0 0 512 512" height="1em"-->
-<!--                                            width="1em" xmlns="http://www.w3.org/2000/svg">-->
-<!--                                            <path-->
-<!--                                                d="M294.1 256L167 129c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.3 34 0L345 239c9.1 9.1 9.3 23.7.7 33.1L201.1 417c-4.7 4.7-10.9 7-17 7s-12.3-2.3-17-7c-9.4-9.4-9.4-24.6 0-33.9l127-127.1z">-->
-<!--                                            </path>-->
-<!--                                        </svg>-->
-<!--                                    </div>-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                        <div class="AdminMemo-item">-->
-<!--                            <div class="Card" style="background: rgb(244, 161, 0);">-->
-<!--                                <div class="CardBody">-->
-<!--                                    <div class="AdminMemo-item-content">-->
-<!--                                        <div class="AdminMemo-item-content-text">-->
-<!--                                            <div class="AdminMemo-item-content-text-title">Earnings (Anually)</div>-->
-<!--                                            <div class="AdminMemo-item-content-text-detail">$40,000</div>-->
-<!--                                        </div><svg stroke="currentColor" fill="currentColor" stroke-width="0"-->
-<!--                                            viewBox="0 0 24 24" color="rgba(255, 255, 255, 0.5)" height="40px"-->
-<!--                                            width="40px" xmlns="http://www.w3.org/2000/svg"-->
-<!--                                            style="color: rgba(255, 255, 255, 0.5);">-->
-<!--                                            <g id="Calendar">-->
-<!--                                                <path-->
-<!--                                                    d="M18.438,4.954H16.5c0-0.346,0-0.691,0-1.036c0-0.124,0-0.248,0-0.372c0-0.262-0.23-0.512-0.5-0.5-->
-<!--                        c-0.271,0.012-0.5,0.22-0.5,0.5c0,0.469,0,0.939,0,1.408h-7c0-0.346,0-0.691,0-1.036c0-0.124,0-0.248,0-0.372-->
-<!--                        c0-0.262-0.23-0.512-0.5-0.5c-0.271,0.012-0.5,0.22-0.5,0.5c0,0.469,0,0.939,0,1.408H5.562c-1.378,0-2.5,1.122-2.5,2.5v11-->
-<!--                        c0,1.379,1.122,2.5,2.5,2.5h12.875c1.379,0,2.5-1.121,2.5-2.5v-11C20.938,6.076,19.816,4.954,18.438,4.954z M5.562,5.954H7.5-->
-<!--                        c0,0.073,0,0.147,0,0.22c0,0.124,0,0.248,0,0.372c0,0.262,0.23,0.512,0.5,0.5c0.271-0.012,0.5-0.22,0.5-0.5c0-0.197,0-0.394,0-0.592-->
-<!--                        h7c0,0.073,0,0.147,0,0.22c0,0.124,0,0.248,0,0.372c0,0.262,0.23,0.512,0.5,0.5c0.271-0.012,0.5-0.22,0.5-0.5-->
-<!--                        c0-0.197,0-0.394,0-0.592h1.937c0.827,0,1.5,0.673,1.5,1.5v1.584H4.062V7.454C4.062,6.627,4.735,5.954,5.562,5.954z M18.438,19.954-->
-<!--                        H5.562c-0.827,0-1.5-0.673-1.5-1.5v-8.416h15.875v8.416C19.938,19.281,19.265,19.954,18.438,19.954z">-->
-<!--                                                </path>-->
-<!--                                            </g>-->
-<!--                                        </svg>-->
-<!--                                    </div>-->
-<!--                                </div>-->
-<!--                                <div class="CardFooter">-->
-<!--                                    <div class="CardFooter-container">-->
-<!--                                        <div class="AdminMemo-item-footer">View Report</div><svg stroke="currentColor"-->
-<!--                                            fill="currentColor" stroke-width="0" viewBox="0 0 512 512" height="1em"-->
-<!--                                            width="1em" xmlns="http://www.w3.org/2000/svg">-->
-<!--                                            <path-->
-<!--                                                d="M294.1 256L167 129c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.3 34 0L345 239c9.1 9.1 9.3 23.7.7 33.1L201.1 417c-4.7 4.7-10.9 7-17 7s-12.3-2.3-17-7c-9.4-9.4-9.4-24.6 0-33.9l127-127.1z">-->
-<!--                                            </path>-->
-<!--                                        </svg>-->
-<!--                                    </div>-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                        <div class="AdminMemo-item">-->
-<!--                            <div class="Card" style="background: rgb(0, 172, 105);">-->
-<!--                                <div class="CardBody">-->
-<!--                                    <div class="AdminMemo-item-content">-->
-<!--                                        <div class="AdminMemo-item-content-text">-->
-<!--                                            <div class="AdminMemo-item-content-text-title">Task Completion</div>-->
-<!--                                            <div class="AdminMemo-item-content-text-detail">24</div>-->
-<!--                                        </div><svg stroke="currentColor" fill="currentColor" stroke-width="0"-->
-<!--                                            viewBox="0 0 24 24" color="rgba(255, 255, 255, 0.5)" height="40px"-->
-<!--                                            width="40px" xmlns="http://www.w3.org/2000/svg"-->
-<!--                                            style="color: rgba(255, 255, 255, 0.5);">-->
-<!--                                            <g id="Calendar">-->
-<!--                                                <path-->
-<!--                                                    d="M18.438,4.954H16.5c0-0.346,0-0.691,0-1.036c0-0.124,0-0.248,0-0.372c0-0.262-0.23-0.512-0.5-0.5-->
-<!--                        c-0.271,0.012-0.5,0.22-0.5,0.5c0,0.469,0,0.939,0,1.408h-7c0-0.346,0-0.691,0-1.036c0-0.124,0-0.248,0-0.372-->
-<!--                        c0-0.262-0.23-0.512-0.5-0.5c-0.271,0.012-0.5,0.22-0.5,0.5c0,0.469,0,0.939,0,1.408H5.562c-1.378,0-2.5,1.122-2.5,2.5v11-->
-<!--                        c0,1.379,1.122,2.5,2.5,2.5h12.875c1.379,0,2.5-1.121,2.5-2.5v-11C20.938,6.076,19.816,4.954,18.438,4.954z M5.562,5.954H7.5-->
-<!--                        c0,0.073,0,0.147,0,0.22c0,0.124,0,0.248,0,0.372c0,0.262,0.23,0.512,0.5,0.5c0.271-0.012,0.5-0.22,0.5-0.5c0-0.197,0-0.394,0-0.592-->
-<!--                        h7c0,0.073,0,0.147,0,0.22c0,0.124,0,0.248,0,0.372c0,0.262,0.23,0.512,0.5,0.5c0.271-0.012,0.5-0.22,0.5-0.5-->
-<!--                        c0-0.197,0-0.394,0-0.592h1.937c0.827,0,1.5,0.673,1.5,1.5v1.584H4.062V7.454C4.062,6.627,4.735,5.954,5.562,5.954z M18.438,19.954-->
-<!--                        H5.562c-0.827,0-1.5-0.673-1.5-1.5v-8.416h15.875v8.416C19.938,19.281,19.265,19.954,18.438,19.954z">-->
-<!--                                                </path>-->
-<!--                                            </g>-->
-<!--                                        </svg>-->
-<!--                                    </div>-->
-<!--                                </div>-->
-<!--                                <div class="CardFooter">-->
-<!--                                    <div class="CardFooter-container">-->
-<!--                                        <div class="AdminMemo-item-footer">View Tasks</div><svg stroke="currentColor"-->
-<!--                                            fill="currentColor" stroke-width="0" viewBox="0 0 512 512" height="1em"-->
-<!--                                            width="1em" xmlns="http://www.w3.org/2000/svg">-->
-<!--                                            <path-->
-<!--                                                d="M294.1 256L167 129c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.3 34 0L345 239c9.1 9.1 9.3 23.7.7 33.1L201.1 417c-4.7 4.7-10.9 7-17 7s-12.3-2.3-17-7c-9.4-9.4-9.4-24.6 0-33.9l127-127.1z">-->
-<!--                                            </path>-->
-<!--                                        </svg>-->
-<!--                                    </div>-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                        <div class="AdminMemo-item">-->
-<!--                            <div class="Card" style="background: rgb(232, 21, 0);">-->
-<!--                                <div class="CardBody">-->
-<!--                                    <div class="AdminMemo-item-content">-->
-<!--                                        <div class="AdminMemo-item-content-text">-->
-<!--                                            <div class="AdminMemo-item-content-text-title">Pending Requests</div>-->
-<!--                                            <div class="AdminMemo-item-content-text-detail">17</div>-->
-<!--                                        </div><svg stroke="currentColor" fill="currentColor" stroke-width="0"-->
-<!--                                            viewBox="0 0 24 24" color="rgba(255, 255, 255, 0.5)" height="40px"-->
-<!--                                            width="40px" xmlns="http://www.w3.org/2000/svg"-->
-<!--                                            style="color: rgba(255, 255, 255, 0.5);">-->
-<!--                                            <g id="Calendar">-->
-<!--                                                <path-->
-<!--                                                    d="M18.438,4.954H16.5c0-0.346,0-0.691,0-1.036c0-0.124,0-0.248,0-0.372c0-0.262-0.23-0.512-0.5-0.5-->
-<!--                        c-0.271,0.012-0.5,0.22-0.5,0.5c0,0.469,0,0.939,0,1.408h-7c0-0.346,0-0.691,0-1.036c0-0.124,0-0.248,0-0.372-->
-<!--                        c0-0.262-0.23-0.512-0.5-0.5c-0.271,0.012-0.5,0.22-0.5,0.5c0,0.469,0,0.939,0,1.408H5.562c-1.378,0-2.5,1.122-2.5,2.5v11-->
-<!--                        c0,1.379,1.122,2.5,2.5,2.5h12.875c1.379,0,2.5-1.121,2.5-2.5v-11C20.938,6.076,19.816,4.954,18.438,4.954z M5.562,5.954H7.5-->
-<!--                        c0,0.073,0,0.147,0,0.22c0,0.124,0,0.248,0,0.372c0,0.262,0.23,0.512,0.5,0.5c0.271-0.012,0.5-0.22,0.5-0.5c0-0.197,0-0.394,0-0.592-->
-<!--                        h7c0,0.073,0,0.147,0,0.22c0,0.124,0,0.248,0,0.372c0,0.262,0.23,0.512,0.5,0.5c0.271-0.012,0.5-0.22,0.5-0.5-->
-<!--                        c0-0.197,0-0.394,0-0.592h1.937c0.827,0,1.5,0.673,1.5,1.5v1.584H4.062V7.454C4.062,6.627,4.735,5.954,5.562,5.954z M18.438,19.954-->
-<!--                        H5.562c-0.827,0-1.5-0.673-1.5-1.5v-8.416h15.875v8.416C19.938,19.281,19.265,19.954,18.438,19.954z">-->
-<!--                                                </path>-->
-<!--                                            </g>-->
-<!--                                        </svg>-->
-<!--                                    </div>-->
-<!--                                </div>-->
-<!--                                <div class="CardFooter">-->
-<!--                                    <div class="CardFooter-container">-->
-<!--                                        <div class="AdminMemo-item-footer">View Requests</div><svg stroke="currentColor"-->
-<!--                                            fill="currentColor" stroke-width="0" viewBox="0 0 512 512" height="1em"-->
-<!--                                            width="1em" xmlns="http://www.w3.org/2000/svg">-->
-<!--                                            <path-->
-<!--                                                d="M294.1 256L167 129c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.3 34 0L345 239c9.1 9.1 9.3 23.7.7 33.1L201.1 417c-4.7 4.7-10.9 7-17 7s-12.3-2.3-17-7c-9.4-9.4-9.4-24.6 0-33.9l127-127.1z">-->
-<!--                                            </path>-->
-<!--                                        </svg>-->
-<!--                                    </div>-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                    <div class="AdminChart">-->
-<!--                        <div class="AdminChart-item">-->
-<!--                            <div class="Card">-->
-<!--                                <div class="CardHeader">Earnings Breakdown<div><svg stroke="currentColor"-->
-<!--                                            fill="currentColor" stroke-width="0" viewBox="0 0 512 512" color="gray"-->
-<!--                                            height="16px" width="16px" xmlns="http://www.w3.org/2000/svg"-->
-<!--                                            style="color: gray;">-->
-<!--                                            <path-->
-<!--                                                d="M296 136c0-22.002-17.998-40-40-40s-40 17.998-40 40 17.998 40 40 40 40-17.998 40-40zm0 240c0-22.002-17.998-40-40-40s-40 17.998-40 40 17.998 40 40 40 40-17.998 40-40zm0-120c0-22.002-17.998-40-40-40s-40 17.998-40 40 17.998 40 40 40 40-17.998 40-40z">-->
-<!--                                            </path>-->
-<!--                                        </svg></div>-->
-<!--                                </div>-->
-<!--                                <div class="CardBody"><canvas style="height: 276px;" id="earningsChart"></canvas>-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                        <div class="AdminChart-item">-->
-<!--                            <div class="Card">-->
-<!--                                <div class="CardHeader">Monthly Revenue<div><svg stroke="currentColor"-->
-<!--                                            fill="currentColor" stroke-width="0" viewBox="0 0 512 512" color="gray"-->
-<!--                                            height="16px" width="16px" xmlns="http://www.w3.org/2000/svg"-->
-<!--                                            style="color: gray;">-->
-<!--                                            <path-->
-<!--                                                d="M296 136c0-22.002-17.998-40-40-40s-40 17.998-40 40 17.998 40 40 40 40-17.998 40-40zm0 240c0-22.002-17.998-40-40-40s-40 17.998-40 40 17.998 40 40 40 40-17.998 40-40zm0-120c0-22.002-17.998-40-40-40s-40 17.998-40 40 17.998 40 40 40 40-17.998 40-40z">-->
-<!--                                            </path>-->
-<!--                                        </svg></div>-->
-<!--                                </div>-->
-<!--                                <div class="CardBody"><canvas style="height: 276px;" id="revenueChart"></canvas>-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                        </div>-->
+                <div class="AdminBanner">
+                    <div class="AdminBanner-container">
+                        <div class="AdminBanner-container-content">
+                            <div class="AdminBanner-container-content-text">
+                                <div class="AdminBanner-container-content-text-title"><svg stroke="currentColor"
+                                        fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round"
+                                        stroke-linejoin="round" color="rgba(255, 255, 255, 0.5)" height="1em"
+                                        width="1em" xmlns="http://www.w3.org/2000/svg"
+                                        style="color: rgba(255, 255, 255, 0.5); margin-right: 8px;">
+                                        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+                                    </svg>Dashboard</div>
+                                <div class="AdminBanner-container-content-text-subtitle">Example dashboard overview and
+                                    content
+                                    summary</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="admin-main-content">
+                    <div class="admin-main-content-overlay show-overlay"></div>
+                    <div class="AdminActivity">
+                        <div class="AdminActivity-item item1">
+                            <div class="Card">
+                                <div class="CardBody">
+                                    <div class="AdminActivity-item-welcome">
+                                        <div class="AdminActivity-item-welcome-text">
+                                            <h1 class="AdminActivity-item-welcome-text-main">Welcome to SB Admin Pro!
+                                            </h1>
+                                            <p class="AdminActivity-item-welcome-text-sub">Browse our fully designed UI
+                                                toolkit! Browse
+                                                our prebuilt app pages, components, and utilites, and be sure to look at
+                                                our full
+                                                documentation!</p>
+                                        </div>
+                                        <div class="AdminActivity-item-welcome-image"><img
+                                                src="https://sb-admin-pro.startbootstrap.com/assets/img/illustrations/at-work.svg">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="AdminActivity-item item2">
+                            <div class="Card">
+                                <div class="CardHeader">Recent Activity<div><svg stroke="currentColor"
+                                            fill="currentColor" stroke-width="0" viewBox="0 0 512 512" color="gray"
+                                            height="16px" width="16px" xmlns="http://www.w3.org/2000/svg"
+                                            style="color: gray;">
+                                            <path
+                                                d="M296 136c0-22.002-17.998-40-40-40s-40 17.998-40 40 17.998 40 40 40 40-17.998 40-40zm0 240c0-22.002-17.998-40-40-40s-40 17.998-40 40 17.998 40 40 40 40-17.998 40-40zm0-120c0-22.002-17.998-40-40-40s-40 17.998-40 40 17.998 40 40 40 40-17.998 40-40z">
+                                            </path>
+                                        </svg></div>
+                                </div>
+                                <div class="CardBody">
+                                    <div class="timeline">
+                                        <div class="timeline-item">
+                                            <div class="timeline-item-marker">
+                                                <div class="timeline-item-marker-text">27 min</div>
+                                                <div class="timeline-item-marker-indicator"></div>
+                                            </div>
+                                            <div class="timeline-item-content">New order placed!<a
+                                                    class="fw-bold text-dark text-decoration-none" href="#!"> Order
+                                                    #2912 </a>has been
+                                                successfully placed.</div>
+                                        </div>
+                                        <div class="timeline-item">
+                                            <div class="timeline-item-marker">
+                                                <div class="timeline-item-marker-text">27 min</div>
+                                                <div class="timeline-item-marker-indicator bg-green"></div>
+                                            </div>
+                                            <div class="timeline-item-content">New order placed!<a
+                                                    class="fw-bold text-dark text-decoration-none" href="#!"> Order
+                                                    #2912 </a>has been
+                                                successfully placed.</div>
+                                        </div>
+                                        <div class="timeline-item">
+                                            <div class="timeline-item-marker">
+                                                <div class="timeline-item-marker-text">27 min</div>
+                                                <div class="timeline-item-marker-indicator"></div>
+                                            </div>
+                                            <div class="timeline-item-content">New order placed!<a
+                                                    class="fw-bold text-dark text-decoration-none" href="#!"> Order
+                                                    #2912 </a>has been
+                                                successfully placed.</div>
+                                        </div>
+                                        <div class="timeline-item">
+                                            <div class="timeline-item-marker">
+                                                <div class="timeline-item-marker-text">27 min</div>
+                                                <div class="timeline-item-marker-indicator"></div>
+                                            </div>
+                                            <div class="timeline-item-content">New order placed!<a
+                                                    class="fw-bold text-dark text-decoration-none" href="#!"> Order
+                                                    #2912 </a>has been
+                                                successfully placed.</div>
+                                        </div>
+                                        <div class="timeline-item">
+                                            <div class="timeline-item-marker">
+                                                <div class="timeline-item-marker-text">27 min</div>
+                                                <div class="timeline-item-marker-indicator"></div>
+                                            </div>
+                                            <div class="timeline-item-content">New order placed!<a
+                                                    class="fw-bold text-dark text-decoration-none" href="#!"> Order
+                                                    #2912 </a>has been
+                                                successfully placed.</div>
+                                        </div>
+                                        <div class="timeline-item">
+                                            <div class="timeline-item-marker">
+                                                <div class="timeline-item-marker-text">27 min</div>
+                                                <div class="timeline-item-marker-indicator"></div>
+                                            </div>
+                                            <div class="timeline-item-content">New order placed!<a
+                                                    class="fw-bold text-dark text-decoration-none" href="#!"> Order
+                                                    #2912 </a>has been
+                                                successfully placed.</div>
+                                        </div>
+                                        <div class="timeline-item">
+                                            <div class="timeline-item-marker">
+                                                <div class="timeline-item-marker-text">27 min</div>
+                                                <div class="timeline-item-marker-indicator"></div>
+                                            </div>
+                                            <div class="timeline-item-content">New order placed!<a
+                                                    class="fw-bold text-dark text-decoration-none" href="#!"> Order
+                                                    #2912 </a>has been
+                                                successfully placed.</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="AdminActivity-item item3">
+                            <div class="Card">
+                                <div class="CardHeader">Progress Tracker<div><svg stroke="currentColor"
+                                            fill="currentColor" stroke-width="0" viewBox="0 0 512 512" color="gray"
+                                            height="16px" width="16px" xmlns="http://www.w3.org/2000/svg"
+                                            style="color: gray;">
+                                            <path
+                                                d="M296 136c0-22.002-17.998-40-40-40s-40 17.998-40 40 17.998 40 40 40 40-17.998 40-40zm0 240c0-22.002-17.998-40-40-40s-40 17.998-40 40 17.998 40 40 40 40-17.998 40-40zm0-120c0-22.002-17.998-40-40-40s-40 17.998-40 40 17.998 40 40 40 40-17.998 40-40z">
+                                            </path>
+                                        </svg></div>
+                                </div>
+                                <div class="CardBody">
+                                    <h4>Server Migration<span style="margin-left: auto;">20%</span></h4>
+                                    <div class="Progress">
+                                        <div class="Progress-bar" style="width: 20%;"></div>
+                                    </div>
+                                    <h4> Sale Tracking<span style="margin-left: auto;">40%</span></h4>
+                                    <div class="Progress">
+                                        <div class="Progress-bar"
+                                            style="width: 40%; background-color: rgb(244, 161, 0);"></div>
+                                    </div>
+                                    <h4> Customer Database<span style="margin-left: auto;">60%</span></h4>
+                                    <div class="Progress">
+                                        <div class="Progress-bar"
+                                            style="width: 60%; background-color: rgb(0, 97, 242);"></div>
+                                    </div>
+                                    <h4> Payout Details<span style="margin-left: auto;">80%</span></h4>
+                                    <div class="Progress">
+                                        <div class="Progress-bar"
+                                            style="width: 80%; background-color: rgb(0, 207, 213);"></div>
+                                    </div>
+                                    <h4> Account Setup<span style="margin-left: auto;">Complete!</span></h4>
+                                    <div class="Progress">
+                                        <div class="Progress-bar"
+                                            style="width: 100%; background-color: rgb(0, 172, 105);"></div>
+                                    </div>
+                                </div>
+                                <div class="CardFooter">
+                                    <div class="CardFooter-container">
+                                        <div class="AdminActivity-item-footer">View Task Center</div><svg
+                                            stroke="currentColor" fill="currentColor" stroke-width="0"
+                                            viewBox="0 0 512 512" height="1em" width="1em"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <path
+                                                d="M294.1 256L167 129c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.3 34 0L345 239c9.1 9.1 9.3 23.7.7 33.1L201.1 417c-4.7 4.7-10.9 7-17 7s-12.3-2.3-17-7c-9.4-9.4-9.4-24.6 0-33.9l127-127.1z">
+                                            </path>
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="AdminMemo">
+                        <div class="AdminMemo-item">
+                            <div class="Card" style="background: rgb(0, 97, 242);">
+                                <div class="CardBody">
+                                    <div class="AdminMemo-item-content">
+                                        <div class="AdminMemo-item-content-text">
+                                            <div class="AdminMemo-item-content-text-title">Earnings (Monthly)</div>
+                                            <div class="AdminMemo-item-content-text-detail">$40,000</div>
+                                        </div><svg stroke="currentColor" fill="currentColor" stroke-width="0"
+                                            viewBox="0 0 24 24" color="rgba(255, 255, 255, 0.5)" height="40px"
+                                            width="40px" xmlns="http://www.w3.org/2000/svg"
+                                            style="color: rgba(255, 255, 255, 0.5);">
+                                            <g id="Calendar">
+                                                <path
+                                                    d="M18.438,4.954H16.5c0-0.346,0-0.691,0-1.036c0-0.124,0-0.248,0-0.372c0-0.262-0.23-0.512-0.5-0.5
+                                        c-0.271,0.012-0.5,0.22-0.5,0.5c0,0.469,0,0.939,0,1.408h-7c0-0.346,0-0.691,0-1.036c0-0.124,0-0.248,0-0.372
+                                        c0-0.262-0.23-0.512-0.5-0.5c-0.271,0.012-0.5,0.22-0.5,0.5c0,0.469,0,0.939,0,1.408H5.562c-1.378,0-2.5,1.122-2.5,2.5v11
+                                        c0,1.379,1.122,2.5,2.5,2.5h12.875c1.379,0,2.5-1.121,2.5-2.5v-11C20.938,6.076,19.816,4.954,18.438,4.954z M5.562,5.954H7.5
+                                        c0,0.073,0,0.147,0,0.22c0,0.124,0,0.248,0,0.372c0,0.262,0.23,0.512,0.5,0.5c0.271-0.012,0.5-0.22,0.5-0.5c0-0.197,0-0.394,0-0.592
+                                        h7c0,0.073,0,0.147,0,0.22c0,0.124,0,0.248,0,0.372c0,0.262,0.23,0.512,0.5,0.5c0.271-0.012,0.5-0.22,0.5-0.5
+                                        c0-0.197,0-0.394,0-0.592h1.937c0.827,0,1.5,0.673,1.5,1.5v1.584H4.062V7.454C4.062,6.627,4.735,5.954,5.562,5.954z M18.438,19.954
+                                        H5.562c-0.827,0-1.5-0.673-1.5-1.5v-8.416h15.875v8.416C19.938,19.281,19.265,19.954,18.438,19.954z">
+                                                </path>
+                                            </g>
+                                        </svg>
+                                    </div>
+                                </div>
+                                <div class="CardFooter">
+                                    <div class="CardFooter-container">
+                                        <div class="AdminMemo-item-footer">View Report</div><svg stroke="currentColor"
+                                            fill="currentColor" stroke-width="0" viewBox="0 0 512 512" height="1em"
+                                            width="1em" xmlns="http://www.w3.org/2000/svg">
+                                            <path
+                                                d="M294.1 256L167 129c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.3 34 0L345 239c9.1 9.1 9.3 23.7.7 33.1L201.1 417c-4.7 4.7-10.9 7-17 7s-12.3-2.3-17-7c-9.4-9.4-9.4-24.6 0-33.9l127-127.1z">
+                                            </path>
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="AdminMemo-item">
+                            <div class="Card" style="background: rgb(244, 161, 0);">
+                                <div class="CardBody">
+                                    <div class="AdminMemo-item-content">
+                                        <div class="AdminMemo-item-content-text">
+                                            <div class="AdminMemo-item-content-text-title">Earnings (Anually)</div>
+                                            <div class="AdminMemo-item-content-text-detail">$40,000</div>
+                                        </div><svg stroke="currentColor" fill="currentColor" stroke-width="0"
+                                            viewBox="0 0 24 24" color="rgba(255, 255, 255, 0.5)" height="40px"
+                                            width="40px" xmlns="http://www.w3.org/2000/svg"
+                                            style="color: rgba(255, 255, 255, 0.5);">
+                                            <g id="Calendar">
+                                                <path
+                                                    d="M18.438,4.954H16.5c0-0.346,0-0.691,0-1.036c0-0.124,0-0.248,0-0.372c0-0.262-0.23-0.512-0.5-0.5
+                                        c-0.271,0.012-0.5,0.22-0.5,0.5c0,0.469,0,0.939,0,1.408h-7c0-0.346,0-0.691,0-1.036c0-0.124,0-0.248,0-0.372
+                                        c0-0.262-0.23-0.512-0.5-0.5c-0.271,0.012-0.5,0.22-0.5,0.5c0,0.469,0,0.939,0,1.408H5.562c-1.378,0-2.5,1.122-2.5,2.5v11
+                                        c0,1.379,1.122,2.5,2.5,2.5h12.875c1.379,0,2.5-1.121,2.5-2.5v-11C20.938,6.076,19.816,4.954,18.438,4.954z M5.562,5.954H7.5
+                                        c0,0.073,0,0.147,0,0.22c0,0.124,0,0.248,0,0.372c0,0.262,0.23,0.512,0.5,0.5c0.271-0.012,0.5-0.22,0.5-0.5c0-0.197,0-0.394,0-0.592
+                                        h7c0,0.073,0,0.147,0,0.22c0,0.124,0,0.248,0,0.372c0,0.262,0.23,0.512,0.5,0.5c0.271-0.012,0.5-0.22,0.5-0.5
+                                        c0-0.197,0-0.394,0-0.592h1.937c0.827,0,1.5,0.673,1.5,1.5v1.584H4.062V7.454C4.062,6.627,4.735,5.954,5.562,5.954z M18.438,19.954
+                                        H5.562c-0.827,0-1.5-0.673-1.5-1.5v-8.416h15.875v8.416C19.938,19.281,19.265,19.954,18.438,19.954z">
+                                                </path>
+                                            </g>
+                                        </svg>
+                                    </div>
+                                </div>
+                                <div class="CardFooter">
+                                    <div class="CardFooter-container">
+                                        <div class="AdminMemo-item-footer">View Report</div><svg stroke="currentColor"
+                                            fill="currentColor" stroke-width="0" viewBox="0 0 512 512" height="1em"
+                                            width="1em" xmlns="http://www.w3.org/2000/svg">
+                                            <path
+                                                d="M294.1 256L167 129c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.3 34 0L345 239c9.1 9.1 9.3 23.7.7 33.1L201.1 417c-4.7 4.7-10.9 7-17 7s-12.3-2.3-17-7c-9.4-9.4-9.4-24.6 0-33.9l127-127.1z">
+                                            </path>
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="AdminMemo-item">
+                            <div class="Card" style="background: rgb(0, 172, 105);">
+                                <div class="CardBody">
+                                    <div class="AdminMemo-item-content">
+                                        <div class="AdminMemo-item-content-text">
+                                            <div class="AdminMemo-item-content-text-title">Task Completion</div>
+                                            <div class="AdminMemo-item-content-text-detail">24</div>
+                                        </div><svg stroke="currentColor" fill="currentColor" stroke-width="0"
+                                            viewBox="0 0 24 24" color="rgba(255, 255, 255, 0.5)" height="40px"
+                                            width="40px" xmlns="http://www.w3.org/2000/svg"
+                                            style="color: rgba(255, 255, 255, 0.5);">
+                                            <g id="Calendar">
+                                                <path
+                                                    d="M18.438,4.954H16.5c0-0.346,0-0.691,0-1.036c0-0.124,0-0.248,0-0.372c0-0.262-0.23-0.512-0.5-0.5
+                                        c-0.271,0.012-0.5,0.22-0.5,0.5c0,0.469,0,0.939,0,1.408h-7c0-0.346,0-0.691,0-1.036c0-0.124,0-0.248,0-0.372
+                                        c0-0.262-0.23-0.512-0.5-0.5c-0.271,0.012-0.5,0.22-0.5,0.5c0,0.469,0,0.939,0,1.408H5.562c-1.378,0-2.5,1.122-2.5,2.5v11
+                                        c0,1.379,1.122,2.5,2.5,2.5h12.875c1.379,0,2.5-1.121,2.5-2.5v-11C20.938,6.076,19.816,4.954,18.438,4.954z M5.562,5.954H7.5
+                                        c0,0.073,0,0.147,0,0.22c0,0.124,0,0.248,0,0.372c0,0.262,0.23,0.512,0.5,0.5c0.271-0.012,0.5-0.22,0.5-0.5c0-0.197,0-0.394,0-0.592
+                                        h7c0,0.073,0,0.147,0,0.22c0,0.124,0,0.248,0,0.372c0,0.262,0.23,0.512,0.5,0.5c0.271-0.012,0.5-0.22,0.5-0.5
+                                        c0-0.197,0-0.394,0-0.592h1.937c0.827,0,1.5,0.673,1.5,1.5v1.584H4.062V7.454C4.062,6.627,4.735,5.954,5.562,5.954z M18.438,19.954
+                                        H5.562c-0.827,0-1.5-0.673-1.5-1.5v-8.416h15.875v8.416C19.938,19.281,19.265,19.954,18.438,19.954z">
+                                                </path>
+                                            </g>
+                                        </svg>
+                                    </div>
+                                </div>
+                                <div class="CardFooter">
+                                    <div class="CardFooter-container">
+                                        <div class="AdminMemo-item-footer">View Tasks</div><svg stroke="currentColor"
+                                            fill="currentColor" stroke-width="0" viewBox="0 0 512 512" height="1em"
+                                            width="1em" xmlns="http://www.w3.org/2000/svg">
+                                            <path
+                                                d="M294.1 256L167 129c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.3 34 0L345 239c9.1 9.1 9.3 23.7.7 33.1L201.1 417c-4.7 4.7-10.9 7-17 7s-12.3-2.3-17-7c-9.4-9.4-9.4-24.6 0-33.9l127-127.1z">
+                                            </path>
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="AdminMemo-item">
+                            <div class="Card" style="background: rgb(232, 21, 0);">
+                                <div class="CardBody">
+                                    <div class="AdminMemo-item-content">
+                                        <div class="AdminMemo-item-content-text">
+                                            <div class="AdminMemo-item-content-text-title">Pending Requests</div>
+                                            <div class="AdminMemo-item-content-text-detail">17</div>
+                                        </div><svg stroke="currentColor" fill="currentColor" stroke-width="0"
+                                            viewBox="0 0 24 24" color="rgba(255, 255, 255, 0.5)" height="40px"
+                                            width="40px" xmlns="http://www.w3.org/2000/svg"
+                                            style="color: rgba(255, 255, 255, 0.5);">
+                                            <g id="Calendar">
+                                                <path
+                                                    d="M18.438,4.954H16.5c0-0.346,0-0.691,0-1.036c0-0.124,0-0.248,0-0.372c0-0.262-0.23-0.512-0.5-0.5
+                                        c-0.271,0.012-0.5,0.22-0.5,0.5c0,0.469,0,0.939,0,1.408h-7c0-0.346,0-0.691,0-1.036c0-0.124,0-0.248,0-0.372
+                                        c0-0.262-0.23-0.512-0.5-0.5c-0.271,0.012-0.5,0.22-0.5,0.5c0,0.469,0,0.939,0,1.408H5.562c-1.378,0-2.5,1.122-2.5,2.5v11
+                                        c0,1.379,1.122,2.5,2.5,2.5h12.875c1.379,0,2.5-1.121,2.5-2.5v-11C20.938,6.076,19.816,4.954,18.438,4.954z M5.562,5.954H7.5
+                                        c0,0.073,0,0.147,0,0.22c0,0.124,0,0.248,0,0.372c0,0.262,0.23,0.512,0.5,0.5c0.271-0.012,0.5-0.22,0.5-0.5c0-0.197,0-0.394,0-0.592
+                                        h7c0,0.073,0,0.147,0,0.22c0,0.124,0,0.248,0,0.372c0,0.262,0.23,0.512,0.5,0.5c0.271-0.012,0.5-0.22,0.5-0.5
+                                        c0-0.197,0-0.394,0-0.592h1.937c0.827,0,1.5,0.673,1.5,1.5v1.584H4.062V7.454C4.062,6.627,4.735,5.954,5.562,5.954z M18.438,19.954
+                                        H5.562c-0.827,0-1.5-0.673-1.5-1.5v-8.416h15.875v8.416C19.938,19.281,19.265,19.954,18.438,19.954z">
+                                                </path>
+                                            </g>
+                                        </svg>
+                                    </div>
+                                </div>
+                                <div class="CardFooter">
+                                    <div class="CardFooter-container">
+                                        <div class="AdminMemo-item-footer">View Requests</div><svg stroke="currentColor"
+                                            fill="currentColor" stroke-width="0" viewBox="0 0 512 512" height="1em"
+                                            width="1em" xmlns="http://www.w3.org/2000/svg">
+                                            <path
+                                                d="M294.1 256L167 129c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.3 34 0L345 239c9.1 9.1 9.3 23.7.7 33.1L201.1 417c-4.7 4.7-10.9 7-17 7s-12.3-2.3-17-7c-9.4-9.4-9.4-24.6 0-33.9l127-127.1z">
+                                            </path>
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="AdminChart">
+                        <div class="AdminChart-item">
+                            <div class="Card">
+                                <div class="CardHeader">Appoinment<div><svg stroke="currentColor" fill="currentColor"
+                                            stroke-width="0" viewBox="0 0 512 512" color="gray" height="16px"
+                                            width="16px" xmlns="http://www.w3.org/2000/svg" style="color: gray;">
+                                            <path
+                                                d="M296 136c0-22.002-17.998-40-40-40s-40 17.998-40 40 17.998 40 40 40 40-17.998 40-40zm0 240c0-22.002-17.998-40-40-40s-40 17.998-40 40 17.998 40 40 40 40-17.998 40-40zm0-120c0-22.002-17.998-40-40-40s-40 17.998-40 40 17.998 40 40 40 40-17.998 40-40z">
+                                            </path>
+                                        </svg></div>
+                                </div>
+                                <div class="CardBody">
+                                    <div id="chartContainer" style="height: 276px; width: 100%;"></div>
+                                </div>
+                                <script>
+                                    // Lấy dữ liệu appointment stats từ server
+                                    function loadChartData(year) {
+                                        $.ajax({
+                                            url: '/appointments/stats/' + year, // Đường dẫn API
+                                            method: 'GET',
+                                            success: function (response) {
+                                                console.log(response);
+                                                // Chuyển đổi dữ liệu thành dạng phù hợp với CanvasJS
+                                                var dataPoints = [];
+                                                for (var month = 1; month <= 12; month++) {
+                                                    dataPoints.push({
+                                                        label: "Tháng " + month,
+                                                        y: response[month] || 0 // Nếu không có dữ liệu thì set là 0
+                                                    });
+                                                }
 
-<!--                        <script>-->
-<!--                            // Dữ liệu cho biểu đồ Earnings Breakdown-->
-<!--                            const earningsData = {-->
-<!--                                labels: ['Jan', '', 'Mar', '', 'May', '', 'Jul', '', 'Sep', '', 'Nov', ''],-->
-<!--                                datasets: [{-->
-<!--                                    label: 'Earnings Breakdown',-->
-<!--                                    data: [0, 10000, 5000, 15000, 10000, 20000, 15000, 25000, 20000, 30000, 25000, 40000],-->
-<!--                                    borderColor: 'rgba(0, 97, 242, 1)',-->
-<!--                                    backgroundColor: 'rgba(0, 97, 242, 0.1)',-->
-<!--                                    fill: true,-->
-<!--                                    tension: 0.4,-->
-<!--                                    pointRadius: 5,-->
-<!--                                    pointBackgroundColor: 'rgba(0, 97, 242, 1)',-->
-<!--                                }],-->
-<!--                            };-->
+                                                // Vẽ biểu đồ
+                                                var chart = new CanvasJS.Chart("chartContainer", {
+                                                    animationEnabled: true,
+                                                    theme: "light2",
+                                                    axisY: {
+                                                        title: "Số lượng"
+                                                    },
+                                                    data: [{
+                                                        type: "column", // Loại biểu đồ: cột (column)
+                                                        dataPoints: dataPoints
+                                                    }]
+                                                });
+                                                chart.render();
+                                            }
+                                        });
+                                    }
 
-<!--                            // Dữ liệu cho biểu đồ Monthly Revenue-->
-<!--                            const revenueData = {-->
-<!--                                labels: ['January', 'February', 'March', 'April', 'May', 'June'],-->
-<!--                                datasets: [{-->
-<!--                                    label: 'Monthly Revenue',-->
-<!--                                    data: [5000, 10000, 8000, 12000, 15000, 14000],-->
-<!--                                    backgroundColor: 'blue',-->
-<!--                                }],-->
-<!--                            };-->
-
-<!--                            // Tùy chọn cho biểu đồ Earnings Breakdown-->
-<!--                            const optionsLine = {-->
-<!--                                responsive: true,-->
-<!--                                maintainAspectRatio: false,-->
-<!--                                scales: {-->
-<!--                                    x: {-->
-<!--                                        grid: {-->
-<!--                                            display: false,-->
-<!--                                        },-->
-<!--                                    },-->
-<!--                                    y: {-->
-<!--                                        ticks: {-->
-<!--                                            beginAtZero: true,-->
-<!--                                            stepSize: 10000,-->
-<!--                                            callback: function (value) {-->
-<!--                                                return '$' + value.toLocaleString(); // Định dạng số với ký hiệu $-->
-<!--                                            },-->
-<!--                                        },-->
-<!--                                        grid: {-->
-<!--                                            color: 'rgba(0, 0, 0, 0.1)',-->
-<!--                                        },-->
-<!--                                    },-->
-<!--                                },-->
-<!--                            };-->
-
-<!--                            // Tùy chọn cho biểu đồ Monthly Revenue-->
-<!--                            const optionsBar = {-->
-<!--                                responsive: true,-->
-<!--                                maintainAspectRatio: false,-->
-<!--                                scales: {-->
-<!--                                    x: {-->
-<!--                                        grid: {-->
-<!--                                            display: false,-->
-<!--                                        },-->
-<!--                                    },-->
-<!--                                    y: {-->
-<!--                                        beginAtZero: true,-->
-<!--                                    },-->
-<!--                                },-->
-<!--                            };-->
-
-<!--                            // Khởi tạo biểu đồ Earnings Breakdown-->
-<!--                            const earningsChartContext = document.getElementById('earningsChart').getContext('2d');-->
-<!--                            const earningsChart = new Chart(earningsChartContext, {-->
-<!--                                type: 'line',-->
-<!--                                data: earningsData,-->
-<!--                                options: optionsLine,-->
-<!--                            });-->
-
-<!--                            // Khởi tạo biểu đồ Monthly Revenue-->
-<!--                            const revenueChartContext = document.getElementById('revenueChart').getContext('2d');-->
-<!--                            const revenueChart = new Chart(revenueChartContext, {-->
-<!--                                type: 'bar',-->
-<!--                                data: revenueData,-->
-<!--                                options: optionsBar,-->
-<!--                            });-->
-<!--                        </script>-->
-<!--                    </div>-->
-<!--                </div>-->
-                <!-- <div class="admin-footer">
-                    <div class="admin-footer-container"><span class="admin-footer-container-copyright">Copyright © Your
-                            Website
-                            2021</span><span class="admin-footer-container-links"><a href="#">Privacy Policy</a> · <a
-                                href="#">Terms
-                                &amp; Conditions</a></span></div>
-                </div> -->
-                <script>
-                    // Load nội dung của file header.html vào div có id "header"
-                    fetch('/test2')
-                        .then(response => response.text())
-                        .then(data => {
-                            document.getElementById('admin-content').innerHTML = data;
-loadAppointment(11, 2024);
-                        })
-                        .catch(error => console.error('Error loading HTML:', error));
-                </script>
+                                    // Gọi hàm để vẽ chart cho năm 2024
+                                    loadChartData(2024);
+                                </script>
+                            </div>
+                        </div>
+                        <div class="AdminChart-item">
+                            <div class="Card">
+                                <div class="CardHeader">Monthly Revenue<div><svg stroke="currentColor"
+                                            fill="currentColor" stroke-width="0" viewBox="0 0 512 512" color="gray"
+                                            height="16px" width="16px" xmlns="http://www.w3.org/2000/svg"
+                                            style="color: gray;">
+                                            <path
+                                                d="M296 136c0-22.002-17.998-40-40-40s-40 17.998-40 40 17.998 40 40 40 40-17.998 40-40zm0 240c0-22.002-17.998-40-40-40s-40 17.998-40 40 17.998 40 40 40 40-17.998 40-40zm0-120c0-22.002-17.998-40-40-40s-40 17.998-40 40 17.998 40 40 40 40-17.998 40-40z">
+                                            </path>
+                                        </svg></div>
+                                </div>
+                                <div class="CardBody"><canvas role="img" height="276" width="526"
+                                        style="display: block; box-sizing: border-box; height: 276px; width: 526px;"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
-    <script src="js/adminControl.js"></script>
-    <script src="js/util.js"></script>
-    <!-- util functions included in the CodyHouse framework -->
-    <script src="js/main.js"></script>
+            <script src="js/adminControl.js"></script>
+            <script src="js/util.js"></script>
+            <!-- util functions included in the CodyHouse framework -->
+            <script src="js/main.js"></script>
 </body>
 
 </html>

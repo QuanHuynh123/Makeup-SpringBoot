@@ -73,7 +73,7 @@
 }
 
 .admin-header-logo {
-    width: 166px;
+    width: 190px;
     padding: 5px 16px 5px 8px;
     font-size: 16px;
     font-weight: bold;
@@ -253,7 +253,7 @@
     max-width: 0;
     z-index: 999;
     background-color: #fff;
-     transition: max-width 0.3s ease-in-out;
+    transition: max-width 0.3s ease-in-out;
 }
 
 .Sidebar.showSidebar {
@@ -303,7 +303,7 @@
 }
 
 .Sidebar-menu:hover {
-    overflow-y: scroll;
+    overflow-y: auto;
 }
 
 .Sidebar-menu-content {
@@ -351,8 +351,15 @@
 }
 
 .Submenu-title.active {
-    color: #0061f2;
-    font-weight: 700;
+    /* color: #0061f2;
+    font-weight: 700; */
+
+    background-color: #f0f0f0;
+    /* Màu nền khi active */
+    color: #007bff;
+    /* Màu chữ khi active */
+    font-weight: bold;
+    /* Tô đậm chữ */
 }
 
 .Submenu-item {
@@ -388,12 +395,12 @@
     cursor: pointer;
     transition: color 0.3s ease;
     font-size: 14px;
-    height:0 !important;
+    height: 0 !important;
 }
 
 .Submenu-item-content .Submenu-item-content-object {
-margin: 0;
-    height:auto !important;
+    margin: 0;
+    height: auto !important;
 }
 
 .Submenu-item-content-object:hover {
@@ -427,6 +434,8 @@ margin: 0;
     transition: max-width 0.3s ease-in-out;
     z-index: 999;
 }
+
+.admin-main {}
 
 .admin-content .admin-main {
     flex: 1;
