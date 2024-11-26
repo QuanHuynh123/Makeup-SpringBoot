@@ -519,13 +519,48 @@
                     <div class="AdminChart">
                         <div class="AdminChart-item">
                             <div class="Card">
-                                <div class="CardHeader">Appoinment<div><svg stroke="currentColor" fill="currentColor"
-                                            stroke-width="0" viewBox="0 0 512 512" color="gray" height="16px"
-                                            width="16px" xmlns="http://www.w3.org/2000/svg" style="color: gray;">
+                                <div class="CardHeader">Appoinment
+                                    <button class="btnMore" onclick="togglePopup()">
+                                        <svg stroke="currentColor" fill="currentColor" stroke-width="0"
+                                            viewBox="0 0 512 512" color="gray" height="16px" width="16px"
+                                            xmlns="http://www.w3.org/2000/svg" style="color: gray;">
                                             <path
                                                 d="M296 136c0-22.002-17.998-40-40-40s-40 17.998-40 40 17.998 40 40 40 40-17.998 40-40zm0 240c0-22.002-17.998-40-40-40s-40 17.998-40 40 17.998 40 40 40 40-17.998 40-40zm0-120c0-22.002-17.998-40-40-40s-40 17.998-40 40 17.998 40 40 40 40-17.998 40-40z">
                                             </path>
-                                        </svg></div>
+                                        </svg>
+                                    </button>
+                                    <div id="popup-menu" class="popup-menu d-none">
+                                        <!-- <div class="popup-menu-item" data-api="/appointments/stats/last12Months">Last 12
+                                            Months</div> -->
+                                        <div class="popup-menu-item" data-api="/appointments/stats/last30Days">Last 30
+                                            Days</div>
+                                        <div class="popup-menu-item" data-api="/appointments/stats/last7Days">Last 7
+                                            Days</div>
+                                        <div class="popup-menu-item" data-api="/appointments/stats/thisMonth">This Month
+                                        </div>
+                                        <div class="popup-menu-item" data-custom-range="true">Custom Range</div>
+                                    </div>
+                                    <!-- Popup cho custom range -->
+                                    <div id="customRangePopup" class="custom-range-popup d-none">
+                                        <div class="popup-content card shadow-sm p-4">
+                                            <h3 class="text-center">Select Date Range</h3>
+                                            <div class="form-group">
+                                                <label for="startDate">Start Date:</label>
+                                                <input type="date" id="startDate" name="startDate" class="form-control"
+                                                    required>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="endDate">End Date:</label>
+                                                <input type="date" id="endDate" name="endDate" class="form-control"
+                                                    required>
+                                            </div>
+                                            <div class="text-center mt-3">
+                                                <button id="submitRange" class="btn btn-primary">Submit</button>
+                                                <button id="closePopup" class="btn btn-secondary ml-2">Close</button>
+                                            </div>
+                                        </div>
+                                    </div>
+
                                 </div>
                                 <div class="CardBody">
                                     <div id="chartContainer" style="height: 276px; width: 100%;"></div>
@@ -571,18 +606,89 @@
                         </div>
                         <div class="AdminChart-item">
                             <div class="Card">
-                                <div class="CardHeader">Monthly Revenue<div><svg stroke="currentColor"
-                                            fill="currentColor" stroke-width="0" viewBox="0 0 512 512" color="gray"
-                                            height="16px" width="16px" xmlns="http://www.w3.org/2000/svg"
-                                            style="color: gray;">
+                                <div class="CardHeader">Order
+                                    <button class="btnMore" onclick="togglePopup()">
+                                        <svg stroke="currentColor" fill="currentColor" stroke-width="0"
+                                            viewBox="0 0 512 512" color="gray" height="16px" width="16px"
+                                            xmlns="http://www.w3.org/2000/svg" style="color: gray;">
                                             <path
                                                 d="M296 136c0-22.002-17.998-40-40-40s-40 17.998-40 40 17.998 40 40 40 40-17.998 40-40zm0 240c0-22.002-17.998-40-40-40s-40 17.998-40 40 17.998 40 40 40 40-17.998 40-40zm0-120c0-22.002-17.998-40-40-40s-40 17.998-40 40 17.998 40 40 40 40-17.998 40-40z">
                                             </path>
-                                        </svg></div>
+                                        </svg>
+                                    </button>
+                                    <div id="popup-menu" class="popup-menu d-none">
+                                        <!-- <div class="popup-menu-item" data-api="/appointments/stats/last12Months">Last 12
+                                                                    Months</div> -->
+                                        <div class="popup-menu-item" data-api="/appointments/stats/last30Days">Last 30
+                                            Days</div>
+                                        <div class="popup-menu-item" data-api="/appointments/stats/last7Days">Last 7
+                                            Days</div>
+                                        <div class="popup-menu-item" data-api="/appointments/stats/thisMonth">This Month
+                                        </div>
+                                        <div class="popup-menu-item" data-custom-range="true">Custom Range</div>
+                                    </div>
+                                    <!-- Popup cho custom range -->
+                                    <div id="customRangePopup" class="custom-range-popup d-none">
+                                        <div class="popup-content card shadow-sm p-4">
+                                            <h3 class="text-center">Select Date Range</h3>
+                                            <div class="form-group">
+                                                <label for="startDate">Start Date:</label>
+                                                <input type="date" id="startDate" name="startDate" class="form-control"
+                                                    required>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="endDate">End Date:</label>
+                                                <input type="date" id="endDate" name="endDate" class="form-control"
+                                                    required>
+                                            </div>
+                                            <div class="text-center mt-3">
+                                                <button id="submitRange" class="btn btn-primary">Submit</button>
+                                                <button id="closePopup" class="btn btn-secondary ml-2">Close</button>
+                                            </div>
+                                        </div>
+                                    </div>
+
                                 </div>
-                                <div class="CardBody"><canvas role="img" height="276" width="526"
-                                        style="display: block; box-sizing: border-box; height: 276px; width: 526px;"></canvas>
+                                <div class="CardBody">
+                                    <div id="chartContainer" style="height: 276px; width: 100%;"></div>
                                 </div>
+                                <script>
+                                    // Lấy dữ liệu appointment stats từ server
+                                    function loadChartData(year) {
+                                        $.ajax({
+                                            url: '/appointments/stats/' + year, // Đường dẫn API
+                                            method: 'GET',
+                                            success: function (response) {
+                                                console.log(response);
+                                                // Chuyển đổi dữ liệu thành dạng phù hợp với CanvasJS
+                                                var dataPoints = [];
+                                                for (var month = 1; month <= 12; month++) {
+                                                    dataPoints.push({
+                                                        label: "Tháng " + month,
+                                                        y: response[month] || 0 // Nếu không có dữ liệu thì set là 0
+                                                    });
+                                                }
+
+                                                // Vẽ biểu đồ
+                                                var chart = new CanvasJS.Chart("chartContainer", {
+                                                    animationEnabled: true,
+                                                    theme: "light2",
+                                                    axisY: {
+                                                        title: "Số lượng"
+                                                    },
+                                                    data: [{
+                                                        type: "column", // Loại biểu đồ: cột (column)
+                                                        dataPoints: dataPoints
+                                                    }]
+                                                });
+                                                chart.render();
+                                            }
+                                        });
+                                    }
+
+                                    // Gọi hàm để vẽ chart cho năm 2024
+                                    loadChartData(2024);
+                                </script>
                             </div>
                         </div>
                     </div>

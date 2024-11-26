@@ -37,15 +37,17 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Intege
             "ORDER BY month")
     List<Object[]> findAppointmentsCountByMonth(int year);
 
-    @Query("SELECT DATE_FORMAT(a.makeupDate, '%Y-%m-%d'), COUNT(a) FROM Appointment a WHERE a.makeupDate BETWEEN :startDate AND :endDate GROUP BY DATE(a.makeupDate)")
+    @Query("SELECT DATE_FORMAT(a.makeupDate, '%Y-%m-%d'), COUNT(a) " +
+            "FROM Appointment a " +
+            "WHERE a.makeupDate BETWEEN :startDate AND :endDate " +
+            "GROUP BY DATE(a.makeupDate) " +
+            "ORDER BY DATE(a.makeupDate) ASC")
     List<Object[]> findAppointmentsCountByDateRange(@Param("startDate") Date startDate, @Param("endDate") Date endDate);
 
-
-    @Query("SELECT DAY(a.makeupDate) AS day, COUNT(a) AS count " +
+    @Query("SELECT DAY(a.makeupDate), COUNT(a) " +
             "FROM Appointment a " +
-            "WHERE MONTH(a.makeupDate) = :month AND YEAR(a.makeupDate) = :year " +
+            "WHERE MONTH(a.makeupDate) = :currentMonth AND YEAR(a.makeupDate) = :currentYear " +
             "GROUP BY DAY(a.makeupDate) " +
-            "ORDER BY day")
-    List<Object[]> findAppointmentsCountByCurrentMonth(@Param("month") int month, @Param("year") int year);
-
+            "ORDER BY DAY(a.makeupDate) ASC")
+    List<Object[]> findAppointmentsCountByCurrentMonth(@Param("currentMonth") int currentMonth, @Param("currentYear") int currentYear);
 }
