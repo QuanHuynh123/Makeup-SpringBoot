@@ -706,7 +706,8 @@
     color: blue;
 }
 
-.CardHeader .btnMore {
+.CardHeader .btnMore,
+.CardHeader .btnMoreOrder {
     cursor: pointer;
     height: 40px;
     width: 40px;
@@ -718,18 +719,21 @@
     background: none;
 }
 
-.CardHeader .btnMore:hover {
+.CardHeader .btnMore:hover,
+.CardHeader .btnMoreOrder:hover {
     background: rgb(224, 224, 224);
 }
 
-.CardHeader .btnMore:focus {
+.CardHeader .btnMore:focus,
+.CardHeader .btnMoreOrder:focus {
     background: rgb(224, 224, 224);
     box-shadow: 0 0 0 4px #b9b9b9;
 }
 
+.popup-menu,
 .popup-menu {
     position: absolute;
-    top: 40px;
+    top: 50px;
     /* Căn chỉnh bên dưới nút 3 chấm */
     right: 0;
     background: white;
@@ -741,14 +745,16 @@
     z-index: 1000;
 }
 
-.popup-menu-item {
+.popup-menu-item,
+.popup-menu-item-order {
     padding: 10px;
     font-size: 14px;
     cursor: pointer;
     color: black;
 }
 
-.popup-menu-item:hover {
+.popup-menu-item:hover,
+.popup-menu-item-order:hover {
     background-color: #f5f5f5;
 }
 

@@ -235,7 +235,7 @@
 //         } else {
 //             console.error("Dữ liệu không hợp lệ", response);
 //         }
-//     }
+//     }    
 // });
 
 
@@ -244,16 +244,16 @@ document.addEventListener("DOMContentLoaded", () => {
     const sidebar = document.querySelector(".Sidebar");
     const main = document.querySelector(".admin-main");
     const submenuTitles = document.querySelectorAll(".Submenu-title");
-    const popupMenu = document.getElementById("popup-menu");
-    const menuButton = document.querySelector(".btnMore");
-    const popupMenuItems = document.querySelectorAll(".popup-menu-item");
-
-    let isPopupOpen = false; // Trạng thái popup menu
-    let chartContainer = document.getElementById("chartContainer");
-
-    if (!sidebar) {
-        console.warn("Sidebar element not found");
-    }
+    const popupMenus = {
+        main: document.getElementById("popup-menu"),
+        order: document.getElementById("popup-menu-order"),
+    };
+    const menuButtons = {
+        main: document.querySelector(".btnMore"),
+        order: document.querySelector(".btnMoreOrder"),
+    };
+    const customRangePopup = document.getElementById("customRangePopup");
+    const toggleButton = document.querySelector(".btnToggleSidebar");
 
     // Hàm toggle sidebar
     function toggleSidebar() {
@@ -261,38 +261,47 @@ document.addEventListener("DOMContentLoaded", () => {
         main?.classList.toggle("showSidebar");
     }
 
-    // Hàm toggle popup menu
-    function togglePopup() {
-        if (!popupMenu) return;
+    // Gắn sự kiện click vào nút toggle
+    toggleButton.addEventListener("click", toggleSidebar);
 
-        if (!isPopupOpen) {
-            popupMenu.classList.remove("d-none");
-            popupMenu.classList.add("d-block");
-            isPopupOpen = true;
+    let activePopup = null;
 
-            document.addEventListener("click", handleClickOutside);
-        } else {
+    if (!sidebar) console.warn("Sidebar element not found");
+
+    // Hàm mở/đóng popup
+    function togglePopup(popupKey) {
+        const popup = popupMenus[popupKey];
+        if (!popup) return;
+
+        if (activePopup === popupKey) {
             closePopup();
+        } else {
+            closePopup(); // Đóng popup đang mở trước đó
+            popup.classList.remove("d-none");
+            popup.classList.add("d-block");
+            activePopup = popupKey;
+            document.addEventListener("click", handleClickOutside);
         }
     }
 
-    // Hàm đóng popup menu
+    // Hàm đóng popup
     function closePopup() {
-        if (!popupMenu) return;
-
-        popupMenu.classList.remove("d-block");
-        popupMenu.classList.add("d-none");
-        isPopupOpen = false;
-
+        if (activePopup && popupMenus[activePopup]) {
+            const popup = popupMenus[activePopup];
+            popup.classList.remove("d-block");
+            popup.classList.add("d-none");
+        }
+        activePopup = null;
         document.removeEventListener("click", handleClickOutside);
     }
 
-    // Xử lý click ngoài popup
+    // Hàm xử lý click ngoài popup
     function handleClickOutside(event) {
         if (
-            popupMenu &&
-            !popupMenu.contains(event.target) &&
-            !menuButton?.contains(event.target)
+            activePopup &&
+            popupMenus[activePopup] &&
+            !popupMenus[activePopup].contains(event.target) &&
+            !menuButtons[activePopup]?.contains(event.target)
         ) {
             closePopup();
         }
@@ -306,49 +315,75 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-    // Gắn sự kiện toggle popup vào nút menu
-    if (menuButton) {
-        menuButton.addEventListener("click", (event) => {
+    // Gắn sự kiện toggle popup vào các nút menu
+    if (menuButtons.main) {
+        menuButtons.main.addEventListener("click", (event) => {
             event.stopPropagation();
-            togglePopup();
+            togglePopup("main");
+        });
+    }
+
+    if (menuButtons.order) {
+        menuButtons.order.addEventListener("click", (event) => {
+            event.stopPropagation();
+            togglePopup("order");
         });
     }
 
     // Xử lý các mục trong popup menu
-    popupMenuItems.forEach(item => {
+    document.querySelectorAll(".popup-menu-item").forEach((item) => {
         item.addEventListener("click", async (event) => {
             const apiEndpoint = item.getAttribute("data-api");
             const isCustomRange = item.getAttribute("data-custom-range");
 
             if (isCustomRange) {
-                handleCustomRange();
+                handleCustomRange("appointments");
             } else if (apiEndpoint) {
                 try {
                     const response = await fetch(apiEndpoint);
                     if (!response.ok) throw new Error("API call failed");
                     const data = await response.json();
-
-                    // Gọi hàm vẽ biểu đồ với dữ liệu từ API
-                    displayChart(data);
+                    displayChart(data, "chartContainer");
                 } catch (error) {
                     console.error("Error fetching API:", error);
                     alert("Failed to fetch data");
                 }
             }
-            closePopup()
+            closePopup();
+        });
+    });
+
+    // Xử lý các mục trong popup menu order
+    document.querySelectorAll(".popup-menu-item-order").forEach((item) => {
+        item.addEventListener("click", async (event) => {
+            const apiEndpoint = item.getAttribute("data-api");
+            const isCustomRange = item.getAttribute("data-custom-range");
+
+            if (isCustomRange) {
+                handleCustomRange("orders");
+            } else if (apiEndpoint) {
+                try {
+                    const response = await fetch(apiEndpoint);
+                    if (!response.ok) throw new Error("API call failed");
+                    const data = await response.json();
+                    displayChart(data, "chartContainerOrder");
+                } catch (error) {
+                    console.error("Error fetching API:", error);
+                    alert("Failed to fetch data");
+                }
+            }
+            closePopup();
         });
     });
 
     // Hàm xử lý Custom Range
-    function handleCustomRange() {
-        const customRangePopup = document.getElementById("customRangePopup");
-        customRangePopup.classList.remove("d-none"); // Hiển thị popup
+    function handleCustomRange(type) {
+        customRangePopup.classList.remove("d-none");
 
-        // Lắng nghe sự kiện đóng và gửi dữ liệu khi chọn phạm vi ngày
         const submitRangeButton = customRangePopup.querySelector("#submitRange");
         const closePopupButton = customRangePopup.querySelector("#closePopup");
 
-        submitRangeButton.addEventListener("click", () => {
+        const submitHandler = () => {
             const startDate = document.getElementById("startDate").value;
             const endDate = document.getElementById("endDate").value;
 
@@ -358,93 +393,100 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
             if (startDate > endDate) {
-                alert("Please select start date before end date.");
+                alert("Start date must be before end date.");
                 return;
             }
 
-            // Gửi yêu cầu API với startDate và endDate
-            fetch(`/appointments/stats/customRange?startDate=${startDate}&endDate=${endDate}`)
-                .then(response => response.json())
-                .then(data => {
-                    displayChart(data);
-                    customRangePopup.classList.add("d-none"); // Đóng popup sau khi nhận dữ liệu
+            fetch(`/${type}/stats/customRange?startDate=${startDate}&endDate=${endDate}`)
+                .then((response) => response.json())
+                .then((data) => {
+                    type == "orders" ? displayChart(data, "chartContainerOrder") : displayChart(data, "chartContainer");
+                    customRangePopup.classList.add("d-none");
                 })
-                .catch(error => {
+                .catch((error) => {
                     console.error("Error fetching data:", error);
                     alert("Failed to fetch data");
-                    customRangePopup.classList.add("d-none"); // Đóng popup nếu có lỗi
+                    customRangePopup.classList.add("d-none");
                 });
-        });
+        };
 
-        closePopupButton.addEventListener("click", () => {
-            customRangePopup.classList.add("d-none"); // Đóng popup khi nhấn "Close"
-        });
+        const closeHandler = () => customRangePopup.classList.add("d-none");
+
+        submitRangeButton.addEventListener("click", submitHandler, { once: true });
+        closePopupButton.addEventListener("click", closeHandler, { once: true });
     }
 
     // Hàm hiển thị biểu đồ với dữ liệu API
-    function displayChart(response) {
-        // Lấy phần tử container của biểu đồ
-        const chartContainer = document.getElementById("chartContainer");
+    function displayChart(response, containerId) {
+        const chartContainer = document.getElementById(containerId);
+        if (!chartContainer) return;
 
-        // Xóa phần tử biểu đồ cũ nếu tồn tại
-        if (chartContainer) {
-            chartContainer.innerHTML = ''; // Xóa nội dung của phần tử container
+        chartContainer.innerHTML = ""; // Xóa nội dung cũ
+        if (!response || typeof response !== "object") {
+            console.error("Invalid data", response);
+            return;
         }
 
-        // Khởi tạo mảng dataPoints để chứa dữ liệu cho biểu đồ
-        let dataPoints = [];
+        const dataPoints = Object.entries(response).map(([key, count]) => ({
+            label: key.includes("-") ? key : `Ngày ${key}`,
+            y: Math.round(count || 0),
+        }));
 
-        // Kiểm tra xem API trả về dữ liệu theo ngày hay không
-        if (response && typeof response === "object") {
-            // Lặp qua các phần tử trong response và tạo dataPoints cho biểu đồ
-            Object.keys(response).forEach(key => {
-                let count = response[key] || 0; // Nếu không có dữ liệu thì set là 0
+        const chart = new CanvasJS.Chart(containerId, {
+            animationEnabled: true,
+            theme: "light2",
+            axisY: {
+                title: "Số lượng",
+                includeZero: true,
+                interval: 1,
+            },
+            data: [{ type: "column", dataPoints }],
+        });
+        chart.render();
+    }
 
-                // Đảm bảo số lượng appointments là số nguyên
-                count = Math.round(count); // Làm tròn số lượng appointments thành số nguyên
+    // Hàm chuyển đổi các tab
+    function toggleTabContent(tabId) {
+        const dashboard = document.getElementById('dashboard');
+        const schedule = document.getElementById('schedule');
+        const staff = document.getElementById('staff');
 
-                // Nếu dữ liệu là ngày tháng
-                if (key.includes("-")) {
-                    dataPoints.push({
-                        label: key, // Ngày hoặc tuần
-                        y: count // Số lượng
-                    });
-                } else {
-                    // Nếu dữ liệu là theo ngày trong tháng
-                    dataPoints.push({
-                        label: "Ngày " + key,
-                        y: count
-                    });
-                }
-            });
+        // Ẩn tất cả nội dung và sau đó hiển thị tab tương ứng
+        dashboard.classList.add('d-none');
+        schedule.classList.add('d-none');
+        staff.classList.add('d-none');
 
-            // Tạo biểu đồ mới trong phần tử chartContainer
-            const chart = new CanvasJS.Chart("chartContainer", {
-                animationEnabled: true,
-                theme: "light2",
-                axisY: {
-                    title: "Số lượng",
-                    includeZero: true, // Đảm bảo bắt đầu từ 0 trên trục Y
-                    minimum: 0, // Thiết lập giá trị tối thiểu cho trục Y
-                    interval: 1, // Thiết lập khoảng cách giữa các nhãn trên trục Y (bước nhảy là 1)
-                    stripLines: [{ // Tùy chọn để hiển thị các đường kẻ ngang nếu cần
-                        value: 0,
-                        color: "#888",
-                        lineDashType: "solid",
-                        width: 1
-                    }],
-                    labelFormatter: function (e) {
-                        return Math.round(e.value); // Đảm bảo các giá trị trên trục Y luôn là số nguyên
-                    }
-                },
-                data: [{
-                    type: "column", // Loại biểu đồ: cột (column)
-                    dataPoints: dataPoints
-                }]
-            });
-            chart.render();
-        } else {
-            console.error("Dữ liệu không hợp lệ", response);
+        if (tabId === 'dashboard') {
+            dashboard.classList.remove('d-none');
+        } else if (tabId === 'schedule') {
+            schedule.classList.remove('d-none');
+        } else if (tabId === 'staff') {
+            staff.classList.remove('d-none');
         }
     }
+
+    // Sử dụng hàm dùng chung cho các tab
+    document.getElementById('tab-schedule').addEventListener('click', function () {
+        // Chuyển tab và tải nội dung
+        toggleTabContent('schedule');
+        loadAppointment(11, 2024);
+    });
+
+    document.getElementById('tab-dashboard').addEventListener('click', function () {
+        // Chuyển tab và tải nội dung
+        toggleTabContent('dashboard');
+    });
+    document.getElementById('tab-staff').addEventListener('click', function () {
+        // Chuyển tab và tải nội dung
+        toggleTabContent('staff');
+        // Load nội dung của file header.html vào div có id "header"
+        fetch('/test')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('staff').innerHTML = data;
+                loadCustomers();
+            })
+            .catch(error => console.error('Error loading HTML:', error));
+    });
 });
+

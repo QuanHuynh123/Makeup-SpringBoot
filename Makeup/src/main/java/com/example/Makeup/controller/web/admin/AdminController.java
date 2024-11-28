@@ -1,7 +1,9 @@
 package com.example.Makeup.controller.web.admin;
 
+import com.example.Makeup.dto.StaffDTO;
 import com.example.Makeup.repository.AppointmentRepository;
 import com.example.Makeup.repository.OrderRepository;
+import com.example.Makeup.service.StaffService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,18 +21,28 @@ import java.util.*;
 public class AdminController {
     @Autowired
     private AppointmentRepository appointmentRepository;
+    @Autowired
+    private StaffService staffService;
 
     @Autowired
     private OrderRepository orderRepository;
 
     @GetMapping("/test")
-    public String loginPage(){
-        return "admin";
+    public String loginPage(Model model) { // Thêm tham số Model
+        List<StaffDTO> staffList = staffService.getAllStaff();
+        model.addAttribute("staffList", staffList); // Truyền danh sách nhân viên vào model
+        return "customer-all"; // Tên của file Thymeleaf (customer-all.html)
     }
+
 
     @GetMapping("/test2")
     public String loginPage2(){
-        return "schedule";
+        return "admin";
+    }
+
+    @GetMapping("/test3")
+    public String loginPage3(){
+        return "dashboard";
     }
 
     @GetMapping("/appointments/stats/{year}")
