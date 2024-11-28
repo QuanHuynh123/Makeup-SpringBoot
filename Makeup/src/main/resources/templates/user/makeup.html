@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html layout:decorate="layoutMakeup" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+   <head>
+      <layout:fragment name="header">
+      <!-- mobile metas -->
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+      <!-- site metas -->
+      <title>beautySGU-makeup</title>
+      <!-- bootstrap css -->
+      <link rel="stylesheet" href="css/bootstrap/bootstrap.min.css">
+      <!-- style css -->
+      <link rel="stylesheet" href="css/header.css">
+      <link rel="stylesheet" href="css/style.css">
+      <link rel="stylesheet" href="css/makeup.css">
+      <link rel="stylesheet" href="css/contact.css">
+      <link rel="stylesheet" href="css/footer.css">
+      <!-- Responsive-->
+      <link rel="stylesheet" href="css/responsive.css">
+      <!-- fevicon -->
+      <link rel="icon" href="images/fevicon.png" type="image/gif" />
+      <!-- Scrollbar Custom CSS -->
+      <link rel="stylesheet" href="css/jquery.mCustomScrollbar.min.css">
+      <!-- Tweaks for older IEs-->
+      <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.css" media="screen">
+      <link rel="stylesheet"  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
+      <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script><![endif]-->
+      <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+      <script>
+         function clickMakeUpService(service) {
+             const form = document.getElementById('request');
+             if (form) {
+                 form.scrollIntoView({ behavior: 'smooth' }); // Cuộn mượt
+                    const select = document.getElementById('optionsMakeup');
+                     select.value = service;
+             } else {
+                 console.error('Form không tồn tại!');
+             }
+         }
+      </script>
+      </layout:fragment>
+   </head>
+   <!-- body -->
+   <body class="main-layout">
+      <div layout:fragment="content">
+         <div id="main_function">
+         <h2 id="title_makeup">MAKE-UP</h2>
+         <hr style="border: 1px solid black; width: 15%;">
+         <div class="width_100 center_row center_column">
+            <p class="sub_title_makeup">
+               Ngoài việc lựa chọn váy cưới thì với mỗi cô dâu lớp trang điểm cũng vô cùng quan trọng. Để nàng xuất hiện với diện mạo lung linh nhất, tôn nên đường nét thanh tú và thần thái rạng ngời hãy trao trọn niềm tin cho các Makeup Artist được đào tạo chuyên nghiệp của chúng mình.
+            </p>
+         </div>
+
+         <div class="button-container">
+            <button class="custom-button">
+              Xem thêm <span class="arrow">→</span>
+            </button>
+          </div>
+
+
+          <h6 id="title_outstanding_service">Các dịch vụ makeup nổi bật</h6>
+
+         <div id="list_option_makeup">
+
+            <div class="makeup-section row center_column">
+               <button class="btn_title_makeup" onclick="clickMakeUpService(1)">Makeup Đám Cưới</button>
+               <div class="row-container">
+                  <ul class="row ul_option">
+                     <li>
+                        <img src="./images/product/o1.jpg" alt="">
+                     </li>
+                     <li>
+                        <img src="./images/product/02.jpg" alt="">
+                     </li>
+                     <li>
+                        <img src="./images/product/o3.jpg" alt="">
+                     </li>
+                     <li>
+                        <img src="./images/product/o4.jpg" alt="">
+                     </li>
+                  </ul>
+               </div>
+            </div>
+
+            <div class="makeup-section row center_column">
+               <button class="btn_title_makeup" onclick="clickMakeUpService(2)">Makeup Đi Chơi/Event</button>
+               <div class="row-container">
+                  <ul class="row ul_option">
+                     <li>
+                        <img src="./images/product/i1.jpg" alt="">
+                     </li>
+                     <li>
+                        <img src="./images/product/i2.jpg" alt="">
+                     </li>
+                     <li>
+                        <img src="./images/product/i3.jpeg" alt="">
+                     </li>
+                     <li>
+                        <img src="./images/product/i4.jpg" alt="">
+                     </li>
+                  </ul>
+               </div>
+            </div>
+
+            <div class="makeup-section row center_column">
+               <button class="btn_title_makeup" onclick="clickMakeUpService(3)">Makeup Chụp Ảnh</button>
+               <div class="row-container">
+                  <ul class="row ul_option">
+                     <li>
+                        <img src="./images/product/c1.jpg" alt="">
+                     </li>
+                     <li>
+                        <img src="./images/product/c2.jpg" alt="">
+                     </li>
+                     <li>
+                        <img src="./images/product/c3.jpg" alt="">
+                     </li>
+                     <li>
+                        <img src="./images/product/c4.jpg" alt="">
+                     </li>
+                  </ul>
+               </div>
+            </div>
+
+            <div class="makeup-section row center_column">
+               <button class="btn_title_makeup" onclick="clickMakeUpService(1)">Makeup Thời Trang</button>
+               <div class="row-container">
+                  <ul class="row ul_option">
+                     <li>
+                     <img src="./images/product/t1.webp" alt="">
+                     </li>
+                     <li>
+                     <img src="./images/product/t2.jpg" alt="">
+                     </li>
+                     <li>
+                     <img src="./images/product/t3.jpg" alt="">
+                     </li>
+                     <li>
+                     <img src="./images/product/t4.webp" alt="">
+                     </li>
+                  </ul>
+               </div>
+            </div>
+         </div>
+
+         <div class="icon-container">
+            <img class="icon_1" src="./images/icon_flower.png">
+         </div>
+
+         <div class="width_100 center_row center_column">
+            <p class="sub_title_makeup">
+               Makeup đám cưới là một phần quan trọng giúp cô dâu tỏa sáng trong ngày trọng đại. Phong cách trang điểm cho ngày cưới thường được lựa chọn kỹ lưỡng, kết hợp giữa nét đẹp tự nhiên và sự sang trọng để cô dâu trông rạng rỡ nhưng vẫn giữ được vẻ thanh thoát. Lớp nền cần được chăm chút cẩn thận, tạo độ mịn màng, che khuyết điểm nhưng không quá dày, giúp da sáng khỏe và tự nhiên suốt cả ngày. Màu mắt và môi thường được lựa chọn phù hợp với váy cưới và phong cách chung của buổi lễ, có thể là tông màu nhẹ nhàng, thanh lịch hoặc quyến rũ, nổi bật. Đặc biệt, sự bền màu và khả năng giữ lâu của lớp trang điểm là yếu tố quan trọng để cô dâu luôn tự tin suốt cả ngày dài, từ lễ cưới cho đến tiệc tối.
+            </p>
+         </div>
+
+         <img class="banner" src="./images/wedding_banner.jpg">
+
+         <div class="width_100 center_row center_column">
+            <p class="sub_title_makeup">
+               Makeup chụp ảnh cosplay kết hợp giữa việc tạo sự sắc nét để lên hình đẹp và tái hiện chân thực nhân vật cosplay. Lớp nền cần mịn màng, bền màu, trong khi mắt, môi và các chi tiết khác được trang điểm đậm và sáng tạo, giúp gương mặt nổi bật và thể hiện đúng tinh thần của nhân vật. Kỹ thuật trang điểm này không chỉ tạo ấn tượng mạnh mẽ trước ống kính mà còn mang lại sự sống động, chân thực cho mỗi shot hình
+            </p>
+         </div>
+
+         <img class="banner" src="./images/cosplay_banner.jpg">
+
+         <div class="width_100 center_row center_column">
+            <p class="sub_title_makeup">
+               Makeup đi chơi thường nhẹ nhàng, tự nhiên nhưng vẫn đủ tươi tắn và rạng rỡ. Lớp nền mỏng nhẹ giúp da trông khỏe khoắn và tự nhiên, kết hợp với chút phấn má hồng, màu son tươi tắn như hồng hoặc cam đào. Phần mắt có thể sử dụng tông màu trung tính hoặc nhũ nhẹ để tạo điểm nhấn, kết hợp với mascara để đôi mắt thêm cuốn hút. Kiểu makeup này giúp gương mặt sáng bừng, trẻ trung nhưng vẫn giữ được sự thoải mái cho cả ngày dài.
+            </p>
+         </div>
+
+         <img class="banner" src="./images/goingout_banner.jpg">
+
+         <div class="icon-container">
+            <img class="icon_1" src="./images/icon_flower.png">
+         </div>
+
+      </div>
+      </div>
+
+      <div th:fragment="js">
+      <script src="js/jquery.min.js"></script>
+      <script src="js/popper.min.js"></script>
+      <script src="js/bootstrap.bundle.min.js"></script>
+      <script src="js/jquery-3.0.0.min.js"></script>
+      <!-- sidebar -->
+      <script src="js/jquery.mCustomScrollbar.concat.min.js"></script>
+      <script src="js/custom.js"></script>
+      <script src="js/bookService.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+      <script>
+         $('a[href^="#"]').on('click', function(event) {
+         
+          var target = $(this.getAttribute('href'));
+         
+          if( target.length ) {
+              event.preventDefault();
+              $('html, body').stop().animate({
+                  scrollTop: target.offset().top
+              }, 2000);
+          }
+         
+         });
+      </script>
+      </div>
+   </body>
+</html>
+

@@ -69,6 +69,10 @@ public class AuthApiRestController {
             );
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
+            Authentication authenticationSuccess = SecurityContextHolder.getContext().getAuthentication();
+            System.out.println("SecurityContextHolder : " +  authenticationSuccess);
+
+            // Dung` httpsession luu tam
             UserDTO userDTO = userService.getInforUser(loginRequest.getUsername());
             session.setAttribute("user", userDTO);
 

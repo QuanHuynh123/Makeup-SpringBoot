@@ -1,6 +1,10 @@
 package com.example.Makeup.entity;
 
 import jakarta.persistence.*;
+
+import java.sql.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import lombok.*;
@@ -36,15 +40,14 @@ public class Product {
 
     @Column(name = "image")
     String image;
+
+    @Column(name = "rental_count")
+    int rentalCount; // Số lượt quần áo đã thuê
+
+    @Column(name = "created_at", updatable = false) //updatable = cấm update, final
+    Date createdAt; // Ngày tạo sản phẩm
     
     @ManyToOne
     @JoinColumn(name = "subCategory_id")
     private SubCategory subCategory;
-    
-    public List<String> getImageList(){
-        if (image != null && !image.isEmpty()) {
-            return Arrays.asList(image.split(","));
-        }
-        return List.of();
-    }
 }

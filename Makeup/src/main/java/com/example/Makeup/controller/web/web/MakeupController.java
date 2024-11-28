@@ -9,6 +9,6 @@ public class MakeupController {
 
     @GetMapping("/makeup")
     public String home(){
-        return "makeup";
+        return "user/makeup";
     }
 }

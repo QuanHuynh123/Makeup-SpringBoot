@@ -47,9 +47,9 @@
     padding-right: 20px;
 }
 
-.fa-quote-left{
+.fa-quote-left {
     color: #fac369 !important;
-    font-size: 70px !important ;
+    font-size: 70px !important;
 }
 
 .customer_Carousel .test_box p {
@@ -87,6 +87,69 @@
     background: #000;
     color: #fff;
 }
+
+/* Tùy chỉnh màu nền cho tiêu đề bảng */
+.table thead th {
+    background-color: #f8f9fa;
+    /* Màu xám nhạt */
+    color: #333;
+    /* Màu chữ */
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 14px;
+}
+
+/* Tùy chỉnh màu nền khi rê chuột vào hàng */
+.table tbody tr:hover {
+    background-color: #f1f1f1;
+    /* Màu nền nhạt hơn khi hover */
+    transition: background-color 0.3s ease;
+}
+
+/* Tùy chỉnh đường viền bảng */
+.table {
+    border: 1px solid #dee2e6;
+    /* Đường viền nhẹ */
+}
+
+/* Tùy chỉnh cho các nút */
+.btn-warning {
+    background-color: #ffc107;
+    color: #fff;
+    border: none;
+    font-size: 12px;
+}
+
+.btn-danger {
+    background-color: #dc3545;
+    color: #fff;
+    border: none;
+    font-size: 12px;
+}
+
+.btn:hover {
+    opacity: 0.8;
+    /* Hiệu ứng hover */
+}
+
+/* Canh chỉnh văn bản */
+.table td,
+.table th {
+    vertical-align: middle;
+    /* Canh giữa theo chiều dọc */
+}
+
+/* Điều chỉnh chiều rộng của ô tìm kiếm */
+#searchStaff {
+    width: 250px;
+}
+
+/* Thêm khoảng cách cho nút thêm */
+button.btn-primary {
+    padding: 10px 20px;
+}
+
+
 
 
 /** end customer section **/
