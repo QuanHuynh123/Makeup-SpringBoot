@@ -1,5 +1,7 @@
 package com.example.Makeup.dto;
 
+import java.sql.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -16,10 +18,9 @@ public class ProductDTO {
     String size;
     double price;
     boolean status;
-    List<String> imageList;
+    String image;
     int subCategoryId;
-    
-    public String getFirstImage() {
-        return (imageList != null && !imageList.isEmpty()) ? imageList.get(0) : null;
-    }
+    int rentalCount;
+    Date createdAt;
+
 }

@@ -16,7 +16,7 @@ public class ProfileController {
     public String profile(ModelMap modelMap, HttpSession session){
         UserDTO userDTO = (UserDTO) session.getAttribute("user");
         modelMap.addAttribute("user",userDTO);
-        return "profile";
+        return "user/profile";
     }
 
 }

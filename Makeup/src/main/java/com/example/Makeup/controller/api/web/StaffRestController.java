@@ -24,9 +24,10 @@ public class StaffRestController {
     public List<StaffDTO> getAllStaff() {
         return staffService.getAllStaff();
     }
-    
+
     // Lấy thông tin nhân viên theo ID, trả về StaffDTO
     @GetMapping("/{id}")
+
     public ResponseEntity<StaffDTO> getStaffById(@PathVariable int id) {
         return staffService.getStaffById(id)
                 .map(staff -> ResponseEntity.ok(staffMapper.toStaffDTO(staff))) // Sử dụng StaffMapper

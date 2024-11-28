@@ -235,7 +235,7 @@
 //         } else {
 //             console.error("Dữ liệu không hợp lệ", response);
 //         }
-//     }    
+//     }
 // });
 
 
@@ -489,4 +489,3 @@ document.addEventListener("DOMContentLoaded", () => {
             .catch(error => console.error('Error loading HTML:', error));
     });
 });
-

@@ -20,7 +20,7 @@ public class HomeController {
         if (userDTO != null) {
             model.addAttribute("user", userDTO);
         }
-        return "index";
+        return "user/index";
     }
 
     @GetMapping("/")
