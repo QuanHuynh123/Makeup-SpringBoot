@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <layout:fragment name="header">
     </layout:fragment>
+    <link rel="stylesheet" href="css/cart.css">
 </head>
 <body>
 <!-- header -->
@@ -81,9 +82,82 @@
                 <input type="text" placeholder="Tìm kiếm...">
                 <button><i class="fa fa-search"></i></button>
             </div>
-            <div class="cart-icon">
-                <i class="fa fa-shopping-cart"></i>
+            <div class="cart-icon" onclick="toggleCart()">
+                <i class="fa fa-shopping-cart" alt="Cart" ></i>
                 <span class="cart-count">0</span>
+            </div>
+            <!-- Giỏ hàng nhỏ (Mini Cart) -->
+            <div id="mini-cart" class="mini-cart hidden">
+                <div class="mini-cart-header">
+                    <h4>Your Shopping Cart</h4>
+                    <button onclick="toggleCart()">X</button>
+                </div>
+                <div class="mini-cart-body">
+                    <p id="cart-empty-msg">You have no items in your shopping cart.</p>
+                    <ul id="cart-items">
+                        <li>
+                            <div class="content_item_cart">
+                                <div class="content_item_cart_left">
+                                    <h3 class="text_name_product">Genshin Impact Citlali</h3>
+                                    <p class="text_use_date">Use Date : </p>
+                                    <p class="text_use_date">Quantity : </p>
+                                    <p class="text_use_date">Price : </p>
+                                    <i class="fa-solid fa-x"></i>
+                                </div>
+                                <div class="content_item_cart_right">
+                                    <img class="img_item_cart" src="./images/product/c2.jpg">
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="content_item_cart">
+                                <div class="content_item_cart_left">
+                                    <h3 class="text_name_product">Genshin Impact Citlali</h3>
+                                    <p class="text_use_date">Use Date : </p>
+                                    <p class="text_use_date">Quantity : </p>
+                                    <p class="text_use_date">Price : </p>
+                                    <i class="fa-solid fa-x"></i>
+                                </div>
+                                <div class="content_item_cart_right">
+                                    <img class="img_item_cart" src="./images/product/c2.jpg">
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="content_item_cart">
+                                <div class="content_item_cart_left">
+                                    <h3 class="text_name_product">Genshin Impact Citlali</h3>
+                                    <p class="text_use_date">Use Date : </p>
+                                    <p class="text_use_date">Quantity : </p>
+                                    <p class="text_use_date">Price : </p>
+                                    <i class="fa-solid fa-x"></i>
+                                </div>
+                                <div class="content_item_cart_right">
+                                    <img class="img_item_cart" src="./images/product/c2.jpg">
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="content_item_cart">
+                                <div class="content_item_cart_left">
+                                    <h3 class="text_name_product">Genshin Impact Citlali</h3>
+                                    <p class="text_use_date">Use Date : </p>
+                                    <p class="text_use_date">Quantity : </p>
+                                    <p class="text_use_date">Price : </p>
+                                    <i class="fa-solid fa-x"></i>
+                                </div>
+                                <div class="content_item_cart_right">
+                                    <img class="img_item_cart" src="./images/product/c2.jpg">
+                                </div>
+                            </div>
+                        </li>
+
+                    </ul>
+                </div>
+                <div class="mini-cart-footer">
+                    <button onclick="goToCartPage()">View Cart</button>
+                    <button onclick="checkout()">Checkout</button>
+                </div>
             </div>
         </div>
     </div>
@@ -187,6 +261,7 @@
           });
         });
     </script>
+    <script src="js/cart.js"></script>
     <div th:replace="~{:: js}"></div>
 
 </body>
