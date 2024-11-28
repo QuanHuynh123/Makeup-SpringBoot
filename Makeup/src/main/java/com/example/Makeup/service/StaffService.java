@@ -7,7 +7,6 @@ import com.example.Makeup.mapper.StaffMapper;
 import com.example.Makeup.repository.StaffRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -25,10 +24,10 @@ public class StaffService {
         return staffMapper.toStaffDTOList(staffList); // Chuyển đổi danh sách
     }
 
+
     public Optional<Staff> getStaffById(int id) {
         return staffRepository.findById(id);
     }
-
     public Staff addStaff(Staff staff) {
         return staffRepository.save(staff);
     }

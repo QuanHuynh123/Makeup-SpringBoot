@@ -64,5 +64,4 @@ public class AppointmentRestController {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
         }
     }
-
 }

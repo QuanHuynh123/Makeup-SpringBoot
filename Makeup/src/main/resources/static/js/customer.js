@@ -457,6 +457,6 @@ document.getElementById('searchStaff').addEventListener('input', searchStaff);
 
 // Hàm làm mới tìm kiếm
 function clearFormSearch() {
-    document.getElementById('searchInput').value = '';
-    document.getElementById('statusFilter').selectedIndex = 0;
+    document.getElementById('searchStaff').value = '';
+//    document.getElementById('statusFilter').selectedIndex = 0;
 }

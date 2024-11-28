@@ -142,15 +142,8 @@ public class AppointmentService {
         }
 
 
-
-
-
         return new Date(calendar.getTimeInMillis());
     }
-
-
-
-
 
 
     // Tính tổng số tuần trong tháng
@@ -161,6 +154,7 @@ public class AppointmentService {
         return (int) Math.ceil(daysInMonth / 7.0);
     }
 
+
     // Lấy tất cả các cuộc hẹn
     public List<AppointmentDTO> getAllAppointments() {
         return appointmentRepository.findAll()
@@ -169,12 +163,14 @@ public class AppointmentService {
                 .collect(Collectors.toList());
     }
 
+
     // Lấy cuộc hẹn theo ID
     public AppointmentDTO getAppointmentById(int id) {
         Optional<Appointment> appointment = appointmentRepository.findById(id);
         return appointment.map(appointmentMapper::toAppointmentDTO)
                 .orElseThrow(() -> new RuntimeException("Appointment not found with ID: " + id));
     }
+
 
     // Thêm mới một cuộc hẹn
     public AppointmentDTO createAppointment(AppointmentDTO appointmentDTO) {
