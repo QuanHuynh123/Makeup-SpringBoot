@@ -5,8 +5,20 @@ const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Fri
 // Lấy tháng và tuần hiện tại theo múi giờ Việt Nam
 const vietnamTime = getCurrentVietnamTime();
 const currentMonth = vietnamTime.getMonth(); // Tháng hiện tại (0 - 11)
-let currentWeekNumber = getWeekOfMonth(vietnamTime)-1;
+let currentWeekNumber = getWeekOfMonth(vietnamTime) - 1;
 var data = null;
+
+// Đặt giá trị mặc định cho select
+function selectCurrentMonth() {
+	const monthSelect = document.getElementById("monthSelect");
+
+	if (monthSelect) {
+		// Đặt giá trị tương ứng với tháng hiện tại
+		monthSelect.value = currentMonth + 1;
+	} else {
+		console.error("Không tìm thấy phần tử với ID 'monthSelect'");
+	}
+}
 
 // Hàm lấy thời gian hiện tại theo múi giờ Việt Nam
 function getCurrentVietnamTime() {
@@ -46,7 +58,7 @@ $(document).ready(function () {
 	$('#monthSelect').change(function () {
 		const selectedMonth = $(this).val(); // Lấy giá trị tháng được chọn
 		const year = 2024; // Có thể thay đổi hoặc lấy năm hiện tại nếu cần
-		currentWeekNumber=1;
+		currentWeekNumber = 1;
 
 		// Kiểm tra xem người dùng đã chọn tháng hay chưa
 		if (selectedMonth != "Choose month") {
@@ -69,20 +81,20 @@ function getRandomColorHSL() {
 }
 
 function formatDateStringToDDMMYYYY(dateString) {
-    const date = new Date(dateString);
-    const day = String(date.getDate()).padStart(2, '0');
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const year = date.getFullYear();
-    return `${day}/${month}/${year}`;
+	const date = new Date(dateString);
+	const day = String(date.getDate()).padStart(2, '0');
+	const month = String(date.getMonth() + 1).padStart(2, '0');
+	const year = date.getFullYear();
+	return `${day}/${month}/${year}`;
 }
 
 // Hàm render lịch cho một tuần nhất định
 function renderScheduleForWeek(data, weekNumber) {
 	const selectedWeek = data.find(week => week.weekNumber === weekNumber);
-document.getElementById('dateOfWeek').innerHTML =
-    "Week " + weekNumber + ": " +
-    formatDateStringToDDMMYYYY(selectedWeek.startDate) + " - " +
-    formatDateStringToDDMMYYYY(selectedWeek.endDate);
+	document.getElementById('dateOfWeek').innerHTML =
+		"Week " + weekNumber + ": " +
+		formatDateStringToDDMMYYYY(selectedWeek.startDate) + " - " +
+		formatDateStringToDDMMYYYY(selectedWeek.endDate);
 	// Xóa tất cả các sự kiện lịch cũ mà không xóa cấu trúc lịch
 	document.querySelectorAll('.cd-schedule__event').forEach(event => event.remove());
 
