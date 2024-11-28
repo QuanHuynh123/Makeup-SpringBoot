@@ -25,9 +25,11 @@ public class CosplayController {
     
     @GetMapping("/cosplay")
     public String home(Model model){
-        List<ProductDTO> products = productService.getProducts();
-        model.addAttribute("products", products);
-        return "cosplay";
+        List<ProductDTO> hotProducts = productService.getHotProducts();
+        List<ProductDTO> newProducts = productService.getNewProducts();
+        model.addAttribute("hotProducts", hotProducts);
+        model.addAttribute("newProducts", newProducts);
+        return "user/cosplay";
     }
     
     

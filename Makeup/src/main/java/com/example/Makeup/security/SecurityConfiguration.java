@@ -26,7 +26,8 @@ public class SecurityConfiguration {
     private AccountService accountService;
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
-        return httpSecurity
+
+        httpSecurity
         .csrf(AbstractHttpConfigurer::disable)
         .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/adminT/**").hasRole("ADMIN")
@@ -38,19 +39,17 @@ public class SecurityConfiguration {
         .formLogin(form -> form
                 .loginPage("/login")
         )
-
         .logout(logout -> logout
                 .logoutUrl("/logout")
                 .permitAll()
         )
-
         .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED) // Tạo session nếu cần
+                .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED) // Tạo session nếu cần
 //                .maximumSessions(1) // Giới hạn số phiên đăng nhập cùng lúc
 //                .expiredUrl("/login?expired=true") // URL khi phiên hết hạn
         )
-        .anonymous(AbstractHttpConfigurer::disable)
-        .build();
+        .anonymous(AbstractHttpConfigurer::disable);
+        return httpSecurity.build();
     }
 
     @Bean
