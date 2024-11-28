@@ -160,6 +160,7 @@ public class AppointmentService {
         int daysInMonth = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
         return (int) Math.ceil(daysInMonth / 7.0);
     }
+
     // Lấy tất cả các cuộc hẹn
     public List<AppointmentDTO> getAllAppointments() {
         return appointmentRepository.findAll()
@@ -167,18 +168,21 @@ public class AppointmentService {
                 .map(appointmentMapper::toAppointmentDTO)
                 .collect(Collectors.toList());
     }
+
     // Lấy cuộc hẹn theo ID
     public AppointmentDTO getAppointmentById(int id) {
         Optional<Appointment> appointment = appointmentRepository.findById(id);
         return appointment.map(appointmentMapper::toAppointmentDTO)
                 .orElseThrow(() -> new RuntimeException("Appointment not found with ID: " + id));
     }
+
     // Thêm mới một cuộc hẹn
     public AppointmentDTO createAppointment(AppointmentDTO appointmentDTO) {
         Appointment appointment = appointmentMapper.toAppointmentEntity(appointmentDTO);
         Appointment savedAppointment = appointmentRepository.save(appointment);
         return appointmentMapper.toAppointmentDTO(savedAppointment);
     }
+
     // Cập nhật một cuộc hẹn
     public AppointmentDTO updateAppointment(int id, AppointmentDTO appointmentDTO) {
         Appointment appointment = appointmentRepository.findById(id)
@@ -190,9 +194,11 @@ public class AppointmentService {
         appointment.setUser(null); // Cần lấy đối tượng User từ database nếu cần thiết
         appointment.setServiceMakeup(null); // Cần lấy đối tượng ServiceMakeup từ database nếu cần thiết
         appointment.setStaff(null); // Cần lấy đối tượng Staff từ database nếu cần thiết
+
         Appointment updatedAppointment = appointmentRepository.save(appointment);
         return appointmentMapper.toAppointmentDTO(updatedAppointment);
     }
+
     // Xóa một cuộc hẹn
     public void deleteAppointment(int id) {
         if (!appointmentRepository.existsById(id)) {
@@ -204,6 +210,7 @@ public class AppointmentService {
     public AppointmentDTO addAppointment(AppointmentDTO appointmentDTO) {
         // Chuyển đổi DTO sang entity
         Appointment appointment = appointmentMapper.toAppointmentEntity(appointmentDTO);
+
         // Kiểm tra trùng lịch hẹn
         List<Appointment> conflictingAppointments = appointmentRepository.findConflictingAppointments(
                 appointment.getStaff().getId(),
@@ -211,10 +218,12 @@ public class AppointmentService {
                 appointment.getStartTime(),
                 appointment.getEndTime()
         );
+
         if (!conflictingAppointments.isEmpty()) {
             // Ném ngoại lệ với thông báo chi tiết
             throw new RuntimeException("The selected staff is already booked during this time slot.");
         }
+
         // Lưu lịch hẹn nếu không có xung đột
         Appointment savedAppointment = appointmentRepository.save(appointment);
         return appointmentMapper.toAppointmentDTO(savedAppointment);
