@@ -69,10 +69,11 @@
                      <th:block th:if="${state.first}"><ul class="row"></th:block>
                          <a th:href="@{/productDetail/{id}(id=${product.id})}">
                             <li class="product-card">
-                                 <div class="product-image">
-                                     <img src="/images/product/ahri1.jpg" alt="Product Image"> <!-- th:src="${product.firstImage}" -->
-                                 </div>
-                                 <div class="product-info">
+                                <div class="product-image">
+                                    <img th:src="@{'/images/product/' + ${product.firstImage}}" alt="Product Image">
+                                </div>
+
+                                <div class="product-info">
                                      <h4 class="product-title" th:text="${product.nameProduct ?: 'No name available'}"></h4>
                                      <p class="product-price" th:text="${product.price ?: 'N/A'}"></p>
                                  </div>
@@ -97,7 +98,7 @@
                         <a th:href="@{/productDetail/{id}(id=${product.id})}">
                             <li class="product-card">
                                 <div class="product-image">
-                                <img src="/images/product/ahri3.jpg" >
+                                    <img th:src="@{'/images/product/' + ${product.firstImage}}" alt="Product Image">
                                 </div>
                                 <div class="product-info">
                                     <h4 class="product-title" th:text="${product.nameProduct ?: 'No name available'}"></h4>

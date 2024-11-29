@@ -22,5 +22,6 @@ public class ProductDTO {
     int subCategoryId;
     int rentalCount;
     Date createdAt;
+    String firstImage;
 
 }

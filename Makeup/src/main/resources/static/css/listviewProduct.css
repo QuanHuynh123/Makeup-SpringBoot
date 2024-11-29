@@ -1,0 +1,223 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f5f5f5;
+}
+
+.content-container {
+    width: 90%;
+    margin: 20px auto;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Bộ lọc */
+.filters {
+    position: sticky; /* Giữ vị trí cố định khi cuộn */
+    top: 115px; /* Cố định tại vị trí cách đầu trang 0px */
+    z-index: 1; /* Đảm bảo thanh lọc luôn nằm trên các thành phần khác */
+    background-color: white; /* Màu nền để thanh không bị lẫn */
+    padding: 10px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1); /* Hiệu ứng đổ bóng cho rõ ràng */
+}
+
+.filters select,
+.filters button {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #fff;
+    cursor: pointer;
+}
+
+.filters button {
+    background-color: #e74c3c;
+    color: #fff;
+}
+
+/* Danh sách sản phẩm */
+.product-list {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr); /* 5 sản phẩm mỗi hàng */
+    gap: 20px; /* Khoảng cách giữa các sản phẩm */
+    margin: 0 auto; /* Căn giữa danh sách */
+}
+
+/* Đảm bảo sản phẩm tự động điều chỉnh nếu màn hình nhỏ */
+@media screen and (max-width: 1200px) {
+    .product-list {
+        grid-template-columns: repeat(4, 1fr); /* 4 sản phẩm mỗi hàng khi màn hình hẹp hơn */
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .product-list {
+        grid-template-columns: repeat(2, 1fr); /* 2 sản phẩm mỗi hàng trên màn hình nhỏ */
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .product-list {
+        grid-template-columns: 1fr; /* 1 sản phẩm mỗi hàng trên màn hình rất nhỏ */
+    }
+}
+
+.product-item {
+    background-color: #fff;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    text-align: center;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.product-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.product-item img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 4px;
+    margin-bottom: 10px;
+}
+
+.product-item h4 {
+    font-size: 16px;
+    margin: 10px 0;
+}
+
+.product-item p {
+    color: #888;
+    font-size: 14px;
+}
+
+
+
+
+*,
+*::after,
+*::before {
+  box-sizing: border-box;
+}
+
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.container-paginate {
+  background: #fdfdfd;
+  padding: 1rem;
+  margin: 3rem auto;
+  border-radius: 0.2rem;
+  box-shadow: 0 4px 6px 0 rgba(0, 0, 0, 0.3);
+  counter-reset: pagination;
+  text-align: center;
+}
+.container-paginate:after {
+  clear: both;
+  content: "";
+  display: table;
+}
+.container-paginate ul {
+  width: 100%;
+}
+
+.middle {
+  width: 32rem;
+}
+
+
+.container-paginate ul, li {
+  list-style: none;
+  display: inline;
+  padding-left: 0px;
+}
+
+.container-paginate li {
+  counter-increment: pagination;
+}
+.container-paginate li:hover a {
+  color: #fdfdfd;
+  background-color: #1d1f20;
+  border: solid 1px #1d1f20;
+}
+.container-paginate li.active a {
+  color: #fdfdfd;
+  background-color: #1d1f20;
+  border: solid 1px #1d1f20;
+}
+.container-paginate li:first-child {
+  float: left;
+}
+.container-paginate li:first-child a:after {
+  content: "Previous";
+}
+.container-paginate li:nth-child(2) {
+  counter-reset: pagination;
+}
+.container-paginate li:last-child {
+  float: right;
+}
+.container-paginate li:last-child a:after {
+  content: "Next";
+}
+.container-paginate li a {
+  border: solid 1px #d7d7d7;
+  border-radius: 0.2rem;
+  color: #7d7d7d;
+  text-decoration: none;
+  text-transform: uppercase;
+  display: inline-block;
+  text-align: center;
+  padding: 0.5rem 0.9rem;
+}
+.container-paginate li a:after {
+  content: " " counter(pagination) " ";
+}
+
+.middle li a {
+  display: none;
+}
+.middle li:first-child a {
+  display: inline-block;
+}
+.middle li:first-child a:after {
+  content: "<";
+}
+.middle li:last-child a {
+  display: inline-block;
+}
+.middle li:last-child a:after {
+  content: ">";
+}
+.middle li:nth-child(2) a {
+  display: inline-block;
+}
+.middle li:nth-child(3) a {
+  display: inline-block;
+}
+.middle li:nth-child(4) a {
+  display: inline-block;
+}
+.middle li:nth-child(5) a {
+  display: inline-block;
+}
+.middle li:nth-last-child(2) a {
+  display: inline-block;
+}
+.middle li:nth-last-child(3) {
+  display: inline-block;
+}
+.middle li:nth-last-child(3):after {
+  padding: 0 1rem;
+  content: "...";
+}
