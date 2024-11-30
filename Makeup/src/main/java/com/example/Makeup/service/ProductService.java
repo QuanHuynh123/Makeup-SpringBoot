@@ -14,6 +14,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.sql.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -75,12 +78,16 @@ public class ProductService {
     public Product create(CreateProductDTO productDTO) throws IOException{
         SubCategory subCategory = subCategoryService.findById(productDTO.getSubCategoryId());
         
+        LocalDate localDate = LocalDate.now();
+        
         Product product = new Product();
         product.setNameProduct(productDTO.getName());
         product.setDescription(productDTO.getDescription());
         product.setSize(productDTO.getSize());
         product.setPrice(productDTO.getPrice());
         product.setSubCategory(subCategory);
+        product.setRentalCount(0);
+        product.setCreatedAt(Date.valueOf(localDate));
         
         List<String> imagePaths = new ArrayList<>();
         for(MultipartFile file: productDTO.getFiles()){
@@ -139,7 +146,7 @@ public class ProductService {
         String uploadDir = System.getProperty("user.dir") + "/src/main/resources/static/images/product";
 
         file.transferTo(new java.io.File(uploadDir + "/" + fileName));
-        return "/images/product" + fileName;
+        return "/images/product/" + fileName;
     }
     
     private boolean deleteImage(String imagePath){
