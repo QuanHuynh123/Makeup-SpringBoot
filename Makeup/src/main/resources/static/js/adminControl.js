@@ -450,11 +450,17 @@ document.addEventListener("DOMContentLoaded", () => {
         const dashboard = document.getElementById('dashboard');
         const schedule = document.getElementById('schedule');
         const staff = document.getElementById('staff');
+        const product = document.getElementById('product');
+        const createProduct = document.getElementById('create-product');
+        const editProduct = document.getElementById('edit-product');
 
         // Ẩn tất cả nội dung và sau đó hiển thị tab tương ứng
         dashboard.classList.add('d-none');
         schedule.classList.add('d-none');
         staff.classList.add('d-none');
+        product.classList.add('d-none');
+        createProduct.classList.add('d-none');
+        editProduct.classList.add('d-none');
 
         if (tabId === 'dashboard') {
             dashboard.classList.remove('d-none');
@@ -462,7 +468,9 @@ document.addEventListener("DOMContentLoaded", () => {
             schedule.classList.remove('d-none');
         } else if (tabId === 'staff') {
             staff.classList.remove('d-none');
-        }
+        } else if (tabId === 'product') {
+            product.classList.remove('d-none');
+        } 
     }
 
     // Sử dụng hàm dùng chung cho các tab
@@ -488,4 +496,17 @@ document.addEventListener("DOMContentLoaded", () => {
             })
             .catch(error => console.error('Error loading HTML:', error));
     });
+    
+    document.getElementById('tab-product').addEventListener('click', function () {
+        // Chuyển tab và tải nội dung
+        toggleTabContent('product');
+        // Load nội dung của file header.html vào div có id "header"
+        fetch('/admin/products')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('product').innerHTML = data;
+            })
+            .catch(error => console.error('Error loading HTML:', error));
+    });
+    
 });

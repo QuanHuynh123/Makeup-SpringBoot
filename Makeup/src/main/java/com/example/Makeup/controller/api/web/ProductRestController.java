@@ -33,7 +33,7 @@ public class ProductRestController {
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> delete(@PathVariable("id") int id){
         boolean result = productService.delete(id);
-        
+
         if (result) 
             return ResponseEntity.ok("Xóa sản phẩm thành công");
         else
