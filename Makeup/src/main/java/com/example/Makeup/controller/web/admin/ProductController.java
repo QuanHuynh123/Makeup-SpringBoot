@@ -22,14 +22,14 @@ public class ProductController {
     
     @GetMapping("/create")
     public String createProductPage(){
-        return "create-product";
+        return "admin/create-product";
     }
     
     @GetMapping
     public String getProducts(Model model){
         List<ProductDTO> products = productService.getProducts();
         model.addAttribute("products",products);
-        return "products";
+        return "admin/products";
     }
 
     
@@ -37,6 +37,6 @@ public class ProductController {
     public String editProductPage(Model model, @PathVariable("id") int id){
         ProductDTO productDTO = productService.findById(id);
         model.addAttribute("product", productDTO);
-        return "edit-product";
+        return "admin/edit-product";
     }
 }
