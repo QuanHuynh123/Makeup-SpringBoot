@@ -819,13 +819,13 @@
                                         <input type="text" class="form-control" id="name"/>
                                     </div>
                                     <div class="form-group">
-                                        <label for="category">Loại sản phẩm</label>
-                                        <select class="form-control" id="category">
-                                            <option>1</option>
-                                            <option>2</option>
-                                            <option>3</option>
-                                            <option>4</option>
-                                          </select>
+                                        <label for="subCategory">Loại sản phẩm</label>
+                                        <select id="subCategory" name="subCategory" class="form-control">
+                                            <option value="" selected disabled>-- Chọn loại sản phẩm --</option>
+                                            <th:block th:each="subCategory : ${subCategories}">
+                                                <option th:value="${subCategory.id}" th:text="${subCategory.name}"></option>
+                                            </th:block>
+                                        </select>
                                     </div>
                                     <div class="form-group">
                                         <label for="price">Giá</label>
@@ -965,7 +965,7 @@
                 let size = $('input[name="size"]:checked').map(function () {
                     return $(this).val(); 
                 }).get();
-                let subCategoryId = $("#category").val();
+                let subCategoryId = $("#subCategory").val();
                 
 
                 if (!name || !price || !description || size.length == 0) {
