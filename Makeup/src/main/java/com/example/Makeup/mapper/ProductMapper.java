@@ -29,5 +29,12 @@ public interface ProductMapper {
             productDTO.setFirstImage(images[0].trim());
         }
     }
+    
+    @AfterMapping
+    default void setSubCategoryName(@MappingTarget ProductDTO productDTO, Product product) {
+        if (product.getSubCategory()!= null ) {
+            productDTO.setSubCategoryName(product.getSubCategory().getName());
+        }
+    }
 
 }
