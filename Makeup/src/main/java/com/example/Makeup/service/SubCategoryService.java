@@ -10,7 +10,11 @@ import com.example.Makeup.enums.AppException;
 import com.example.Makeup.enums.ErrorCode;
 import com.example.Makeup.mapper.SubCategoryMapper;
 import com.example.Makeup.repository.SubCategoryRepository;
+
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +33,14 @@ public class SubCategoryService {
 
         // Tiến hành xử lý
         return subCategoryMapper.toSubCategoryDTO(optSubCategory);
+    }
+
+    public List<SubCategoryDTO> getAll(){
+        List<SubCategory> subCategories = subCategoryRepository.findAll();
+
+        return subCategories.stream()
+                .map(subCategoryMapper::toSubCategoryDTO)
+                .collect(Collectors.toList());
     }
 
 }

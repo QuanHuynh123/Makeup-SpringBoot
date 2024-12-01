@@ -4,6 +4,7 @@ import com.example.Makeup.dto.CreateProductDTO;
 import com.example.Makeup.dto.ProductDTO;
 import com.example.Makeup.dto.SubCategoryDTO;
 import com.example.Makeup.entity.Product;
+import com.example.Makeup.mapper.SubCategoryMapper;
 import org.springframework.data.domain.Page;
 import com.example.Makeup.entity.SubCategory;
 import com.example.Makeup.enums.AppException;
@@ -14,6 +15,8 @@ import java.io.File;
 import java.io.IOException;
 
 import java.nio.file.Paths;
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -32,6 +35,9 @@ public class ProductService {
     
     @Autowired
     SubCategoryService subCategoryService;
+
+    @Autowired
+    SubCategoryMapper subCategoryMapper;
 
     @Autowired
     ProductMapper productMapper;
@@ -69,27 +75,31 @@ public class ProductService {
                 .map(productMapper::toProductDTO)
                 .collect(Collectors.toList());
     }
-    
-//    public Product create(CreateProductDTO productDTO) throws IOException{
-//        SubCategoryDTO subCategoryDTO = subCategoryService.findById(productDTO.getSubCategoryId());
-//
-//        Product product = new Product();
-//        product.setNameProduct(productDTO.getName());
-//        product.setDescription(productDTO.getDescription());
-//        product.setSize(productDTO.getSize());
-//        product.setPrice(productDTO.getPrice());
-//        product.setSubCategory(subCategoryDTO);
-//
-//        List<String> imagePaths = new ArrayList<>();
-//        for(MultipartFile file: productDTO.getFiles()){
-//            String path = saveImage(file);
-//            imagePaths.add(path);
-//        }
-//        product.setImage(String.join(",", imagePaths));
-//
-//        return productRepository.save(product);
-//    }
-    
+
+    public Product create(CreateProductDTO productDTO) throws IOException{
+        SubCategoryDTO subCategoryDTO = subCategoryService.findById(productDTO.getSubCategoryId());
+
+        LocalDate localDate = LocalDate.now();
+
+        Product product = new Product();
+        product.setNameProduct(productDTO.getName());
+        product.setDescription(productDTO.getDescription());
+        product.setSize(productDTO.getSize());
+        product.setPrice(productDTO.getPrice());
+        product.setSubCategory(subCategoryMapper.toSubCategoryEntity(subCategoryDTO));
+        product.setRentalCount(0);
+        product.setCreatedAt(Date.valueOf(localDate));
+
+        List<String> imagePaths = new ArrayList<>();
+        for(MultipartFile file: productDTO.getFiles()){
+            String path = saveImage(file);
+            imagePaths.add(path);
+        }
+        product.setImage(String.join(",", imagePaths));
+
+        return productRepository.save(product);
+    }
+
     public boolean delete(int id){
         if (productRepository.existsById(id)) {
             productRepository.deleteById(id);
@@ -150,29 +160,28 @@ public class ProductService {
 //
 //        return productRepository.save(product);
 //    }
-    
+
     private String saveImage(MultipartFile file) throws IOException {
         String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
         String uploadDir = System.getProperty("user.dir") + "/src/main/resources/static/images/product";
-
         file.transferTo(new java.io.File(uploadDir + "/" + fileName));
-        return "/images/product" + fileName;
+        return "/images/product/" + fileName;
     }
-    
+
     private boolean deleteImage(String imagePath){
         String filePath = Paths.get("src/main/resources/static", imagePath).toString();
-        
+
         File file = new File(filePath);
-        
-        if (!file.exists()) 
+
+        if (!file.exists())
             return false;
-        
+
         boolean deleted = file.delete();
-        
+
         if (deleted) {
             return true;
         } else
             return false;
-        
+
     }
 }
