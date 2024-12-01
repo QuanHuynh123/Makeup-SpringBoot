@@ -5,6 +5,10 @@ body {
     background-color: #f5f5f5;
 }
 
+a{
+    text-decoration: none;
+}
+
 .content-container {
     width: 90%;
     margin: 20px auto;
@@ -87,18 +91,25 @@ body {
     border-radius: 4px;
     margin-bottom: 10px;
 }
+/* Thông tin sản phẩm */
+.product-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: left;
+}
+
 
 .product-item h4 {
     font-size: 16px;
     margin: 10px 0;
+    color: #1d1f20;
 }
 
 .product-item p {
     color: #888;
     font-size: 14px;
 }
-
-
 
 
 *,
@@ -155,21 +166,7 @@ body {
   background-color: #1d1f20;
   border: solid 1px #1d1f20;
 }
-.container-paginate li:first-child {
-  float: left;
-}
-.container-paginate li:first-child a:after {
-  content: "Previous";
-}
-.container-paginate li:nth-child(2) {
-  counter-reset: pagination;
-}
-.container-paginate li:last-child {
-  float: right;
-}
-.container-paginate li:last-child a:after {
-  content: "Next";
-}
+
 .container-paginate li a {
   border: solid 1px #d7d7d7;
   border-radius: 0.2rem;
@@ -179,45 +176,11 @@ body {
   display: inline-block;
   text-align: center;
   padding: 0.5rem 0.9rem;
-}
-.container-paginate li a:after {
-  content: " " counter(pagination) " ";
+  font-size: 15px;
 }
 
-.middle li a {
-  display: none;
-}
-.middle li:first-child a {
-  display: inline-block;
-}
-.middle li:first-child a:after {
-  content: "<";
-}
-.middle li:last-child a {
-  display: inline-block;
-}
-.middle li:last-child a:after {
-  content: ">";
-}
-.middle li:nth-child(2) a {
-  display: inline-block;
-}
-.middle li:nth-child(3) a {
-  display: inline-block;
-}
-.middle li:nth-child(4) a {
-  display: inline-block;
-}
-.middle li:nth-child(5) a {
-  display: inline-block;
-}
-.middle li:nth-last-child(2) a {
-  display: inline-block;
-}
-.middle li:nth-last-child(3) {
-  display: inline-block;
-}
-.middle li:nth-last-child(3):after {
-  padding: 0 1rem;
-  content: "...";
+.pagination a.active {
+    color: white;
+    background-color: #1d1f20;
+    border: solid 1px #1d1f20;
 }

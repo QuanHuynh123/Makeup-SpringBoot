@@ -13,4 +13,5 @@ import java.util.List;
 public class CategoryDTO {
     int id;
     String name;
+    List<SubCategoryDTO> subCategories;
 }

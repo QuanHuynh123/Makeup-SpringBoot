@@ -3,32 +3,9 @@
 <head>
     <head>
         <layout:fragment name="header">
-        <!-- mobile metas -->
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="viewport" content="initial-scale=1, maximum-scale=1">
-        <!-- site metas -->
-        <title>beautySGU</title>
-        <!-- bootstrap css -->
-        <link rel="stylesheet" href="css/bootstrap/bootstrap.min.css">
-        <!-- style css -->
-        <link rel="stylesheet" href="css/style.css">
-        <link rel="stylesheet" href="css/cosplay.css">
-        <link rel="stylesheet" href="css/productDetail.css">
-        <link rel="stylesheet" href="css/footer.css">
-        <!-- Responsive-->
-        <link rel="stylesheet" href="css/responsive.css">
-        <!-- fevicon -->
-        <link rel="icon" href="images/fevicon.png" type="image/gif" />
-        <!-- Scrollbar Custom CSS -->
-        <link rel="stylesheet" href="css/jquery.mCustomScrollbar.min.css">
-        <!-- Tweaks for older IEs-->
-        <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.css" media="screen">
-        <link rel="stylesheet"  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
-        <link href='https://fonts.googleapis.com/css?family=Satisfy' rel='stylesheet'>
-
-        <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script><![endif]-->
+            <link rel="stylesheet" href="/css/cosplay.css">
+            <link rel="stylesheet" href="/css/productDetail.css">
+            <link rel="stylesheet" href="/css/footer.css">
         </layout:fragment>
     </head>
 </head>
@@ -40,18 +17,22 @@
     <div class="container" id="container_product_top">
         <div class="left-column">
             <div class="image-gallery">
-                <img src="https://d2rbvftet3l7m9.cloudfront.net/media/.renditions/wysiwyg/Mobile_Suit_Gundam_SEED_FREEDOM_Shinn_Asuka_Cosplay_Costume1.jpg" alt="Main Costume" class="main-image">
+                <img th:src="@{'/images/product/' + ${product.firstImage}}" alt="Product Image" class="main-image">
+                <button class="prev" onclick="moveSlide(-1)">&#10094;</button>
                 <div class="thumbnail-gallery">
-                    <img src="https://d2rbvftet3l7m9.cloudfront.net/media/.renditions/wysiwyg/Mobile_Suit_Gundam_SEED_FREEDOM_Shinn_Asuka_Cosplay_Costume1.jpg" alt="Thumbnail 1">
-                    <img src="https://d2rbvftet3l7m9.cloudfront.net/media/.renditions/wysiwyg/Mobile_Suit_Gundam_SEED_FREEDOM_Shinn_Asuka_Cosplay_Costume1.jpg" alt="Thumbnail 2">
-                    <img src="https://d2rbvftet3l7m9.cloudfront.net/media/.renditions/wysiwyg/Mobile_Suit_Gundam_SEED_FREEDOM_Shinn_Asuka_Cosplay_Costume1.jpg" alt="Thumbnail 3">
+                    <div class="thumbnail-gallery">
+                        <div th:each="image : ${images}">
+                            <img th:src="@{'/images/product/' + ${image}}" alt="Thumbnail">
+                        </div>
+                    </div>
                 </div>
+                <button class="next" onclick="moveSlide(1)">&#10095;</button>
             </div>
         </div>
 
         <div class="right-column">
-            <h1>Mobile Suit Gundam SEED FREEDOM Shinn Asuka Cosplay Costume</h1>
-            <p class="price">$108.00</p>
+            <h1 th:text="${product.nameProduct ?: 'No name available'}"></h1>
+            <p class="price" th:text="${product.price ?: 'N/A'}"></p>
             <p><strong>SKU:</strong> Shinn Asuka</p>
             <p><strong>Processing Time:</strong> 25-35 days</p>
 
@@ -100,14 +81,8 @@
                     <div class="value">
                         <p><strong>Features:</strong></p>
                         <p>Comfortable fabric ensures all-day wearability for Feixiao cosplay.<br>Exquisite accessories add authenticity to Feixiao’s fanart design.<br>Leather belt adds a bold, stylish touch to the overall look.<br>Perfect for Honkai: Star Rail fans, bring Feixiao to life with ease.<br>Ideal for cosplay events, embody Feixiao’s unique, striking style!</p>
-                        <div id="list_img">
-                            <img src="https://d2rbvftet3l7m9.cloudfront.net/media/.renditions/wysiwyg/Mobile_Suit_Gundam_SEED_FREEDOM_Shinn_Asuka_Cosplay_Costume1.jpg" alt="">
-                            <img src="https://d2rbvftet3l7m9.cloudfront.net/media/.renditions/wysiwyg/Mobile_Suit_Gundam_SEED_FREEDOM_Shinn_Asuka_Cosplay_Costume2.jpg" alt="">
-                            <img src="https://d2rbvftet3l7m9.cloudfront.net/media/.renditions/wysiwyg/Mobile_Suit_Gundam_SEED_FREEDOM_Shinn_Asuka_Cosplay_Costume3.jpg" alt="">
-                            <img src="https://d2rbvftet3l7m9.cloudfront.net/media/.renditions/wysiwyg/Mobile_Suit_Gundam_SEED_FREEDOM_Shinn_Asuka_Cosplay_Costume4.jpg" alt="">
-                            <img src="https://d2rbvftet3l7m9.cloudfront.net/media/.renditions/wysiwyg/Mobile_Suit_Gundam_SEED_FREEDOM_Shinn_Asuka_Cosplay_Costume5.jpg" alt="">
-                            <img src="https://d2rbvftet3l7m9.cloudfront.net/media/.renditions/wysiwyg/Mobile_Suit_Gundam_SEED_FREEDOM_Shinn_Asuka_Cosplay_Costume6.jpg" alt="">
-                            <img src="https://d2rbvftet3l7m9.cloudfront.net/media/.renditions/wysiwyg/Mobile_Suit_Gundam_SEED_FREEDOM_Shinn_Asuka_Cosplay_Costume7.jpg" alt="">
+                        <div id="list_img" th:each="image : ${images}">
+                            <img th:src="@{'/images/product/' + ${image}}" alt="Thumbnail">
                         </div>
                     </div>
                 </div>
@@ -148,11 +123,11 @@
 
 
     <div th:fragment="js">
-        <script src="js/jquery.min.js"></script>
-        <script src="js/popper.min.js"></script>
-        <script src="js/bootstrap.bundle.min.js"></script>
-        <script src="js/jquery-3.0.0.min.js"></script>
-        <script src="js/custom.js"></script>
+        <script src="/js/jquery.min.js"></script>
+        <script src="/js/popper.min.js"></script>
+        <script src="/js/bootstrap.bundle.min.js"></script>
+        <script src="/js/jquery-3.0.0.min.js"></script>
+        <script src="/js/custom.js"></script>
         <script>
             $('a[href^="#"]').on('click', function(event) {
 
@@ -166,6 +141,28 @@
              }
 
             });
+        </script>
+
+        <script>
+            let currentIndex = 0;  // Biến lưu trữ chỉ số ảnh hiện tại
+
+            function moveSlide(step) {
+                const gallery = document.querySelector('.thumbnail-gallery');
+                const images = gallery.querySelectorAll('img');
+                const totalImages = images.length;
+
+                currentIndex += step;
+
+                // Nếu đi vượt quá số ảnh, quay lại đầu hoặc cuối
+                if (currentIndex < 0) {
+                    currentIndex = totalImages - 1;
+                } else if (currentIndex >= totalImages-6) {
+                    currentIndex = 0;
+                }
+
+                // Di chuyển gallery để hiển thị ảnh hiện tại
+                gallery.style.transform = 'translateX(' + (-currentIndex * 100) + '%)';
+            }
         </script>
     </div>
 </body>

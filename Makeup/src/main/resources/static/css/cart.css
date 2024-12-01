@@ -88,3 +88,137 @@
 
 
 /* End - Cart mini */
+
+
+
+/* Cart-container */
+.cart-container {
+    display: flex;
+    justify-content: space-between;
+    padding: 200px 20px 20px 20px;
+    margin: 0px auto;
+    width: 70%;
+}
+
+.cart-items {
+    width: 70%;
+}
+
+.cart-item {
+    display: flex;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 10px;
+}
+
+.cart-item-image {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    margin-right: 20px;
+}
+
+.text{
+    display: flex;
+    flex-direction: column;
+}
+
+.cart-item-info {
+    display: flex;
+    flex-direction: row;
+}
+
+.cart-item-name {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.cart-item-price {
+    margin: 5px 0;
+    font-size: 16px;
+    color: #333;
+}
+
+.quantity {
+    display: flex;
+    align-items: center;
+    margin: auto 100px;
+    background-color: white;
+    border: solid 1px black;
+}
+
+.quantity button {
+    padding: 5px;
+    font-size: 16px;
+    background-color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.quantity button:hover {
+    background-color: #e0e0e0;
+}
+
+.quantity-input {
+    width: 40px;
+    text-align: center;
+    margin: 0 10px;
+    padding: 5px;
+    font-size: 16px;
+    border: none;
+}
+
+.cart-summary {
+    width: 25%;
+    border: 1px solid #ccc;
+    padding: 15px;
+    background-color: #f9f9f9;
+}
+
+.cart-summary h3 {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.cart-summary p {
+    font-size: 16px;
+    margin: 5px 0;
+}
+
+.checkout-btn, .clear-cart-btn {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    background-color: #ff6f61;
+    color: white;
+    border: none;
+    margin-top: 15px;
+    height: 45px;
+    cursor: pointer;
+}
+
+.checkout-btn:hover, .clear-cart-btn:hover {
+    background-color: #e05a4f;
+}
+
+.checkout-vnpay-btn {
+    background-image: url(/images/Logo-VNPAY-QR.webp);
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    background-size: 50%;
+    background-repeat: no-repeat;
+    background-position: center; /* Căn giữa hình ảnh */
+    background-color: #ff6f61;
+    color: white;
+    border: none;
+    height: 45px;
+    margin-top: 15px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center; /* Căn giữa văn bản (nếu có) */
+    align-items: center; /* Căn giữa hình ảnh theo chiều dọc */
+}
+
+/* End - Cart-container */
+C:\Users\huynh\IdeaProjects\Makeup\Makeup\src\main\resources\static\images

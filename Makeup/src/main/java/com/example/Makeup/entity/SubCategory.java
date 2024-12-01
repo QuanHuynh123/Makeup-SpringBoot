@@ -27,8 +27,8 @@ public class SubCategory {
     private List<Product> product;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "subCategory_id",nullable = false)
-    Category category;
+    @JoinColumn(name = "category_id", nullable = false) // Sửa cột tham chiếu
+    private Category category;
 
     public SubCategory(String name, int idCategory) {
         this.name = name;

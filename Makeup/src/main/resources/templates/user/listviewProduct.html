@@ -1,33 +1,17 @@
 <!DOCTYPE html>
 <html layout:decorate="layoutCosplay" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
-<head>
-    <layout:fragment name="header">
-        <!-- mobile metas -->
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="viewport" content="initial-scale=1, maximum-scale=1">
-        <link rel="stylesheet" href="css/bootstrap/bootstrap.min.css">
-        <!-- style css -->
-        <link rel="stylesheet" href="css/cosplay.css">
-        <link rel="stylesheet" href="css/footer.css">
-        <link rel="stylesheet" href="css/listviewProduct.css">
-        <!-- Responsive-->
-        <link rel="stylesheet" href="css/responsive.css">
-        <!-- fevicon -->
-        <link rel="icon" href="images/fevicon.png" type="image/gif" />
-        <!-- Scrollbar Custom CSS -->
-        <link rel="stylesheet" href="css/jquery.mCustomScrollbar.min.css">
-        <!-- Tweaks for older IEs-->
-        <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.css" media="screen">
-        <link rel="stylesheet"  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
-        <link href='https://fonts.googleapis.com/css?family=Satisfy' rel='stylesheet'>
-    </layout:fragment>
-</head>
-<!-- body -->
+    <head>
+        <layout:fragment name="header">
+            <link rel="stylesheet" href="/css/cosplay.css">
+            <link rel="stylesheet" href="/css/footer.css">
+            <link rel="stylesheet" href="/css/listviewProduct.css">
+        </layout:fragment>
+    </head>
+
 <body class="main-layout" >
 <div layout:fragment="content">
     <h1 style="padding-top: 150px; text-align: center; font-size: 50px; background-color: white;">
-        <span class="base">Arknights </span></h1>
+        <span class="base" th:text="${nameSub ?: 'N/A'}"> </span></h1>
 
     <!-- product -->
     <div id="container_product">
@@ -47,187 +31,137 @@
                 <select>
                     <option>Mới</option>
                 </select>
-                <button>Xếp theo: Nổi bật</button>
+                <button>Xếp theo: Giá</button>
             </div>
 
-            <!-- Danh sách sản phẩm -->
+            <div th:if="${error != null and error != ''}" class="alert alert-warning" role="alert">
+                <span th:text="${error}"></span>
+            </div>
+
+            <div id="totalPages" style="display:none;" th:attr="data-total-pages=${totalPages}"></div>
+            <div id="categoryId" style="display:none;" th:attr="data-category-id=${categoryId}"></div>
+
+            <div th:if="${error == null or error == ''}">
             <ul class="product-list">
-                <li class="product-item">
-                    <img src="./images/product/c4.jpg" alt="Product Image">
-                    <h4>Màn hình Asus TUF GAMING</h4>
-                    <p>25 inch | 180 Hz | IPS</p>
-                </li>
-                <li class="product-item">
-                    <img src="./images/product/c4.jpg" alt="Product Image">
-                    <h4>Màn hình Asus TUF GAMING</h4>
-                    <p>25 inch | 180 Hz | IPS</p>
-                </li>
-                <li class="product-item">
-                    <img src="./images/product/c4.jpg" alt="Product Image">
-                    <h4>Màn hình Asus TUF GAMING</h4>
-                    <p>25 inch | 180 Hz | IPS</p>
-                </li>
-                <li class="product-item">
-                    <img src="./images/product/c4.jpg" alt="Product Image">
-                    <h4>Màn hình Asus TUF GAMING</h4>
-                    <p>25 inch | 180 Hz | IPS</p>
-                </li>
-                <li class="product-item">
-                    <img src="./images/product/c4.jpg" alt="Product Image">
-                    <h4>Màn hình Asus TUF GAMING</h4>
-                    <p>25 inch | 180 Hz | IPS</p>
-                </li>
-                <li class="product-item">
-                    <img src="./images/product/c4.jpg" alt="Product Image">
-                    <h4>Màn hình Asus TUF GAMING</h4>
-                    <p>25 inch | 180 Hz | IPS</p>
-                </li>
-                <li class="product-item">
-                    <img src="./images/product/c4.jpg" alt="Product Image">
-                    <h4>Màn hình Asus TUF GAMING</h4>
-                    <p>25 inch | 180 Hz | IPS</p>
-                </li>
-                <li class="product-item">
-                    <img src="./images/product/c4.jpg" alt="Product Image">
-                    <h4>Màn hình Asus TUF GAMING</h4>
-                    <p>25 inch | 180 Hz | IPS</p>
-                </li>
-                <li class="product-item">
-                    <img src="./images/product/c4.jpg" alt="Product Image">
-                    <h4>Màn hình Asus TUF GAMING</h4>
-                    <p>25 inch | 180 Hz | IPS</p>
-                </li>
-                <li class="product-item">
-                    <img src="./images/product/c4.jpg" alt="Product Image">
-                    <h4>Màn hình Asus TUF GAMING</h4>
-                    <p>25 inch | 180 Hz | IPS</p>
-                </li>
-                <li class="product-item">
-                    <img src="./images/product/c4.jpg" alt="Product Image">
-                    <h4>Màn hình Asus TUF GAMING</h4>
-                    <p>25 inch | 180 Hz | IPS</p>
-                </li>
-                <li class="product-item">
-                    <img src="./images/product/c4.jpg" alt="Product Image">
-                    <h4>Màn hình Asus TUF GAMING</h4>
-                    <p>25 inch | 180 Hz | IPS</p>
-                </li>
-                <li class="product-item">
-                    <img src="./images/product/c4.jpg" alt="Product Image">
-                    <h4>Màn hình Asus TUF GAMING</h4>
-                    <p>25 inch | 180 Hz | IPS</p>
-                </li>
-                <li class="product-item">
-                    <img src="./images/product/c4.jpg" alt="Product Image">
-                    <h4>Màn hình Asus TUF GAMING</h4>
-                    <p>25 inch | 180 Hz | IPS</p>
-                </li>
-                <li class="product-item">
-                    <img src="./images/product/c4.jpg" alt="Product Image">
-                    <h4>Màn hình Asus TUF GAMING</h4>
-                    <p>25 inch | 180 Hz | IPS</p>
-                </li>
-                <li class="product-item">
-                    <img src="./images/product/c4.jpg" alt="Product Image">
-                    <h4>Màn hình Asus TUF GAMING</h4>
-                    <p>25 inch | 180 Hz | IPS</p>
-                </li>
+                    <li class="product-item" th:each="product : ${products}">
+                        <a th:href="@{/productDetail/{id}(id=${product.id})}">
+                            <img th:src="@{'/images/product/' + ${product.firstImage}}" alt="Product Image">
+                            <div class="product-info">
+                                <h4 th:text="${product.nameProduct ?: 'No name available'}">Tên sản phẩm</h4>
+                                <p class="product-price" th:text="${product.price ?: 'N/A'}"></p>
+                            </div>
+                        </a>
+                    </li>
             </ul>
+            </div>
         </div>
     </div>
 
-    <!-- paginate-->
-    <div class="container-paginate middle">
-        <div class="pagination">
-            <ul>
-                <li><a href="#"></a></li>
-                <li><a href="#"></a></li>
-                <li class="active"><a href="#"></a></li>
-                <li><a href="#"></a></li>
-                <li><a href="#"></a></li>
-                <li><a href="#"></a></li>
-                <li><a href="#"></a></li>
-                <li><a href="#"></a></li>
-                <li><a href="#"></a></li>
-                <li><a href="#"></a></li>
-                <li><a href="#"></a></li>
-                <li><a href="#"></a></li>
-                <li><a href="#"></a></li>
-                <li><a href="#"></a></li>
-                <li><a href="#"></a></li>
-                <li><a href="#"></a></li>
-                <li><a href="#"></a></li>
-                <li><a href="#"></a></li>
-                <li><a href="#"></a></li>
-            </ul>
+    <!-- end-paginate-->
+    <div th:if="${error == null or error == ''}">
+        <div class="container-paginate middle">
+            <div class="pagination">
+                <ul>
+                    <li>
+                        <a href="#" data-page="${currentPage - 1}"
+                           th:if="${currentPage > 0}">&lt; Prev</a>
+                    </li>
+
+                    <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}">
+                        <a href="#" th:text="${i + 1}"
+                           th:attr="data-page=${i}"
+                           th:classappend="${i == currentPage} ? 'active' : ''">>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="#"  th:attr="data-page=${currentPage + 1}"
+                           th:if="${currentPage < totalPages - 1}">Next &gt;</a>
+                    </li>
+                </ul>
+            </div>
         </div>
     </div>
     <!-- end-paginate-->
+
     <!-- end product -->
 </div>
 
 <div th:fragment="js">
-    <script src="js/jquery.min.js"></script>
-    <script src="js/popper.min.js"></script>
-    <script src="js/bootstrap.bundle.min.js"></script>
-    <script src="js/jquery-3.0.0.min.js"></script>
-    <script src="js/custom.js"></script>
-    <script>
-        let currentSlide = 0;
-        const slides = document.querySelectorAll('.slide');
-
-        function showSlide(index) {
-            slides.forEach((slide, i) => {
-                slide.classList.remove('active');
-                if (i === index) {
-                    slide.classList.add('active');
-                }
-            });
-        }
-
-        function nextSlide() {
-            currentSlide = (currentSlide + 1) % slides.length;
-            showSlide(currentSlide);
-        }
-
-        function prevSlide() {
-            currentSlide = (currentSlide - 1 + slides.length) % slides.length;
-            showSlide(currentSlide);
-        }
-
-        // Auto slide every 5 seconds
-        setInterval(nextSlide, 5000);
-    </script>
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/popper.min.js"></script>
+    <script src="/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/jquery-3.0.0.min.js"></script>
 
     <script>
-        let currentSlide1 = 0;
+        $(document).ready(function() {
+         $('.pagination a').on('click', function(event) {
+             event.preventDefault();
+             const page = $(this).attr('data-page') || 0;
+             const size = 10;  // Số sản phẩm trên mỗi trang
+             const categoryId = $('#categoryId').data('category-id');
+             const totalPages = $('#totalPages').data('total-pages');
 
-        function moveSlide(direction) {
-            const slides = document.querySelectorAll('.bottom-slide');
-            const totalSlides = slides.length;
-            const slider = document.querySelector('.bottom-slider');
-
-            // Update current slide index
-            currentSlide1 += direction;
-
-            // Loop slide index if it's out of range
-            if (currentSlide1 < 0) {
-                currentSlide1 = totalSlides - 1;
-            } else if (currentSlide1 >= totalSlides) {
-                currentSlide1 = 0;
+            if (!categoryId || isNaN(page) || isNaN(size)) {
+                console.error('Tham số không hợp lệ:', { categoryId, page, size });
+                return;
             }
 
-        // Calculate the new position
-        const offset = -currentSlide1 * (slides[0].offsetWidth + 20); // 20 là khoảng cách giữa các slide
-        slider.style.transform = `translateX(${offset}px)`;
-}
+            // Kiểm tra để tránh vượt quá totalPages
+            if (page < 0 || page >= totalPages) {
+                console.warn('Trang không hợp lệ:', page);
+                return;
+            }
 
-    // Tự động chuyển slide sau mỗi 3 giây
-    setInterval(() => {
-        moveSlide(1);
-    }, 3000);
+             $.ajax({
+                 url: '/api/category/' + categoryId + '?page=' + page + '&size=' + size,
+                 method: 'GET',
+                 success: function(response) {
+                     $('#container_product .product-list').html(generateProductHtml(response.products));
+                     updatePagination(response.currentPage, response.totalPages);
+                 },
+                 error: function() {
+                     alert('Có lỗi xảy ra khi tải dữ liệu!');
+                 }
+             });
+         });
+     });
+
+
+        function generateProductHtml(products) {
+        let html = '';
+        products.forEach(function(product) {
+            html += `
+                <li class="product-item">
+                    <a href="/productDetail/${product.id}">
+                        <img src="/images/product/${product.firstImage}" alt="${product.nameProduct}">
+                        <div class="product-info">
+                            <h4>${product.nameProduct || 'No name available'}</h4>
+                            <p class="product-price">${product.price || 'N/A'} VNĐ</p>
+                        </div>
+                    </a>
+                </li>`;
+        });
+        return html;
+    }
+
+    function updatePagination(currentPage, totalPages) {
+        const paginationLinks = $('.pagination a');
+
+        // Reset tất cả các thẻ để xóa lớp active
+        paginationLinks.removeClass('active');
+
+        // Đặt lại trạng thái active cho trang hiện tại
+        paginationLinks.each(function() {
+            const page = $(this).data('page');
+            if (page === currentPage) {
+                $(this).addClass('active');
+            }
+        });
+    }
 
     </script>
+
 </div>
 </body>
 </html>

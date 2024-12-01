@@ -2,9 +2,26 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
     <meta charset="UTF-8">
+    <!-- mobile metas -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <!-- site metas -->
+    <title>beautySGU</title>
+    <!-- bootstrap css -->
+    <link rel="stylesheet" href="/css/bootstrap/bootstrap.min.css">
+    <!-- style css -->
     <layout:fragment name="header">
     </layout:fragment>
-    <link rel="stylesheet" href="css/cart.css">
+    <link rel="stylesheet" href="/css/cart.css">
+    <!-- Responsive-->
+    <link rel="stylesheet" href="/css/responsive.css">
+    <!-- fevicon -->
+    <link rel="icon" href="/images/fevicon.png" type="image/gif" />
+    <!-- Tweaks for older IEs-->
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.css" media="screen">
+    <link rel="stylesheet"  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
+    <link href='https://fonts.googleapis.com/css?family=Satisfy' rel='stylesheet'>
 </head>
 <body>
 <!-- header -->
@@ -27,56 +44,24 @@
     <!-- bottom header-->
     <div id="container_bottom_header" class="row">
         <div id="left_bottom_header">
-            <a href="cosplay.html"><img src="images/logo_cosplay.png"></a>
+            <a href="/cosplay/home"><img src="/images/logo_cosplay.png"></a>
         </div>
         <div id="middle_bottom_header">
             <ul class="nav_main">
-                <li class="center">
-                    <a class="title_category_cosplay" href="#"> ANIMES </a>
-                    <ul class="dropdown_submenu">
-                        <li><a>DRAGON BALL </a></li>
-                        <li><a>ATTACK ON TITAN </a></li>
-                        <li><a>NARUTO </a></li>
-                        <li><a>ONE PEACE </a></li>
-                        <li><a>ONE PUNCH MAN</a></li>
-                        <li><a>JUJUTSU KAISEN</a></li>
+                <!-- Lặp qua các danh mục -->
+                <li class="center" th:each="category : ${category}">
+                    <a class="title_category_cosplay" th:text="${category.name}" href="#"></a>
+                    <!-- Dropdown cho danh mục con -->
+                    <ul class="dropdown_submenu" th:if="${category.subCategories != null}">
+                        <li th:each="subCategory : ${category.subCategories}">
+                            <a th:href="@{/cosplay/category/{id}(id=${subCategory.id})}" th:text="${subCategory.name}"></a>
+                        </li>
                     </ul>
                     <i class="fa-solid fa-caret-down"></i>
                 </li>
-                <li class="center">
-                    <a class="title_category_cosplay" href="#"> MOVIE   </a>
-                    <ul class="dropdown_submenu">
-                        <li><a>RESIDENT EVIL </a></li>
-                        <li><a>SUPERMAN</a></li>
-                        <li><a>SPIDER-MAN </a></li>
-                        <li><a>AQUAMAN</a></li>
-                        <li><a>IT</a></li>
-                        <li><a>CAPTAIN MAVEL</a></li>
-                    </ul>
-                    <i class="fa-solid fa-caret-down"></i>
-                </li>
-                <li class="center">
-                    <a class="title_category_cosplay" href="#"> GAME   </a>
-                    <ul class="dropdown_submenu">
-                        <li><a>FATE GRAND ORDER</a></li>
-                        <li><a>LEAGUE OF LEGION </a></li>
-                        <li><a>HONKAI STAR RAIL</a></li>
-                        <li><a>GENSHIN IMPACT </a></li>
-                        <li><a>VANLORANT</a></li>
-                    </ul>
-                    <i class="fa-solid fa-caret-down"></i>
-                </li>
-                <li class="center">
-                    <a class="title_category_cosplay" href="#"> FESTIVAL   </a>
-                    <ul class="dropdown_submenu">
-                        <li><a>HALLOWEEN </a></li>
-                        <li><a>MERRY CHRISTMAS</a></li>
-                    </ul>
-                    <i class="fa-solid fa-caret-down"></i>
-                </li>
-
             </ul>
         </div>
+
         <div id="right_bottom_header">
             <div class="search-bar">
                 <input type="text" placeholder="Tìm kiếm...">
@@ -155,8 +140,8 @@
                     </ul>
                 </div>
                 <div class="mini-cart-footer">
-                    <button onclick="goToCartPage()">View Cart</button>
-                    <button onclick="checkout()">Checkout</button>
+                    <a href="/cart/home"><button >View Cart</button></a>
+                    <a href="/cart/checkout"><button >Checkout</button></a>
                 </div>
             </div>
         </div>
@@ -261,7 +246,7 @@
           });
         });
     </script>
-    <script src="js/cart.js"></script>
+    <script src="/js/cart.js"></script>
     <div th:replace="~{:: js}"></div>
 
 </body>

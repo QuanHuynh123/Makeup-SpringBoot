@@ -2,32 +2,12 @@
 <html layout:decorate="layoutCosplay" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
    <head>
        <layout:fragment name="header">
-      <!-- mobile metas -->
-      <meta name="viewport" content="width=device-width, initial-scale=1">
-      <meta name="viewport" content="initial-scale=1, maximum-scale=1">
-      <!-- site metas -->
-      <title>beautySGU</title>
-      <!-- bootstrap css -->
-      <link rel="stylesheet" href="css/bootstrap/bootstrap.min.css">
-      <!-- style css -->
-      <link rel="stylesheet" href="css/style.css">
-      <link rel="stylesheet" href="css/cosplay.css">
-      <link rel="stylesheet" href="css/footer.css">
-      <link rel="stylesheet" href="css/contact.css">
-      <!-- Responsive-->
-      <link rel="stylesheet" href="css/responsive.css">
-      <!-- fevicon -->
-      <link rel="icon" href="images/fevicon.png" type="image/gif" />
-      <!-- Scrollbar Custom CSS -->
-      <link rel="stylesheet" href="css/jquery.mCustomScrollbar.min.css">
-      <!-- Tweaks for older IEs-->
-      <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
-      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.css" media="screen">
-      <link rel="stylesheet"  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
-      <link href='https://fonts.googleapis.com/css?family=Satisfy' rel='stylesheet'>
+          <link rel="stylesheet" href="/css/cosplay.css">
+          <link rel="stylesheet" href="/css/footer.css">
+          <link rel="stylesheet" href="/css/contact.css">
        </layout:fragment>
    </head>
-   <!-- body -->
+
    <body class="main-layout" >
    <div layout:fragment="content">
     <!-- banner -->
@@ -41,7 +21,7 @@
                     <img class="img_banner_cosplay" src="/images/banner_cosplay_2.jpg" alt="Cosplay 2">
                 </div>
                 <div class="slide">
-                    <img class="img_banner_cosplay" src="/images/banner_cosplay_3.png" alt="Cosplay 2">
+                    <img class="img_banner_cosplay" src="/images/banner_cosplay_3.jpg" alt="Cosplay 2">
                 </div>
                 <button class="prev" onclick="prevSlide()">&#10094;</button>
                 <button class="next" onclick="nextSlide()">&#10095;</button>
@@ -184,11 +164,12 @@
    </div>
 
    <div th:fragment="js">
-      <script src="js/jquery.min.js"></script>
-      <script src="js/popper.min.js"></script>
-      <script src="js/bootstrap.bundle.min.js"></script>
-      <script src="js/jquery-3.0.0.min.js"></script>
-      <script src="js/custom.js"></script>
+      <script src="/js/jquery.min.js"></script>
+      <script src="/js/popper.min.js"></script>
+      <script src="/js/bootstrap.bundle.min.js"></script>
+      <script src="/js/jquery-3.0.0.min.js"></script>
+      <script src="/js/custom.js"></script>
+
       <script>
         let currentSlide = 0;
         const slides = document.querySelectorAll('.slide');
@@ -216,35 +197,35 @@
         setInterval(nextSlide, 5000);
       </script>
 
-      <script>
-        let currentSlide1 = 0;
+       <script>
+           //script slider bottom
+           let currentSlide1 = 0;
 
-        function moveSlide(direction) {
-            const slides = document.querySelectorAll('.bottom-slide');
-            const totalSlides = slides.length;
-            const slider = document.querySelector('.bottom-slider');
-            
-            // Update current slide index
-            currentSlide1 += direction;
+           function moveSlide(direction) {
+               const slides = document.querySelectorAll('.bottom-slide');
+               const totalSlides = slides.length;
+               const slider = document.querySelector('.bottom-slider');
 
-            // Loop slide index if it's out of range
-            if (currentSlide1 < 0) {
-                currentSlide1 = totalSlides - 1;
-            } else if (currentSlide1 >= totalSlides) {
-                currentSlide1 = 0;
-            }
+               // Update current slide index
+               currentSlide1 += direction;
+               // Loop slide index if it's out of range
+               if (currentSlide1 < 0) {
+                   currentSlide1 = totalSlides - 1;
+               } else if (currentSlide1 >= totalSlides -3 ) {
+                   currentSlide1 = 0;
+               }
 
-        // Calculate the new position
-        const offset = -currentSlide1 * (slides[0].offsetWidth + 20); // 20 là khoảng cách giữa các slide
-        slider.style.transform = `translateX(${offset}px)`;
-}
+           // Calculate the new position
+           const offset = -currentSlide1 * (slides[0].offsetWidth + 20); // 20 là khoảng cách giữa các slide
+           slider.style.transform = `translateX(${offset}px)`;
+           }
 
-    // Tự động chuyển slide sau mỗi 3 giây
-    setInterval(() => {
-        moveSlide(1);
-    }, 3000);
+           // Tự động chuyển slide sau mỗi 3 giây
+           setInterval(() => {
+               moveSlide(1);
+           }, 3000);
 
-      </script>
+       </script>
    </div>
    </body>
 </html>

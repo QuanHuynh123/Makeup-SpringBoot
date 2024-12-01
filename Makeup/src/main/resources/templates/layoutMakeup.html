@@ -2,6 +2,9 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
     <meta charset="UTF-8">
+    <!-- mobile metas -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
     <layout:fragment name="header">
     </layout:fragment>
 </head>
@@ -69,7 +72,7 @@
                             <ul class="profile_menu">
                                 <li><a href="/profile">Thông tin  </a></li>
                                 <li><a href="/myOder">Đơn hàng của tôi</a></li>
-                                <li><a href="/myCart">Giỏ hàng</a></li>
+                                <li><a href="/cart/home">Giỏ hàng</a></li>
                                 <li><a href="/logout">Đăng xuất</a></li>
                             </ul>
                         </th:block>
@@ -291,6 +294,22 @@
             });
           });
         });
+    </script>
+
+    <script>
+        function initMap() {
+          var map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 11,
+            center: {lat: 40.645037, lng: -73.880224},
+            });
+
+        var image = 'images/maps-and-flags.png';
+        var beachMarker = new google.maps.Marker({
+            position: {lat: 40.645037, lng: -73.880224},
+            map: map,
+            icon: image
+          });
+        }
     </script>
 
     <div th:replace="~{:: js}"></div>
