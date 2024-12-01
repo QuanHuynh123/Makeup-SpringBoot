@@ -314,8 +314,9 @@
     font-weight: bold;
     color: #333;
     margin: 5px 0;
-    overflow: hidden; /* Ẩn phần văn bản thừa vượt chiều rộng */
-    text-overflow: ellipsis; /* Hiển thị dấu "…" ở cuối */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-height: 230px;
 }
 
 .product-info .product-price {

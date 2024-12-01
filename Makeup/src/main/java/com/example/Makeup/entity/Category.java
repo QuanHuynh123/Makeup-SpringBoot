@@ -23,6 +23,9 @@ public class Category {
     @Column(name = "name", length = 100, nullable = false)
     String name;
 
+    // Mối quan hệ OneToMany với SubCategory
+    @OneToMany(mappedBy = "category", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<SubCategory> subCategories;
 
     public Category(String name){
         this.name = name;

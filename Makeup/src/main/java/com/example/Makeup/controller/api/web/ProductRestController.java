@@ -26,7 +26,7 @@ public class ProductRestController {
     
     @PostMapping("/create")
     public ResponseEntity<String> create(@ModelAttribute CreateProductDTO producDTO) throws IOException{
-        Product createdProduct = productService.create(producDTO);
+        //Product createdProduct = productService.create(producDTO);
         return ResponseEntity.ok("Tạo sản phẩm mới thành công");
     }
     

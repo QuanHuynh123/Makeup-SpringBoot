@@ -2,27 +2,25 @@ package com.example.Makeup.service;
 
 import com.example.Makeup.dto.CreateProductDTO;
 import com.example.Makeup.dto.ProductDTO;
+import com.example.Makeup.dto.SubCategoryDTO;
 import com.example.Makeup.entity.Product;
+import org.springframework.data.domain.Page;
 import com.example.Makeup.entity.SubCategory;
 import com.example.Makeup.enums.AppException;
 import com.example.Makeup.enums.ErrorCode;
 import com.example.Makeup.mapper.ProductMapper;
 import com.example.Makeup.repository.ProductRepository;
-import com.example.Makeup.repository.SubCategoryRepository;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
+
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
-import org.hibernate.query.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -72,25 +70,25 @@ public class ProductService {
                 .collect(Collectors.toList());
     }
     
-    public Product create(CreateProductDTO productDTO) throws IOException{
-        SubCategory subCategory = subCategoryService.findById(productDTO.getSubCategoryId());
-        
-        Product product = new Product();
-        product.setNameProduct(productDTO.getName());
-        product.setDescription(productDTO.getDescription());
-        product.setSize(productDTO.getSize());
-        product.setPrice(productDTO.getPrice());
-        product.setSubCategory(subCategory);
-        
-        List<String> imagePaths = new ArrayList<>();
-        for(MultipartFile file: productDTO.getFiles()){
-            String path = saveImage(file);
-            imagePaths.add(path);
-        }
-        product.setImage(String.join(",", imagePaths));
-        
-        return productRepository.save(product);
-    }
+//    public Product create(CreateProductDTO productDTO) throws IOException{
+//        SubCategoryDTO subCategoryDTO = subCategoryService.findById(productDTO.getSubCategoryId());
+//
+//        Product product = new Product();
+//        product.setNameProduct(productDTO.getName());
+//        product.setDescription(productDTO.getDescription());
+//        product.setSize(productDTO.getSize());
+//        product.setPrice(productDTO.getPrice());
+//        product.setSubCategory(subCategoryDTO);
+//
+//        List<String> imagePaths = new ArrayList<>();
+//        for(MultipartFile file: productDTO.getFiles()){
+//            String path = saveImage(file);
+//            imagePaths.add(path);
+//        }
+//        product.setImage(String.join(",", imagePaths));
+//
+//        return productRepository.save(product);
+//    }
     
     public boolean delete(int id){
         if (productRepository.existsById(id)) {
@@ -100,6 +98,25 @@ public class ProductService {
             return false;
         }
     }
+
+    public Page<ProductDTO> getProductBySubcategoryId(int subCategoryId, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size); // Tạo đối tượng phân trang
+        Page<Product> productPage = productRepository.findBySubCategoryId(subCategoryId, pageable);
+
+        // Kiểm tra nếu không có sản phẩm nào trong trang
+        if (productPage.isEmpty()) {
+            throw new AppException(ErrorCode.PRODUCT_NOT_FOUND); // Ném exception nếu không có sản phẩm
+        }
+
+        // Chuyển đổi Page<Product> thành Page<ProductDTO>
+        return productPage.map(productMapper::toProductDTO);
+    }
+
+    public int countProductsBySubcategoryId(int subCategoryId){
+        return productRepository.countProductsBySubcategoryId(subCategoryId);
+    }
+
+
     
 //    public Product edit(CreateProductDTO productDTO, int id) throws IOException{
 //        SubCategory subCategory = subCategoryService.findById(productDTO.getSubCategoryId());

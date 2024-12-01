@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html layout:decorate="layoutCosplay" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <head>
+        <layout:fragment name="header">
+            <link rel="stylesheet" href="/css/cart.css">
+            <link rel="stylesheet" href="/css/cosplay.css">
+            <link rel="stylesheet" href="/css/productDetail.css">
+            <link rel="stylesheet" href="/css/footer.css">
+        </layout:fragment>
+    </head>
+</head>
+<body class="main-layout" >
+<div layout:fragment="content">
+    <!-- cart-->
+    <div class="cart-container">
+        <div class="cart-items">
+            <div class="cart-item">
+                <img src="/images/product/c3.jpg" alt="Product Image" class="cart-item-image">
+                <div class="cart-item-info">
+                    <div class="text">
+                        <h4 class="cart-item-name">Product Name</h4>
+                        <p class="cart-item-price">$45.90</p>
+                        <p class="cart-item-size">Size : S</p>
+                        <p class="cart-item-useDate">Use date : Dec 18, 2024</p>
+                    </div>
+                    <div class="quantity">
+                        <button class="quantity-decrease">-</button>
+                        <input type="number" class="quantity-input" value="1">
+                        <button class="quantity-increase">+</button>
+                    </div>
+                </div>
+            </div>
+            <div class="cart-item">
+                <img src="/images/product/c3.jpg" alt="Product Image" class="cart-item-image">
+                <div class="cart-item-info">
+                    <div class="text">
+                        <h4 class="cart-item-name">Product Name</h4>
+                        <p class="cart-item-price">$45.90</p>
+                        <p class="cart-item-size">Size : S</p>
+                        <p class="cart-item-useDate">Use date : Dec 18, 2024</p>
+                    </div>
+                    <div class="quantity">
+                        <button class="quantity-decrease">-</button>
+                        <input type="number" class="quantity-input" value="1">
+                        <button class="quantity-increase">+</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="cart-summary">
+            <h3>Shopping Cart</h3>
+            <p>Order Total: $143.82</p>
+            <button class="checkout-btn">Proceed to Checkout</button>
+            <button class="checkout-vnpay-btn"></button>
+            <button class="clear-cart-btn">Clear Cart</button>
+        </div>
+    </div>
+
+
+    <!-- end cart -->
+</div>
+
+
+<div th:fragment="js">
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/popper.min.js"></script>
+    <script src="/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/jquery-3.0.0.min.js"></script>
+    <script src="/js/custom.js"></script>
+    <script>
+        $('a[href^="#"]').on('click', function(event) {
+
+         var target = $(this.getAttribute('href'));
+
+         if( target.length ) {
+             event.preventDefault();
+             $('html, body').stop().animate({
+                 scrollTop: target.offset().top
+             }, 2000);
+         }
+
+        });
+    </script>
+
+    <script>
+        $(document).ready(function() {
+            // Increase quantity
+            $('.quantity-increase').on('click', function() {
+                var quantityInput = $(this).siblings('.quantity-input');
+                var currentValue = parseInt(quantityInput.val());
+                quantityInput.val(currentValue + 1);
+            });
+
+            // Decrease quantity
+            $('.quantity-decrease').on('click', function() {
+                var quantityInput = $(this).siblings('.quantity-input');
+                var currentValue = parseInt(quantityInput.val());
+                if (currentValue > 1) {
+                    quantityInput.val(currentValue - 1);
+                }
+            });
+
+            // Ensure input only accepts numbers
+            $('.quantity-input').on('input', function() {
+                var value = $(this).val();
+                if (isNaN(value) || value < 1) {
+                    $(this).val(1);
+                }
+            });
+        });
+
+    </script>
+</div>
+</body>
+</html>
