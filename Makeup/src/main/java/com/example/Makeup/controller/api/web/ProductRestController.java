@@ -23,27 +23,27 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class ProductRestController {
     @Autowired
     ProductService productService;
-    
+
     @PostMapping("/create")
     public ResponseEntity<String> create(@ModelAttribute CreateProductDTO producDTO) throws IOException{
-        //Product createdProduct = productService.create(producDTO);
+        Product createdProduct = productService.create(producDTO);
         return ResponseEntity.ok("Tạo sản phẩm mới thành công");
     }
-    
+
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> delete(@PathVariable("id") int id){
         boolean result = productService.delete(id);
-        
-        if (result) 
+
+        if (result)
             return ResponseEntity.ok("Xóa sản phẩm thành công");
         else
             return ResponseEntity.status(500).body("Xóa sản phẩm thất bại");
     }
-    
+
     @PutMapping("/edit/{id}")
     public ResponseEntity<String> edit(@ModelAttribute CreateProductDTO productDTO, @PathVariable("id") int id) throws IOException{
 //        Product product = productService.edit(productDTO, id);
-        
+
 //        if (product != null) {
 //            return ResponseEntity.ok("Sửa sản phẩm thành công");
 //        }
