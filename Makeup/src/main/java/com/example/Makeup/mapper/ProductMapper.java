@@ -37,11 +37,4 @@ public interface ProductMapper {
         }
     }
 
-    @AfterMapping
-    default void setSubCategoryName(@MappingTarget ProductDTO productDTO, Product product) {
-        if (product.getSubCategory()!= null ) {
-            productDTO.setSubCategoryName(product.getSubCategory().getName());
-        }
-    }
-
 }

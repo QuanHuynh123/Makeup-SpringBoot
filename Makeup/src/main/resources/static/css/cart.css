@@ -220,5 +220,25 @@
     align-items: center; /* Căn giữa hình ảnh theo chiều dọc */
 }
 
+.function_edit_delete{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.btn-update-cart-item{
+    color: white;
+    background-color: rgb(35, 163, 3);
+    border: none;
+    border-radius: 5px ;
+    font-size: 13px;
+}
+
+.btn-delete-cart-item{
+    margin-left: 10px;
+    color: red;
+    font-size: 30px;
+    border: none;
+    background-color: #f9f9f9;
+}
 /* End - Cart-container */
-C:\Users\huynh\IdeaProjects\Makeup\Makeup\src\main\resources\static\images

@@ -1,10 +1,12 @@
 package com.example.Makeup.controller.api.admin;
 
 import com.example.Makeup.dto.AccountDTO;
+import com.example.Makeup.dto.CartDTO;
 import com.example.Makeup.dto.LoginRequest;
 import com.example.Makeup.dto.UserDTO;
 import com.example.Makeup.entity.Account;
 import com.example.Makeup.service.AccountService;
+import com.example.Makeup.service.CartService;
 import com.example.Makeup.service.RoleService;
 import com.example.Makeup.service.UserService;
 import jakarta.servlet.http.HttpSession;
@@ -41,6 +43,9 @@ public class AuthApiRestController {
     private AuthenticationProvider authenticationProvider ;
 
     @Autowired
+    CartService cartService;
+
+    @Autowired
     UserService userService ;
 
     @PostMapping("/registerUser")
@@ -75,6 +80,9 @@ public class AuthApiRestController {
             // Dung` httpsession luu tam
             UserDTO userDTO = userService.getInforUser(loginRequest.getUsername());
             session.setAttribute("user", userDTO);
+
+            CartDTO cart = cartService.getCart(userDTO.getId());
+            session.setAttribute("cartId", cart.getId());
 
             boolean isAdmin = authentication.getAuthorities().stream()
                     .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ROLE_ADMIN"));
