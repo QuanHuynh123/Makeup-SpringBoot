@@ -36,6 +36,9 @@ public class Order {
     @JoinColumn(name = "user_id", nullable = false)
     User user;
 
+    @Column(name = "pickupDate") // Cột ngày lấy
+    Date pickupDate; // Ngày lấy do nhân viên chỉ định
+
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "payment_id", nullable = false)
     Payment payment;

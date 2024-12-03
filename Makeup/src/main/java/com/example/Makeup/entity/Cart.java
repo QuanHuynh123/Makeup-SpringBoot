@@ -31,6 +31,7 @@ public class Cart {
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     User user;
 
+
     public Cart(double totalPrice, int totalQuantity, Date createDate, User user) {
         this.totalPrice = totalPrice;
         this.totalQuantity = totalQuantity;

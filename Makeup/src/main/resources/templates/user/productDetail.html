@@ -6,6 +6,7 @@
             <link rel="stylesheet" href="/css/cosplay.css">
             <link rel="stylesheet" href="/css/productDetail.css">
             <link rel="stylesheet" href="/css/footer.css">
+            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         </layout:fragment>
     </head>
 </head>
@@ -13,7 +14,7 @@
 <div layout:fragment="content">
 <!-- product-->
 <div id="container_product">
-
+    <div id="productId" style="display:none;" th:attr="product-id=${product.id}"></div>
     <div class="container" id="container_product_top">
         <div class="left-column">
             <div class="image-gallery">
@@ -34,7 +35,7 @@
             <h1 th:text="${product.nameProduct ?: 'No name available'}"></h1>
             <p class="price" th:text="${product.price ?: 'N/A'}"></p>
             <p><strong>SKU:</strong> Shinn Asuka</p>
-            <p><strong>Processing Time:</strong> 25-35 days</p>
+            <p><strong>Processing Time:</strong> 3-5 days</p>
 
             <form>
                 <label for="gender">Gender:</label>
@@ -59,7 +60,7 @@
                 <label for="quantity">Qty:</label>
                 <input type="number" id="quantity" min="1" value="1">
 
-                <button type="submit" class="add-to-cart">Add to Cart</button>
+                <button type="submit" class="add-to-cart" id="add_cart_btn">Add to Cart</button>
             </form>
         </div>
     </div>
@@ -123,11 +124,10 @@
 
 
     <div th:fragment="js">
-        <script src="/js/jquery.min.js"></script>
-        <script src="/js/popper.min.js"></script>
         <script src="/js/bootstrap.bundle.min.js"></script>
-        <script src="/js/jquery-3.0.0.min.js"></script>
         <script src="/js/custom.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
         <script>
             $('a[href^="#"]').on('click', function(event) {
 
@@ -139,13 +139,11 @@
                      scrollTop: target.offset().top
                  }, 2000);
              }
-
             });
         </script>
 
         <script>
-            let currentIndex = 0;  // Biến lưu trữ chỉ số ảnh hiện tại
-
+            let currentIndex = 0;
             function moveSlide(step) {
                 const gallery = document.querySelector('.thumbnail-gallery');
                 const images = gallery.querySelectorAll('img');
@@ -159,10 +157,62 @@
                 } else if (currentIndex >= totalImages-6) {
                     currentIndex = 0;
                 }
-
-                // Di chuyển gallery để hiển thị ảnh hiện tại
                 gallery.style.transform = 'translateX(' + (-currentIndex * 100) + '%)';
             }
+        </script>
+
+        <script>
+
+            $(document).ready(function () {
+                $('#add_cart_btn').on('click', function (e) {
+                    e.preventDefault();
+
+                    const productId = document.getElementById('productId').getAttribute('product-id');
+                    const gender = $('#gender').val();
+                    const size = $('#size').val();
+                    const useDate = $('#use-date').val();
+                    const quantity = $('#quantity').val();
+
+                    const currentDate = new Date().toISOString().split('T')[0]; // Lấy ngày hiện tại theo định dạng yyyy-mm-dd
+                    if (useDate < currentDate) {
+                        Swal.fire("Ngày sử dụng không thể là ngày trong quá khứ. Vui lòng chọn lại.");
+                        return;
+                    }
+
+                    if (!productId|| !gender || !size || !useDate || quantity <= 0) {
+                        Swal.fire("Vui lòng chọn đầy đủ thông tin trước khi thêm vào giỏ hàng.!");
+                        return;
+                    }
+
+                    $.ajax({
+                        url: '/api/cart/add',
+                        method: 'POST',
+                        contentType: 'application/json',
+                        data: JSON.stringify({
+                            productId: productId,
+                            useDate: useDate,
+                            quantity: quantity
+                        }),
+                        success: function (response) {
+                            Swal.fire({
+                              position: "top-end",
+                              icon: "success",
+                              title: "Thêm sản phẩm vào giỏ thành công!",
+                              showConfirmButton: false,
+                              timer: 1500
+                            });
+                        },
+                        error: function (error) {
+                            Swal.fire({
+                              icon: "error",
+                              title: "Oops...",
+                              text: "Thêm hàng vào giỏ thất bại!",
+                              footer: '<a href="#">Why do I have this issue?</a>'
+                            });
+                        }
+                    });
+                });
+            });
         </script>
     </div>
 </body>

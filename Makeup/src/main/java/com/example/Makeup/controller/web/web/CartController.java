@@ -34,14 +34,13 @@ public class CartController {
             if (user != null) {
                 int userId = user.getId();  // Lấy userId từ session
 
-                // Gọi CartService để lấy cart của người dùng dựa trên userId
-                CartDTO cart = cartService.getCart(userId);  // Giả sử bạn có phương thức này trong CartService
+                CartDTO cart = cartService.getCart(userId);
                 List<CartItemDTO> cartItemDTOS = cartItemService.getCartItemByCartId(cart.getId());
 
                 if (cartItemDTOS.isEmpty())
-                    model.addAttribute("error","null");
+                    model.addAttribute("error","Bạn chưa thêm sản phẩm nào vào giỏ hàng!");
 
-                model.addAttribute("cartItem", cartItemDTOS);
+                model.addAttribute("cartItems", cartItemDTOS);
                 model.addAttribute("cart", cart);
 
                 // Trả về view "cart"
@@ -51,10 +50,9 @@ public class CartController {
             }
 
         } catch (Exception e) {
-            // Ghi log hoặc xử lý lỗi ở đây
             e.printStackTrace();
             model.addAttribute("errorMessage", "Đã xảy ra lỗi trong quá trình lấy giỏ hàng.");
-            return "error";  // Trả về một trang lỗi hoặc trang thích hợp
+            return "error";
         }
     }
 }
