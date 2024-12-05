@@ -8,17 +8,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
+
 @Service
 public class StaffService {
     @Autowired
     private StaffRepository staffRepository;
+
     @Autowired
     private StaffMapper staffMapper;
+
     public List<StaffDTO> getAllStaff() {
         // Sử dụng mapper để chuyển đổi danh sách Staff sang StaffDTO
         List<Staff> staffList = staffRepository.findAll();
         return staffMapper.toStaffDTOList(staffList); // Chuyển đổi danh sách
     }
+
+
     public Optional<Staff> getStaffById(int id) {
         return staffRepository.findById(id);
     }
@@ -32,6 +37,7 @@ public class StaffService {
             return staffRepository.save(staff);
         }).orElseThrow(() -> new RuntimeException("Staff not found with id " + id));
     }
+
     public void deleteStaff(int id) {
         staffRepository.deleteById(id);
     }

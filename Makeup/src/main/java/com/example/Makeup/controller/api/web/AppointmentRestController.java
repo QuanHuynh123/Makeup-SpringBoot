@@ -24,30 +24,35 @@ public class AppointmentRestController {
             @RequestParam int year) {
         return appointmentService.getAppointmentsByMonth(month, year);
     }
-    @GetMapping
+
     public List<AppointmentDTO> getAllAppointments() {
         return appointmentService.getAllAppointments();
     }
+
     // Lấy cuộc hẹn theo ID
     @GetMapping("/{id}")
     public AppointmentDTO getAppointmentById(@PathVariable int id) {
         return appointmentService.getAppointmentById(id);
     }
+
     // Thêm mới một cuộc hẹn
     @PostMapping
     public AppointmentDTO createAppointment(@RequestBody AppointmentDTO appointmentDTO) {
         return appointmentService.createAppointment(appointmentDTO);
     }
+
     // Cập nhật một cuộc hẹn
     @PutMapping("/{id}")
     public AppointmentDTO updateAppointment(@PathVariable int id, @RequestBody AppointmentDTO appointmentDTO) {
         return appointmentService.updateAppointment(id, appointmentDTO);
     }
+
     // Xóa một cuộc hẹn
     @DeleteMapping("/{id}")
     public void deleteAppointment(@PathVariable int id) {
         appointmentService.deleteAppointment(id);
     }
+
     @PostMapping("/create")
     public ResponseEntity<?> addAppointment(@RequestBody AppointmentDTO appointmentDTO) {
         try {
