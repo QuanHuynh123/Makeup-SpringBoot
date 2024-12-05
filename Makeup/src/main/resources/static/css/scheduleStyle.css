@@ -3694,7 +3694,7 @@ a {
 .cd-schedule {
     position: relative;
     overflow: auto;
-        height: 400px;
+    height: 400px;
 }
 
 .cd-schedule::before {
@@ -3861,11 +3861,11 @@ a {
     width: 100%;
     padding: 0 1.25em;
     padding: 0 var(--component-padding);
-        position: sticky;
-        top: 0;
-        left: 0;
-        z-index: 99;
-        background: white;
+    position: sticky;
+    top: 0;
+    left: 0;
+    z-index: 99;
+    background: white;
 }
 
 .cd-schedule__top-info>span {
@@ -4027,12 +4027,26 @@ a {
 
 .cd-schedule-modal {
     position: fixed;
+    background-color: white;
     z-index: 3;
     top: 0;
     right: 0;
     height: 100%;
     width: 100%;
     visibility: hidden;
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    -webkit-transform: translateX(100%);
+    -ms-transform: translateX(100%);
+    transform: translateX(100%);
+    transition: visibility .4s, -webkit-transform .4s;
+    transition: transform .4s, visibility .4s;
+    transition: transform .4s, visibility .4s, -webkit-transform .4s;
+    transition-timing-function: cubic-bezier(0.5, 0, 0.1, 1)
+}
+
+.cd-schedule-modal.active {
+    visibility: visible;
     -webkit-transform: translateZ(0);
     transform: translateZ(0);
     -webkit-transform: translateX(100%);
@@ -4132,7 +4146,7 @@ a {
 
 @media (min-width: 64rem) {
     .cd-schedule-modal__event-info {
-        opacity: 0;
+        opacity: 1;
         font-size: 0.83333em;
         font-size: var(--text-sm)
     }
@@ -4259,7 +4273,7 @@ a {
         width: 40px;
         height: 40px;
         background: transparent;
-        opacity: 0
+        opacity: 1
     }
 
     .cd-schedule-modal__close::after,
@@ -4312,7 +4326,7 @@ a {
     transition: opacity .4s, visibility .4s
 }
 
-.cd-schedule-modal--open+.cd-schedule__cover-layer {
+.cd-schedule-modal.active+.cd-schedule__cover-layer {
     opacity: 1;
     visibility: visible
 }
