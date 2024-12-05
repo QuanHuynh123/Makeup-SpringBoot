@@ -37,9 +37,6 @@ public class AuthApiRestController {
     private PasswordEncoder passwordEncoder;
 
     @Autowired
-    private AuthenticationManager authenticationManager;
-
-    @Autowired
     private AuthenticationProvider authenticationProvider ;
 
     @Autowired
@@ -63,55 +60,44 @@ public class AuthApiRestController {
 
 
 
-    @PostMapping("/loginUser")
-    public ResponseEntity<Map<String, String>> login(@RequestBody LoginRequest loginRequest , HttpSession session) {
-        try {
-            Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(
-                            loginRequest.getUsername(),
-                            loginRequest.getPassword()
-                    )
-            );
+//    @PostMapping("/loginUser")
+//    public ResponseEntity<Map<String, String>> login(@RequestBody LoginRequest loginRequest , HttpSession session) {
+//        try {
+//            Authentication authentication = authenticationManager.authenticate(
+//                    new UsernamePasswordAuthenticationToken(
+//                            loginRequest.getUsername(),
+//                            loginRequest.getPassword()
+//                    )
+//            );
+//
+//            SecurityContextHolder.getContext().setAuthentication(authentication);
+//            Authentication authenticationSuccess = SecurityContextHolder.getContext().getAuthentication();
+//            System.out.println("SecurityContextHolder : " +  authenticationSuccess);
+//
+//            // Dung` httpsession luu tam
+//            UserDTO userDTO = userService.getInforUser(loginRequest.getUsername());
+//            session.setAttribute("user", userDTO);
+//
+//            CartDTO cart = cartService.getCart(userDTO.getId());
+//            session.setAttribute("cartId", cart.getId());
+//
+//            boolean isAdmin = authentication.getAuthorities().stream()
+//                    .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ROLE_ADMIN"));
+//
+//            Map<String, String> response = Map.of(
+//                    "status", "Đăng nhập thành công!",
+//                    "redirectUrl", isAdmin ? "/admin" : "/home"
+//            );
+//            return ResponseEntity.ok(response);
+//
+//        } catch (Exception e) {
+//            Map<String, String> errorResponse = Map.of(
+//                    "status", "error",
+//                    "message", "Đăng nhập thất bại!"
+//            );
+//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
+//        }
+//    }
 
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-            Authentication authenticationSuccess = SecurityContextHolder.getContext().getAuthentication();
-            System.out.println("SecurityContextHolder : " +  authenticationSuccess);
-
-            // Dung` httpsession luu tam
-            UserDTO userDTO = userService.getInforUser(loginRequest.getUsername());
-            session.setAttribute("user", userDTO);
-
-            CartDTO cart = cartService.getCart(userDTO.getId());
-            session.setAttribute("cartId", cart.getId());
-
-            boolean isAdmin = authentication.getAuthorities().stream()
-                    .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ROLE_ADMIN"));
-
-            Map<String, String> response = Map.of(
-                    "status", "Đăng nhập thành công!",
-                    "redirectUrl", isAdmin ? "/admin" : "/home"
-            );
-            return ResponseEntity.ok(response);
-
-        } catch (Exception e) {
-            Map<String, String> errorResponse = Map.of(
-                    "status", "error",
-                    "message", "Đăng nhập thất bại!"
-            );
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
-        }
-    }
-
-    @GetMapping("/status")
-    public String getStatus() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        System.out.println( "User is authenticated: " + authentication.getPrincipal() + " " + authentication.getName());
-        if (authentication != null && authentication.isAuthenticated()) {
-            System.out.println( "User is authenticated: " + authentication.getPrincipal() + " " + authentication.getName());
-            return "User is authenticated" ;
-        } else {
-            return "User is not authenticated" ;
-        }
-    }
 
 }

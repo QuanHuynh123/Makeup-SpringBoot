@@ -172,7 +172,7 @@ ul.email li a {
     font-size: 17px;
     font-family: Roboto;
     line-height: 40px;
-    top: 80px; /* Điều chỉnh vị trí menu nếu cần */
+    top: 50px; /* Điều chỉnh vị trí menu nếu cần */
     left: 0; /* Đặt vị trí bên trái để nó thẳng hàng với icon */
     display: none; /* Ẩn menu mặc định */
 }

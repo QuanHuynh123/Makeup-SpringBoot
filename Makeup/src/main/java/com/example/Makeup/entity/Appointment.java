@@ -41,6 +41,6 @@ public class Appointment {
     ServiceMakeup serviceMakeup; // Kết nối đến dịch vụ makeup
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "staff_id", nullable = false)
+    @JoinColumn(name = "staff_id")
     Staff staff; // Liên kết với nhân viên
 }
