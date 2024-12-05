@@ -36,6 +36,7 @@ public class UserService {
     }
 
     public UserDTO getInforUser(String phone){
+        System.out.println(phone);
         User user =  userRepository.findByPhone(phone);
         return userMapper.toUserDTO(user);
     }

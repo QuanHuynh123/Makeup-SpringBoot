@@ -1,9 +1,12 @@
 package com.example.Makeup.controller.web.web;
 
 import com.example.Makeup.dto.*;
+import com.example.Makeup.entity.Account;
 import com.example.Makeup.service.*;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -24,6 +27,27 @@ public class GlobalModelAttribute {
 
     @Autowired
     FeedBackService feedBackService;
+
+    @Autowired
+    UserService userService;
+
+    @ModelAttribute
+    public void addSessionUser(HttpSession session){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if(!authentication.equals("anonymousUser")){
+            UserDTO userDTO = userService.getInforUser(authentication.getName());
+            session.setAttribute("user", userDTO);
+        }
+    }
+
+    @ModelAttribute
+    public void addUserLogin(Model model , HttpSession session ){
+        UserDTO userDTO = (UserDTO) session.getAttribute("user");
+        System.out.println("Session User: " + userDTO); // Kiểm tra giá trị của userDTO
+        if (userDTO != null) {
+            model.addAttribute("user", userDTO);
+        }
+    }
 
     @ModelAttribute
     public void addCartMini(Model model , HttpSession session){
@@ -51,14 +75,6 @@ public class GlobalModelAttribute {
         model.addAttribute("category",categories);
     }
 
-    @ModelAttribute
-    public void addUserLogin(Model model , HttpSession session ){
-        UserDTO userDTO = (UserDTO) session.getAttribute("user");
-        System.out.println("Session User: " + userDTO); // Kiểm tra giá trị của userDTO
-        if (userDTO != null) {
-            model.addAttribute("user", userDTO);
-        }
-    }
 
     @ModelAttribute
     public void addFeedGoodFeedBack(Model model){
