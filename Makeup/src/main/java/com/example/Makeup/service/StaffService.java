@@ -1,5 +1,4 @@
 package com.example.Makeup.service;
-
 import com.example.Makeup.dto.StaffDTO;
 import com.example.Makeup.entity.Account;
 import com.example.Makeup.entity.Staff;
@@ -31,7 +30,6 @@ public class StaffService {
     public Staff addStaff(Staff staff) {
         return staffRepository.save(staff);
     }
-
     public Staff updateStaff(int id, Staff staffDetails) {
         return staffRepository.findById(id).map(staff -> {
             staff.setNameStaff(staffDetails.getNameStaff());

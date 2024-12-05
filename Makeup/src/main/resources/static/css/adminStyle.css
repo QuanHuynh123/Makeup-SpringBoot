@@ -672,6 +672,9 @@
 
     .AdminActivity-item-welcome-image {
         width: 100%;
+        display: flex        ;
+            align-items: center;
+            justify-content: center;
     }
 
     .AdminActivity-item-welcome-image img {

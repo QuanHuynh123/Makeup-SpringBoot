@@ -25,7 +25,6 @@ public class AppointmentRestController {
         return appointmentService.getAppointmentsByMonth(month, year);
     }
 
-    @GetMapping
     public List<AppointmentDTO> getAllAppointments() {
         return appointmentService.getAllAppointments();
     }

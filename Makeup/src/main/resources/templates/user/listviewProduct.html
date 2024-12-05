@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html layout:decorate="layoutCosplay" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+    <head>
+        <layout:fragment name="header">
+            <link rel="stylesheet" href="/css/cosplay.css">
+            <link rel="stylesheet" href="/css/footer.css">
+            <link rel="stylesheet" href="/css/listviewProduct.css">
+        </layout:fragment>
+    </head>
+
+<body class="main-layout" >
+<div layout:fragment="content">
+    <h1 style="padding-top: 150px; text-align: center; font-size: 50px; background-color: white;">
+        <span class="base" th:text="${nameSub ?: 'N/A'}"> </span></h1>
+
+    <!-- product -->
+    <div id="container_product">
+        <div class="content-container">
+            <!-- Bộ lọc -->
+            <div class="filters">
+                <button>Bộ lọc</button>
+                <select>
+                    <option>Giá</option>
+                </select>
+                <select>
+                    <option>Tên</option>
+                </select>
+                <select>
+                    <option>Bán chạy</option>
+                </select>
+                <select>
+                    <option>Mới</option>
+                </select>
+                <button>Xếp theo: Giá</button>
+            </div>
+
+            <div th:if="${error != null and error != ''}" class="alert alert-warning" role="alert">
+                <span th:text="${error}"></span>
+            </div>
+
+            <div id="totalPages" style="display:none;" th:attr="data-total-pages=${totalPages}"></div>
+            <div id="categoryId" style="display:none;" th:attr="data-category-id=${categoryId}"></div>
+
+            <div th:if="${error == null or error == ''}">
+            <ul class="product-list">
+                    <li class="product-item" th:each="product : ${products}">
+                        <a th:href="@{/productDetail/{id}(id=${product.id})}">
+                            <img th:src="@{'/images/product/' + ${product.firstImage}}" alt="Product Image">
+                            <div class="product-info">
+                                <h4 th:text="${product.nameProduct ?: 'No name available'}">Tên sản phẩm</h4>
+                                <p class="product-price" th:text="${product.price ?: 'N/A'}"></p>
+                            </div>
+                        </a>
+                    </li>
+            </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- end-paginate-->
+    <div th:if="${error == null or error == ''}">
+        <div class="container-paginate middle">
+            <div class="pagination">
+                <ul>
+                    <li>
+                        <a href="#" data-page="${currentPage - 1}"
+                           th:if="${currentPage > 0}">&lt; Prev</a>
+                    </li>
+
+                    <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}">
+                        <a href="#" th:text="${i + 1}"
+                           th:attr="data-page=${i}"
+                           th:classappend="${i == currentPage} ? 'active' : ''">>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="#"  th:attr="data-page=${currentPage + 1}"
+                           th:if="${currentPage < totalPages - 1}">Next &gt;</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- end-paginate-->
+
+    <!-- end product -->
+</div>
+
+<div th:fragment="js">
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/popper.min.js"></script>
+    <script src="/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/jquery-3.0.0.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+         $('.pagination a').on('click', function(event) {
+             event.preventDefault();
+             const page = $(this).attr('data-page') || 0;
+             const size = 10;  // Số sản phẩm trên mỗi trang
+             const categoryId = $('#categoryId').data('category-id');
+             const totalPages = $('#totalPages').data('total-pages');
+
+            if (!categoryId || isNaN(page) || isNaN(size)) {
+                console.error('Tham số không hợp lệ:', { categoryId, page, size });
+                return;
+            }
+
+            // Kiểm tra để tránh vượt quá totalPages
+            if (page < 0 || page >= totalPages) {
+                console.warn('Trang không hợp lệ:', page);
+                return;
+            }
+
+             $.ajax({
+                 url: '/api/category/' + categoryId + '?page=' + page + '&size=' + size,
+                 method: 'GET',
+                 success: function(response) {
+                     $('#container_product .product-list').html(generateProductHtml(response.products));
+                     updatePagination(response.currentPage, response.totalPages);
+                 },
+                 error: function() {
+                     alert('Có lỗi xảy ra khi tải dữ liệu!');
+                 }
+             });
+         });
+     });
+
+
+        function generateProductHtml(products) {
+        let html = '';
+        products.forEach(function(product) {
+            html += `
+                <li class="product-item">
+                    <a href="/productDetail/${product.id}">
+                        <img src="/images/product/${product.firstImage}" alt="${product.nameProduct}">
+                        <div class="product-info">
+                            <h4>${product.nameProduct || 'No name available'}</h4>
+                            <p class="product-price">${product.price || 'N/A'} VNĐ</p>
+                        </div>
+                    </a>
+                </li>`;
+        });
+        return html;
+    }
+
+    function updatePagination(currentPage, totalPages) {
+        const paginationLinks = $('.pagination a');
+
+        // Reset tất cả các thẻ để xóa lớp active
+        paginationLinks.removeClass('active');
+
+        // Đặt lại trạng thái active cho trang hiện tại
+        paginationLinks.each(function() {
+            const page = $(this).data('page');
+            if (page === currentPage) {
+                $(this).addClass('active');
+            }
+        });
+    }
+
+    </script>
+
+</div>
+</body>
+</html>
+
