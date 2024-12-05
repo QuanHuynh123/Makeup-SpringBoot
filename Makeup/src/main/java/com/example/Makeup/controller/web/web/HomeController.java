@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Controller
 public class HomeController {
 
-    @GetMapping("/home")
+    @RequestMapping("/home")
     public String home(ModelMap model , HttpSession session ){
         UserDTO userDTO = (UserDTO) session.getAttribute("user");
         System.out.println("Session User: " + userDTO); // Kiểm tra giá trị của userDTO
@@ -23,7 +23,7 @@ public class HomeController {
         return "user/index";
     }
 
-    @GetMapping("/")
+    @RequestMapping("/")
     public String redirectToHome() {
         return "redirect:/home"; // Chuyển hướng đến /home
     }

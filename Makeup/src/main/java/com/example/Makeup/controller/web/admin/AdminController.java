@@ -276,6 +276,4 @@ public class AdminController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null); // Trả về mã lỗi nếu có lỗi
         }
     }
-
-
 }

@@ -16,6 +16,7 @@ public class OrderDTO {
     double totalPrice;
     int totalQuantity;
     Date orderDate;
+    Date pickupDate;
     boolean status;
     int userId;
     int paymentId;

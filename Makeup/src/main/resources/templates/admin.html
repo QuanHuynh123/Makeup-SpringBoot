@@ -12,7 +12,6 @@
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>document.getElementsByTagName("html")[0].className += " js";</script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -131,18 +130,10 @@
                                         </div>
                                     </div>
                                     <div class="Submenu">
-                                        <div class="Submenu-title">
+                                        <div class="Submenu-title" id="tab-product">
                                             <span style="margin-right: 8px; padding-right: 8px;">
                                                 <i class="fa-solid fa-box"></i>
                                             </span>Product
-                                        </div>
-                                        <div class="Submenu-item">
-                                            <div class="Submenu-item-content">
-                                                <a class="Submenu-item-content-object"
-                                                    href="/admin/products/create">Create New Product</a>
-                                                <a class="Submenu-item-content-object"
-                                                    href="/admin/products">Products</a>
-                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -542,7 +533,7 @@
                                         </button>
                                         <div id="popup-menu" class="popup-menu d-none">
                                             <!-- <div class="popup-menu-item" data-api="/appointments/stats/last12Months">Last 12
-                                            Months</div> -->
+                                        Months</div> -->
                                             <div class="popup-menu-item" data-api="/appointments/stats/last30Days">Last
                                                 30
                                                 Days</div>
@@ -632,7 +623,7 @@
                                         </button>
                                         <div id="popup-menu-order" class="popup-menu d-none">
                                             <!-- <div class="popup-menu-item" data-api="/appointments/stats/last12Months">Last 12
-                                                                    Months</div> -->
+                                                                Months</div> -->
                                             <div class="popup-menu-item-order" data-api="/orders/stats/last30Days">Last
                                                 30
                                                 Days</div>
@@ -814,6 +805,9 @@
                     </div>
                 </div>
                 <div id="staff" class="d-none mt-3"></div>
+                <div id="product" class="d-none mt-3"></div>
+                <div id="create-product" class="d-none mt-3"></div>
+                <div id="edit-product" class="d-none mt-3"></div>
             </div>
 
             <script src="js/util.js"></script>
@@ -821,7 +815,6 @@
             <script src="js/main.js"></script>
             <script src="js/adminControl.js"></script>
             <script src="/js/customer.js"></script>
-        </div>
-    </div>
 </body>
+
 </html>

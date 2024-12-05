@@ -1,11 +1,11 @@
-$(document).ready(function() {
+$(document).ready(function () {
     // Lấy danh sách dịch vụ và load vào select
     $.ajax({
         url: "/api/serviceMakeups/services",
         type: "GET",
-        success: function(data) {
+        success: function (data) {
             const serviceSelect = $("#optionsMakeup");
-            $.each(data, function(index, service) {
+            $.each(data, function (index, service) {
                 const option = $("<option>")
                     .val(service.id)
                     .text(service.nameService)
@@ -13,12 +13,12 @@ $(document).ready(function() {
                 serviceSelect.append(option);
             });
         },
-        error: function(xhr, status, error) {
+        error: function (xhr, status, error) {
             console.error("Error fetching services:", error);
         }
     });
 
-    $('#btn_book_service').on('click', function(event) {
+    $('#btn_book_service').on('click', function (event) {
         event.preventDefault(); // Ngăn chặn submit mặc định của form
 
         // Hàm kiểm tra email hợp lệ
@@ -49,10 +49,12 @@ $(document).ready(function() {
         if (startTime && timeNeed && !isNaN(timeNeed)) {
             var startDate = new Date(`${date}T${startTime}`);
             startDate.setMinutes(startDate.getMinutes() + timeNeed * 60);
-            endTime = startDate.toTimeString().split(' ')[0].slice(0, 5);
+            // endTime = startDate.toTimeString().split(' ')[0].slice(0, 5);
+
         } else {
             console.log("Start time or duration is missing or invalid");
         }
+
 
         // Kiểm tra hợp lệ
         if (!validateEmail(email)) {
@@ -95,25 +97,24 @@ $(document).ready(function() {
                 "serviceMakeupId": serviceOption,
                 "staffId": serviceStaff
             }),
-            success: function(response) {
+            success: function (response) {
                 Swal.fire({
-                                    position: "mid",
-                                    icon: "success",
-                                    title: "Booking success",
-                                    showConfirmButton: false,
-                                    timer: 1500
-                                })
+                    position: "mid",
+                    icon: "success",
+                    title: "Booking success",
+                    showConfirmButton: false,
+                    timer: 1500
+                })
             },
-            error: function(xhr, status, error) {
-               Swal.fire({
-                                   position: "mid",
-                                   icon: "error",
-                                   title: response  ,
-                                   showConfirmButton: false,
-                                   timer: 1500
-                               })
+            error: function (xhr, status, error) {
+                Swal.fire({
+                    position: "mid",
+                    icon: "error",
+                    title: response,
+                    showConfirmButton: false,
+                    timer: 1500
+                })
             }
         });
     });
-
 });

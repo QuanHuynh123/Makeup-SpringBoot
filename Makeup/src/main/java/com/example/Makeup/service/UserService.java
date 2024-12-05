@@ -40,6 +40,10 @@ public class UserService {
         return userMapper.toUserDTO(user);
     }
 
+    public User getUserById(int userId){
+       return  userRepository.findById(userId).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+    }
+
     @Transactional
     public UserDTO updateInforUser(String phone , String name , String email , String address  ) {
         User user = userRepository.findByPhone(phone);

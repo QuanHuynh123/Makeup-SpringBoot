@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html layout:decorate="layoutCosplay" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <head>
+        <layout:fragment name="header">
+            <link rel="stylesheet" href="/css/cart.css">
+            <link rel="stylesheet" href="/css/cosplay.css">
+            <link rel="stylesheet" href="/css/productDetail.css">
+            <link rel="stylesheet" href="/css/footer.css">
+            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        </layout:fragment>
+    </head>
+</head>
+<body class="main-layout" >
+<div layout:fragment="content">
+    <!-- cart-->
+    <div class="cart-container">
+        <div class="cart-items">
+            <div th:if="${error != null and error != ''}" class="alert alert-warning" role="alert">
+                <span th:text="${error}"></span>
+            </div>
+            <div th:if="${error == null or error == ''}">
+
+                <div class="cart-item" th:each="item : ${cartItems}">
+                    <img th:src="@{'/images/product/' + ${item.imageFirst}}"  alt="Product Image" class="cart-item-image">
+                    <div class="cart-item-info" th:attr="cart-id=${item.id}">
+                        <input class="product-id" style="display:none;" th:value="${item.productId}">
+                        <div class="text">
+                            <h4 class="cart-item-name" th:text="${item.productName}">Product Name</h4>
+                            <p class="cart-item-price" th:text="${item.price}" >$45.90</p>
+                            <p class="cart-item-size">Size : S</p>
+                            <label >Use Date:</label>
+                            <input type="date"  class="use-date" th:value=" ${item.useDate}">
+                        </div>
+                        <div class="quantity">
+                            <button class="quantity-decrease">-</button>
+                            <input type="number" class="quantity-input" th:value="${item.quantity}">
+                            <button class="quantity-increase">+</button>
+                        </div>
+
+                        <div class="function_edit_delete">
+                            <button class="btn-update-cart-item"><i class="fa-solid fa-rotate-right"> update</i></button>
+                            <button class="btn-delete-cart-item"><i class="fa-solid fa-delete-left"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="cart-summary">
+            <h3>Shopping Cart</h3>
+            <p th:text="'Order Total:' + ${cart.totalPrice}">Order Total: $143.82</p>
+            <button class="checkout-btn">Proceed to Checkout</button>
+            <button class="checkout-vnpay-btn"></button>
+            <button class="clear-cart-btn">Clear Cart</button>
+        </div>
+    </div>
+
+
+    <!-- end cart -->
+</div>
+
+
+<div th:fragment="js">
+    <script src="/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/custom.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        $('a[href^="#"]').on('click', function(event) {
+
+         var target = $(this.getAttribute('href'));
+
+         if( target.length ) {
+             event.preventDefault();
+             $('html, body').stop().animate({
+                 scrollTop: target.offset().top
+             }, 2000);
+         }
+
+        });
+    </script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const increaseButtons = document.querySelectorAll(".quantity-increase");
+            const decreaseButtons = document.querySelectorAll(".quantity-decrease");
+
+            increaseButtons.forEach(button => {
+                button.addEventListener("click", function () {
+                    const input = this.parentElement.querySelector(".quantity-input");
+                    let currentValue = parseInt(input.value) || 0;
+                    input.value = currentValue + 1;
+                });
+            });
+
+            decreaseButtons.forEach(button => {
+                button.addEventListener("click", function () {
+                    const input = this.parentElement.querySelector(".quantity-input");
+                    let currentValue = parseInt(input.value) || 0;
+                    if (currentValue > 1) {
+                        input.value = currentValue - 1;
+                    }
+                });
+            });
+        });
+
+    </script>
+
+    <script>
+       document.addEventListener("DOMContentLoaded", function () {
+          const updateButtons = document.querySelectorAll(".btn-update-cart-item");
+          updateButtons.forEach(button => {
+          button.addEventListener("click", function () {
+              const cartItem = this.closest(".cart-item-info");
+
+              const itemId = cartItem.getAttribute("cart-id");
+              const productId = cartItem.querySelector(".product-id");
+              const newQuantity = cartItem.querySelector(".quantity-input");
+              const useDate = cartItem.querySelector(".use-date");
+
+                const currentDate = new Date().toISOString().split('T')[0]; // Lấy ngày hiện tại theo định dạng yyyy-mm-dd
+                if (useDate < currentDate) {
+                    Swal.fire("Ngày sử dụng không thể là ngày trong quá khứ. Vui lòng chọn lại.");
+                    return;
+                }
+
+                $.ajax({
+                    url: '/api/cart/update',
+                    method: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({
+                        cartItemId: itemId ,
+                        productId : productId.value,
+                        quantity: newQuantity.value,
+                        useDate : useDate.value
+                    }),
+                    success: function (response) {
+                    Swal.fire({
+                          position: "top-end",
+                          icon: "success",
+                          title: "Cập nhật thành công!",
+                          showConfirmButton: false,
+                          timer: 1500
+                        }).then(() => {
+                        location.reload();  // Reload trang sau khi thông báo kết thúc
+                        });
+                    },
+                    error: function (error) {
+                        Swal.fire({
+                          icon: "error",
+                          title: "Oops...",
+                          text: "Cập nhật thất bại!",
+                          footer: '<a href="#">Why do I have this issue?</a>'
+                        });
+                    }
+                });
+          });
+        });
+    });
+    </script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+          const deleteButtons = document.querySelectorAll(".btn-delete-cart-item");
+              deleteButtons.forEach(button => {
+                  button.addEventListener("click", function () {
+                    const cartItem = this.closest(".cart-item-info");
+                    const itemId = cartItem.getAttribute("cart-id");
+
+                      $.ajax({
+                        url: '/api/cart/delete?cartItemId=' + itemId,
+                        method: 'DELETE',
+                        success: function (response) {
+                        Swal.fire({
+                              position: "top-end",
+                              icon: "success",
+                              title: "Xóa thành công!",
+                              showConfirmButton: false,
+                              timer: 3000
+                            }).then(() => {
+                            location.reload();  // Reload trang sau khi thông báo kết thúc
+                            });
+                        },
+                        error: function (error) {
+                            Swal.fire({
+                              icon: "error",
+                              title: "Oops...",
+                              text: "Xóa thất bại!",
+                              footer: '<a href="#">Why do I have this issue?</a>'
+                            });
+                        }
+                    });
+                  });
+              });
+          });
+    </script>
+</div>
+</body>
+</html>
