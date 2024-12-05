@@ -261,34 +261,40 @@ document.addEventListener("DOMContentLoaded", () => {
         main?.classList.toggle("showSidebar");
     }
 
-    // Biến trạng thái lưu kích thước màn hình hiện tại
-    let isSmallScreen = window.matchMedia("(max-width: 992px)").matches;
-
     // Hàm toggle sidebar
     function toggleSidebar() {
         sidebar?.classList.toggle("showSidebar");
         main?.classList.toggle("showSidebar");
     }
 
-    // Hàm xử lý thay đổi kích thước
-    function handleResize() {
-        const mediaQuery = window.matchMedia("(max-width: 992px)");
-        const currentlySmallScreen = mediaQuery.matches;
+  // Biến trạng thái lưu kích thước màn hình hiện tại
+  let isSmallScreen = window.matchMedia("(max-width: 992px)").matches;
 
-        // Chỉ thực hiện khi trạng thái thay đổi
-        if (currentlySmallScreen !== isSmallScreen) {
-            isSmallScreen = currentlySmallScreen; // Cập nhật trạng thái
+  // Hàm xử lý thay đổi kích thước
+  function handleResize() {
+      const mediaQuery = window.matchMedia("(max-width: 992px)");
+      const currentlySmallScreen = mediaQuery.matches;
 
-            // Gọi toggleSidebar nếu có thay đổi kích thước
-            toggleSidebar();
-        }
-    }
+      // Chỉ thực hiện khi trạng thái thay đổi
+      if (currentlySmallScreen !== isSmallScreen) {
+          isSmallScreen = currentlySmallScreen; // Cập nhật trạng thái
 
-    // Lắng nghe sự kiện resize
-    window.addEventListener("resize", handleResize);
+          // Xóa hoặc thêm class dựa trên kích thước màn hình
+          if (isSmallScreen) {
+              sidebar?.classList.remove("showSidebar");
+              main?.classList.remove("showSidebar");
+          } else {
+              sidebar?.classList.add("showSidebar");
+              main?.classList.add("showSidebar");
+          }
+      }
+  }
 
-    // Kiểm tra kích thước ngay khi tải trang
-    handleResize();
+  // Lắng nghe sự kiện resize
+  window.addEventListener("resize", handleResize);
+
+  // Kiểm tra kích thước ngay khi tải trang
+  handleResize();
 
     // Gắn sự kiện click vào nút toggle
     toggleButton.addEventListener("click", toggleSidebar);

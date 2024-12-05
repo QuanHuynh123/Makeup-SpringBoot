@@ -1,28 +1,23 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-   <head>
-      <!-- basic -->
-      <meta charset="utf-8">
-      <meta http-equiv="X-UA-Compatible" content="IE=edge">
-      <!-- mobile metas -->
-      <meta name="viewport" content="width=device-width, initial-scale=1">
-      <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+<html layout:decorate="layoutMakeup" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+   <layout:fragment name="header">
       <!-- site metas -->
-      <title>beautySGU</title>
+      <title>beautySGU-makeup</title>
       <!-- bootstrap css -->
-      <link rel="stylesheet" href="css/bootstrap/bootstrap.min.css">
+      <link rel="stylesheet" href="/css/bootstrap/bootstrap.min.css">
       <!-- style css -->
-      <link rel="stylesheet" href="css/header.css">
-      <link rel="stylesheet" href="css/style.css">
-      <link rel="stylesheet" href="css/makeup.css">
-      <link rel="stylesheet" href="css/contact.css">
-      <link rel="stylesheet" href="css/footer.css">
+      <link rel="stylesheet" href="/css/header.css">
+      <link rel="stylesheet" href="/css/style.css">
+      <link rel="stylesheet" href="/css/makeup.css">
+      <link rel="stylesheet" href="/css/contact.css">
+      <link rel="stylesheet" href="/css/footer.css">
       <!-- Responsive-->
-      <link rel="stylesheet" href="css/responsive.css">
+      <link rel="stylesheet" href="/css/responsive.css">
       <!-- fevicon -->
-      <link rel="icon" href="images/fevicon.png" type="image/gif" />
+      <link rel="icon" href="/images/fevicon.png" type="image/gif" />
       <!-- Scrollbar Custom CSS -->
-      <link rel="stylesheet" href="css/jquery.mCustomScrollbar.min.css">
+      <link rel="stylesheet" href="/css/jquery.mCustomScrollbar.min.css">
       <!-- Tweaks for older IEs-->
       <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.css" media="screen">
@@ -31,7 +26,6 @@
       <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script><![endif]-->
       <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-      <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
       <script>
          function clickMakeUpService(service) {
              const form = document.getElementById('request');
@@ -44,470 +38,169 @@
              }
          }
       </script>
-   </head>
-   <!-- body -->
-   <body class="main-layout">
-      <!-- loader  -->
-      <div class="loader_bg">
-         <div class="loader"><img src="images/loading.gif" alt="#" /></div>
-      </div>
-      <!-- end loader -->
-      <!-- header -->
-      <header>
-         <!-- header inner -->
-         <div class="header">
-            <div class="container">
-               <div class="row nowrap">
-                  <div class="col-xl-5 col-lg-5 col-md-9 col-sm-9">
-                     <nav class="navigation navbar navbar-expand-md navbar-dark ">
-                        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample04" aria-controls="navbarsExample04" aria-expanded="false" aria-label="Toggle navigation">
-                           <span class="navbar-toggler-icon"></span>
-                        </button>
-                        <div class="collapse navbar-collapse" id="navbarsExample04">
-                           <ul class="navbar-nav mr-auto">
-                              <li class="nav-item active">
-                                 <a class="nav-link" href="/home"> Home  </a>
-                              </li>
-                              <li class="nav-item">
-                                 <a class="nav-link" href="#about">About</a>
-                              </li>
-                              <li class="nav-item">
-                                 <a class="nav-link" href="#service">Service</a>
-                              </li>
-                              <li class="nav-item">
-                                 <a class="nav-link" href="#customer">Customer</a>
-                              </li>
-                              <li class="nav-item">
-                                 <a class="nav-link" href="#contact">Contact</a>
-                              </li>
-                              <li class="nav-item">
-                                 <a class="nav-link" href="/login">Login</a>
-                              </li>
-                           </ul>
-                        </div>
-                     </nav>
-                  </div>
-                  <div class="col-xl-2 col-lg-2 col-md-2 col-sm-2 col logo_section">
-                     <div class="full">
-                        <div class="center-desk">
-                           <div class="logo">
-                              <a href="index.html"><img src="images/logo.png" alt="#" style="width: 100px;" /></a>
-                           </div>
-                        </div>
-                     </div>
-                  </div>
-                  <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4">
-                     <ul class="email">
-                        <li ><a href="#" style="font-size: 14px;">Call: (+71) 1234567890</a></li>
-                        <li ><a href="#" style="font-size: 14px;">Email: huynhminhquan07072002@gmail.com</a></li>
-                     </ul>
-                     <!-- Thêm phần thông tin profile -->
-                  </div>
-                  <div class="col-xl-1 col-lg-1 col-md-2 col-sm-2 col profile_container">
-                     <i class="fa-solid fa-user icon_function" id="profile-icon" style="cursor: pointer;">
-                        <th:block th:if="${user == null }">
-                           <ul class="profile_menu">
-                              <li><a href="/login">Đăng nhập</a></li>
-                           </ul>
-                        </th:block>
-
-                        <th:block th:if="${user != null}">
-                           <ul class="profile_menu">
-                              <li><a href="/profile">Thông tin  </a></li>
-                              <li><a href="/myOder">Đơn hàng của tôi</a></li>
-                              <li><a href="/myCart">Giỏ hàng</a></li>
-                              <li><a href="/logout">Đăng xuất</a></li>
-                           </ul>
-                        </th:block>
-                     </i>
-                  </div>
-
-               </div>
-            </div>
-         </div>
-      </header>
-
-      <div id="main_function">
-         <h2 id="title_makeup">MAKE-UP</h2>
-         <hr style="border: 1px solid black; width: 15%;">
-         <div class="width_100 center_row center_column">
-            <p class="sub_title_makeup">
-               Ngoài việc lựa chọn váy cưới thì với mỗi cô dâu lớp trang điểm cũng vô cùng quan trọng. Để nàng xuất hiện với diện mạo lung linh nhất, tôn nên đường nét thanh tú và thần thái rạng ngời hãy trao trọn niềm tin cho các Makeup Artist được đào tạo chuyên nghiệp của chúng mình.
-            </p>
-         </div>
-
-         <div class="button-container">
-            <button class="custom-button">
-              Xem thêm <span class="arrow">→</span>
-            </button>
-          </div>
-
-
-          <h6 id="title_outstanding_service">Các dịch vụ makeup nổi bật</h6>
-
-         <div id="list_option_makeup">
-
-            <div class="makeup-section row center_column">
-               <button class="btn_title_makeup" onclick="clickMakeUpService(1)">Makeup Đám Cưới</button>
-               <div class="row-container">
-                  <ul class="row ul_option">
-                     <li>
-                        <img src="./images/product/o1.jpg" alt="">
-                     </li>
-                     <li>
-                        <img src="./images/product/02.jpg" alt="">
-                     </li>
-                     <li>
-                        <img src="./images/product/o3.jpg" alt="">
-                     </li>
-                     <li>
-                        <img src="./images/product/o4.jpg" alt="">
-                     </li>
-                  </ul>
-               </div>
-            </div>
-
-            <div class="makeup-section row center_column">
-               <button class="btn_title_makeup" onclick="clickMakeUpService(2)">Makeup Đi Chơi/Event</button>
-               <div class="row-container">
-                  <ul class="row ul_option">
-                     <li>
-                        <img src="./images/product/i1.jpg" alt="">
-                     </li>
-                     <li>
-                        <img src="./images/product/i2.jpg" alt="">
-                     </li>
-                     <li>
-                        <img src="./images/product/i3.jpeg" alt="">
-                     </li>
-                     <li>
-                        <img src="./images/product/i4.jpg" alt="">
-                     </li>
-                  </ul>
-               </div>
-            </div>
-
-            <div class="makeup-section row center_column">
-               <button class="btn_title_makeup" onclick="clickMakeUpService(3)">Makeup Chụp Ảnh</button>
-               <div class="row-container">
-                  <ul class="row ul_option">
-                     <li>
-                        <img src="./images/product/c1.jpg" alt="">
-                     </li>
-                     <li>
-                        <img src="./images/product/c2.jpg" alt="">
-                     </li>
-                     <li>
-                        <img src="./images/product/c3.jpg" alt="">
-                     </li>
-                     <li>
-                        <img src="./images/product/c4.jpg" alt="">
-                     </li>
-                  </ul>
-               </div>
-            </div>
-
-            <div class="makeup-section row center_column">
-               <button class="btn_title_makeup" onclick="clickMakeUpService(1)">Makeup Thời Trang</button>
-               <div class="row-container">
-                  <ul class="row ul_option">
-                     <li>
-                     <img src="./images/product/t1.webp" alt="">
-                     </li>
-                     <li>
-                     <img src="./images/product/t2.jpg" alt="">
-                     </li>
-                     <li>
-                     <img src="./images/product/t3.jpg" alt="">
-                     </li>
-                     <li>
-                     <img src="./images/product/t4.webp" alt="">
-                     </li>
-                  </ul>
-               </div>
-            </div>
-         </div>
-
-         <div class="icon-container">
-            <img class="icon_1" src="./images/icon_flower.png">
-         </div>
-
-         <div class="width_100 center_row center_column">
-            <p class="sub_title_makeup">
-               Makeup đám cưới là một phần quan trọng giúp cô dâu tỏa sáng trong ngày trọng đại. Phong cách trang điểm cho ngày cưới thường được lựa chọn kỹ lưỡng, kết hợp giữa nét đẹp tự nhiên và sự sang trọng để cô dâu trông rạng rỡ nhưng vẫn giữ được vẻ thanh thoát. Lớp nền cần được chăm chút cẩn thận, tạo độ mịn màng, che khuyết điểm nhưng không quá dày, giúp da sáng khỏe và tự nhiên suốt cả ngày. Màu mắt và môi thường được lựa chọn phù hợp với váy cưới và phong cách chung của buổi lễ, có thể là tông màu nhẹ nhàng, thanh lịch hoặc quyến rũ, nổi bật. Đặc biệt, sự bền màu và khả năng giữ lâu của lớp trang điểm là yếu tố quan trọng để cô dâu luôn tự tin suốt cả ngày dài, từ lễ cưới cho đến tiệc tối.
-            </p>
-         </div>
-
-         <img class="banner" src="./images/wedding_banner.jpg">
-
-         <div class="width_100 center_row center_column">
-            <p class="sub_title_makeup">
-               Makeup chụp ảnh cosplay kết hợp giữa việc tạo sự sắc nét để lên hình đẹp và tái hiện chân thực nhân vật cosplay. Lớp nền cần mịn màng, bền màu, trong khi mắt, môi và các chi tiết khác được trang điểm đậm và sáng tạo, giúp gương mặt nổi bật và thể hiện đúng tinh thần của nhân vật. Kỹ thuật trang điểm này không chỉ tạo ấn tượng mạnh mẽ trước ống kính mà còn mang lại sự sống động, chân thực cho mỗi shot hình
-            </p>
-         </div>
-
-         <img class="banner" src="./images/cosplay_banner.jpg">
-
-         <div class="width_100 center_row center_column">
-            <p class="sub_title_makeup">
-               Makeup đi chơi thường nhẹ nhàng, tự nhiên nhưng vẫn đủ tươi tắn và rạng rỡ. Lớp nền mỏng nhẹ giúp da trông khỏe khoắn và tự nhiên, kết hợp với chút phấn má hồng, màu son tươi tắn như hồng hoặc cam đào. Phần mắt có thể sử dụng tông màu trung tính hoặc nhũ nhẹ để tạo điểm nhấn, kết hợp với mascara để đôi mắt thêm cuốn hút. Kiểu makeup này giúp gương mặt sáng bừng, trẻ trung nhưng vẫn giữ được sự thoải mái cho cả ngày dài.
-            </p>
-         </div>
-
-         <img class="banner" src="./images/goingout_banner.jpg">
-
-         <div class="icon-container">
-            <img class="icon_1" src="./images/icon_flower.png">
-         </div>
-
+   </layout:fragment>
+</head>
+<!-- body -->
+<body class="main-layout">
+<div layout:fragment="content">
+   <div id="main_function">
+      <h2 id="title_makeup">MAKE-UP</h2>
+      <hr style="border: 1px solid black; width: 15%;">
+      <div class="width_100 center_row center_column">
+         <p class="sub_title_makeup">
+            Ngoài việc lựa chọn váy cưới thì với mỗi cô dâu lớp trang điểm cũng vô cùng quan trọng. Để nàng xuất hiện với diện mạo lung linh nhất, tôn nên đường nét thanh tú và thần thái rạng ngời hãy trao trọn niềm tin cho các Makeup Artist được đào tạo chuyên nghiệp của chúng mình.
+         </p>
       </div>
 
-      <!--  contact -->
-      <div class="contact">
-         <div class="container">
-            <div class="row">    
-               <div class="col-md-12">
-                  <div class="titlepage">
-                     <h2> <i class="fa-solid fa-snowflake"></i> Liên hệ <span class="white"> Với chúng tôi</span></h2>
-                  </div>
-               </div>
+      <div class="button-container">
+         <button class="custom-button">
+            Xem thêm <span class="arrow">→</span>
+         </button>
+      </div>
+
+
+      <h6 id="title_outstanding_service">Các dịch vụ makeup nổi bật</h6>
+
+      <div id="list_option_makeup">
+
+         <div class="makeup-section row center_column">
+            <button class="btn_title_makeup" onclick="clickMakeUpService(1)">Makeup Đám Cưới</button>
+            <div class="row-container">
+               <ul class="row ul_option">
+                  <li>
+                     <img src="./images/o1.jpg" alt="">
+                  </li>
+                  <li>
+                     <img src="./images/o2.jpg" alt="">
+                  </li>
+                  <li>
+                     <img src="./images/o3.jpg" alt="">
+                  </li>
+                  <li>
+                     <img src="./images/o4.jpg" alt="">
+                  </li>
+               </ul>
             </div>
-            <div class="row">
-               <div class="col-md-6">
-                  <form id="request" class="main_form">
-                     <div class="row">
-                        <div class="col-md-12">
-                           <input class="contactus" placeholder="Name" type="text" name="Name">
-                        </div>
-                        <div class="col-md-12">
-                           <input class="contactus" placeholder="Email" type="email" name="Email">
-                        </div>
-                        <div class="col-md-12">
-                           <input class="contactus" placeholder="Phone Number" type="tel" name="PhoneNumber">
-                        </div>
-                        <div class="col-md-12">
-                           <textarea class="textarea" placeholder="Message" name="Message"></textarea>
-                        </div>
+         </div>
 
-                        <!-- Phần chọn với select dịch vụ -->
-                        <div class="col-md-12">
-                           <select class="contactus" id="optionsStaff" name="Option">
-                              <option value="">--Choose a staff--</option>
-                           </select>
-                           <script>
-                              $(document).ready(function() {
-                                  $.ajax({
-                                      url: "/api/staff",
-                                      type: "GET",
-                                      success: function(data) {
-                                          const serviceSelect = $("#optionsStaff");
+         <div class="makeup-section row center_column">
+            <button class="btn_title_makeup" onclick="clickMakeUpService(2)">Makeup Đi Chơi/Event</button>
+            <div class="row-container">
+               <ul class="row ul_option">
+                  <li>
+                     <img src="./images/i1.jpg" alt="">
+                  </li>
+                  <li>
+                     <img src="./images/i2.jpg" alt="">
+                  </li>
+                  <li>
+                     <img src="./images/i3.jpeg" alt="">
+                  </li>
+                  <li>
+                     <img src="./images/i4.jpg" alt="">
+                  </li>
+               </ul>
+            </div>
+         </div>
 
-                                          // Duyệt qua mỗi dịch vụ và thêm vào <select>
-                                          $.each(data, function(index, service) {
-                                              const option = $("<option>")
-                                                 .val(service.id)
-                                                 .text(service.nameStaff)
-                                                // .data('time', parseInt(service.time, 10)); // Đảm bảo chuyển đổi thành số nguyên
+         <div class="makeup-section row center_column">
+            <button class="btn_title_makeup" onclick="clickMakeUpService(3)">Makeup Chụp Ảnh</button>
+            <div class="row-container">
+               <ul class="row ul_option">
+                  <li>
+                     <img src="./images/c1.jpg" alt="">
+                  </li>
+                  <li>
+                     <img src="./images/c2.jpg" alt="">
+                  </li>
+                  <li>
+                     <img src="./images/c3.jpg" alt="">
+                  </li>
+                  <li>
+                     <img src="./images/c4.jpg" alt="">
+                  </li>
+               </ul>
+            </div>
+         </div>
 
-                                              serviceSelect.append(option);
-                                          });
-                                      },
-                                      error: function(xhr, status, error) {
-                                          console.error("Error fetching services:", error);
-                                      }
-                                  });
-                              });
-                           </script>
-                        </div>
-
-                        <!-- Phần chọn với select -->
-                        <div class="col-md-12">
-                           <select class="contactus" id="optionsMakeup" name="Option">
-                              <option value="">--Choose a service--</option>
-                           </select>
-                           <script>
-                              $(document).ready(function() {
-                                  $.ajax({
-                                      url: "/api/serviceMakeups/services",
-                                      type: "GET",
-                                      success: function(data) {
-                                          const serviceSelect = $("#optionsMakeup");
-
-                                          // Duyệt qua mỗi dịch vụ và thêm vào <select>
-                                          $.each(data, function(index, service) {
-                                              const option = $("<option>")
-                                                 .val(service.id)
-                                                 .text(service.nameService+" - "+service.time+"h")
-                                                 .data('time', parseInt(service.time, 10)); // Đảm bảo chuyển đổi thành số nguyên
-
-                                              serviceSelect.append(option);
-                                          });
-                                      },
-                                      error: function(xhr, status, error) {
-                                          console.error("Error fetching services:", error);
-                                      }
-                                  });
-                              });
-                           </script>
-                        </div>
-
-                        <div class="col-md-12 d-flex gap-3">
-                           <!--                              <div class="row">-->
-                           <div class="col-6 px-0">
-                              <input class="contactus" type="date" id="date" name="Date" min="<?= date('Y-m-d'); ?>">
-                           </div>
-                           <div class="col-6 px-0 ">
-                              <input class="contactus" type="time" id="time" name="Time">
-                              <!--                                 </div>-->
-                           </div>
-                        </div>
-
-
-                        <div class="col-sm-col-xl-6 col-lg-6 col-md-6 col-sm-12 center_row">
-                           <button id="btn_book_service" class="send_btn" type="submit">Send</button>
-                        </div>
-                     </div>
-                  </form>
-               </div>
-               <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
-                    <div class="map-responsive">
-                        <iframe src="https://www.google.com/maps/embed/v1/place?key=AIzaSyA0s1a7phLN0iaD6-UE7m4qP-z21pH0eSc&q=Truong+Dai+hoc+Sai+Gon+273+An+Duong+Vuong+Phuong+3+Quan+5+Ho+Chi+Minh+700000" 
-                           width="600" 
-                           height="432" 
-                           frameborder="0" 
-                           style="border:0; width: 100%;" 
-                           allowfullscreen>
-                        </iframe>
-                     </div>
-               </div>
+         <div class="makeup-section row center_column">
+            <button class="btn_title_makeup" onclick="clickMakeUpService(1)">Makeup Thời Trang</button>
+            <div class="row-container">
+               <ul class="row ul_option">
+                  <li>
+                     <img src="./images/t1.webp" alt="">
+                  </li>
+                  <li>
+                     <img src="./images/t2.jpg" alt="">
+                  </li>
+                  <li>
+                     <img src="./images/t3.jpg" alt="">
+                  </li>
+                  <li>
+                     <img src="./images/t4.webp" alt="">
+                  </li>
+               </ul>
             </div>
          </div>
       </div>
-      <!-- end contact -->
 
-      <!--  footer -->
-      <footer id="contact">
-         <div class="footer">
-            <div class="container">
-               <div class="row">
-                  <div class="col-md-8 offset-md-4">
-                     <form class="bottom_form">
-                        <h3>Newsletter</h3>
-                        <input class="enter" placeholder="Enter your email" type="text" name="Enter your email">
-                        <button class="sub_btn">subscribe</button>
-                     </form>
-                  </div>
-               </div>
-               <div class="row">
-                  <div class="col-xl-6 col-md-12">
-                     <div class="row">
-                        <div class="col-md-7 padd_bottom">
-                           <div class="heading3">
-                              <a href="#"><img src="images/logo.png" alt="#" style="width: 80px;"/></a>
-                              <p>Chào mừng bạn đến với trang web của chúng tôi. Chúng tôi chuyên cung cấp các dịch vụ và sản phẩm làm đẹp, đặc biệt là trang điểm cho các sự kiện như đám cưới, tiệc, và các dịp đặc biệt khác. Liên hệ với chúng tôi để biết thêm thông tin chi tiết.</p>
-                           </div>
-                        </div>
-                        <div class="col-md-5 padd_bottom padd_bott">
-                           <div class="heading3">
-                              <h3>Contact Us</h3>
-                              <ul class="infometion">
-                                 <li><a href="#">273 Đ. An Dương Vương, Quận 5, Hồ Chí Minh</a></li>
-                                 <li><a href="#">Điện thoại: 0123 456 789</a></li>
-                                 <li><a href="#">Email: huynhminhquan07072002@gmail.com</a></li>
-                                 <li><a href="#">Giờ làm việc: 8:00 - 18:00</a></li>
-                              </ul>
-                           </div>
-                        </div>
-                     </div>
-                  </div>
-                  <div class="col-xl-6 col-md-12">
-                     <div class="row">
-                        <div class="col-md-6 offset-md-1 padd_bottom">
-                           <div class="heading3">
-                              <h3>INFORMATION</h3>
-                              <ul class="infometion">
-                                 <li><a href="#">Dịch vụ trang điểm chuyên nghiệp</a></li>
-                                 <li><a href="#">Sản phẩm mỹ phẩm chất lượng cao</a></li>
-                                 <li><a href="#">Chương trình ưu đãi</a></li>
-                                 <li><a href="#">Hướng dẫn mua hàng</a></li>
-                                 <li><a href="#">Chính sách bảo hành</a></li>
-                                 <li><a href="#">Hỗ trợ khách hàng 24/7</a></li>
-                              </ul>
-                           </div>
-                        </div>
-                        <div class="col-md-5">
-                           <div class="heading3">
-                              <h3>MY ACCOUNT</h3>
-                              <ul class="infometion">
-                                 <li><a href="#">Quản lý đơn hàng</a></li>
-                                 <li><a href="#">Lịch sử mua hàng</a></li>
-                                 <li><a href="#">Đổi trả sản phẩm</a></li>
-                                 <li><a href="#">Cập nhật thông tin cá nhân</a></li>
-                                 <li><a href="#">Ưu đãi thành viên</a></li>
-                                 <li><a href="#">Hỗ trợ tài khoản</a></li>
-                              </ul>
-                           </div>
-                        </div>
-                     </div>
-                  </div>
-               </div>
-            </div>
-            <div class="copyright">
-               <div class="container">
-                  <div class="row">
-                     <div class="col-md-12">
-                        <p>2024 Website makeup</a></p>
-                     </div>
-                  </div>
-               </div>
-            </div>
-         </div>
-      </footer>
-      <!-- end footer -->
-      <!-- Java
-       files-->
-      <script src="js/jquery.min.js"></script>
-      <script src="js/popper.min.js"></script>
-      <script src="js/bootstrap.bundle.min.js"></script>
-      <script src="js/jquery-3.0.0.min.js"></script>
-      <script src="js/bookService.js"></script>
-      <!-- sidebar -->
-      <script src="js/jquery.mCustomScrollbar.concat.min.js"></script>
-      <script src="js/custom.js"></script>
-      <script>
-         $('a[href^="#"]').on('click', function(event) {
-         
-          var target = $(this.getAttribute('href'));
-         
-          if( target.length ) {
-              event.preventDefault();
-              $('html, body').stop().animate({
-                  scrollTop: target.offset().top
-              }, 2000);
-          }
-         
-         });
-      </script>
-      <script>
-         // This example adds a marker to indicate the position of Bondi Beach in Sydney,
-         // Australia.
-         function initMap() {
-           var map = new google.maps.Map(document.getElementById('map'), {
-             zoom: 11,
-             center: {lat: 40.645037, lng: -73.880224},
-             });
-         
-         var image = 'images/maps-and-flags.png';
-         var beachMarker = new google.maps.Marker({
-             position: {lat: 40.645037, lng: -73.880224},
-             map: map,
-             icon: image
-           });
-         }
-      </script>
-      <!-- google map js -->
-      <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA8eaHt9Dh5H57Zh0xVTqxVdBFCvFMqFjQ&callback=initMap"></script>
-      <!-- end google map js --> 
-   </body>
+      <div class="icon-container">
+         <img class="icon_1" src="./images/icon_flower.png">
+      </div>
+
+      <div class="width_100 center_row center_column">
+         <p class="sub_title_makeup">
+            Makeup đám cưới là một phần quan trọng giúp cô dâu tỏa sáng trong ngày trọng đại. Phong cách trang điểm cho ngày cưới thường được lựa chọn kỹ lưỡng, kết hợp giữa nét đẹp tự nhiên và sự sang trọng để cô dâu trông rạng rỡ nhưng vẫn giữ được vẻ thanh thoát. Lớp nền cần được chăm chút cẩn thận, tạo độ mịn màng, che khuyết điểm nhưng không quá dày, giúp da sáng khỏe và tự nhiên suốt cả ngày. Màu mắt và môi thường được lựa chọn phù hợp với váy cưới và phong cách chung của buổi lễ, có thể là tông màu nhẹ nhàng, thanh lịch hoặc quyến rũ, nổi bật. Đặc biệt, sự bền màu và khả năng giữ lâu của lớp trang điểm là yếu tố quan trọng để cô dâu luôn tự tin suốt cả ngày dài, từ lễ cưới cho đến tiệc tối.
+         </p>
+      </div>
+
+      <img class="banner" src="./images/wedding_banner.jpg">
+
+      <div class="width_100 center_row center_column">
+         <p class="sub_title_makeup">
+            Makeup chụp ảnh cosplay kết hợp giữa việc tạo sự sắc nét để lên hình đẹp và tái hiện chân thực nhân vật cosplay. Lớp nền cần mịn màng, bền màu, trong khi mắt, môi và các chi tiết khác được trang điểm đậm và sáng tạo, giúp gương mặt nổi bật và thể hiện đúng tinh thần của nhân vật. Kỹ thuật trang điểm này không chỉ tạo ấn tượng mạnh mẽ trước ống kính mà còn mang lại sự sống động, chân thực cho mỗi shot hình
+         </p>
+      </div>
+
+      <img class="banner" src="./images/cosplay_banner.jpg">
+
+      <div class="width_100 center_row center_column">
+         <p class="sub_title_makeup">
+            Makeup đi chơi thường nhẹ nhàng, tự nhiên nhưng vẫn đủ tươi tắn và rạng rỡ. Lớp nền mỏng nhẹ giúp da trông khỏe khoắn và tự nhiên, kết hợp với chút phấn má hồng, màu son tươi tắn như hồng hoặc cam đào. Phần mắt có thể sử dụng tông màu trung tính hoặc nhũ nhẹ để tạo điểm nhấn, kết hợp với mascara để đôi mắt thêm cuốn hút. Kiểu makeup này giúp gương mặt sáng bừng, trẻ trung nhưng vẫn giữ được sự thoải mái cho cả ngày dài.
+         </p>
+      </div>
+
+      <img class="banner" src="./images/goingout_banner.jpg">
+
+      <div class="icon-container">
+         <img class="icon_1" src="./images/icon_flower.png">
+      </div>
+
+   </div>
+</div>
+
+<div th:fragment="js">
+   <script src="/js/jquery.min.js"></script>
+   <script src="/js/popper.min.js"></script>
+   <script src="/js/bootstrap.bundle.min.js"></script>
+   <script src="/js/jquery-3.0.0.min.js"></script>
+   <script src="/js/custom.js"></script>
+   <script src="/js/bookService.js"></script>
+   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+   <script>
+      $('a[href^="#"]').on('click', function(event) {
+
+       var target = $(this.getAttribute('href'));
+
+       if( target.length ) {
+           event.preventDefault();
+           $('html, body').stop().animate({
+               scrollTop: target.offset().top
+           }, 2000);
+       }
+
+      });
+   </script>
+</div>
+</body>
 </html>
-

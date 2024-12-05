@@ -123,55 +123,54 @@
                                 <option value="">--Choose a staff--</option>
                             </select>
                             <script>
-                                $(document).ready(function() {
-                                    $.ajax({
-                                        url: "/api/staff",
-                                        type: "GET",
-                                        success: function(data) {
-                                            const serviceSelect = $("#optionsStaff");
-                                            // Duyệt qua mỗi dịch vụ và thêm vào <select>
-                                            $.each(data, function(index, service) {
-                                                const option = $("<option>")
-                                                   .val(service.id)
-                                                   .text(service.nameStaff)
-                                                  // .data('time', parseInt(service.time, 10)); // Đảm bảo chuyển đổi thành số nguyên
-                                                serviceSelect.append(option);
-                                            });
-                                        },
-                                        error: function(xhr, status, error) {
-                                            console.error("Error fetching services:", error);
-                                        }
-                                    });
+                                $(document).ready(function () {
+                                   $.ajax({
+                                      url: "/api/staff",
+                                      type: "GET",
+                                      success: function (data) {
+                                         const serviceSelect = $("#optionsStaff");
+                                         // Duyệt qua mỗi dịch vụ và thêm vào <select>
+                                         $.each(data, function (index, service) {
+                                            const option = $("<option>")
+                                               .val(service.id)
+                                               .text(service.nameStaff)
+                                            // .data('time', parseInt(service.time, 10)); // Đảm bảo chuyển đổi thành số nguyên
+                                            serviceSelect.append(option);
+                                         });
+                                      },
+                                      error: function (xhr, status, error) {
+                                         console.error("Error fetching services:", error);
+                                      }
+                                   });
                                 });
                             </script>
                         </div>
+
                         <!-- Phần chọn với select -->
                         <div class="col-md-12">
                             <select class="contactus" id="optionsMakeup" name="Option">
                                 <option value="">--Choose a service--</option>
                             </select>
                             <script>
-                                $(document).ready(function() {
-                                    $.ajax({
-                                        url: "/api/serviceMakeups/services",
-                                        type: "GET",
-                                        success: function(data) {
-                                            const serviceSelect = $("#optionsMakeup");
-
-                                            // Duyệt qua mỗi dịch vụ và thêm vào <select>
-                                            $.each(data, function(index, service) {
-                                                const option = $("<option>")
-                                                   .val(service.id)
-                                                   .text(service.nameService+" - "+service.time+"h")
-                                                   .data('time', parseInt(service.time, 10)); // Đảm bảo chuyển đổi thành số nguyên
-
-                                                serviceSelect.append(option);
-                                            });
-                                        },
-                                        error: function(xhr, status, error) {
-                                            console.error("Error fetching services:", error);
-                                        }
-                                    });
+                                $(document).ready(function () {
+                                   $.ajax({
+                                      url: "/api/serviceMakeups/services",
+                                      type: "GET",
+                                      success: function (data) {
+                                         const serviceSelect = $("#optionsMakeup");
+                                         // Duyệt qua mỗi dịch vụ và thêm vào <select>
+                                         $.each(data, function (index, service) {
+                                            const option = $("<option>")
+                                               .val(service.id)
+                                               .text(service.nameService + " - " + service.time + "h")
+                                               .data('time', parseInt(service.time, 10)); // Đảm bảo chuyển đổi thành số nguyên
+                                            serviceSelect.append(option);
+                                         });
+                                      },
+                                      error: function (xhr, status, error) {
+                                         console.error("Error fetching services:", error);
+                                      }
+                                   });
                                 });
                             </script>
                         </div>
