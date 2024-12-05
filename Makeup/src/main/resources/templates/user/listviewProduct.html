@@ -34,14 +34,14 @@
                 <button>Xếp theo: Giá</button>
             </div>
 
-            <div th:if="${error != null and error != ''}" class="alert alert-warning" role="alert">
-                <span th:text="${error}"></span>
+            <div th:if="${nullProduct != null and nullProduct != ''}" class="alert alert-warning" role="alert">
+                <span th:text="${nullProduct}"></span>
             </div>
 
             <div id="totalPages" style="display:none;" th:attr="data-total-pages=${totalPages}"></div>
             <div id="categoryId" style="display:none;" th:attr="data-category-id=${categoryId}"></div>
 
-            <div th:if="${error == null or error == ''}">
+            <div th:if="${nullProduct == null or nullProduct == ''}">
             <ul class="product-list">
                     <li class="product-item" th:each="product : ${products}">
                         <a th:href="@{/productDetail/{id}(id=${product.id})}">
@@ -58,7 +58,7 @@
     </div>
 
     <!-- end-paginate-->
-    <div th:if="${error == null or error == ''}">
+    <div th:if="${nullProduct == null or nullProduct == ''}">
         <div class="container-paginate middle">
             <div class="pagination">
                 <ul>

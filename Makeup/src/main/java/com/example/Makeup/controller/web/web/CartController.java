@@ -32,18 +32,6 @@ public class CartController {
             UserDTO user = (UserDTO) session.getAttribute("user");
 
             if (user != null) {
-                int userId = user.getId();  // Lấy userId từ session
-
-                CartDTO cart = cartService.getCart(userId);
-                List<CartItemDTO> cartItemDTOS = cartItemService.getCartItemByCartId(cart.getId());
-
-                if (cartItemDTOS.isEmpty())
-                    model.addAttribute("error","Bạn chưa thêm sản phẩm nào vào giỏ hàng!");
-
-                model.addAttribute("cartItems", cartItemDTOS);
-                model.addAttribute("cart", cart);
-
-                // Trả về view "cart"
                 return "user/cart";
             } else {
                 return "redirect:/login";

@@ -67,4 +67,8 @@ public class CartService {
         cartRepository.save(cart);
         return true;
     }
+
+    public int countCartItem(int cartId){
+        return cartItemRepository.countByCartId(cartId);
+    }
 }

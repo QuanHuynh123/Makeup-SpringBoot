@@ -22,10 +22,6 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 public class CosplayController {
     @Autowired
     ProductService productService;
-
-    @Autowired
-    CategoryService categoryService;
-
     @Autowired
     SubCategoryService subCategoryService;
     
@@ -33,10 +29,8 @@ public class CosplayController {
     public String home(Model model){
         List<ProductDTO> hotProducts = productService.getHotProducts();
         List<ProductDTO> newProducts = productService.getNewProducts();
-        List<CategoryDTO> categories = categoryService.getAllCategory();
         model.addAttribute("hotProducts", hotProducts);
         model.addAttribute("newProducts", newProducts);
-        model.addAttribute("category",categories);
         return "user/cosplay";
     }
 
@@ -57,11 +51,8 @@ public class CosplayController {
             model.addAttribute("nameSub", subCategoryDTO.getName());
 
         } catch (AppException e) {
-            model.addAttribute("error", "Không có sản phẩm");
+            model.addAttribute("nullProduct", "Không có sản phẩm");
         }
-
-        List<CategoryDTO> categories = categoryService.getAllCategory();
-        model.addAttribute("category", categories);
         return "user/listviewProduct";  // Trả về toàn bộ trang nếu không phải yêu cầu AJAX
     }
 

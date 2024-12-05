@@ -26,6 +26,9 @@ public class Account {
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "account", cascade = CascadeType.ALL)
     User user;
 
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "account", cascade = CascadeType.ALL)
+    Staff staff;  // Quan hệ một-một ngược lại với Staff
+
     @ManyToOne
     @JoinColumn(name = "role_id", nullable = false)
     Role role;
