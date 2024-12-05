@@ -36,12 +36,12 @@ public class AdminController {
 
 
     @GetMapping("/test2")
-    public String loginPage2(){
+    public String loginPage2() {
         return "admin";
     }
 
     @GetMapping("/test3")
-    public String loginPage3(){
+    public String loginPage3() {
         return "dashboard";
     }
 
@@ -88,7 +88,6 @@ public class AdminController {
 
         return ResponseEntity.ok(stats);
     }
-
 
 
     @GetMapping("/appointments/stats/last7Days")
@@ -155,22 +154,6 @@ public class AdminController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null); // Trả về mã lỗi nếu có lỗi
         }
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     @GetMapping("/orders/stats/{year}")
@@ -293,8 +276,4 @@ public class AdminController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null); // Trả về mã lỗi nếu có lỗi
         }
     }
-
-
-
-
 }

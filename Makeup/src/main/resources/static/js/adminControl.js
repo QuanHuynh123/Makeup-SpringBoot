@@ -261,6 +261,35 @@ document.addEventListener("DOMContentLoaded", () => {
         main?.classList.toggle("showSidebar");
     }
 
+    // Biến trạng thái lưu kích thước màn hình hiện tại
+    let isSmallScreen = window.matchMedia("(max-width: 992px)").matches;
+
+    // Hàm toggle sidebar
+    function toggleSidebar() {
+        sidebar?.classList.toggle("showSidebar");
+        main?.classList.toggle("showSidebar");
+    }
+
+    // Hàm xử lý thay đổi kích thước
+    function handleResize() {
+        const mediaQuery = window.matchMedia("(max-width: 992px)");
+        const currentlySmallScreen = mediaQuery.matches;
+
+        // Chỉ thực hiện khi trạng thái thay đổi
+        if (currentlySmallScreen !== isSmallScreen) {
+            isSmallScreen = currentlySmallScreen; // Cập nhật trạng thái
+
+            // Gọi toggleSidebar nếu có thay đổi kích thước
+            toggleSidebar();
+        }
+    }
+
+    // Lắng nghe sự kiện resize
+    window.addEventListener("resize", handleResize);
+
+    // Kiểm tra kích thước ngay khi tải trang
+    handleResize();
+
     // Gắn sự kiện click vào nút toggle
     toggleButton.addEventListener("click", toggleSidebar);
 
