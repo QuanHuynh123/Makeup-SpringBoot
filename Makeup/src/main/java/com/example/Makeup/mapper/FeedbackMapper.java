@@ -9,6 +9,7 @@ import org.mapstruct.Mapping;
 public interface FeedbackMapper {
     @Mapping(source = "user.id", target = "userId")
     @Mapping(source = "serviceMakeup.id", target = "serviceMakeupId")
+    @Mapping(source = "user.fullName" , target="nameUser")
     FeedBackDTO toFeedBackDTO(FeedBack feedBack);
 
     @Mapping(source = "userId", target = "user.id")

@@ -14,12 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class HomeController {
 
     @RequestMapping("/home")
-    public String home(ModelMap model , HttpSession session ){
-        UserDTO userDTO = (UserDTO) session.getAttribute("user");
-        System.out.println("Session User: " + userDTO); // Kiểm tra giá trị của userDTO
-        if (userDTO != null) {
-            model.addAttribute("user", userDTO);
-        }
+    public String home(ModelMap model ){
         return "user/index";
     }
 

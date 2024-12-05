@@ -49,10 +49,10 @@ $(document).ready(function() {
         if (startTime && timeNeed && !isNaN(timeNeed)) {
             var startDate = new Date(`${date}T${startTime}`);
             startDate.setMinutes(startDate.getMinutes() + timeNeed * 60);
+            endTime = startDate.toTimeString().split(' ')[0].slice(0, 5);
         } else {
             console.log("Start time or duration is missing or invalid");
         }
-
 
         // Kiểm tra hợp lệ
         if (!validateEmail(email)) {
@@ -96,23 +96,24 @@ $(document).ready(function() {
                 "staffId": serviceStaff
             }),
             success: function(response) {
-             Swal.fire({
-                position: "mid",
-                icon: "success",
-                title: "Booking success",
-                showConfirmButton: false,
-                timer: 1500
-            })
+                Swal.fire({
+                                    position: "mid",
+                                    icon: "success",
+                                    title: "Booking success",
+                                    showConfirmButton: false,
+                                    timer: 1500
+                                })
             },
             error: function(xhr, status, error) {
-                Swal.fire({
-                  position: "mid",
-                  icon: "error",
-                  title: response,
-                  showConfirmButton: false,
-                  timer: 1500
-              })
+               Swal.fire({
+                                   position: "mid",
+                                   icon: "error",
+                                   title: response,
+                                   showConfirmButton: false,
+                                   timer: 1500
+                               })
             }
         });
     });
+
 });

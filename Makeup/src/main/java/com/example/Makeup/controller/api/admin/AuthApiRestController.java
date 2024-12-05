@@ -102,7 +102,6 @@ public class AuthApiRestController {
         }
     }
 
-
     @GetMapping("/status")
     public String getStatus() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

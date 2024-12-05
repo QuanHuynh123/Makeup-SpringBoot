@@ -35,7 +35,20 @@
             </div>
             <div class="header-right">
                 <a href="/contact-us" class="header-link">Contact Us</a>
-                <a href="/account" class="header-link">Account</a>
+                <a href="#" class="header-link account">Account</a>
+                    <th:block th:if="${user == null }">
+                        <ul class="profile_menu">
+                            <li><a href="/login">Đăng nhập</a></li>
+                        </ul>
+                    </th:block>
+                    <th:block th:if="${user != null}">
+                        <ul class="profile_menu">
+                            <li><a href="/profile">Thông tin  </a></li>
+                            <li><a href="/myOder">Đơn hàng của tôi</a></li>
+                            <li><a href="/cart/home">Giỏ hàng</a></li>
+                            <li><a href="/logout">Đăng xuất</a></li>
+                        </ul>
+                    </th:block>
             </div>
         </div>
     </div>
@@ -69,7 +82,7 @@
             </div>
             <div class="cart-icon" onclick="toggleCart()">
                 <i class="fa fa-shopping-cart" alt="Cart" ></i>
-                <span class="cart-count">0</span>
+                <span class="cart-count" th:text="${countCart}"></span>
             </div>
             <!-- Giỏ hàng nhỏ (Mini Cart) -->
             <div id="mini-cart" class="mini-cart hidden">
@@ -78,65 +91,25 @@
                     <button onclick="toggleCart()">X</button>
                 </div>
                 <div class="mini-cart-body">
-                    <p id="cart-empty-msg">You have no items in your shopping cart.</p>
-                    <ul id="cart-items">
-                        <li>
+                    <div th:if="${error != null and error != ''}" id="cart-empty-msg" >
+                        <p th:text="You have no items in your shopping cart."></p>
+                    </div>
+                    <ul id="cart-mini-items">
+                        <li th:each="item : ${cartItems}">
                             <div class="content_item_cart">
+                                <input class="cart-id" style="display:none;" th:value="${item.id}">
                                 <div class="content_item_cart_left">
-                                    <h3 class="text_name_product">Genshin Impact Citlali</h3>
-                                    <p class="text_use_date">Use Date : </p>
-                                    <p class="text_use_date">Quantity : </p>
-                                    <p class="text_use_date">Price : </p>
-                                    <i class="fa-solid fa-x"></i>
+                                    <h3 class="text_name_product" th:text="${item.productName}"></h3>
+                                    <p class="p_use_date small-text" th:text="'Use date : ' +  ${item.useDate}"></p>
+                                    <p class="p_quantity small-text" th:text="'Quantity : ' + ${item.quantity}"> </p>
+                                    <p class="p_price small-text" th:text="'Price : ' + ${item.price}"> </p>
+                                    <button class="btn_delete"><i class="fa-solid fa-x"></i></button>
                                 </div>
                                 <div class="content_item_cart_right">
-                                    <img class="img_item_cart" src="./images/product/c2.jpg">
+                                    <img class="img_item_cart" th:src="@{'/images/product/' + ${item.imageFirst}}" alt="Product Image">
                                 </div>
                             </div>
                         </li>
-                        <li>
-                            <div class="content_item_cart">
-                                <div class="content_item_cart_left">
-                                    <h3 class="text_name_product">Genshin Impact Citlali</h3>
-                                    <p class="text_use_date">Use Date : </p>
-                                    <p class="text_use_date">Quantity : </p>
-                                    <p class="text_use_date">Price : </p>
-                                    <i class="fa-solid fa-x"></i>
-                                </div>
-                                <div class="content_item_cart_right">
-                                    <img class="img_item_cart" src="./images/product/c2.jpg">
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="content_item_cart">
-                                <div class="content_item_cart_left">
-                                    <h3 class="text_name_product">Genshin Impact Citlali</h3>
-                                    <p class="text_use_date">Use Date : </p>
-                                    <p class="text_use_date">Quantity : </p>
-                                    <p class="text_use_date">Price : </p>
-                                    <i class="fa-solid fa-x"></i>
-                                </div>
-                                <div class="content_item_cart_right">
-                                    <img class="img_item_cart" src="./images/product/c2.jpg">
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="content_item_cart">
-                                <div class="content_item_cart_left">
-                                    <h3 class="text_name_product">Genshin Impact Citlali</h3>
-                                    <p class="text_use_date">Use Date : </p>
-                                    <p class="text_use_date">Quantity : </p>
-                                    <p class="text_use_date">Price : </p>
-                                    <i class="fa-solid fa-x"></i>
-                                </div>
-                                <div class="content_item_cart_right">
-                                    <img class="img_item_cart" src="./images/product/c2.jpg">
-                                </div>
-                            </div>
-                        </li>
-
                     </ul>
                 </div>
                 <div class="mini-cart-footer">
@@ -246,7 +219,80 @@
           });
         });
     </script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const deleteButtons = document.querySelectorAll(".btn_delete");
+
+        deleteButtons.forEach(button => {
+            button.addEventListener("click", function () {
+                const listItem = this.closest("li"); // Lấy thẻ <li> chứa nút delete
+                const cartItemId = listItem.querySelector(".cart-id").value; // Lấy cartItemId từ input hidden
+
+                // Hiển thị hộp thoại xác nhận
+                Swal.fire({
+                    title: "Bạn có chắc chắn muốn xóa không?",
+                    text: "Hành động này không thể hoàn tác!",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Xóa",
+                    cancelButtonText: "Hủy"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Gửi yêu cầu xóa khi người dùng xác nhận
+                        $.ajax({
+                            url: `/api/cart/delete?cartItemId=${cartItemId}`,
+                            method: "DELETE",
+                            success: function (response) {
+                                Swal.fire({
+                                    position: "top-end",
+                                    icon: "success",
+                                    title: "Xóa thành công!",
+                                    showConfirmButton: false,
+                                    timer: 3000
+                                }).then(() => {
+                                    location.reload(); // Reload trang sau khi thông báo kết thúc
+                                });
+                            },
+                            error: function (xhr, status, error) {
+                                Swal.fire({
+                                    icon: "error",
+                                    title: "Oops...",
+                                    text: "Xóa thất bại!",
+                                    footer: '<a href="#">Why do I have this issue?</a>'
+                                });
+                            }
+                        });
+                    }
+                });
+            });
+        });
+    });
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+    const accountLink = document.querySelector(".account"); // Lấy phần tử tài khoản
+    const profileMenu = document.querySelector(".profile_menu"); // Lấy menu profile
+
+    accountLink.addEventListener("click", function (event) {
+        event.preventDefault();  // Ngừng hành động mặc định của link (nếu có)
+
+        // Toggle lớp active
+        this.classList.toggle("active");
+    });
+
+    // Đóng menu khi click bên ngoài
+    document.addEventListener("click", function (event) {
+        if (!accountLink.contains(event.target) && !profileMenu.contains(event.target)) {
+            accountLink.classList.remove("active");
+        }
+    });
+});
+
+</script>
     <script src="/js/cart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <div th:replace="~{:: js}"></div>
 
 </body>

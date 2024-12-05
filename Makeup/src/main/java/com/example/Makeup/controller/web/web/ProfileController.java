@@ -13,9 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Controller
 public class ProfileController {
     @RequestMapping("/profile")
-    public String profile(ModelMap modelMap, HttpSession session){
-        UserDTO userDTO = (UserDTO) session.getAttribute("user");
-        modelMap.addAttribute("user",userDTO);
+    public String profile(ModelMap modelMap){
         return "user/profile";
     }
 
