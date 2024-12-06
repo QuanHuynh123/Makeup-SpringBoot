@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class MyOrderController {
 
-    @GetMapping("/myOrder")
+    @RequestMapping("/myOrder")
     public String myOrder(){
         return "myOrder";
     }

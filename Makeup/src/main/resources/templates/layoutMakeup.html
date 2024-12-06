@@ -2,6 +2,9 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
     <meta charset="UTF-8">
+    <!-- mobile metas -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
     <layout:fragment name="header">
     </layout:fragment>
 </head>
@@ -53,7 +56,7 @@
                 <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4">
                     <ul class="email">
                         <li ><a href="#" style="font-size: 14px;">Call: (+71) 1234567890</a></li>
-                        <li ><a href="#" style="font-size: 14px;">Email: huynhminhquan07072002@gmail.com</a></li>
+                        <li ><a href="#" style="font-size: 14px;">Email: makeup247@gmail.com</a></li>
                     </ul>
                     <!-- Thêm phần thông tin profile -->
                 </div>
@@ -69,7 +72,7 @@
                             <ul class="profile_menu">
                                 <li><a href="/profile">Thông tin  </a></li>
                                 <li><a href="/myOder">Đơn hàng của tôi</a></li>
-                                <li><a href="/myCart">Giỏ hàng</a></li>
+                                <li><a href="/cart/home">Giỏ hàng</a></li>
                                 <li><a href="/logout">Đăng xuất</a></li>
                             </ul>
                         </th:block>
@@ -120,55 +123,54 @@
                                 <option value="">--Choose a staff--</option>
                             </select>
                             <script>
-                                $(document).ready(function() {
-                                    $.ajax({
-                                        url: "/api/staff",
-                                        type: "GET",
-                                        success: function(data) {
-                                            const serviceSelect = $("#optionsStaff");
-                                            // Duyệt qua mỗi dịch vụ và thêm vào <select>
-                                            $.each(data, function(index, service) {
-                                                const option = $("<option>")
-                                                   .val(service.id)
-                                                   .text(service.nameStaff)
-                                                  // .data('time', parseInt(service.time, 10)); // Đảm bảo chuyển đổi thành số nguyên
-                                                serviceSelect.append(option);
-                                            });
-                                        },
-                                        error: function(xhr, status, error) {
-                                            console.error("Error fetching services:", error);
-                                        }
-                                    });
+                                $(document).ready(function () {
+                                   $.ajax({
+                                      url: "/api/staff",
+                                      type: "GET",
+                                      success: function (data) {
+                                         const serviceSelect = $("#optionsStaff");
+                                         // Duyệt qua mỗi dịch vụ và thêm vào <select>
+                                         $.each(data, function (index, service) {
+                                            const option = $("<option>")
+                                               .val(service.id)
+                                               .text(service.nameStaff)
+                                            // .data('time', parseInt(service.time, 10)); // Đảm bảo chuyển đổi thành số nguyên
+                                            serviceSelect.append(option);
+                                         });
+                                      },
+                                      error: function (xhr, status, error) {
+                                         console.error("Error fetching services:", error);
+                                      }
+                                   });
                                 });
                             </script>
                         </div>
+
                         <!-- Phần chọn với select -->
                         <div class="col-md-12">
                             <select class="contactus" id="optionsMakeup" name="Option">
                                 <option value="">--Choose a service--</option>
                             </select>
                             <script>
-                                $(document).ready(function() {
-                                    $.ajax({
-                                        url: "/api/serviceMakeups/services",
-                                        type: "GET",
-                                        success: function(data) {
-                                            const serviceSelect = $("#optionsMakeup");
-
-                                            // Duyệt qua mỗi dịch vụ và thêm vào <select>
-                                            $.each(data, function(index, service) {
-                                                const option = $("<option>")
-                                                   .val(service.id)
-                                                   .text(service.nameService+" - "+service.time+"h")
-                                                   .data('time', parseInt(service.time, 10)); // Đảm bảo chuyển đổi thành số nguyên
-
-                                                serviceSelect.append(option);
-                                            });
-                                        },
-                                        error: function(xhr, status, error) {
-                                            console.error("Error fetching services:", error);
-                                        }
-                                    });
+                                $(document).ready(function () {
+                                   $.ajax({
+                                      url: "/api/serviceMakeups/services",
+                                      type: "GET",
+                                      success: function (data) {
+                                         const serviceSelect = $("#optionsMakeup");
+                                         // Duyệt qua mỗi dịch vụ và thêm vào <select>
+                                         $.each(data, function (index, service) {
+                                            const option = $("<option>")
+                                               .val(service.id)
+                                               .text(service.nameService + " - " + service.time + "h")
+                                               .data('time', parseInt(service.time, 10)); // Đảm bảo chuyển đổi thành số nguyên
+                                            serviceSelect.append(option);
+                                         });
+                                      },
+                                      error: function (xhr, status, error) {
+                                         console.error("Error fetching services:", error);
+                                      }
+                                   });
                                 });
                             </script>
                         </div>
@@ -218,7 +220,7 @@
                     <div class="row">
                         <div class="col-md-7 padd_bottom">
                             <div class="heading3">
-                                <a href="#"><img src="images/logo.png" alt="#" style="width: 80px;"/></a>
+                                <a href="#"><img src="/images/logo.png" alt="#" style="width: 80px;"/></a>
                                 <p>Chào mừng bạn đến với trang web của chúng tôi. Chúng tôi chuyên cung cấp các dịch vụ và sản phẩm làm đẹp, đặc biệt là trang điểm cho các sự kiện như đám cưới, tiệc, và các dịp đặc biệt khác. Liên hệ với chúng tôi để biết thêm thông tin chi tiết.</p>
                             </div>
                         </div>
@@ -291,6 +293,22 @@
             });
           });
         });
+    </script>
+
+    <script>
+        function initMap() {
+          var map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 11,
+            center: {lat: 40.645037, lng: -73.880224},
+            });
+
+        var image = 'images/maps-and-flags.png';
+        var beachMarker = new google.maps.Marker({
+            position: {lat: 40.645037, lng: -73.880224},
+            map: map,
+            icon: image
+          });
+        }
     </script>
 
     <div th:replace="~{:: js}"></div>

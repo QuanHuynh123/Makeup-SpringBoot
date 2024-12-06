@@ -1,4 +1,15 @@
 /*top header*/
+a {
+    text-decoration: none; /* Bỏ gạch chân */
+    color: inherit; /* Kế thừa màu từ phần tử cha */
+    cursor: pointer; /* Hiển thị con trỏ mặc định */
+}
+
+li {
+    list-style: none; /* Loại bỏ dấu chấm, số hoặc hình ảnh đầu dòng */
+    cursor: pointer;
+}
+
 #header{
     position: fixed;
     z-index: 2;
@@ -20,6 +31,10 @@
     gap: 15px; /* Khoảng cách giữa các mục */
   }
 
+  .header-right{
+    position: relative;
+  }
+
   .header-link {
     text-decoration: none; /* Xóa gạch chân */
     color: white;
@@ -30,6 +45,51 @@
   .header-link:hover {
     color: #ff9900; /* Màu khi hover */
   }
+
+  .account{
+    position: relative;
+  }
+
+ .profile_menu {
+     position: absolute;
+     width: 200px;
+     border-top: 5px solid rgba(0, 0, 0, 0.90);
+     background: rgba(255, 255, 255, 0.95);
+     box-shadow: 0 0 10px rgba(0, 0, 0, 0.7);
+     z-index: 1000;
+     color: #000000;
+     font-size: 17px;
+     font-family: Roboto;
+     line-height: 40px;
+     top: 43px;
+     left: 0;
+     display: none;  /* Ẩn menu */
+ }
+
+  .profile_menu li {
+      width: 100%;
+  }
+
+  .profile_menu li a {
+      padding: 5px;
+      display: block; /* Đảm bảo link chiếm toàn bộ chiều rộng */
+      color: black; /* Màu chữ cho link */
+      text-decoration: none;
+      font-size: 18px;
+  }
+
+  .profile_menu li:hover {
+      background: rgba(0, 0, 0, 0.50);
+      color: #FFFAFA;
+  }
+
+  .icon_function {
+      font-size: 30px;
+  }
+
+.account.active + .profile_menu {
+    display: block; /* Hiển thị menu khi lớp active được thêm vào */
+}
 
 /* end-top-header*/
 
@@ -298,11 +358,13 @@
     text-align: center;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease;
+    max-height : 340px;
+    margin : 10px;
 }
 
 .product-image img {
     width: 100%;
-    height: auto;
+    height: 230px;
     display: block;
     margin-bottom: 10px;
 }
@@ -312,6 +374,9 @@
     font-weight: bold;
     color: #333;
     margin: 5px 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-height: 230px;
 }
 
 .product-info .product-price {

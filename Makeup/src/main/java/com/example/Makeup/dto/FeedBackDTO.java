@@ -16,5 +16,6 @@ public class FeedBackDTO {
     String comment;
     Date reviewDate;
     int userId; // ID của người dùng
+    String nameUser;
     int serviceMakeupId; // ID của dịch vụ makeup
 }

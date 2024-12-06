@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class MakeupController {
 
-    @GetMapping("/makeup")
+    @RequestMapping("/makeup")
     public String home(){
         return "user/makeup";
     }

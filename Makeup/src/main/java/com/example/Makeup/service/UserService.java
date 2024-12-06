@@ -36,8 +36,13 @@ public class UserService {
     }
 
     public UserDTO getInforUser(String phone){
+        System.out.println(phone);
         User user =  userRepository.findByPhone(phone);
         return userMapper.toUserDTO(user);
+    }
+
+    public User getUserById(int userId){
+       return  userRepository.findById(userId).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
     }
 
     @Transactional

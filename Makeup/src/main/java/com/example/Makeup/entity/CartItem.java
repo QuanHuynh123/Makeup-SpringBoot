@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import java.util.List;
+import java.sql.Date;
 
 @Entity
 @NoArgsConstructor
@@ -28,6 +28,9 @@ public class CartItem {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cart_id", nullable = false)
     Cart cart;
+
+    @Column(name = "use_date", nullable = false)
+    Date useDate; // Ngày sử dụng
 
     @OneToOne(fetch  = FetchType.LAZY)
     @JoinColumn(name = "product_id", nullable = false)

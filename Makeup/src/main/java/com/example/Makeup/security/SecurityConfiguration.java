@@ -26,36 +26,41 @@ public class SecurityConfiguration {
     private AccountService accountService;
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
-
-        httpSecurity
+        return httpSecurity
         .csrf(AbstractHttpConfigurer::disable)
-        .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/adminT/**").hasRole("ADMIN")
-                .requestMatchers("/userT/**").hasRole("USER")
-                .requestMatchers("/error").permitAll()
-
-                .anyRequest().permitAll()
-        )
+        .authorizeHttpRequests(registry -> {
+            registry.requestMatchers("/home",
+                            "/cosplay",
+                            "/productDetail",
+                            "/makeup",
+                            "/register/**",
+                            "/static/**",
+                            "/js/**",
+                            "/css/**",
+                            "/icon/**",
+                            "/images/**",
+                            "/fonts/**")
+                    .permitAll();
+            registry.requestMatchers("/adm/**").hasRole("ADMIN");
+            registry.requestMatchers("/use/**").hasRole("USER");
+            registry.anyRequest().permitAll();
+        })
         .formLogin(form -> form
                 .loginPage("/login")
+                .successHandler(new AuthenticationSuccessHandler())
+                .permitAll()
         )
         .logout(logout -> logout
                 .logoutUrl("/logout")
                 .permitAll()
         )
-        .sessionManagement(session -> session
-                .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED) // Tạo session nếu cần
-//                .maximumSessions(1) // Giới hạn số phiên đăng nhập cùng lúc
-//                .expiredUrl("/login?expired=true") // URL khi phiên hết hạn
-        )
-        .anonymous(AbstractHttpConfigurer::disable);
-        return httpSecurity.build();
+        .build();
     }
 
-    @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
-        return authenticationConfiguration.getAuthenticationManager();
-    }
+//    @Bean
+//    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+//        return authenticationConfiguration.getAuthenticationManager();
+//    }
 
 
     @Bean
