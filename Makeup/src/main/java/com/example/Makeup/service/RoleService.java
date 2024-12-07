@@ -16,4 +16,13 @@ public class RoleService {
     public Optional<Role> getRole(Integer id){
         return roleRepository.findById(id);
     }
+
+    public Role getRoleById(int roleId) {
+        Optional<Role> role = roleRepository.findById(roleId);
+        if (role.isPresent()) {
+            return role.get();
+        } else {
+            throw new RuntimeException("Role not found for id: " + roleId);
+        }
+    }
 }

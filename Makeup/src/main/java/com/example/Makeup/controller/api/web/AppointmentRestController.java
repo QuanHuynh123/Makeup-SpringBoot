@@ -1,6 +1,8 @@
 package com.example.Makeup.controller.api.web;
 
+import com.example.Makeup.dto.ApiResponse;
 import com.example.Makeup.dto.AppointmentDTO;
+import com.example.Makeup.dto.AppointmentDetailDTO;
 import com.example.Makeup.dto.WeekAppointmentsDTO;
 import com.example.Makeup.service.AppointmentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,12 +23,20 @@ public class AppointmentRestController {
     @GetMapping("/by-month")
     public List<WeekAppointmentsDTO> getAppointmentsByMonth(
             @RequestParam int month,
-            @RequestParam int year) {
-        return appointmentService.getAppointmentsByMonth(month, year);
+            @RequestParam int year,
+            @RequestParam(required = false) Integer staffID) {
+        return appointmentService.getAppointmentsByMonth(month, year, staffID);
     }
+
+//    @GetMapping
+//    public List<AppointmentDTO> getAllAppointments() {
+//        return appointmentService.getAllAppointments();
+//    }
+
     @GetMapping
-    public List<AppointmentDTO> getAllAppointments() {
-        return appointmentService.getAllAppointments();
+    public ResponseEntity<List<AppointmentDetailDTO>> getAllAppointments() {
+        List<AppointmentDetailDTO> appointments = appointmentService.getAllAppointmentsDetail();
+        return ResponseEntity.ok(appointments);
     }
 
     // Lấy cuộc hẹn theo ID
@@ -34,6 +44,17 @@ public class AppointmentRestController {
     public AppointmentDTO getAppointmentById(@PathVariable int id) {
         return appointmentService.getAppointmentById(id);
     }
+
+    @GetMapping("/appointmentDetail/{id}")
+    public ResponseEntity<AppointmentDetailDTO> getAppointmentDetailById(@PathVariable int id) {
+        AppointmentDetailDTO appointment = appointmentService.getAppointmentDetailById(id);
+        if (appointment != null) {
+            return ResponseEntity.ok(appointment);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+    }
+
 
     // Thêm mới một cuộc hẹn
     @PostMapping
@@ -43,9 +64,23 @@ public class AppointmentRestController {
 
     // Cập nhật một cuộc hẹn
     @PutMapping("/{id}")
-    public AppointmentDTO updateAppointment(@PathVariable int id, @RequestBody AppointmentDTO appointmentDTO) {
-        return appointmentService.updateAppointment(id, appointmentDTO);
+    public ResponseEntity<ApiResponse<AppointmentDTO>> updateAppointment(
+            @PathVariable int id,
+            @RequestBody AppointmentDTO appointmentDTO) {
+        try {
+            // Gọi hàm update từ Service và trả về phản hồi thành công
+            ApiResponse<AppointmentDTO> response = appointmentService.updateAppointment(id, appointmentDTO);
+            return ResponseEntity.ok(response);
+        } catch (RuntimeException e) {
+            // Trả về thông báo lỗi
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(ApiResponse.<AppointmentDTO>builder()
+                            .code(400)
+                            .message("Có lỗi xảy ra: " + e.getMessage())
+                            .build());
+        }
     }
+
 
     // Xóa một cuộc hẹn
     @DeleteMapping("/{id}")
@@ -60,7 +95,7 @@ public class AppointmentRestController {
             return ResponseEntity.ok(savedAppointment);
         } catch (RuntimeException e) {
             // Trả về thông báo lỗi dưới dạng chuỗi
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
 }

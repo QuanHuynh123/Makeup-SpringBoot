@@ -419,7 +419,7 @@
 
 .admin-content {
     display: flex;
-    height: 100vh;
+    height: calc(100vh - 58px);
     position: relative;
     margin-top: 58px;
     position: relative;
@@ -440,7 +440,7 @@
 .admin-content .admin-main {
     flex: 1;
     margin-left: 0;
-    height: 100vh;
+    height: calc(100vh - 58px);
     margin-bottom: 50px;
     width: calc(100vw - 240px);
     transition: margin-left 0.3s ease-in-out;

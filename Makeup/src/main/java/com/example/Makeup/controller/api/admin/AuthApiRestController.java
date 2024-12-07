@@ -55,6 +55,7 @@ public class AuthApiRestController {
         account.setRoleId(2);
         Account accountEntity =  accountService.save(account);
         userService.createInforUser(account,accountEntity);
+        cartService.createCart(accountEntity.getId());
         return ResponseEntity.ok("Create Success!");
     }
 

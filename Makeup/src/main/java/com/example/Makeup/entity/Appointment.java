@@ -43,4 +43,9 @@ public class Appointment {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "staff_id")
     Staff staff; // Liên kết với nhân viên
+
+    public boolean getStatus() {
+        return status;
+    }
+
 }

@@ -14,4 +14,5 @@ public class StaffDTO {
     int id;
     String nameStaff;
     String phone;
+    String accountId;
 }
