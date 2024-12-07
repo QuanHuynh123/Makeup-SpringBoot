@@ -39,7 +39,16 @@ public class Order {
     @Column(name = "pickupDate") // Cột ngày lấy
     Date pickupDate; // Ngày lấy do nhân viên chỉ định
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "payment_id", nullable = false)
     Payment payment;
+
+    public Order(double totalPrice, int totalQuantity, Date orderDate, boolean status, User user, Payment payment) {
+        this.totalPrice = totalPrice;
+        this.totalQuantity = totalQuantity;
+        this.orderDate = orderDate;
+        this.status = status;
+        this.user = user;
+        this.payment = payment;
+    }
 }

@@ -25,12 +25,12 @@ public class AccountRestController {
      * Lấy tất cả tài khoản
      */
     @GetMapping
-    public ResponseEntity<List<Account>> getAllAccounts() {
+    public ResponseEntity<List<AccountDTO>> getAllAccounts() {
         List<Account> accounts = accountService.findAll();
-//        List<AccountDTO> accountDTOs = accounts.stream()
-//                .map(accountMapper::toDTO)
-//                .toList();
-        return ResponseEntity.ok(accounts);
+        List<AccountDTO> accountDTOs = accounts.stream()
+                .map(accountMapper::toDTO)
+                .toList();
+        return ResponseEntity.ok(accountDTOs);
     }
 
     /**

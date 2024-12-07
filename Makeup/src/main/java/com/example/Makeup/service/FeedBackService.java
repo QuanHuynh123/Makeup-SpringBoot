@@ -29,8 +29,8 @@ public class FeedBackService {
 
     public List<FeedBackDTO> getGoodFeedback(int minRating){
         List<FeedBack> feedBacks =  feedBackRepository.findByRatingGreaterThanEqual(minRating);
-        if (feedBacks.isEmpty())
-            throw  new AppException(ErrorCode.CANT_FOUND);
+//        if (feedBacks.isEmpty())
+//            throw  new AppException(ErrorCode.CANT_FOUND);
 
         return feedBacks.stream()
                 .map(feedbackMapper::toFeedBackDTO)

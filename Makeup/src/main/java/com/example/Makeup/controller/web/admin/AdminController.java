@@ -1,21 +1,26 @@
 package com.example.Makeup.controller.web.admin;
 
+import com.example.Makeup.dto.AppointmentDetailDTO;
 import com.example.Makeup.dto.StaffDTO;
+import com.example.Makeup.dto.StaffDetailDTO;
 import com.example.Makeup.repository.AppointmentRepository;
 import com.example.Makeup.repository.OrderRepository;
+import com.example.Makeup.service.AppointmentService;
 import com.example.Makeup.service.StaffService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Controller
-@RequestMapping("/admin")
 public class AdminController {
     @Autowired
     private AppointmentRepository appointmentRepository;
@@ -23,24 +28,45 @@ public class AdminController {
     private StaffService staffService;
 
     @Autowired
+    private AppointmentService appointmentService;
+
+    @Autowired
     private OrderRepository orderRepository;
 
-    @GetMapping("/home")
-    public String adminHome() {
-        return "admin";
+    @GetMapping("/test")
+    public String loginPage(Model model) {
+        List<StaffDetailDTO> staffList = staffService.getAllStaffDetail();
+        model.addAttribute("staffList", staffList); // Truyền danh sách nhân viên vào model
+        return "admin/staff-all";
     }
 
-    @GetMapping("/test")
-    public String staffPage(Model model) { // Thêm tham số Model
+    @GetMapping("/test2")
+    public String loginPage2() {
+        return "admin/admin";
+    }
+
+    @GetMapping("/test3")
+    public String loginPage2(Model model) {
         List<StaffDTO> staffList = staffService.getAllStaff();
         model.addAttribute("staffList", staffList); // Truyền danh sách nhân viên vào model
-        return "customer-all"; // Tên của file Thymeleaf (customer-all.html)
+        return "admin/staff-all";
     }
 
-    @GetMapping("/dashboard")
-    public String loginPage3() {
-        return "dashboard";
+    @GetMapping("/test4")
+    public String loginPage3(Model model) {
+        List<StaffDTO> staffList = staffService.getAllStaff();
+        model.addAttribute("staffList", staffList); // Truyền danh sách nhân viên vào model
+        return "admin/account-all";
     }
+
+    @GetMapping("/test5")
+    public String loginPage4(Model model) {
+        List<AppointmentDetailDTO> appointmentList = appointmentService.getAllAppointmentsDetail();
+//        appointmentList.forEach(appointment -> System.out.println("Appointment: " + appointment));
+        model.addAttribute("appointmentList", appointmentList); // Truyền vào model
+        return "admin/appointment-all";
+    }
+
 
     @GetMapping("/appointments/stats/{year}")
     public ResponseEntity<Map<Integer, Long>> getAppointmentStats(@PathVariable int year) {

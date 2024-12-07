@@ -96,4 +96,9 @@ public class AccountService implements UserDetailsService {
             throw new AppException(ErrorCode.CANT_FOUND);
         }
     }
+
+    public boolean isUsernameExists(String username) {
+        Optional<Account> account = accountRepository.findByUserNameIgnoreCase(username);
+        return account.isPresent();
+    }
 }

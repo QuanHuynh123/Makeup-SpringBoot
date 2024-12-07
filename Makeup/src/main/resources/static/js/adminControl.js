@@ -267,34 +267,34 @@ document.addEventListener("DOMContentLoaded", () => {
         main?.classList.toggle("showSidebar");
     }
 
-  // Biến trạng thái lưu kích thước màn hình hiện tại
-  let isSmallScreen = window.matchMedia("(max-width: 992px)").matches;
+    // Biến trạng thái lưu kích thước màn hình hiện tại
+    let isSmallScreen = window.matchMedia("(max-width: 992px)").matches;
 
-  // Hàm xử lý thay đổi kích thước
-  function handleResize() {
-      const mediaQuery = window.matchMedia("(max-width: 992px)");
-      const currentlySmallScreen = mediaQuery.matches;
+    // Hàm xử lý thay đổi kích thước
+    function handleResize() {
+        const mediaQuery = window.matchMedia("(max-width: 992px)");
+        const currentlySmallScreen = mediaQuery.matches;
 
-      // Chỉ thực hiện khi trạng thái thay đổi
-      if (currentlySmallScreen !== isSmallScreen) {
-          isSmallScreen = currentlySmallScreen; // Cập nhật trạng thái
+        // Chỉ thực hiện khi trạng thái thay đổi
+        if (currentlySmallScreen !== isSmallScreen) {
+            isSmallScreen = currentlySmallScreen; // Cập nhật trạng thái
 
-          // Xóa hoặc thêm class dựa trên kích thước màn hình
-          if (isSmallScreen) {
-              sidebar?.classList.remove("showSidebar");
-              main?.classList.remove("showSidebar");
-          } else {
-              sidebar?.classList.add("showSidebar");
-              main?.classList.add("showSidebar");
-          }
-      }
-  }
+            // Xóa hoặc thêm class dựa trên kích thước màn hình
+            if (isSmallScreen) {
+                sidebar?.classList.remove("showSidebar");
+                main?.classList.remove("showSidebar");
+            } else {
+                sidebar?.classList.add("showSidebar");
+                main?.classList.add("showSidebar");
+            }
+        }
+    }
 
-  // Lắng nghe sự kiện resize
-  window.addEventListener("resize", handleResize);
+    // Lắng nghe sự kiện resize
+    window.addEventListener("resize", handleResize);
 
-  // Kiểm tra kích thước ngay khi tải trang
-  handleResize();
+    // Kiểm tra kích thước ngay khi tải trang
+    handleResize();
 
     // Gắn sự kiện click vào nút toggle
     toggleButton.addEventListener("click", toggleSidebar);
@@ -485,6 +485,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const dashboard = document.getElementById('dashboard');
         const schedule = document.getElementById('schedule');
         const staff = document.getElementById('staff');
+        const appointment = document.getElementById('appointment');
         const product = document.getElementById('product');
         const createProduct = document.getElementById('create-product');
         const editProduct = document.getElementById('edit-product');
@@ -493,6 +494,7 @@ document.addEventListener("DOMContentLoaded", () => {
         dashboard.classList.add('d-none');
         schedule.classList.add('d-none');
         staff.classList.add('d-none');
+        appointment.classList.add('d-none');
         product.classList.add('d-none');
         createProduct.classList.add('d-none');
         editProduct.classList.add('d-none');
@@ -505,6 +507,8 @@ document.addEventListener("DOMContentLoaded", () => {
             staff.classList.remove('d-none');
         } else if (tabId === 'product') {
             product.classList.remove('d-none');
+        } else if (tabId === 'appointment') {
+            appointment.classList.remove('d-none');
         }
     }
 
@@ -512,30 +516,40 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById('tab-schedule').addEventListener('click', function () {
         // Chuyển tab và tải nội dung
         toggleTabContent('schedule');
-        loadAppointment(11, 2024);
+        loadStaffSelectAppointment();
+        loadAppointment(12, 2024, document.getElementById("staffSelect").value);
     });
 
     document.getElementById('tab-dashboard').addEventListener('click', function () {
-        // Chuyển tab và tải nội dung
         toggleTabContent('dashboard');
     });
+
     document.getElementById('tab-staff').addEventListener('click', function () {
-        // Chuyển tab và tải nội dung
         toggleTabContent('staff');
-        // Load nội dung của file header.html vào div có id "header"
         fetch('/test')
             .then(response => response.text())
             .then(data => {
                 document.getElementById('staff').innerHTML = data;
-                loadCustomers();
+                loadStaffs();
+            })
+            .catch(error => console.error('Error loading HTML:', error));
+    });
+
+    document.getElementById('tab-appointment').addEventListener('click', function () {
+        toggleTabContent('appointment');
+        fetch('/test5')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('appointment').innerHTML = data;
+                loadAppointmentsDetail();
+                loadMakeUpServices();
+                loadStaffSelect();
             })
             .catch(error => console.error('Error loading HTML:', error));
     });
 
     document.getElementById('tab-product').addEventListener('click', function () {
-        // Chuyển tab và tải nội dung
         toggleTabContent('product');
-        // Load nội dung của file header.html vào div có id "header"
         fetch('/admin/products')
             .then(response => response.text())
             .then(data => {
@@ -543,5 +557,10 @@ document.addEventListener("DOMContentLoaded", () => {
             })
             .catch(error => console.error('Error loading HTML:', error));
     });
+
+    ///////////////////////Appointment tab///////////////////////////
+
+
+    /////////////////////////////////////////////////////////////////////////////////////
 
 });
