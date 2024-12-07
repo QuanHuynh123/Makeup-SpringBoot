@@ -37,7 +37,7 @@ public class UserService {
 
     public UserDTO getInforUser(String phone){
         System.out.println(phone);
-        User user =  userRepository.findByPhone(phone);
+        User user =  userRepository.findByPhoneAndAccountNotNull(phone);
         return userMapper.toUserDTO(user);
     }
 
@@ -51,7 +51,7 @@ public class UserService {
 
     @Transactional
     public UserDTO updateInforUser(String phone , String name , String email , String address  ) {
-        User user = userRepository.findByPhone(phone);
+        User user = userRepository.findByPhoneAndAccountNotNull(phone);
         if (user == null) {
             throw new AppException(ErrorCode.USER_NOT_FOUND);
         }

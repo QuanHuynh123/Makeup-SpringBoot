@@ -257,10 +257,6 @@ public class AppointmentService {
                 .build();
     }
 
-
-
-
-
     // Xóa một cuộc hẹn
     public void deleteAppointment(int id) {
         if (!appointmentRepository.existsById(id)) {

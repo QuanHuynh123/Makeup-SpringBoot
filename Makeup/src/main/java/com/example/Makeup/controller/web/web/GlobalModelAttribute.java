@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
+import javax.swing.plaf.PanelUI;
 import java.util.List;
 
 @ControllerAdvice
@@ -35,36 +36,46 @@ public class GlobalModelAttribute {
     public void addSessionUser(Model model, HttpSession session){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && !authentication.getName().equals("anonymousUser")) {
+            boolean isAdmin = authentication.getAuthorities().stream()
+                    .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ROLE_ADMIN"));
+            if(!isAdmin){
+                UserDTO userDTO = userService.getInforUser(authentication.getName());
+                session.setAttribute("user", userDTO);
+                model.addAttribute("user", userDTO);
 
-            UserDTO userDTO = userService.getInforUser(authentication.getName());
+                addCartAndMiniCart(model, session , userDTO.getId());
+                addCategoryHeaderCosplay(model);
+                addFeedGoodFeedBack(model);
 
-            session.setAttribute("user", userDTO);
-            model.addAttribute("user", userDTO);
-
-            CartDTO cart = cartService.getCart(userDTO.getId());
-            List<CartItemDTO> cartItemDTOS = cartItemService.getCartItemByCartId(cart.getId());
-            session.setAttribute("cartId",cart.getId());
-
-            int count = cartService.countCartItem(cart.getId());
-
-            if (cartItemDTOS.isEmpty())
-                model.addAttribute("error","Bạn chưa thêm sản phẩm nào vào giỏ hàng!");
-            model.addAttribute("cartItems", cartItemDTOS);
-            model.addAttribute("cart", cart);
-            model.addAttribute("countCart",count);
-
-        }else {
-            System.out.println("Chua login");
+            }
+            else
+                System.out.println("Welcome Admin!");
         }
+        else
+            System.out.println("Welcome Anonymous");
     }
 
-    @ModelAttribute
-    public void addHeader(Model model ){
+
+    public void addCartAndMiniCart(Model model, HttpSession session,  int userId){
+
+        CartDTO cart = cartService.getCart(userId);
+        List<CartItemDTO> cartItemDTOS = cartItemService.getCartItemByCartId(cart.getId());
+        session.setAttribute("cartId",cart.getId());
+
+        int count = cartService.countCartItem(cart.getId());
+
+        if (cartItemDTOS.isEmpty())
+            model.addAttribute("error","Bạn chưa thêm sản phẩm nào vào giỏ hàng!");
+        model.addAttribute("cartItems", cartItemDTOS);
+        model.addAttribute("cart", cart);
+        model.addAttribute("countCart",count);
+    }
+
+    public void addCategoryHeaderCosplay(Model model ){
         List<CategoryDTO> categories = categoryService.getAllCategory();
         model.addAttribute("category",categories);
     }
 
-    @ModelAttribute
     public void addFeedGoodFeedBack(Model model){
         List<FeedBackDTO> feedBackDTOS = feedBackService.getGoodFeedback(4);
         if(feedBackDTOS.isEmpty())
