@@ -43,4 +43,9 @@ public class CartController {
             return "error";
         }
     }
+
+    @GetMapping("/checkOut")
+    public String checkOut(Model model) {
+        return "user/checkOut";
+    }
 }

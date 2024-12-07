@@ -1,10 +1,18 @@
 package com.example.Makeup.service;
 
+import com.example.Makeup.dto.ApiResponse;
 import com.example.Makeup.dto.AppointmentDTO;
+import com.example.Makeup.dto.AppointmentDetailDTO;
 import com.example.Makeup.dto.WeekAppointmentsDTO;
 import com.example.Makeup.entity.Appointment;
+import com.example.Makeup.entity.ServiceMakeup;
+import com.example.Makeup.entity.Staff;
+import com.example.Makeup.entity.User;
 import com.example.Makeup.mapper.AppointmentMapper;
 import com.example.Makeup.repository.AppointmentRepository;
+import com.example.Makeup.repository.ServiceMakeupRepository;
+import com.example.Makeup.repository.StaffRepository;
+import com.example.Makeup.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,16 +25,31 @@ public class AppointmentService {
     @Autowired
     private AppointmentRepository appointmentRepository;
     @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private StaffRepository staffRepository;
+    @Autowired
+    private ServiceMakeupRepository serviceMakeupRepository;
+    @Autowired
     private AppointmentMapper appointmentMapper;
 
-    public List<WeekAppointmentsDTO> getAppointmentsByMonth(int month, int year) {
-        List<Appointment> appointments = appointmentRepository.findAppointmentsByMonth(month, year);
+    public List<WeekAppointmentsDTO> getAppointmentsByMonth(int month, int year, Integer staffID) {
+        List<Appointment> appointments;
+
+        // Kiểm tra nếu có `staffID`, gọi phương thức phù hợp trong repository
+        if (staffID != null) {
+            appointments = appointmentRepository.findAppointmentsByMonthAndStaff(month, year, staffID);
+        } else {
+            appointments = appointmentRepository.findAppointmentsByMonth(month, year);
+        }
+
         List<AppointmentDTO> appointmentDTOs = appointments.stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
 
         return groupAppointmentsByWeek(appointmentDTOs, month, year);
     }
+
 
     // Chuyển đổi từ entity Appointment sang AppointmentDTO
     private AppointmentDTO convertToDTO(Appointment appointment) {
@@ -35,7 +58,7 @@ public class AppointmentService {
                 appointment.getStartTime(),
                 appointment.getEndTime(),
                 appointment.getMakeupDate(),
-                appointment.isStatus(),
+                appointment.getStatus(),
                 appointment.getUser().getId(),
                 appointment.getServiceMakeup().getId(),
                 appointment.getStaff().getId()
@@ -160,6 +183,9 @@ public class AppointmentService {
                 .map(appointmentMapper::toAppointmentDTO)
                 .collect(Collectors.toList());
     }
+    public List<Appointment> getAllAppointmentsEntity() {
+        return appointmentRepository.findAll();
+    }
     // Lấy cuộc hẹn theo ID
     public AppointmentDTO getAppointmentById(int id) {
         Optional<Appointment> appointment = appointmentRepository.findById(id);
@@ -175,19 +201,64 @@ public class AppointmentService {
     }
 
     // Cập nhật một cuộc hẹn
-    public AppointmentDTO updateAppointment(int id, AppointmentDTO appointmentDTO) {
+    public ApiResponse<AppointmentDTO> updateAppointment(int id, AppointmentDTO appointmentDTO) {
         Appointment appointment = appointmentRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Appointment not found with ID: " + id));
+
+        AppointmentDTO asd = appointmentMapper.toAppointmentDTO(appointment);
+
+        // Kiểm tra xem status có thay đổi từ 0 thành 1 không
+        boolean isStatusChangedToActive = asd.isStatus() == false && appointmentDTO.isStatus() == true;
+
+        // Nếu status thay đổi từ 0 thành 1, kiểm tra có bị trùng lịch với nhân viên không
+        if (isStatusChangedToActive) {
+            List<Appointment> conflictingAppointments = appointmentRepository.findConflictingAppointments(
+                    appointmentDTO.getStaffId(),
+                    appointmentDTO.getMakeupDate(),
+                    appointmentDTO.getStartTime(),
+                    appointmentDTO.getEndTime()
+            );
+
+            // Nếu có cuộc hẹn xung đột
+            if (!conflictingAppointments.isEmpty()) {
+                throw new RuntimeException("Có cuộc hẹn xung đột với nhân viên vào cùng thời gian này!");
+            }
+        }
+
+        // Cập nhật các thuộc tính từ appointmentDTO
         appointment.setStartTime(appointmentDTO.getStartTime());
         appointment.setEndTime(appointmentDTO.getEndTime());
         appointment.setMakeupDate(appointmentDTO.getMakeupDate());
         appointment.setStatus(appointmentDTO.isStatus());
-        appointment.setUser(null); // Cần lấy đối tượng User từ database nếu cần thiết
-        appointment.setServiceMakeup(null); // Cần lấy đối tượng ServiceMakeup từ database nếu cần thiết
-        appointment.setStaff(null); // Cần lấy đối tượng Staff từ database nếu cần thiết
+
+        User user = userRepository.findById(appointmentDTO.getUserId())
+                .orElseThrow(() -> new RuntimeException("User not found with ID: " + appointmentDTO.getUserId()));
+        appointment.setUser(user);
+
+        ServiceMakeup serviceMakeup = serviceMakeupRepository.findById(appointmentDTO.getServiceMakeupId())
+                .orElseThrow(() -> new RuntimeException("Service Makeup not found with ID: " + appointmentDTO.getServiceMakeupId()));
+        appointment.setServiceMakeup(serviceMakeup);
+
+        Staff staff = staffRepository.findById(appointmentDTO.getStaffId())
+                .orElseThrow(() -> new RuntimeException("Staff not found with ID: " + appointmentDTO.getStaffId()));
+        appointment.setStaff(staff);
+
+        // Lưu cuộc hẹn đã cập nhật
         Appointment updatedAppointment = appointmentRepository.save(appointment);
-        return appointmentMapper.toAppointmentDTO(updatedAppointment);
+
+        // Chuyển đổi sang DTO
+        AppointmentDTO updatedAppointmentDTO = appointmentMapper.toAppointmentDTO(updatedAppointment);
+
+        // Trả về phản hồi thành công
+        return ApiResponse.<AppointmentDTO>builder()
+                .code(200)  // Mã phản hồi HTTP cho thành công
+                .message("Cập nhật cuộc hẹn thành công!")
+                .result(updatedAppointmentDTO)
+                .build();
     }
+
+
+
 
 
     // Xóa một cuộc hẹn
@@ -216,5 +287,13 @@ public class AppointmentService {
         Appointment savedAppointment = appointmentRepository.save(appointment);
         return appointmentMapper.toAppointmentDTO(savedAppointment);
     }
+
+    public List<AppointmentDetailDTO> getAllAppointmentsDetail() {
+        return appointmentRepository.findAllAppointmentsWithDetails();
+    }
+    public AppointmentDetailDTO getAppointmentDetailById(int id) {
+        return appointmentRepository.findAppointmentWithDetailsById(id);
+    }
+
 
 }

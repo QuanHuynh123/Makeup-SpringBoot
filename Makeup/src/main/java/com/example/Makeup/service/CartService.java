@@ -40,11 +40,11 @@ public class CartService {
         return cartMapper.toCartDTO(cart);
     }
 
-    public  void createCart(int userId){
+    public  void createCart(int accountId){
         LocalDate localDate = LocalDate.now();
 
         Date sqlDate = Date.valueOf(localDate);
-        User user = userService.getUserById(userId);
+        User user = userService.findUserByAccountId(accountId);
         Cart cart = new Cart( 0,0,sqlDate, user);
         cartRepository.save(cart);
     }
@@ -55,13 +55,12 @@ public class CartService {
         int quantityCart = 0;
         double totalPrice = 0 ;
         List<CartItem> cartItemList = cartItemRepository.findAllByCartId(cartId);
-        if (cartItemList.isEmpty())
-            throw  new AppException(ErrorCode.CANT_FOUND);
-        else
-            for (CartItem cartItem : cartItemList){
-                quantityCart+=1;
+        if (!cartItemList.isEmpty()) {
+            for (CartItem cartItem : cartItemList) {
+                quantityCart += 1;
                 totalPrice += cartItem.getPrice();
             }
+        }
         cart.setTotalPrice(totalPrice);
         cart.setTotalQuantity(quantityCart);
         cartRepository.save(cart);

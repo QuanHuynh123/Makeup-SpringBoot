@@ -62,7 +62,7 @@
                 </div>
                 <div class="col-xl-1 col-lg-1 col-md-2 col-sm-2 col profile_container">
                     <i class="fa-solid fa-user icon_function" id="profile-icon" style="cursor: pointer;">
-                        <th:block th:if="${user == null }">
+                        <th:block th:if="${user == null or #strings.isEmpty(user)}">
                             <ul class="profile_menu">
                                 <li><a href="/login">Đăng nhập</a></li>
                             </ul>
@@ -70,13 +70,14 @@
 
                         <th:block th:if="${user != null}">
                             <ul class="profile_menu">
-                                <li><a href="/profile">Thông tin  </a></li>
+                                <li><a href="/profile">Thông tin</a></li>
                                 <li><a href="/myOder">Đơn hàng của tôi</a></li>
                                 <li><a href="/cart/home">Giỏ hàng</a></li>
                                 <li><a href="/logout">Đăng xuất</a></li>
                             </ul>
                         </th:block>
                     </i>
+
                 </div>
 
             </div>
@@ -105,14 +106,27 @@
                 <form id="request" class="main_form">
                     <div class="row">
                         <div class="col-md-12">
-                            <input class="contactus" placeholder="Name" type="text" name="Name">
+                            <input class="contactus"
+                                   placeholder="Name"
+                                   type="text"
+                                   name="Name"
+                                   th:value="${user != null ? user.fullName : ''}">
                         </div>
                         <div class="col-md-12">
-                            <input class="contactus" placeholder="Email" type="email" name="Email">
+                            <input class="contactus"
+                                   placeholder="Email"
+                                   type="email"
+                                   name="Email"
+                                   th:value="${user != null ? user.email : ''}">
                         </div>
                         <div class="col-md-12">
-                            <input class="contactus" placeholder="Phone Number" type="tel" name="PhoneNumber">
+                            <input class="contactus"
+                                   placeholder="Phone Number"
+                                   type="tel"
+                                   name="PhoneNumber"
+                                   th:value="${user != null ? user.phone : ''}">
                         </div>
+
                         <div class="col-md-12">
                             <textarea class="textarea" placeholder="Message" name="Message"></textarea>
                         </div>
@@ -195,7 +209,15 @@
 
             </div>
             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
-                <div id="map" style="height: 432px; width: 100%;"></div>
+                <div class="map-responsive">
+                    <iframe src="https://www.google.com/maps/embed/v1/place?key=AIzaSyA0s1a7phLN0iaD6-UE7m4qP-z21pH0eSc&q=Truong+Dai+hoc+Sai+Gon+273+An+Duong+Vuong+Phuong+3+Quan+5+Ho+Chi+Minh+700000"
+                            width="600"
+                            height="432"
+                            frameborder="0"
+                            style="border:0; width: 100%;"
+                            allowfullscreen>
+                    </iframe>
+                </div>
             </div>
         </div>
     </div>
@@ -281,7 +303,7 @@
     </div>
 </footer>
 <!-- end footer -->
-    <script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA8eaHt9Dh5H57Zh0xVTqxVdBFCvFMqFjQ&callback=initMap"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA8eaHt9Dh5H57Zh0xVTqxVdBFCvFMqFjQ&callback=initMap"></script>
     <script>
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
           anchor.addEventListener('click', function (e) {
@@ -294,23 +316,6 @@
           });
         });
     </script>
-
-    <script>
-        function initMap() {
-          var map = new google.maps.Map(document.getElementById('map'), {
-            zoom: 11,
-            center: {lat: 40.645037, lng: -73.880224},
-            });
-
-        var image = 'images/maps-and-flags.png';
-        var beachMarker = new google.maps.Marker({
-            position: {lat: 40.645037, lng: -73.880224},
-            map: map,
-            icon: image
-          });
-        }
-    </script>
-
     <div th:replace="~{:: js}"></div>
 
 </body>

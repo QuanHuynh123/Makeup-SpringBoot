@@ -92,7 +92,7 @@
                 </div>
                 <div class="mini-cart-body">
                     <div th:if="${error != null and error != ''}" id="cart-empty-msg" >
-                        <p th:text="You have no items in your shopping cart."></p>
+                        <p th:text="'You have no items in your shopping cart.'"></p>
                     </div>
                     <ul id="cart-mini-items">
                         <li th:each="item : ${cartItems}">
@@ -114,7 +114,7 @@
                 </div>
                 <div class="mini-cart-footer">
                     <a href="/cart/home"><button >View Cart</button></a>
-                    <a href="/cart/checkout"><button >Checkout</button></a>
+                    <a href="/cart/checkOut"><button >Checkout</button></a>
                 </div>
             </div>
         </div>
@@ -250,7 +250,7 @@
                                     icon: "success",
                                     title: "Xóa thành công!",
                                     showConfirmButton: false,
-                                    timer: 3000
+                                    timer: 2000
                                 }).then(() => {
                                     location.reload(); // Reload trang sau khi thông báo kết thúc
                                 });

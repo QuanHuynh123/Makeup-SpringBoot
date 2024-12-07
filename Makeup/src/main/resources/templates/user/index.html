@@ -215,37 +215,48 @@
                </div>
             </div>
          </div>
-         <div id="myCarousel" class="carousel slide customer_Carousel " data-ride="carousel">
-            <li th:each="feedback, iterStat : ${feedbacks}"
-                th:classappend="${iterStat.index == 0} ? 'active' : ''"
-                data-target="#myCarousel"
-                th:attr="data-slide-to=${iterStat.index}">
-            </li>
-            <div class="carousel-inner">
-               <div th:each="feedback, iterStat : ${feedbacks}"
-                    th:classappend="${iterStat.index == 0} ? 'active' : ''"
-                    class="carousel-item">
-                  <div class="container">
-                     <div class="carousel-caption">
-                        <div class="test_box">
-                           <i><img src="images/tes.jpg" alt="#" style="max-width: 40%; height: auto; border-radius: 20px;"/></i>
-                           <h4 th:text="${feedback.nameUser}"></h4>
-                           <span>customer</span>
-                           <p th:text="${feedback.comment}"></p>
-                           <i sclass="fa-solid fa-quote-left"></i>
+         <div id="myCarousel" class="carousel slide customer_Carousel" data-ride="carousel">
+            <!-- Kiểm tra nếu feedbacks không phải là null và có phần tử -->
+            <div th:if="${feedbacks != null and #lists.isEmpty(feedbacks) == false}">
+               <ul>
+                  <li th:each="feedback, iterStat : ${feedbacks}"
+                      th:classappend="${iterStat.index == 0} ? 'active' : ''"
+                      data-target="#myCarousel"
+                      th:attr="data-slide-to=${iterStat.index}">
+                  </li>
+               </ul>
+               <div class="carousel-inner">
+                  <div th:each="feedback, iterStat : ${feedbacks}"
+                       th:classappend="${iterStat.index == 0} ? 'active' : ''"
+                       class="carousel-item">
+                     <div class="container">
+                        <div class="carousel-caption">
+                           <div class="test_box">
+                              <i><img src="images/tes.jpg" alt="#" style="max-width: 40%; height: auto; border-radius: 20px;"/></i>
+                              <h4 th:text="${feedback.nameUser}"></h4>
+                              <span>customer</span>
+                              <p th:text="${feedback.comment}"></p>
+                              <i class="fa-solid fa-quote-left"></i>
+                           </div>
                         </div>
                      </div>
                   </div>
                </div>
-            <a class="carousel-control-prev" href="#myCarousel" role="button" data-slide="prev">
-               <i class="fa fa-chevron-left" aria-hidden="true"></i>
-            </a>
-            <a class="carousel-control-next" href="#myCarousel" role="button" data-slide="next">
-               <i class="fa fa-chevron-right" aria-hidden="true"></i>
-            </a>
+               <a class="carousel-control-prev" href="#myCarousel" role="button" data-slide="prev">
+                  <i class="fa fa-chevron-left" aria-hidden="true"></i>
+               </a>
+               <a class="carousel-control-next" href="#myCarousel" role="button" data-slide="next">
+                  <i class="fa fa-chevron-right" aria-hidden="true"></i>
+               </a>
+            </div>
+            <!-- Nếu feedbacks là null hoặc không có phần tử -->
+            <div th:if="${feedbacks == null or #lists.isEmpty(feedbacks)}">
+               <p>No feedback available.</p>
+            </div>
          </div>
       </div>
    </div>
+
    <!-- end customer -->
 </div>
 

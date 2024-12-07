@@ -109,10 +109,10 @@ ul {
 .btn_delete{
     background-color: red;
     border: none;
+    width : 50%;
 }
 
 /* End - Cart mini */
-
 
 
 /* Cart-container */

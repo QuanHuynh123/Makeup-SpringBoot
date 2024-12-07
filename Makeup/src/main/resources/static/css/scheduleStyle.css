@@ -1,3 +1,4 @@
+
 @import url("https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600");
 
 *,
@@ -3694,7 +3695,10 @@ a {
 .cd-schedule {
     position: relative;
     overflow: auto;
-    height: 400px;
+    height: 70vh;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    /* Ví dụ về hiệu ứng đổ bóng */
+
 }
 
 .cd-schedule::before {
@@ -4128,6 +4132,7 @@ a {
 
 .cd-schedule-modal__event-info {
     position: relative;
+    padding: 50px;
     z-index: 2;
     line-height: 1.4;
     line-height: var(--body-line-height);

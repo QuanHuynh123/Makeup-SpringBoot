@@ -32,40 +32,29 @@ public class GlobalModelAttribute {
     UserService userService;
 
     @ModelAttribute
-    public void addSessionUser(HttpSession session){
+    public void addSessionUser(Model model, HttpSession session){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if(!authentication.equals("anonymousUser")){
+        if (authentication != null && !authentication.getName().equals("anonymousUser")) {
+
             UserDTO userDTO = userService.getInforUser(authentication.getName());
+
             session.setAttribute("user", userDTO);
-        }
-    }
-
-    @ModelAttribute
-    public void addUserLogin(Model model , HttpSession session ){
-        UserDTO userDTO = (UserDTO) session.getAttribute("user");
-        System.out.println("Session User: " + userDTO); // Kiểm tra giá trị của userDTO
-        if (userDTO != null) {
             model.addAttribute("user", userDTO);
-        }
-    }
 
-    @ModelAttribute
-    public void addCartMini(Model model , HttpSession session){
-        UserDTO user = (UserDTO) session.getAttribute("user");
-        if (user != null) {
-            int userId = user.getId();  // Lấy userId từ session
-
-            CartDTO cart = cartService.getCart(userId);
+            CartDTO cart = cartService.getCart(userDTO.getId());
             List<CartItemDTO> cartItemDTOS = cartItemService.getCartItemByCartId(cart.getId());
+            session.setAttribute("cartId",cart.getId());
 
             int count = cartService.countCartItem(cart.getId());
 
             if (cartItemDTOS.isEmpty())
                 model.addAttribute("error","Bạn chưa thêm sản phẩm nào vào giỏ hàng!");
-
             model.addAttribute("cartItems", cartItemDTOS);
             model.addAttribute("cart", cart);
             model.addAttribute("countCart",count);
+
+        }else {
+            System.out.println("Chua login");
         }
     }
 
@@ -75,10 +64,11 @@ public class GlobalModelAttribute {
         model.addAttribute("category",categories);
     }
 
-
     @ModelAttribute
     public void addFeedGoodFeedBack(Model model){
         List<FeedBackDTO> feedBackDTOS = feedBackService.getGoodFeedback(4);
+        if(feedBackDTOS.isEmpty())
+            System.out.println("Feedback null");
         model.addAttribute("feedbacks", feedBackDTOS);
     }
 }
