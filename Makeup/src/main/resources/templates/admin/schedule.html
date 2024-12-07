@@ -15,7 +15,8 @@
 
 <body>
 <div style="width: 50%; margin: auto;">
-  <select id="monthSelect" class="form-select" aria-label="Default select example">
+  <select id="monthSelect" class="form-select" aria-label="Default select example"
+          onchange=" loadAppointment(this.value, 2024);">
     <option value="" disabled selected>Choose month</option>
     <option value="1">January</option>
     <option value="2">February</option>
@@ -32,10 +33,17 @@
   </select>
 </div>
 
+<div style="width: 50%; margin: auto;">
+  <select id="staffSelect" class="form-select" aria-label="Default select example"
+          onchange=" loadAppointment(this.value, 2024);">
+
+  </select>
+</div>
+
 <div class="d-flex justify-content-between mt-3" style="width: 50%; margin: auto;">
-  <button onclick="changeWeek(-1);">Prev</button>
+  <button class="btn btn-primary" onclick="changeWeek(-1);">Prev</button>
   <div id="dateOfWeek">sfsdfs</div>
-  <button onclick="changeWeek(+1);">Next</button>
+  <button class="btn btn-primary" onclick="changeWeek(+1);">Next</button>
 </div>
 
 <div>
@@ -106,7 +114,7 @@
     <script>
       $(document).ready(function () {
         // Gọi loadAppointment và xử lý dữ liệu sau khi nhận được
-      loadAppointment(12, 2024);
+        loadAppointment(12, 2024);
       });
     </script>
     <div class="cd-schedule-modal">

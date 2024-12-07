@@ -32,7 +32,7 @@ public class OrderItem {
     @JoinColumn(name = "order_id", nullable = false)
     Order order;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id", nullable = false)
     Product product;
 }

@@ -51,7 +51,7 @@
         <div class="cart-summary">
             <h3>Shopping Cart</h3>
             <p th:text="'Order Total:' + ${cart.totalPrice}">Order Total: $143.82</p>
-            <button class="checkout-btn">Proceed to Checkout</button>
+            <a href="/cart/checkOut"><button class="checkout-btn">Proceed to Checkout</button></a>
             <button class="checkout-vnpay-btn"></button>
             <button class="clear-cart-btn">Clear Cart</button>
         </div>

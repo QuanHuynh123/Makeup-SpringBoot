@@ -45,6 +45,10 @@ public class UserService {
        return  userRepository.findById(userId).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
     }
 
+    public User findUserByAccountId(int accountId){
+        return userRepository.findByAccountId(accountId);
+    }
+
     @Transactional
     public UserDTO updateInforUser(String phone , String name , String email , String address  ) {
         User user = userRepository.findByPhone(phone);
@@ -57,4 +61,31 @@ public class UserService {
         User userUpdateSuccess = userRepository.save(user);
         return userMapper.toUserDTO(userUpdateSuccess);
     }
+
+    public UserDTO createUser(UserDTO userDTO) {
+        // Kiểm tra nếu user đã tồn tại
+        var existingUser = userRepository.findByEmailAndPhone(userDTO.getEmail(), userDTO.getPhone());
+        if (existingUser.isPresent()) {
+            // Chuyển User entity thành DTO
+            User user = existingUser.get();
+            return new UserDTO(user.getId(), user.getFullName(), user.getEmail(), user.getAddress(), user.getPhone(),
+                    0, // role (bạn có thể cập nhật logic phù hợp)
+                    user.getCart() != null ? user.getCart().getId() : 0,
+                    user.getAccount() != null ? user.getAccount().getId() : 0); // Kiểm tra account != null
+        }
+        // Tạo user mới
+        User newUser = new User();
+        newUser.setFullName(userDTO.getFullName());
+        newUser.setEmail(userDTO.getEmail());
+        newUser.setAddress(userDTO.getAddress());
+        newUser.setPhone(userDTO.getPhone());
+        // Lưu user vào database
+        User savedUser = userRepository.save(newUser);
+        // Trả về thông tin người dùng vừa được lưu
+        return new UserDTO(savedUser.getId(), savedUser.getFullName(), savedUser.getEmail(), savedUser.getAddress(),
+                savedUser.getPhone(), 0,
+                savedUser.getCart() != null ? savedUser.getCart().getId() : 0,
+                savedUser.getAccount() != null ? savedUser.getAccount().getId() : 0); // Kiểm tra account != null
+    }
+
 }

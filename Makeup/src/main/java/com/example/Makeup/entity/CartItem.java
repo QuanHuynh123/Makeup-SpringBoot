@@ -32,7 +32,7 @@ public class CartItem {
     @Column(name = "use_date", nullable = false)
     Date useDate; // Ngày sử dụng
 
-    @OneToOne(fetch  = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id", nullable = false)
-    Product product ;
+    Product product;
 }

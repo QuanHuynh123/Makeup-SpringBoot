@@ -19,15 +19,15 @@
         <div class="left-column">
             <div class="image-gallery">
                 <img th:src="@{'/images/product/' + ${product.firstImage}}" alt="Product Image" class="main-image">
-                <button class="prev" onclick="moveSlide(-1)">&#10094;</button>
-                <div class="thumbnail-gallery">
+                <div class="thumbnail-gallery-container">
+                    <button class="prev" onclick="moveSlide(-1)">&#10094;</button>
                     <div class="thumbnail-gallery">
                         <div th:each="image : ${images}">
                             <img th:src="@{'/images/product/' + ${image}}" alt="Thumbnail">
                         </div>
                     </div>
+                    <button class="next" onclick="moveSlide(1)">&#10095;</button>
                 </div>
-                <button class="next" onclick="moveSlide(1)">&#10095;</button>
             </div>
         </div>
 
@@ -200,6 +200,8 @@
                               title: "Thêm sản phẩm vào giỏ thành công!",
                               showConfirmButton: false,
                               timer: 1500
+                            }).then(() => {
+                            location.reload();  // Reload trang sau khi thông báo kết thúc
                             });
                         },
                         error: function (error) {

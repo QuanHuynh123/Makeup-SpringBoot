@@ -11,9 +11,9 @@ public class EmailNotificationScheduler {
     @Autowired
     AppointmentService appointmentService;
 
-    @Scheduled(fixedRate = 5 * 60 * 1000)  // Mỗi 5 phút
-    public void sendEmailNotifications() {
-        System.out.println("Đang gửi thông báo email...");
-        // Thực hiện công việc gửi email
-    }
+//    @Scheduled(fixedRate = 5 * 60 * 1000)  // Mỗi 5 phút
+//    public void sendEmailNotifications() {
+//        System.out.println("Đang gửi thông báo email...");
+//        // Thực hiện công việc gửi email
+//    }
 }

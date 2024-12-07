@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html layout:decorate="layoutCosplay" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <head>
+        <layout:fragment name="header">
+            <link rel="stylesheet" href="/css/checkOut.css">
+            <link rel="stylesheet" href="/css/cosplay.css">
+            <link rel="stylesheet" href="/css/footer.css">
+            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        </layout:fragment>
+    </head>
+</head>
+<body class="main-layout" >
+<div layout:fragment="content">
+    <!-- checkOut-->
+    <div class="container-checkout">
+        <!-- Left Section -->
+        <div class="left-section">
+            <div class="section-header">
+                <img src="https://img.icons8.com/ios/50/000000/home.png" alt="Home Icon">
+                <span>CONFIRM INFORMATION FOR PICKUP</span>
+            </div>
+            <form>
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" name="email"
+                           th:value="${user != null ? user.email : ''}" required>
+                </div>
+                <div class="form-group">
+                    <label for="firstName">Name</label>
+                    <input type="text"
+                           id="firstName"
+                           name="firstName"
+                           th:value="${user != null ? user.fullName : ''}" required>
+                </div>
+                <div class="form-group">
+                    <label for="phoneNumber">Phone Number</label>
+                    <input type="tel"
+                           id="phoneNumber"
+                           name="phoneNumber"
+                           placeholder="Enter your phone number"
+                           th:value="${user != null ? user.phone : ''}" required>
+                </div>
+                <div class="form-group">
+                    <label for="message">Message</label>
+                    <textarea id="message" name="message" rows="4" placeholder="Enter your message (optional)"></textarea>
+                </div>
+
+
+                <!-- Payment Method Section -->
+                <div class="payment-method-section">
+                    <div class="form-group">
+                        <label>Payment Method</label>
+                        <div id="div_directly">
+                            <input type="radio" id="paymentInStore" name="paymentMethod" value="1" checked>
+                            <label for="paymentInStore">Directly at Store</label>
+                        </div>
+                        <div id="div_vnpay">
+                            <input type="radio" id="vnpay" name="paymentMethod" value="2">
+                            <label for="vnpay">
+                                <img src="/images/Logo-VNPAY-QR.webp" alt="VNPAY Logo" style="width: 50px;">
+                                Thanh toán qua VNPAY
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+
+        <!-- Right Section -->
+        <div class="right-section">
+            <div class="section-header">
+                <span>ORDER SUMMARY</span>
+            </div>
+            <div class="product-table-container">
+                <table class="product-table">
+                    <thead>
+                    <tr>
+                        <th>PRODUCT NAME</th>
+                        <th>QTY</th>
+                        <th>SUBTOTAL</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Kiểm tra nếu cartItems không có sản phẩm nào -->
+                        <tr th:if="${#lists.isEmpty(cartItems)}">
+                            <td colspan="3" style="text-align: center;">Bạn chưa chọn sản phẩm nào</td>
+                        </tr>
+
+                        <!-- Duyệt qua danh sách cartItems -->
+                        <tr th:each="item : ${cartItems}">
+                            <td>
+                                <!-- Hiển thị hình ảnh sản phẩm -->
+                                <img  th:src="@{'/images/product/' + ${item.imageFirst}}" alt="Product Image" style="width: 50px;">
+                                <span th:text="${item.productName}">Product Name</span>
+                            </td>
+                            <td>
+                                <!-- Hiển thị số lượng sản phẩm và cho phép thay đổi -->
+                                <input type="number" th:value="${item.quantity}" min="1" style="width: 60px;">
+                            </td>
+                            <td>
+                                <!-- Hiển thị tổng tiền (price * quantity) -->
+                                <span th:text="${item.price}">Subtotal</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div th:if="${cart != null}">
+                <div class="summary-row">
+                    <span>Quantity:</span>
+                    <span id="cartQuantity" th:text="${cart.totalQuantity}"></span>
+                </div>
+                <div class="summary-row">
+                    <span>Shipping:</span>
+                    <span>Not yet calculated</span>
+                </div>
+                <div class="summary-row total">
+                    <span>Order Total:</span>
+                    <span id="orderTotal" th:text="${cart.totalPrice}"></span>
+                </div>
+            </div>
+            <button class="btn">Place Order</button>
+        </div>
+    </div>
+
+
+    <div class="bottom-section">
+        <div class="bottom-content">
+            <!-- Địa chỉ cửa hàng -->
+            <label for="storeAddress">Địa chỉ cửa hàng</label>
+            <p id="storeAddress">
+                273 Đ. An Dương Vương, Phường 3, Quận 5, Hồ Chí Minh, Việt Nam
+            </p>
+
+            <!-- Nhúng bản đồ -->
+            <div id="map-container">
+                <iframe src="https://www.google.com/maps/embed/v1/place?key=AIzaSyA0s1a7phLN0iaD6-UE7m4qP-z21pH0eSc&q=Truong+Dai+hoc+Sai+Gon+273+An+Duong+Vuong+Phuong+3+Quan+5+Ho+Chi+Minh+700000"
+                        width="600"
+                        height="432"
+                        frameborder="0"
+                        style="border:0; width: 100%;"
+                        allowfullscreen>
+                </iframe>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- end checkOut -->
+</div>
+
+
+<div th:fragment="js">
+    <script src="/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/custom.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA8eaHt9Dh5H57Zh0xVTqxVdBFCvFMqFjQ&callback=initMap"></script>
+    <script>
+        $('a[href^="#"]').on('click', function(event) {
+
+         var target = $(this.getAttribute('href'));
+
+         if( target.length ) {
+             event.preventDefault();
+             $('html, body').stop().animate({
+                 scrollTop: target.offset().top
+             }, 2000);
+         }
+
+        });
+    </script>
+    <script>
+        // JavaScript to ensure only one radio button can be selected at a time
+        document.addEventListener('DOMContentLoaded', function () {
+        const paymentInStore = document.getElementById('paymentInStore');
+        const vnpay = document.getElementById('vnpay');
+
+        // Add event listeners to both radio buttons
+        paymentInStore.addEventListener('change', function () {
+            if (paymentInStore.checked) {
+                vnpay.checked = false; // Uncheck VNPAY when "Directly at Store" is selected
+            }
+        });
+
+        vnpay.addEventListener('change', function () {
+            if (vnpay.checked) {
+                paymentInStore.checked = false; // Uncheck Directly at Store when VNPAY is selected
+            }
+        });
+        });
+
+    </script>
+
+    <script>
+        $(document).ready(function() {
+            // Khi nhấn vào nút Place Order
+            $('.btn').on('click', function(event) {
+                event.preventDefault();  // Ngừng hành động mặc định của button
+
+                // Thu thập thông tin từ các input
+                var email = $('#email').val();
+                var firstName = $('#firstName').val();
+                var phoneNumber = $('#phoneNumber').val();
+                var message = $('#message').val();
+                const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
+                const quantity = document.getElementById('cartQuantity').textContent;
+                const totalPrice = document.getElementById('orderTotal').textContent;
+
+                const exchangeRate = 23000;
+                const amount = Math.round(totalPrice * exchangeRate);
+                const orderInfo = "Don hang " + amount ;
+
+                let  requestUrl = '/order/place' ;
+                // Kiểm tra nếu paymentMethod là 2 (VNPAY)
+                if (paymentMethod == 2) {
+                    requestUrl = '/submitOrder';
+                }
+                // Gửi Ajax request
+                $.ajax({
+                    url: requestUrl,  // Địa chỉ endpoint để xử lý đơn hàng
+                    type: 'POST',
+                    data: {
+                        orderInfo : orderInfo,
+                        email: email,
+                        firstName: firstName,
+                        phoneNumber: phoneNumber,
+                        message: message,
+                        quantity : quantity,
+                        amount : amount
+                    },
+                    success: function(response) {
+                        window.location.href = response;
+                    },
+                    error: function(xhr, status, error) {
+                        // Xử lý lỗi nếu có
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Something went wrong. Please try again.'
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+
+
+</div>
+</body>
+</html>

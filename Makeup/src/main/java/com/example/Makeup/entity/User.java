@@ -31,9 +31,6 @@ public class User {
     @Column(name = "phone", length = 20, nullable = false)
     String phone;
 
-    @OneToMany(mappedBy = "user" , fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    List<Order> orders;
-
     @OneToMany(mappedBy = "user" , fetch = FetchType.LAZY ,  cascade = CascadeType.ALL)
     List<Appointment> appointments;
 
@@ -42,6 +39,6 @@ public class User {
     Cart cart;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "account_id", nullable = false)
+    @JoinColumn(name = "account_id", nullable = true)  // Đảm bảo account_id có thể NULL
     Account account;
 }
