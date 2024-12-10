@@ -16,11 +16,27 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Intege
     List<Appointment> findByMakeupDateBetween(Date startDate, Date endDate);
     List<Appointment> findByStaffId(int staffId);
 
-    @Query("SELECT a FROM Appointment a WHERE MONTH(a.makeupDate) = :month AND YEAR(a.makeupDate) = :year")
-    List<Appointment> findAppointmentsByMonth(@Param("month") int month, @Param("year") int year);
+    @Query("SELECT new com.example.Makeup.dto.AppointmentDetailDTO(" +
+            "a.id, a.startTime, a.endTime, a.makeupDate, a.status, " +
+            "u.fullName, u.phone, s.nameService, st.nameStaff, " +
+            "u.id, s.id, st.id) " +
+            "FROM Appointment a " +
+            "JOIN a.user u " +
+            "JOIN a.serviceMakeup s " +
+            "JOIN a.staff st " +
+            "WHERE MONTH(a.makeupDate) = :month AND YEAR(a.makeupDate) = :year")
+    List<AppointmentDetailDTO> findAppointmentsByMonth(@Param("month") int month, @Param("year") int year);
 
-    @Query("SELECT a FROM Appointment a WHERE MONTH(a.makeupDate) = :month AND YEAR(a.makeupDate) = :year AND a.staff.id = :staffID")
-    List<Appointment> findAppointmentsByMonthAndStaff(@Param("month") int month, @Param("year") int year, @Param("staffID") int staffID);
+    @Query("SELECT new com.example.Makeup.dto.AppointmentDetailDTO(" +
+            "a.id, a.startTime, a.endTime, a.makeupDate, a.status, " +
+            "u.fullName, u.phone, s.nameService, st.nameStaff, " +
+            "u.id, s.id, st.id) " +
+            "FROM Appointment a " +
+            "JOIN a.user u " +
+            "JOIN a.serviceMakeup s " +
+            "JOIN a.staff st " +
+            "WHERE MONTH(a.makeupDate) = :month AND YEAR(a.makeupDate) = :year AND st.id = :staffID")
+    List<AppointmentDetailDTO> findAppointmentsByMonthAndStaff(@Param("month") int month, @Param("year") int year, @Param("staffID") int staffID);
 
 
     @Query("SELECT a FROM Appointment a WHERE a.staff.id = :staffId " +
@@ -62,7 +78,7 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Intege
 
     @Query("SELECT new com.example.Makeup.dto.AppointmentDetailDTO(" +
             "a.id, a.startTime, a.endTime, a.makeupDate, a.status, " +
-            "u.fullName, s.nameService, st.nameStaff, " +
+            "u.fullName, u.phone, s.nameService, st.nameStaff, " +
             "u.id, s.id, st.id) " +
             "FROM Appointment a " +
             "JOIN a.user u " +
@@ -72,7 +88,7 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Intege
 
     @Query("SELECT new com.example.Makeup.dto.AppointmentDetailDTO(" +
             "a.id, a.startTime, a.endTime, a.makeupDate, a.status, " +
-            "u.fullName, s.nameService, st.nameStaff, " +
+            "u.fullName, u.phone, s.nameService, st.nameStaff, " +
             "u.id, s.id, st.id) " +
             "FROM Appointment a " +
             "JOIN a.user u " +
@@ -80,6 +96,7 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Intege
             "JOIN a.staff st " +
             "WHERE a.id = :id")
     AppointmentDetailDTO findAppointmentWithDetailsById(@Param("id") int id);
+
 
 
 }

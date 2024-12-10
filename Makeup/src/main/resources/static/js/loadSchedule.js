@@ -177,7 +177,11 @@ function renderScheduleForWeek(data, weekNumber) {
                data-end="${appointment.endTime}" 
                data-id="${appointment.id}" 
                href="#0">
-              <em class="cd-schedule__name">Appointment ID: ${appointment.id}</em>
+           <em class="cd-schedule__name">
+               ID: ${appointment.id}<br>
+               Customer: ${appointment.userName}<br>
+               Phone: ${appointment.userPhone}<br>
+           </em>
             </a>
           </li>
         `;
@@ -188,6 +192,10 @@ function renderScheduleForWeek(data, weekNumber) {
 				dayElement.closest('li').querySelector('ul').insertAdjacentHTML('beforeend', eventHTML);
 			}
 		});
+		var scheduleTemplate = new ScheduleTemplate(document.querySelector('.cd-schedule'));
+
+        		// Gọi hàm placeEvents từ đối tượng
+        		scheduleTemplate.placeEvents();
 	});
 
 	// Gắn sự kiện nhấp chuột cho từng sự kiện trong lịch
@@ -212,8 +220,11 @@ function showAppointmentDetails(appointmentId, appointments) {
 	const modal = document.querySelector('.cd-schedule-modal');
 	modal.querySelector('.cd-schedule-modal__date').textContent =
 		`${appointment.startTime} - ${appointment.endTime}`;
-	modal.querySelector('.cd-schedule-modal__name').textContent = appointment.title || `Appointment ID: ${appointment.id}`;
+	modal.querySelector('.cd-schedule-modal__name').textContent = appointment.title || `ID: ${appointment.id}`;
 	modal.querySelector('.cd-schedule-modal__event-info').innerHTML = `
+	<p><strong>Customer:</strong> ${appointment.userName || "N/A"}</p>
+	<p><strong>Phone:</strong> ${appointment.userPhone || "N/A"}</p>
+	<p><strong>Service:</strong> ${appointment.serviceMakeupName || "N/A"}</p>
     <p><strong>Makeup Date:</strong> ${appointment.makeupDate || "N/A"}</p>
     <p><strong>Start Time:</strong> ${appointment.startTime || "N/A"}</p>
     <p><strong>End Time:</strong> ${appointment.endTime || "N/A"}</p>

@@ -18,6 +18,7 @@ public class AppointmentDetailDTO {
     Date makeupDate;
     boolean status;
     String userName;
+    String userPhone;
     String serviceMakeupName;
     String staffName;
     int userID;

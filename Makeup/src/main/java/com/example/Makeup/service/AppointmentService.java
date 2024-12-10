@@ -34,7 +34,7 @@ public class AppointmentService {
     private AppointmentMapper appointmentMapper;
 
     public List<WeekAppointmentsDTO> getAppointmentsByMonth(int month, int year, Integer staffID) {
-        List<Appointment> appointments;
+        List<AppointmentDetailDTO> appointments;
 
         // Kiểm tra nếu có `staffID`, gọi phương thức phù hợp trong repository
         if (staffID != null) {
@@ -43,11 +43,7 @@ public class AppointmentService {
             appointments = appointmentRepository.findAppointmentsByMonth(month, year);
         }
 
-        List<AppointmentDTO> appointmentDTOs = appointments.stream()
-                .map(this::convertToDTO)
-                .collect(Collectors.toList());
-
-        return groupAppointmentsByWeek(appointmentDTOs, month, year);
+        return groupAppointmentsByWeek(appointments, month, year);
     }
 
 
@@ -66,11 +62,11 @@ public class AppointmentService {
     }
 
     // Nhóm các lịch hẹn theo tuần trong tháng và thêm thông tin ngày bắt đầu, kết thúc của tuần
-    private List<WeekAppointmentsDTO> groupAppointmentsByWeek(List<AppointmentDTO> appointments, int month, int year) {
-        Map<Integer, List<AppointmentDTO>> weeklyAppointments = new HashMap<>();
+    private List<WeekAppointmentsDTO> groupAppointmentsByWeek(List<AppointmentDetailDTO> appointments, int month, int year) {
+        Map<Integer, List<AppointmentDetailDTO>> weeklyAppointments = new HashMap<>();
 
         // Nhóm các lịch hẹn theo tuần trong tháng
-        for (AppointmentDTO appointment : appointments) {
+        for (AppointmentDetailDTO appointment : appointments) {
             int weekOfMonth = getWeekOfMonth(appointment.getMakeupDate());
             weeklyAppointments
                     .computeIfAbsent(weekOfMonth, k -> new ArrayList<>())
@@ -83,7 +79,7 @@ public class AppointmentService {
         // Trả về danh sách các tuần, bao gồm cả tuần không có lịch hẹn
         List<WeekAppointmentsDTO> weekAppointmentsDTOList = new ArrayList<>();
         for (int weekNumber = 1; weekNumber <= totalWeeks; weekNumber++) {
-            List<AppointmentDTO> appointmentsInWeek = weeklyAppointments.getOrDefault(weekNumber, new ArrayList<>());
+            List<AppointmentDetailDTO> appointmentsInWeek = weeklyAppointments.getOrDefault(weekNumber, new ArrayList<>());
 
             // Tính ngày bắt đầu và kết thúc của tuần
             Date startDate = getStartDateOfWeek(weekNumber, month, year);
@@ -291,5 +287,21 @@ public class AppointmentService {
         return appointmentRepository.findAppointmentWithDetailsById(id);
     }
 
+    private AppointmentDetailDTO convertToDetailDTO(Appointment appointment) {
+        return new AppointmentDetailDTO(
+                appointment.getId(),
+                appointment.getStartTime(),
+                appointment.getEndTime(),
+                appointment.getMakeupDate(),
+                appointment.getStatus(),
+                appointment.getUser().getFullName(),
+                appointment.getUser().getPhone(), // Thêm số điện thoại người dùng
+                appointment.getServiceMakeup().getNameService(),
+                appointment.getStaff().getNameStaff(),
+                appointment.getUser().getId(),
+                appointment.getServiceMakeup().getId(),
+                appointment.getStaff().getId()
+        );
+    }
 
 }
