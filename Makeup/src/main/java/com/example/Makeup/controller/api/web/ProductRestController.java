@@ -42,11 +42,11 @@ public class ProductRestController {
 
     @PutMapping("/edit/{id}")
     public ResponseEntity<String> edit(@ModelAttribute CreateProductDTO productDTO, @PathVariable("id") int id) throws IOException{
-//        Product product = productService.edit(productDTO, id);
+       Product product = productService.edit(productDTO, id);
 
-//        if (product != null) {
-//            return ResponseEntity.ok("Sửa sản phẩm thành công");
-//        }
+       if (product != null) {
+          return ResponseEntity.ok("Sửa sản phẩm thành công");
+       }
         return ResponseEntity.status(500).body("Sửa sản phẩm thất bại");
     }
 }

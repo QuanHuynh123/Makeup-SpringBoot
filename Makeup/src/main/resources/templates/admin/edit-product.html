@@ -104,6 +104,13 @@
                                     </div>
                                 </div>
                                 <div class="Submenu">
+                                    <div class="Submenu-title" id="tab-appointment">
+                                            <span style="margin-right: 8px; padding-right: 8px;">
+                                                <i class="fa-regular fa-calendar-check"></i>
+                                            </span>Appointment
+                                    </div>
+                                </div>
+                                <div class="Submenu">
                                     <div class="Submenu-title">
                                                 <span style="margin-right: 8px; padding-right: 8px;">
                                                     <i class="fa-regular fa-comment"></i>
@@ -818,12 +825,16 @@
                                     <input type="text" class="form-control" id="name" th:value="${product.nameProduct}"/>
                                 </div>
                                 <div class="form-group">
-                                    <label for="category">Loại sản phẩm</label>
-                                    <select class="form-control" id="category">
-                                        <option value="1" th:selected="${product.subCategoryId == 1}">1</option>
-                                        <option value="2" th:selected="${product.subCategoryId == 2}">2</option>
-                                        <option value="3" th:selected="${product.subCategoryId == 3}">3</option>
-                                        <option value="4" th:selected="${product.subCategoryId == 4}">4</option>
+                                    <label for="subCategory">Loại sản phẩm</label>
+                                    <select id="subCategory" name="subCategory" class="form-control">
+                                        <option value="" selected disabled>-- Chọn loại sản phẩm --</option>
+                                        <th:block th:each="subCategory : ${subCategories}">
+                                            <option 
+                                                th:value="${subCategory.id}" 
+                                                th:text="${subCategory.name}"
+                                                th:selected="${subCategory.id == product.subCategoryId}">
+                                            </option>
+                                        </th:block>
                                     </select>
                                 </div>
                                 <div class="form-group">
@@ -847,6 +858,7 @@
                                 </div>
                                 <div class="float-right">
                                     <button type="button" class="btn btn-primary btn-create">Sửa</button>
+                                    <button id="btn-back" class="btn btn-light">Quay lại</button>
                                 </div>
                             </div>
                         </div>
@@ -864,7 +876,7 @@
                                         <div class = "upload-wrapper">
                                             <div class="image-gallery-container">
                                                 <div class="image-gallery">
-                                                    <div th:each="image : ${product.imageList}">
+                                                    <div th:each="image : ${images}">
                                                         <img th:src="${image}" alt="Product Image">
                                                     </div>
                                                 </div>
@@ -897,6 +909,9 @@
 
             <div id="staff" class="d-none mt-3"></div>
             <div id="product" class="d-none mt-3"></div>
+            <div id="appointment" class="d-none mt-3"></div>
+            <div id="create-product" class="d-none mt-3"></div>
+            <div id="edit-product" class="d-none mt-3"></div>
         </div>
     </div>
 </div>
@@ -964,7 +979,7 @@
             let price = $("#price").val();
             let description = $("#description").val();
             let size = $("#size").val();
-            let subCategoryId = $("#category").val();
+            let subCategoryId = $("#subCategory").val();
 
             if (!name || !price || !description || !size) {
                 Swal.fire({

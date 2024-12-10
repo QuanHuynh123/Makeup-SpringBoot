@@ -44,8 +44,15 @@ public class ProductController {
 
     @GetMapping("/edit/{id}")
     public String editProductPage(Model model, @PathVariable("id") int id){
+        List<SubCategoryDTO> subCategories = subCategoryService.getAll();
+        model.addAttribute("subCategories", subCategories);
+        
         ProductDTO productDTO = productService.findById(id);
+        System.out.println(productDTO.getDescribe());
+        
+        String[] imageList = productDTO.getImage().split(",");
         model.addAttribute("product", productDTO);
+        model.addAttribute("images", imageList);
         return "admin/edit-product";
     }
 }
