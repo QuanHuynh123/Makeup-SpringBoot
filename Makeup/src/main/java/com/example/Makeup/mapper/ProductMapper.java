@@ -14,9 +14,11 @@ import java.util.Optional;
 public interface ProductMapper {
 
     @Mapping(source = "subCategory.id", target = "subCategoryId")
+    @Mapping(source = "description", target = "describe")
     ProductDTO toProductDTO(Product product);
 
     @Mapping(source = "subCategoryId", target = "subCategory.id")
+    @Mapping(source = "describe", target = "description")
     Product toProductEntity(ProductDTO productDTO);
 
     // Logic để xử lý thuộc tính `firstImage`

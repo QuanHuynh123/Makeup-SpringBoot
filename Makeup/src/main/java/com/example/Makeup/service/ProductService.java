@@ -19,6 +19,7 @@ import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -128,38 +129,39 @@ public class ProductService {
 
 
     
-//    public Product edit(CreateProductDTO productDTO, int id) throws IOException{
-//        SubCategory subCategory = subCategoryService.findById(productDTO.getSubCategoryId());
-//
-//        Optional<Product> opt = productRepository.findById(id);
-//
-//        if (opt.isEmpty()) {
-//            return null;
-//        }
-//
-//        Product product = opt.get();
-//        product.setNameProduct(productDTO.getName());
-//        product.setDescription(productDTO.getDescription());
-//        product.setPrice(productDTO.getPrice());
-//        product.setStatus(productDTO.isStatus());
-//        product.setSize(productDTO.getSize());
-//        product.setSubCategory(subCategory);
-//
-//        if (productDTO.getFiles() != null) {
-//            for (String image: product) {
-//                boolean deleted = deleteImage(image);
-//            }
-//
-//            List<String> imagePaths = new ArrayList<>();
-//            for(MultipartFile file: productDTO.getFiles()){
-//                String path = saveImage(file);
-//                imagePaths.add(path);
-//            }
-//            product.setImage(String.join(",", imagePaths));
-//        }
-//
-//        return productRepository.save(product);
-//    }
+    public Product edit(CreateProductDTO productDTO, int id) throws IOException{
+        SubCategoryDTO subCategoryDTO=  subCategoryService.findById(productDTO.getSubCategoryId());
+
+        Optional<Product> opt = productRepository.findById(id);
+
+        if (opt.isEmpty()) {
+            return null;
+        }
+
+        Product product = opt.get();
+        product.setNameProduct(productDTO.getName());
+        product.setDescription(productDTO.getDescription());
+        product.setPrice(productDTO.getPrice());
+        product.setStatus(productDTO.isStatus());
+        product.setSize(productDTO.getSize());
+        product.setSubCategory(subCategoryMapper.toSubCategoryEntity(subCategoryDTO));
+        String[] images = product.getImage().split(",");
+
+        if (productDTO.getFiles() != null) {
+            for (String image: images) {
+                boolean deleted = deleteImage(image);
+            }
+
+            List<String> imagePaths = new ArrayList<>();
+            for(MultipartFile file: productDTO.getFiles()){
+                String path = saveImage(file);
+                imagePaths.add(path);
+            }
+            product.setImage(String.join(",", imagePaths));
+        }
+
+        return productRepository.save(product);
+    }
 
     private String saveImage(MultipartFile file) throws IOException {
         String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
