@@ -315,6 +315,16 @@ document.addEventListener("DOMContentLoaded", () => {
             })
             .catch(error => console.error('Error loading HTML:', error));
     });
+    
+    document.getElementById('btn-back').addEventListener('click', function () {
+        toggleTabContent('product');
+        fetch('/admin/products')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('product').innerHTML = data;
+            })
+            .catch(error => console.error('Error loading HTML:', error));
+    });
 
     ///////////////////////Appointment tab///////////////////////////
 
