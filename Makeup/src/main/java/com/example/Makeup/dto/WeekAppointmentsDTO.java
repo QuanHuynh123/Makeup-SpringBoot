@@ -7,9 +7,9 @@ public class WeekAppointmentsDTO {
     private int weekNumber; // Tuần trong tháng
     private Date startDate; // Ngày bắt đầu của tuần
     private Date endDate;   // Ngày kết thúc của tuần
-    private List<AppointmentDTO> appointments; // Các lịch hẹn trong tuần
+    private List<AppointmentDetailDTO> appointments; // Các lịch hẹn trong tuần
 
-    public WeekAppointmentsDTO(int weekNumber, Date startDate, Date endDate, List<AppointmentDTO> appointments) {
+    public WeekAppointmentsDTO(int weekNumber, Date startDate, Date endDate, List<AppointmentDetailDTO> appointments) {
         this.weekNumber = weekNumber;
         this.startDate = startDate;
         this.endDate = endDate;
@@ -41,11 +41,11 @@ public class WeekAppointmentsDTO {
         this.endDate = endDate;
     }
 
-    public List<AppointmentDTO> getAppointments() {
+    public List<AppointmentDetailDTO> getAppointments() {
         return appointments;
     }
 
-    public void setAppointments(List<AppointmentDTO> appointments) {
+    public void setAppointments(List<AppointmentDetailDTO> appointments) {
         this.appointments = appointments;
     }
 }
