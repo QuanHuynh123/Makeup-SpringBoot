@@ -132,10 +132,17 @@
                             <div class="Sidebar-menu-item-header">Sales</div>
                             <div class="Sidebar-menu-item-main">
                                 <div class="Submenu">
-                                    <div class="Submenu-title">
+                                    <div class="Submenu-title" id="tab-order">
                                             <span style="margin-right: 8px; padding-right: 8px;">
                                                 <i class="fa-solid fa-cart-shopping"></i>
                                             </span>Order
+                                    </div>
+                                </div>
+                                <div class="Submenu">
+                                    <div class="Submenu-title" id="tab-approveOrder">
+                                            <span style="margin-right: 8px; padding-right: 8px;">
+                                                <i class="fa-solid fa-cart-shopping"></i>
+                                            </span>Approve Order
                                     </div>
                                 </div>
                                 <div class="Submenu">
@@ -158,6 +165,16 @@
                                         Staff
                                     </div>
                                 </div>
+
+                                <div class="Submenu">
+                                    <div class="Submenu-title" id="tab-logOut">
+                                            <span style="margin-right: 8px; padding-right: 8px;">
+                                                <i class="fa-solid fa-user"></i>
+                                            </span>
+                                            <a href="/logout" style="text-decoration: none;">Đăng xuất</a>
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
                     </div>
@@ -809,6 +826,8 @@
             <div id="staff" class="d-none mt-3"></div>
             <div id="appointment" class="d-none mt-3"></div>
             <div id="product" class="d-none mt-3"></div>
+            <div id="order" class="d-none mt-3"></div>
+            <div id="approveOrder" class="d-none mt-3"></div>
             <div id="create-product" class="d-none mt-3"></div>
             <div id="edit-product" class="d-none mt-3"></div>
         </div>
@@ -817,10 +836,10 @@
 <script src="/js/util.js"></script>
 <script src="/js/main.js"></script>
 <script src="/js/staff.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <!-- <script src="js/appointment.js"></script> -->
 <script src="/js/adminControl.js"></script>
-
-
+<script src="/js/order.js"></script>
 </body>
 
 </html>

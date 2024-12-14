@@ -41,6 +41,12 @@ public class Product {
     @Column(name = "image")
     String image;
 
+    @Column(name = "current_quantity", nullable = false)
+    int currentQuantity; // Số lượng còn lại trong kho
+
+    @Column(name = "quantity", nullable = false)
+    int quantity;
+    
     @Column(name = "rental_count")
     int rentalCount; // Số lượt quần áo đã thuê
 

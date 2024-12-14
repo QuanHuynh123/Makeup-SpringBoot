@@ -110,6 +110,24 @@ ul {
     background-color: red;
     border: none;
     width : 50%;
+    border-radius: 3px;
+}
+
+#btn-viewcart > button{
+    background-color: #e95836;
+    color: WHITE;
+    border: none;
+    padding: 7px 15px 7px 15px;
+    border-radius: 5px;
+}
+
+#btn-checkout > button{
+    background-color: #1aa40c;
+    color: WHITE;
+    border: none;
+    padding: 7px 15px 7px 15px;
+    border-radius: 5px;
+    margin-left: 50px;
 }
 
 /* End - Cart mini */
@@ -260,5 +278,9 @@ ul {
     font-size: 30px;
     border: none;
     background-color: #f9f9f9;
+}
+
+.use-date{
+    width: 170px;
 }
 /* End - Cart-container */

@@ -11,6 +11,8 @@ import org.mapstruct.factory.Mappers;
 public interface OrderMapper {
     @Mapping(source = "user.id", target = "userId")
     @Mapping(source = "payment.id", target = "paymentId")
+    @Mapping(source = "user.phone", target = "phone")
+    @Mapping(source = "user.fullName", target = "name")
     OrderDTO toOrderDTO(Order order);
 
     @Mapping(source = "userId", target = "user.id")

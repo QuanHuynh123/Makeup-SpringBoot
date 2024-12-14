@@ -1,17 +1,19 @@
 package com.example.Makeup.config;
 
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.context.annotation.Configuration;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
+@Configuration
 public class VNPAYConfig {
     public static String vnp_PayUrl = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
     public static String vnp_Returnurl = "/vnpay-payment-return"; //  chuyển hướng người dùng trở lại sau khi thanh toán
-    public static String vnp_TmnCode = "3VFVKVFD"; // Đăng ký, mã Terminal ID
-    public static String vnp_HashSecret = "B1TXM1NW98IEO75WFXPGMMV8RWJR2LCT"; // Đăng ký, khóa bí mật dùng để tạo chữ kí cho các giao dịch
+    public static String vnp_TmnCode = "BAVALJ15"; // Đăng ký, mã Terminal ID
+    public static String vnp_HashSecret = "FUGN0N7MI3SIE1EGVDEGA5D1P75DBT67"; // Đăng ký, khóa bí mật dùng để tạo chữ kí cho các giao dịch
     public static String vnp_apiUrl = "https://sandbox.vnpayment.vn/merchant_webapi/api/transaction";
 
 

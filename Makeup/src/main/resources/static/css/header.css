@@ -175,6 +175,7 @@ ul.email li a {
     top: 50px; /* Điều chỉnh vị trí menu nếu cần */
     left: 0; /* Đặt vị trí bên trái để nó thẳng hàng với icon */
     display: none; /* Ẩn menu mặc định */
+    padding-left: 0;
 }
 
 .profile_menu li {

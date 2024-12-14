@@ -34,4 +34,6 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
     List<Order> findByOrderDate(Date orderDate);
 
     Page<Order> findAll(Pageable pageable);
+
+    List<Order> findByStatusFalse();
 }

@@ -245,6 +245,8 @@ document.addEventListener("DOMContentLoaded", () => {
         const staff = document.getElementById('staff');
         const appointment = document.getElementById('appointment');
         const product = document.getElementById('product');
+        const order = document.getElementById('order');
+        const approveOrder = document.getElementById('approveOrder');
         const createProduct = document.getElementById('create-product');
         const editProduct = document.getElementById('edit-product');
 
@@ -254,6 +256,8 @@ document.addEventListener("DOMContentLoaded", () => {
         staff.classList.add('d-none');
         appointment.classList.add('d-none');
         product.classList.add('d-none');
+        order.classList.add('d-none');
+        approveOrder.classList.add('d-none');
         createProduct.classList.add('d-none');
         editProduct.classList.add('d-none');
 
@@ -267,6 +271,14 @@ document.addEventListener("DOMContentLoaded", () => {
             product.classList.remove('d-none');
         } else if (tabId === 'appointment') {
             appointment.classList.remove('d-none');
+        } else if (tabId === 'order'){
+            order.classList.remove('d-none');
+        } else if (tabId === 'approveOrder'){
+            approveOrder.classList.remove('d-none');
+        }else if(tabId == 'create-product'){
+            createProduct.classList.remove('d-none');
+        }else if(tabId == 'edit-product'){
+            editProduct.classList.remove('d-none');
         }
     }
 
@@ -306,25 +318,111 @@ document.addEventListener("DOMContentLoaded", () => {
             .catch(error => console.error('Error loading HTML:', error));
     });
 
-    document.getElementById('tab-product').addEventListener('click', function () {
-        toggleTabContent('product');
-        fetch('/admin/products')
+document.getElementById('tab-product').addEventListener('click', function () {
+    toggleTabContent('product'); // Hiển thị tab 'product'
+    fetch('/admin/products') // Lấy nội dung HTML của page con
+        .then(response => response.text())
+        .then(data => {
+            document.getElementById('product').innerHTML = data; // Gắn HTML vào tab 'product'
+            setupProductCreateEvent();
+            setupProductEditEvent();
+        })
+        .catch(error => console.error('Error loading HTML:', error));
+});
+
+function setupProductCreateEvent() {
+        const createProductBtn = document.getElementById('tab-create-product');
+        if (createProductBtn) {
+            createProductBtn.addEventListener('click', function () {
+                toggleTabContent('create-product');
+                fetch('/admin/products/create')
+                    .then(response => response.text())
+                    .then(data => {
+                        document.getElementById('create-product').innerHTML = data;
+                        handleBackButton();
+                    })
+                    .catch(error => console.error('Error loading HTML:', error));
+            });
+        }
+}
+
+function setupProductEditEvent() {
+        const productTable = document.getElementById('product');
+         if (productTable) {
+             productTable.addEventListener('click', function (event) {
+                 // Kiểm tra xem sự kiện xảy ra trên một div có id bắt đầu bằng 'tab-edit-product-'
+                 if (event.target && event.target.closest('div[id^="tab-edit-product-"]')) {
+                     const clickedDiv = event.target.closest('div[id^="tab-edit-product-"]');
+                     const productId = clickedDiv.id.split('-')[3]; // Lấy phần tử thứ 3, vì id có dạng 'tab-edit-product-2'
+
+                     console.log('Product ID for editing: ' + productId);  // Hiển thị Product ID
+
+                     // Thực hiện logic với productId, ví dụ là gọi API để mở form chỉnh sửa sản phẩm
+                     toggleTabContent('edit-product');
+                     fetch(`/admin/products/edit/${productId}`)
+                         .then(response => response.text())
+                         .then(data => {
+                             document.getElementById('edit-product').innerHTML = data; // Gắn nội dung vào phần tử 'edit-product'
+                             handleBackButton();
+                         })
+                         .catch(error => console.error('Error loading edit form:', error));
+                 }
+             });
+         }
+}
+
+function handleBackButton() {
+    const btnBack = document.getElementById('btn-back');
+    if (btnBack) {
+        btnBack.addEventListener('click', function () {
+            // Gọi hàm toggleTabContent để chuyển tab về 'product'
+            toggleTabContent('product');
+
+            // Fetch lại danh sách sản phẩm từ server
+            fetch('/admin/products')
+                .then(response => response.text())
+                .then(data => {
+                    // Chèn dữ liệu vào phần tử có id là 'product'
+                    document.getElementById('product').innerHTML = data;
+                    setupProductCreateEvent();
+                    setupProductEditEvent();
+                })
+                .catch(error => console.error('Error loading HTML:', error));
+        });
+    }
+}
+
+
+
+    document.getElementById('tab-order').addEventListener('click', function () {
+        toggleTabContent('order');
+        fetch('/admin/order')
             .then(response => response.text())
             .then(data => {
-                document.getElementById('product').innerHTML = data;
+                document.getElementById('order').innerHTML = data;
             })
             .catch(error => console.error('Error loading HTML:', error));
     });
-    
-    document.getElementById('btn-back').addEventListener('click', function () {
-        toggleTabContent('product');
-        fetch('/admin/products')
+
+    document.getElementById('tab-approveOrder').addEventListener('click', function () {
+        toggleTabContent('approveOrder');
+        fetch('/admin/approveOrder')
             .then(response => response.text())
             .then(data => {
-                document.getElementById('product').innerHTML = data;
+              const container = document.getElementById('approveOrder');
+              container.innerHTML = data;
+
+                 container.addEventListener('click', function (e) {
+                    if (e.target && e.target.matches('#btn-approveOrder')) {
+                        const orderId = e.target.getAttribute('data-id');
+                        console.log("Nút được click:", orderId);
+                        approveOrder(orderId);
+                    }
+                 });
             })
             .catch(error => console.error('Error loading HTML:', error));
     });
+
 
     ///////////////////////Appointment tab///////////////////////////
 

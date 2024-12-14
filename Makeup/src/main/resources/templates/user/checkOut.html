@@ -218,6 +218,7 @@
                 if (paymentMethod == 2) {
                     requestUrl = '/submitOrder';
                 }
+                alert(requestUrl);
                 // Gửi Ajax request
                 $.ajax({
                     url: requestUrl,  // Địa chỉ endpoint để xử lý đơn hàng
@@ -232,7 +233,16 @@
                         amount : amount
                     },
                     success: function(response) {
-                        window.location.href = response;
+                    /*
+                    Swal.fire({
+                        position: "top-end",
+                        icon: "success",
+                        title: response,
+                        showConfirmButton: false,
+                        timer: 2000
+                    }).then(() => {
+                        window.location.href = "/cosplay/home";
+                    }); */
                     },
                     error: function(xhr, status, error) {
                         // Xử lý lỗi nếu có

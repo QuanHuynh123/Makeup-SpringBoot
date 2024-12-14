@@ -7,6 +7,7 @@ import com.example.Makeup.enums.AppException;
 import com.example.Makeup.enums.ErrorCode;
 import com.example.Makeup.mapper.CartItemMapper;
 import com.example.Makeup.repository.CartItemRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -46,10 +47,17 @@ public class CartItemService {
         return cartService.updateCartTotals( cartId);
     }
 
+    @Transactional
     public boolean deleteCartItem(int cartItemId , int cartId){
         CartItem cartItem = cartItemRepository.findById(cartItemId)
                 .orElseThrow(() -> new AppException(ErrorCode.CANT_FOUND));
         cartItemRepository.delete(cartItem);
+        return cartService.updateCartTotals(cartId);
+    }
+
+    @Transactional
+    public boolean deleteAllCartItem(int cartId){
+        cartItemRepository.deleteAllByCartId(cartId);
         return cartService.updateCartTotals(cartId);
     }
 

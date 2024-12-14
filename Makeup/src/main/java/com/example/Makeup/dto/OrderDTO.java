@@ -17,6 +17,8 @@ public class OrderDTO {
     int totalQuantity;
     Date orderDate;
     Date pickupDate;
+    String phone;
+    String name ;
     boolean status;
     int userId;
     int paymentId;

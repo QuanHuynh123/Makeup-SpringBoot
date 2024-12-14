@@ -6,6 +6,7 @@ import com.example.Makeup.service.OrderItemService;
 import com.example.Makeup.service.OrderService;
 import com.example.Makeup.service.VNPAYService;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -59,13 +60,12 @@ public class VNPAYController {
         this.request = request;
         System.out.println(this.orderInfo);
         String baseUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort();
-        String vnpayUrl = vnPayService.createOrder(request, orderTotal, this.orderInfo, baseUrl);
-        return  vnpayUrl;
+        return vnPayService.createOrder(request, orderTotal, this.orderInfo, baseUrl);
     }
 
     // Sau khi hoàn tất thanh toán, VNPAY sẽ chuyển hướng trình duyệt về URL này
     @GetMapping("/vnpay-payment-return")
-    public String paymentCompleted(HttpServletRequest request, Model model) {
+    public String paymentCompleted(HttpServletRequest request, Model model , HttpSession session) {
         int paymentStatus = vnPayService.orderReturn(request);
 
         String orderInfo = request.getParameter("vnp_OrderInfo");
@@ -79,14 +79,14 @@ public class VNPAYController {
         model.addAttribute("transactionId", transactionId);
 
         if(paymentStatus ==1 ) {
-            List<CartItemDTO> cartItemDTOS = (List<CartItemDTO>) model.getAttribute("cartItems");
-            cutOrderInfo(orderInfo, cartItemDTOS);
+            int cartId = (int) session.getAttribute("cartId");
+            cutOrderInfo(orderInfo, Double.parseDouble(totalPrice),  cartId);
             return "orderSuccess";
         }else
             return "orderfail";
     }
 
-    public String cutOrderInfo(String orderInfo, List<CartItemDTO> cartItemDTOS) {
+    public String cutOrderInfo(String orderInfo, double totalPrice, int cartId) {
         System.out.println(orderInfo);
         String phoneNumber = "", email = "", name = "", message = "";
         int quantity = 0;
@@ -107,8 +107,15 @@ public class VNPAYController {
         }
 
         System.out.println(phoneNumber + ", " + email + ", " + name + ", " + message + ", " + quantity);
+        totalPrice = totalPrice / 2300000;
+        int orderId = orderService.createOrder(email,name,phoneNumber,message,2,quantity,totalPrice);
+        orderItemService.createOrderItem(cartId,orderId);
+
         return " " ;
     }
+
+//  9704198526191432198
+//  NGUYEN VAN A
 
 
 }

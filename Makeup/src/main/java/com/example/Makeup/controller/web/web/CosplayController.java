@@ -22,7 +22,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 @Controller
-@RequestMapping("cosplay")
+@RequestMapping("/cosplay")
 public class CosplayController {
     @Autowired
     ProductService productService;
