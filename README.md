@@ -2,9 +2,6 @@
 
 A web application for booking makeup services, designed to streamline the appointment scheduling process and provide secure payment options.
 
-## 🚀 **Project Link**
-[GitHub Repository](https://github.com/QuanHuynh123/MakeupSpringBoot.git)
-
 ## 💻 **Technologies Used**
 - **Java (21)**  
 - **Spring Boot**  
