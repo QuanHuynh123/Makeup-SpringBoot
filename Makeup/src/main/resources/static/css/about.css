@@ -4,7 +4,7 @@
     background: url(../images/about_bg.png);
     background-size: 100% 100%;
     background-repeat: no-repeat;
-    height: 100vh;
+    min-height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -47,6 +47,58 @@
     bottom: -120px;
     width: 50%; /* Ảnh sẽ chiếm 50% chiều rộng của phần tử cha */
     height: auto;
+}
+
+/* Responsive cho màn hình vừa */
+@media (max-width: 768px) {
+  #about {
+    flex-direction: column; /* Xếp dọc */
+  }
+
+  .about .container {
+       top : 20 ;
+       left : 0 ;
+  }
+
+  .titlepage h2 {
+    font-size: 1.5rem;
+  }
+
+  .titlepage p {
+    font-size: 0.9rem;
+  }
+
+  #img_artist_about {
+    max-width: 250px;
+  }
+
+  #img_artist_about{
+    display: hidden;
+  }
+}
+
+/* Responsive cho màn hình nhỏ */
+@media (max-width: 480px) {
+  .titlepage h2 {
+    font-size: 1.2rem;
+  }
+
+  .about .container {
+     top : 20 ;
+     left : 0 ;
+  }
+
+  .titlepage p {
+    font-size: 0.8rem;
+  }
+
+  #img_artist_about {
+    max-width: 200px;
+  }
+
+  #img_artist_about{
+    display: hidden;
+  }
 }
 
 

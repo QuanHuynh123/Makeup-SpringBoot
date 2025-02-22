@@ -177,3 +177,84 @@ p{
     object-position: top; 
 }
 /** end banner section **/
+
+
+/* Responsive cho màn hình nhỏ hơn */
+@media (max-width: 768px) {
+  #banner_2 {
+    flex-direction: column; /* Xếp dọc */
+  }
+
+  #img_banner_2 {
+    max-width: 90%; /* Chiếm 90% chiều rộng */
+    margin-bottom: 20px;
+  }
+
+  #sub_banner_2 {
+    max-width: 100%;
+    padding: 10px;
+  }
+
+  .title_sub_banner_2 {
+    font-size: 1rem; /* Giảm kích thước */
+  }
+
+  .text_sub_banner_2 {
+    font-size: 1.5rem;
+  }
+
+  #sub_banner_2 p {
+    font-size: 0.9rem; /* Giảm kích thước chữ */
+  }
+
+  #banner_3 {
+    flex-direction: column; /* Xếp dọc */
+  }
+  #img_banner_3 {
+    max-width: 90%; /* Chiếm 90% chiều rộng */
+    margin-bottom: 20px;
+  }
+
+  .logo{
+    display: none;
+  }
+  .profile_container{
+    justify-content: flex-start;
+    margin-left: 15px;
+  }
+  .profile_menu {
+    top: 40px;
+  }
+
+}
+
+/* Responsive cho màn hình rất nhỏ (điện thoại) */
+@media (max-width: 480px) {
+  #img_banner_2 {
+    max-width: 100%; /* Chiếm toàn bộ màn hình */
+  }
+
+  #img_banner_3 {
+    max-width: 100%; /* Chiếm toàn bộ màn hình */
+  }
+
+  .text_sub_banner_2 {
+    font-size: 1.2rem;
+  }
+
+  #sub_banner_2 p {
+    font-size: 0.8rem; /* Văn bản nhỏ hơn */
+  }
+
+  .logo{
+    display: none;
+  }
+  .profile_container{
+    justify-content: flex-start;
+    margin-left: 15px;
+  }
+  .profile_menu {
+    top: 40px;
+  }
+
+}

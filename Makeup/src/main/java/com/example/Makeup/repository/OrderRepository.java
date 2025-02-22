@@ -36,4 +36,6 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
     Page<Order> findAll(Pageable pageable);
 
     List<Order> findByStatusFalse();
+
+    List<Order> findByUserId(Integer userId);
 }

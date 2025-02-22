@@ -6,7 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/admin/order/")
+@RequestMapping("api/admin/order")
 public class OrderAdminRestController {
     @Autowired
     OrderService orderService;

@@ -46,7 +46,7 @@
 }
 
 .sub_title_makeup{
-    width: 50%;
+    width: 80%;
     margin-top: 30px;
 }
 
@@ -183,4 +183,47 @@ transform: translateX(5px);
 
 #service{
     margin-top: 100px;
+}
+
+/* Responsive cho màn hình nhỏ hơn */
+@media (max-width: 768px) {
+    .logo{
+        display:none;
+    }
+
+    #sub_title_makeup {
+        width: 80%;
+    }
+
+    .makeup-section, .ul_option {
+        flex-direction: column;
+        align-items: baseline;
+    }
+
+    .banner{
+        width: 90%;
+    }
+}
+
+/* Responsive cho màn hình rất nhỏ (điện thoại) */
+@media (max-width: 480px) {
+    .logo{
+        display:none;
+    }
+
+    #sub_title_makeup {
+        width: 80%;
+        height: auto;
+    }
+
+    .makeup-section, .ul_option {
+        flex-direction: column;
+        align-items: baseline;
+    }
+
+    .banner{
+        width: 90%;
+        height: auto;
+    }
+
 }

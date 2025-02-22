@@ -82,3 +82,102 @@
 }
 
 /** end contact **/
+
+
+
+
+/* Time Section */
+  #scheduler{
+    display: none;
+    position: absolute;
+    z-index: 10000;
+  }
+
+  .time-section {
+    background: #3a3a55;
+    padding: 20px;
+    border-radius: 10px;
+    width: 250px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .time-header h3 {
+    margin: 0;
+    font-size: 1.1rem;
+  }
+
+  .time-picker-btn {
+    background: none;
+    border: 1px solid #fff;
+    border-radius: 30px;
+    color: #fff;
+    cursor: pointer;
+    height: 60px;
+    width: 100%;
+  }
+
+  .time-picker-btn:hover {
+    background: #444;
+  }
+
+  .time-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  .time-slot {
+    background: #4caf50;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    color: #fff;
+    text-align: center;
+    cursor: pointer;
+  }
+
+  .time-slot:hover {
+    background: #388e3c;
+  }
+
+  .time-grid .isPicked {
+    background: #999999;
+  }
+
+  .time-grid .selected{
+    background: #ff0000;
+  }
+
+  .date-picker{
+     width: 100%;
+  }
+
+  #title_date_picker{
+    color: #ffffff;
+  }
+
+
+  /* Responsive cho màn hình nhỏ hơn */
+@media (max-width: 768px) {
+  .d-flex{
+    flex-direction: column;
+    grid-template-columns: 1fr;
+  }
+  .d-flex > .col-6{
+    min-width: 100%;
+  }
+
+}
+
+/* Responsive cho màn hình rất nhỏ (điện thoại) */
+@media (max-width: 480px) {
+  .d-flex{
+    flex-direction: column;
+    grid-template-columns: 1fr;
+  }
+  .d-flex > .col-6{
+    min-width: 100%;
+  }
+}

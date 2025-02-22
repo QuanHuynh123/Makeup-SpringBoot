@@ -17,4 +17,5 @@ public class OrderItemDTO {
     Date useDate;
     int orderId;
     int productId;
+    String productName;
 }

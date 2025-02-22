@@ -209,11 +209,20 @@
                 const quantity = document.getElementById('cartQuantity').textContent;
                 const totalPrice = document.getElementById('orderTotal').textContent;
 
+                if(quantity == 0 ) {
+                     Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Chưa có sản phẩm nào trong giỏ hàng.'
+                    });
+                    return;
+                }
+
                 const exchangeRate = 23000;
                 const amount = Math.round(totalPrice * exchangeRate);
                 const orderInfo = "Don hang " + amount ;
 
-                let  requestUrl = '/order/place' ;
+                let  requestUrl = 'api/order/place' ;
                 // Kiểm tra nếu paymentMethod là 2 (VNPAY)
                 if (paymentMethod == 2) {
                     requestUrl = '/submitOrder';

@@ -240,3 +240,19 @@ form input {
 }
 
 /* END - DANH MỤC LIÊN QUAN */
+
+    /* Responsive cho màn hình nhỏ hơn */
+  @media (max-width: 768px) {
+
+      #container_product_top {
+        flex-direction: column;
+      }
+
+  }
+
+  /* Responsive cho màn hình rất nhỏ (điện thoại) */
+  @media (max-width: 480px) {
+      #container_product_top {
+        flex-direction: column;
+      }
+  }

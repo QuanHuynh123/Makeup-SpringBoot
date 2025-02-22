@@ -2,6 +2,9 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Responsive-->
+    <link rel="stylesheet" href="css/responsive.css">
     <link rel="stylesheet"  href="/css/profile.css">
     <link rel="stylesheet"  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -42,15 +45,6 @@
         <input type="text" class="input" id="email" th:value="${user != null ? user.email : ''}" />
     </div>
 
-<!--    <div class='button' >-->
-<!--        <div class='button__icon'><i class="fa-solid fa-venus-mars"></i></div>-->
-<!--        <div class='button__text'>Giới tính : </div>-->
-<!--        <select id="gender" name="gender">-->
-<!--            <option value="Nam" th:selected="${user.gender == 'Nam'}">Nam</option>-->
-<!--            <option value="Nữ" th:selected="${user.gender == 'Nữ'}">Nữ</option>-->
-<!--            <option value="Khác"  th:selected="${user.gender == 'Khác'}">Khác</option>-->
-<!--        </select>-->
-<!--    </div>-->
     <div id="div_button">
         <button class="btn_save" onclick="getData()">CẬP NHẬT THÔNG TIN</button>
     </div>

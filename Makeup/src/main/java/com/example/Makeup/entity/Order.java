@@ -39,6 +39,10 @@ public class Order {
     @Column(name = "pickupDate") // Cột ngày lấy
     Date pickupDate; // Ngày lấy do nhân viên chỉ định
 
+    @Column(name = "return_status", nullable = false)
+    boolean returnStatus;
+
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "payment_id", nullable = false)
     Payment payment;

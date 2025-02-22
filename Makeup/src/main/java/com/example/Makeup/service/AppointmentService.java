@@ -304,4 +304,18 @@ public class AppointmentService {
         );
     }
 
+    private List<AppointmentDTO> getAppointmentUser(int userId){
+        List<Appointment> appointments = appointmentRepository.findAllByUserId(userId);
+        return appointments.stream()
+                .map(appointmentMapper::toAppointmentDTO)
+                .collect(Collectors.toList());
+    }
+
+    public List<AppointmentDTO> getAppointmentsByDateAndStaff(int staffId, Date makeupDate) {
+        List<Appointment> appointments = appointmentRepository.findAppointmentsByDateAndStaff(staffId, makeupDate);
+        return appointments.stream()
+                .map(appointmentMapper::toAppointmentDTO)
+                .collect(Collectors.toList());
+    }
+
 }

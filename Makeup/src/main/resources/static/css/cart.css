@@ -127,7 +127,7 @@ ul {
     border: none;
     padding: 7px 15px 7px 15px;
     border-radius: 5px;
-    margin-left: 50px;
+    margin-left: 30px;
 }
 
 /* End - Cart mini */
@@ -284,3 +284,26 @@ ul {
     width: 170px;
 }
 /* End - Cart-container */
+
+
+/* Responsive cho màn hình nhỏ hơn */
+@media (max-width: 768px) {
+    .cart-container{
+        flex-direction: column;
+    }
+
+    .cart-summary {
+        width: 100%;
+    }
+}
+
+/* Responsive cho màn hình rất nhỏ (điện thoại) */
+@media (max-width: 480px) {
+    .cart-container{
+        flex-direction: column;
+    }
+
+    .cart-summary {
+        width: 100%;
+    }
+}

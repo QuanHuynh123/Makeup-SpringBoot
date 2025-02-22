@@ -2,6 +2,7 @@ package com.example.Makeup.repository;
 
 import com.example.Makeup.dto.AppointmentDetailDTO;
 import com.example.Makeup.entity.Appointment;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -15,6 +16,8 @@ import java.util.List;
 public interface AppointmentRepository extends JpaRepository<Appointment, Integer> {
     List<Appointment> findByMakeupDateBetween(Date startDate, Date endDate);
     List<Appointment> findByStaffId(int staffId);
+
+    List<Appointment> findAllByUserId(int userId);
 
     @Query("SELECT new com.example.Makeup.dto.AppointmentDetailDTO(" +
             "a.id, a.startTime, a.endTime, a.makeupDate, a.status, " +
@@ -97,6 +100,12 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Intege
             "WHERE a.id = :id")
     AppointmentDetailDTO findAppointmentWithDetailsById(@Param("id") int id);
 
+
+    @Query("SELECT a FROM Appointment a WHERE a.staff.id = :staffId AND a.makeupDate = :makeupDate")
+    List<Appointment> findAppointmentsByDateAndStaff(
+            @Param("staffId") int staffId,
+            @Param("makeupDate") Date makeupDate
+    );
 
 
 }

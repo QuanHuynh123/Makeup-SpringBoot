@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- basic -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- site metas -->
+    <title>beautySGU</title>
+    <!-- bootstrap css -->
+    <link rel="stylesheet" href="/css/bootstrap/bootstrap.min.css">
+    <!-- style css -->
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/orderDetail.css">
+    <!-- Responsive-->
+    <link rel="stylesheet" href="/css/responsive.css">
+    <!-- fevicon -->
+    <link rel="icon" href="/images/fevicon.png" type="image/gif" />
+    <!-- Tweaks for older IEs-->
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.css" media="screen">
+    <link rel="stylesheet"  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
+    <link href='https://fonts.googleapis.com/css?family=Satisfy' rel='stylesheet'>
+</head>
+<!-- body -->
+<body class="main-layout">
+<!-- header -->
+<header>
+    <!-- header inner -->
+    <div class="header">
+        <div class="col-xl-1 col-lg-2 col-md-3 col-sm-4 div_btn_home">
+            <a href="/user/myOrder"><button class="btn_home"><i class="fa-solid fa-house"></i> Home</i></button></a>
+        </div>
+    </div>
+</header>
+<!-- end header -->
+
+<!-- content-->
+<div id="content_orderDetail">
+    <div class="col-12 child_content_orderDetail">
+        <h2 class="h3 mb-3 text-black">Đơn hàng mã : </h2>
+        <div class="grid-container">
+            <div class="column-1">
+                <div class="box" id="box-list-item">
+                    <table style="width: 100%; border-collapse: collapse; text-align: center; ">
+                        <thead>
+                        <tr class="info-row boder-bottom">
+                            <th>Items summary</th>
+                            <th>QTY</th>
+                            <th>Price</th>
+                            <th>TotalPrice</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr class="info-row boder-bottom" th:each="item : ${orderItems}">
+                            <td th:text="${item.productName}">Cáo mèo</td>
+                            <td th:text=${item.quantity}>x1</td>
+                            <td th:text="${item.price}">$120</td>
+                            <td th:text="${item.quantity * item.price}">$150</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="box" id="infor-box">
+                    <h3 class="title_box">Customer And Order Details</h3>
+                    <div class="info-row boder-bottom">
+                        <span>Customer Name</span>
+                        <span>Harun Lbili</span>
+                    </div>
+                    <div class="info-row boder-bottom">
+                        <span>Phone Number</span>
+                        <span th:text=${order.phone}>7918881829</span>
+                    </div>
+                    <div class="info-row boder-bottom">
+                        <span>Bag Option</span>
+                        <span>No Bag</span>
+                    </div>
+                    <div class="info-row boder-bottom">
+                        <span>Type</span>
+                        <span>Delivery</span>
+                    </div>
+                    <div class="info-row boder-bottom">
+                        <span>Note</span>
+                        <span>N/A</span>
+                    </div>
+                </div>
+            </div>
+            <div class="column-2">
+                <div class="box" id="box-summary">
+                    <h3 class="title_box">Order summary</h3>
+                    <div class="info-row">
+                        <span>Order Created</span>
+                        <span th:text="${order.orderDate}">Sun, May 7, 2021</span>
+                    </div>
+                    <div class="info-row">
+                        <span>Subtotal</span>
+                        <span th:text="${order.totalPrice}">$375.00</span>
+                    </div>
+                    <div class="info-row">
+                        <span>Delivery Fee</span>
+                        <span>$0.0</span>
+                    </div>
+                </div>
+                <div class="box" id="box-totalPrice">
+                    <div class="info-row">
+                        <span>Total</span>
+                        <span th:text="${order.totalPrice}">$375.00</span>
+                    </div>
+                </div>
+                <div class="box" id="box-address">
+                    <h3 class="title_box" >Address</h3>
+                    <div class="info-row">
+                        <span>Address line</span>
+                        <span>273 Đ. An Dương Vương, Phường 3, Quận 5, Hồ Chí Minh</span>
+                    </div>
+                    <div class="info-row">
+                        <span>Flat</span>
+                        <span>$00.00</span>
+                    </div>
+                    <div class="info-row">
+                        <span>Street Name</span>
+                        <span>Đ. An Dương Vương</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="short_infor">
+
+        </div>
+    </div>
+</div>
+
+<!-- end-content-->
+
+<script src="/js/jquery-3.0.0.min.js"></script>
+</body>
+</html>
+

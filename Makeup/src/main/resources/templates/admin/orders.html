@@ -39,7 +39,7 @@
                                 <th>Ngày đặt</th>
                                 <th>Ngày lấy</th>
                                 <th>Tình trạng</th>
-                                <th>Trả hàng</th>
+                                <th>Duyệt trả hàng</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -51,9 +51,9 @@
                                 <td th:text="${item.totalQuantity}"></td>
                                 <td th:text="${item.orderDate}"></td>
                                 <td th:text="${item.pickupDate}"></td>
-                                <td th:text="${item.status ? 'Đã duyệt' : 'Chưa duyệt'}"></td>
+                                <td th:text="${item.returnStatus ? 'Đã trả' : 'Chưa trả '}"></td>
                                 <td>
-                                    <button id="btn-approveOrder" type="button" class="btn btn-warning btn-sm" th:attr="data-id=${item.id}">
+                                    <button id="btn-returnProductOrder" type="button" class="btn btn-warning btn-sm" th:attr="data-id=${item.id}">
                                         <i class="fa-solid fa-check"></i>
                                     </button>
                                 </td>

@@ -1,9 +1,11 @@
 package com.example.Makeup.service;
 
 import com.example.Makeup.dto.OrderDTO;
+import com.example.Makeup.dto.OrderItemDTO;
 import com.example.Makeup.entity.*;
 import com.example.Makeup.enums.AppException;
 import com.example.Makeup.enums.ErrorCode;
+import com.example.Makeup.mapper.OrderItemMapper;
 import com.example.Makeup.mapper.OrderMapper;
 import com.example.Makeup.repository.*;
 import jakarta.transaction.Transactional;
@@ -47,6 +49,7 @@ public class OrderService {
 
         order.setTotalQuantity(quantity);
         order.setTotalPrice(totalPrice);
+        order.setReturnStatus(false);
 
         Order order1 =   orderRepository.save(order);
         String subject = "Xác nhận đặt hàng";
@@ -58,6 +61,15 @@ public class OrderService {
         }
 
         return order1.getId();
+    }
+
+    public OrderDTO getOrder(int orderId){
+        try{
+            Order order  = orderRepository.findById(orderId).orElseThrow(()-> new AppException(ErrorCode.ORDER_NOT_FOUND));
+            return orderMapper.toOrderDTO(order);
+        }catch (Exception e) {
+            return null;
+        }
     }
 
     @Transactional
@@ -93,5 +105,35 @@ public class OrderService {
         return orders.stream()
                 .map(orderMapper::toOrderDTO)
                 .collect(Collectors.toList());
+    }
+
+    public boolean returnProductOfOrder(int orderId){
+        try {
+            Order order = orderRepository.findById(orderId).orElseThrow(() -> new AppException(ErrorCode.ORDER_NOT_FOUND));
+            List<OrderItem> orderItems = orderItemRepository.findAllByOrderId(orderId);
+            for (OrderItem orderItem : orderItems) {
+                Product product = productRepository.findById(orderItem.getProduct().getId()).orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOT_FOUND));
+                product.setCurrentQuantity(product.getCurrentQuantity() + orderItem.getQuantity());
+                productRepository.save(product);
+           }
+            return true;
+        }catch (Exception e){
+            return false;
+        }
+    }
+
+    public List<OrderDTO> getMyOrder(int userId){
+        try {
+            List<Order> orders =  orderRepository.findByUserId(userId);
+            Collections.reverse(orders);
+            if (orders.isEmpty()){
+                throw  new AppException(ErrorCode.ORDER_NOT_FOUND);
+            }
+            return orders.stream()
+                    .map(orderMapper::toOrderDTO)
+                    .collect(Collectors.toList());
+        }catch (Exception e){
+            return null;
+        }
     }
 }

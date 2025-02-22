@@ -175,3 +175,17 @@ body {
   #btn_home{
     padding: 5px;
   }
+
+    /* Responsive cho màn hình nhỏ hơn */
+  @media (max-width: 768px) {
+    .bg{
+        display: none;
+    }
+  }
+
+  /* Responsive cho màn hình rất nhỏ (điện thoại) */
+  @media (max-width: 480px) {
+    .bg{
+        display: none;
+    }
+  }

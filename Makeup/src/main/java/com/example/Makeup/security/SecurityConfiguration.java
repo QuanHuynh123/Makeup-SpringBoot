@@ -41,8 +41,9 @@ public class SecurityConfiguration {
                             "/images/**",
                             "/fonts/**")
                     .permitAll();
-//            registry.requestMatchers("/admin/**").hasRole("ADMIN");
-            registry.requestMatchers("/user/**").hasRole("USER");
+            registry.requestMatchers("/admin/**","/api/accounts/**"
+                    ,"api/admin/order/**").hasRole("ADMIN");
+            registry.requestMatchers("/user/**","/api/user/**").hasRole("USER");
             registry.anyRequest().permitAll();
         })
         .formLogin(form -> form

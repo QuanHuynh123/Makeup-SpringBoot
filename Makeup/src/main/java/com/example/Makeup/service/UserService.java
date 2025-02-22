@@ -30,7 +30,6 @@ public class UserService {
     public void createInforUser(AccountDTO account, Account accountEntity){
         User user = new User();
         user.setPhone(account.getUserName());
-
         user.setAccount(accountEntity);
         userRepository.save(user);
     }

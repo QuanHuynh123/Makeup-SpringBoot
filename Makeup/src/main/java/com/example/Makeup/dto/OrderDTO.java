@@ -22,4 +22,5 @@ public class OrderDTO {
     boolean status;
     int userId;
     int paymentId;
+    boolean returnStatus;
 }

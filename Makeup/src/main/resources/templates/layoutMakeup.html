@@ -78,7 +78,8 @@
                         <th:block th:if="${user != null}">
                             <ul class="profile_menu">
                                 <li><a href="/user/profile">Thông tin</a></li>
-                                <li><a href="/user/myOder">Đơn hàng của tôi</a></li>
+                                <li><a href="/user/myAppointment">Lịch hẹn của tôi</a></li>
+                                <li><a href="/user/myOrder">Đơn hàng của tôi</a></li>
                                 <li><a href="/cart/home">Giỏ hàng</a></li>
                                 <li><a href="/logout">Đăng xuất</a></li>
                             </ul>
@@ -196,14 +197,35 @@
                             </script>
                         </div>
 
-                        <div class="col-md-12 d-flex gap-3">
+                        <div class="col-md-12 d-flex">
                             <!--                              <div class="row">-->
                             <div class="col-6 px-0">
-                                <input class="contactus" type="date" id="date" name="Date" min="<?= date('Y-m-d'); ?>">
+                                <input class="contactus date-picker" type="date" id="date" name="Date" min="<?= date('Y-m-d'); ?>">
                             </div>
+
                             <div class="col-6 px-0 ">
-                                <input class="contactus" type="time" id="time" name="Time">
-                                <!--                                 </div>-->
+                                <button class="time-picker-btn" id="timePickerBtn">Pick a time</button>
+
+                                <div id="scheduler">
+                                    <div class="time-section">
+                                        <div class="time-header">
+                                            <h3 id="title_date_picker">Wednesday 30 June 2024</h3>
+                                        </div>
+                                        <div class="time-grid">
+                                            <div class="time-slot">7:00 AM</div>
+                                            <div class="time-slot">8:00 AM</div>
+                                            <div class="time-slot">9:00 AM</div>
+                                            <div class="time-slot">10:00 AM</div>
+                                            <div class="time-slot">01:00 PM</div>
+                                            <div class="time-slot">02:00 PM</div>
+                                            <div class="time-slot">03:00 PM</div>
+                                            <div class="time-slot">04:00 PM</div>
+                                            <div class="time-slot">05:00 PM</div>
+                                            <div class="time-slot">06:00 PM</div>
+                                        </div>
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
 
@@ -321,6 +343,23 @@
               behavior: 'smooth'
             });
           });
+        });
+    </script>
+
+    <script>
+        const timePickerBtn = document.getElementById('timePickerBtn');
+        const timeScheduler = document.getElementById('scheduler');
+
+        // Thêm sự kiện click cho nút
+        timePickerBtn.addEventListener('click', (event) => {
+        event.preventDefault(); // Ngăn chặn load lại trang
+
+        // Kiểm tra trạng thái hiển thị của bảng giờ
+        if (timeScheduler.style.display === 'none' || timeScheduler.style.display === '') {
+           timeScheduler.style.display = 'block'; // Hiển thị bảng giờ
+        } else {
+           timeScheduler.style.display = 'none'; // Ẩn bảng giờ
+        }
         });
     </script>
     <div th:replace="~{:: js}"></div>

@@ -19,18 +19,16 @@ public class GlobalModelAttribute {
 
     @Autowired
     CartService cartService;
-
     @Autowired
     CartItemService cartItemService;
-
     @Autowired
     CategoryService categoryService;
-
     @Autowired
     FeedBackService feedBackService;
-
     @Autowired
     UserService userService;
+    @Autowired
+    OrderService orderService;
 
     @ModelAttribute
     public void addSessionUser(Model model, HttpSession session){
@@ -46,7 +44,7 @@ public class GlobalModelAttribute {
                 addCartAndMiniCart(model, session , userDTO.getId());
                 addCategoryHeaderCosplay(model);
                 addFeedGoodFeedBack(model);
-
+                addMyOrder(model,userDTO.getId());
             }
             else
                 System.out.println("Welcome Admin!");
@@ -81,5 +79,10 @@ public class GlobalModelAttribute {
         if(feedBackDTOS.isEmpty())
             System.out.println("Feedback null");
         model.addAttribute("feedbacks", feedBackDTOS);
+    }
+
+    public void addMyOrder(Model model, int userId){
+        List<OrderDTO> orders = orderService.getMyOrder(userId);
+        model.addAttribute("myOrder",orders);
     }
 }

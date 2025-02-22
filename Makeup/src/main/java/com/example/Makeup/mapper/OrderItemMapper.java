@@ -10,6 +10,7 @@ import org.mapstruct.factory.Mappers;
 public interface OrderItemMapper {
     @Mapping(source = "order.id", target = "orderId")
     @Mapping(source = "product.id", target = "productId")
+    @Mapping(source = "product.nameProduct", target = "productName")
     OrderItemDTO toOrderItemDTO(OrderItem orderItem);
 
     @Mapping(source = "orderId", target = "order.id")

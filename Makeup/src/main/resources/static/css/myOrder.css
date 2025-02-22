@@ -1,0 +1,124 @@
+/* header */
+.header{
+    top: 0;
+    background-color: black;
+    height: 70px;
+    position: fixed;
+    z-index: 10;
+    width: 100%;
+    display: flex;
+}
+
+.div_btn_home{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.btn_home{
+    background: none;
+    border: none;
+    color: white;
+    font-size: 22px;
+}
+
+.search-bar {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    max-width: 1000px; /* Đảm bảo kích thước hợp lý */
+    background-color: #ffffff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    overflow: hidden;
+    margin-top: 30px;
+    margin-left: 100px;
+}
+
+.search-input {
+    flex: 1;
+    border: none;
+    padding: 10px;
+    font-size: 16px;
+    outline: none;
+}
+
+.search-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 3px;
+    margin-right: 5px;
+}
+
+.search-button i {
+    font-size: 16px;
+}
+
+.search-button:hover {
+    background-color: #0056b3;
+}
+
+@media (max-width: 768px) {
+    .header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .search-bar {
+        width: 100%;
+    }
+}
+
+/* end-header */
+
+#content_order{
+    margin-top:100px ;
+    background-color: #c9c9cc;
+}
+
+.child_content_order{
+    width: 95%;
+    margin: auto auto;
+}
+
+.text-black{
+    margin: 0px 0px 20px 20px;
+    font-family: Roboto;
+    font-size: 30px;
+    padding-top: 20px;
+    font-weight: 500;
+    color: black;
+}
+
+.col-12{
+    margin-top: 30px;
+    flex: 0 0 100%;
+    max-width: 100%;
+}
+
+.alert-light{
+    border: solid 2px #eee;
+    color: #6c6c6d;
+    background-color: #fefefe;
+    padding: 10px;
+}
+
+.alert-heading{
+    color: inherit;
+    font-size: 1.25rem;
+}
+
+.alert-primary{
+    color: #004005;
+    background-color: #cce5ff;
+    border-color: #b8daff;
+    border: 1px solid transparent;
+    border-radius: .25rem;
+    padding: .75rem 1.25rem;
+}
