@@ -20,6 +20,8 @@ public class MakeupApplication {
 //				.setCredentials(GoogleCredentials.fromStream(serviceAccount))
 //				.build();
 //		FirebaseApp.initializeApp(options);
+
+		// fqfqfq
 	}
 
 }

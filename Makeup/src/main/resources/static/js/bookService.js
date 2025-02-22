@@ -36,6 +36,19 @@ $(document).ready(function () {
         var serviceStaff = $('#optionsStaff').val();
         var date = $('#date').val();
 
+        // Get the current date
+        var currentDate = new Date();
+        currentDate.setHours(0, 0, 0, 0); // Set time to midnight to only compare dates
+
+        // Convert the selected date to a Date object
+        var selectedDate = new Date(date);
+
+        // Check if the selected date is in the past
+        if (selectedDate < currentDate) {
+            alert('Please select a valid date. The date cannot be in the past.');
+            return;
+        }
+
         if (isNaN(selectedTime) ||  selectedTime == null ) {
             alert("Invalid start time");
             return;
@@ -89,7 +102,7 @@ $(document).ready(function () {
                     data: JSON.stringify({
                         startTime: startTime,
                         endTime: endTime ,
-                        makeupDate: date,
+                        makeupDate: selectedDate,
                         status: false,
                         userId: userId, // Sử dụng userId đã tạo
                         serviceMakeupId: serviceOption,
@@ -149,7 +162,6 @@ $(document).ready(function () {
     /* ** Time picker
     ...................
     Time picker ** */
-
     $(document).ready(function () {
     $("#date, #optionsStaff").on("change", function () {
         let selectedDate = $("#date").val();
