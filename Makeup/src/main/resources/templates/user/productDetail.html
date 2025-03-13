@@ -32,7 +32,7 @@
         </div>
 
         <div class="right-column">
-            <h1 th:text="${product.nameProduct ?: 'No name available'}"></h1>
+            <h1 class="name-product" th:text="${product.nameProduct ?: 'No name available'}"></h1>
             <p class="price" th:text="${product.price ?: 'N/A'}"></p>
             <p><strong>SKU:</strong> Shinn Asuka</p>
             <p><strong>Processing Time:</strong> 3-5 days</p>
@@ -168,10 +168,23 @@
                     e.preventDefault();
 
                     const productId = document.getElementById('productId').getAttribute('product-id');
-                    const gender = $('#gender').val();
-                    const size = $('#size').val();
+                    const productName = $('.name-product').text();
+                    //const gender = $('#gender').val();
+                    //const size = $('#size').val();
                     const useDate = $('#use-date').val();
+                    var price = $('.price').text();
                     const quantity = $('#quantity').val();
+                    var imgSrc = $('.main-image').attr('src'); // Lấy đường dẫn ảnh
+                    var imageName = imgSrc.substring(imgSrc.lastIndexOf('/') + 1);
+
+                    let cartItem = {
+                        productId: productId,
+                        productName: productName,  // Cần lấy từ giao diện hoặc API
+                        useDate: useDate,
+                        quantity: quantity,
+                        price: price,  // Cần lấy từ giao diện hoặc API
+                        imageFirst: imageName  // Cần lấy từ giao diện hoặc API
+                    };
 
                     const currentDate = new Date().toISOString().split('T')[0]; // Lấy ngày hiện tại theo định dạng yyyy-mm-dd
                     if (useDate < currentDate) {
@@ -193,24 +206,27 @@
                             useDate: useDate,
                             quantity: quantity
                         }),
-                        success: function (response) {
-                            Swal.fire({
-                              position: "top-end",
-                              icon: "success",
-                              title: "Thêm sản phẩm vào giỏ thành công!",
-                              showConfirmButton: false,
-                              timer: 1500
-                            }).then(() => {
-                            location.reload();  // Reload trang sau khi thông báo kết thúc
-                            });
+                        success: function (response, status, xhr) {
+                            if (xhr.status === 204) {
+                                    alert("cc");
+                                    // Lưu vào localStorage vì server không có session
+                                    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+                                    cart.push(cartItem);
+                                    localStorage.setItem("cart", JSON.stringify(cart));
+                            } else {
+                                    Swal.fire({
+                                      position: "top-end",
+                                      icon: "success",
+                                      title: "Thêm sản phẩm vào giỏ thành công!",
+                                      showConfirmButton: false,
+                                      timer: 1500
+                                    }).then(() => {
+                                    location.reload();  // Reload trang sau khi thông báo kết thúc
+                                    });
+                              }
                         },
                         error: function (error) {
-                            Swal.fire({
-                              icon: "error",
-                              title: "Oops...",
-                              text: "Thêm hàng vào giỏ thất bại!",
-                              footer: '<a href="#">Why do I have this issue?</a>'
-                            });
+                            Swal.fire("Lỗi!", "Không thể thêm sản phẩm.", "error");
                         }
                     });
                 });

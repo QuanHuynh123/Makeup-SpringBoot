@@ -22,7 +22,11 @@ public class CartRestController {
     @PostMapping("/add")
     public ResponseEntity<String> addToCart(@RequestBody CartItemDTO cartRequest , HttpSession session)
     {
-        int cartId = (int) session.getAttribute("cartId");
+        Integer cartId = (Integer) session.getAttribute("cartId");
+
+        if (cartId == null) {
+            return ResponseEntity.noContent().build();
+        }
         if(cartItemService.addCartItem(cartRequest,cartId))
             return  ResponseEntity.ok("");
         else return ResponseEntity.badRequest().body("");

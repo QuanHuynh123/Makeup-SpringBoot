@@ -8,10 +8,50 @@ function goToCartPage() {
     window.location.href = '/cart'; // Đường dẫn đến trang giỏ hàng
 }
 
-// Chuyển hướng đến trang thanh toán
-function checkout() {
-    window.location.href = '/checkout'; // Đường dẫn đến trang thanh toán
-}
+$(document).ready(function () {
+    $("#btn-checkout").on("click", function (event) {
+        event.preventDefault(); // Chặn chuyển hướng ngay lập tức
+
+        let dates = new Set();
+
+        $(".p_use_date").each(function () {
+            let dateText = $(this).text().replace("Use date : ", "").trim(); // Lấy ngày
+            dates.add(dateText);
+        });
+
+        // Kiểm tra xem có nhiều hơn một ngày không
+        if (dates.size > 1) {
+            Swal.fire({
+                icon: "error",
+                title: "Chờ đã",
+                text: "Các sản phẩm phải có chung một ngày đặt!",
+                footer: '<a href="#">Why do I have this issue?</a>'
+            });
+            return;
+        }
+
+        // Lấy ngày đầu tiên từ Set
+        let selectedDate = Array.from(dates)[0]; // Lấy phần tử đầu tiên
+        let useDate = new Date(selectedDate);
+        let today = new Date();
+        today.setHours(0, 0, 0, 0); // Đưa về 00:00 để so sánh
+
+        // Kiểm tra ngày có hợp lệ không
+        if (useDate < today) {
+            Swal.fire({
+                icon: "error",
+                title: "Lỗi ngày đặt",
+                text: "Không thể đặt sản phẩm với ngày trong quá khứ!",
+            });
+            return;
+        }
+
+        // Nếu hợp lệ, chuyển hướng đến trang checkout
+        window.location.href = $(this).attr("href");
+    });
+});
+
+
 
 // Thêm sản phẩm vào giỏ hàng (giả lập)
 function addToCart(product) {

@@ -22,6 +22,8 @@
             <div th:if="${error == null or error == ''}">
 
                 <div class="cart-item" th:each="item : ${cartItems}">
+
+                    <input type="checkbox" class="select-item" th:value="${item.id}">
                     <img th:src="@{'/images/product/' + ${item.imageFirst}}"  alt="Product Image" class="cart-item-image">
                     <div class="cart-item-info" th:attr="cart-id=${item.id}">
                         <input class="product-id" style="display:none;" th:value="${item.productId}">
@@ -43,6 +45,7 @@
                             <button class="btn-delete-cart-item"><i class="fa-solid fa-delete-left"></i></button>
                         </div>
                     </div>
+
                 </div>
 
             </div>
@@ -195,6 +198,64 @@
               });
           });
     </script>
+
+    <script>
+        $(document).ready(function () {
+            $(".checkout-btn").on("click", function (event) {
+                 event.preventDefault();
+
+                 var selectedItems = $('.cart-item').filter(function() {
+                   return $(this).find('.select-item:checked').length > 0;
+                 });
+
+                 if (selectedItems.length > 0) {
+
+                 let dates = new Set();
+
+                 selectedItems.each(function() {
+                 var cartItem = $(this);
+
+                 // Lấy useDate
+                 var useDate = cartItem.find('.use-date').val();
+
+                 let dateText = useDate.replace("Use date : ", "").trim(); // Lấy ngày
+                 dates.add(dateText);
+
+                });
+
+                if (dates.size > 1) {
+                    Swal.fire({
+                    icon: "error",
+                    title: "Chờ đã",
+                    text: "Các sản phẩm phải có chung một ngày đặt!",
+                    footer: '<a href="#">Why do I have this issue?</a>'
+                    });
+                    return;
+                }
+
+                let selectedDate = Array.from(dates)[0]; // Lấy phần tử đầu tiên
+                let useDate = new Date(selectedDate);
+                let today = new Date();
+                today.setHours(0, 0, 0, 0); // Đưa về 00:00 để so sánh
+
+                // Kiểm tra ngày có hợp lệ không
+                if (useDate < today) {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Lỗi ngày đặt",
+                        text: "Không thể đặt sản phẩm với ngày trong quá khứ!",
+                    });
+                    return;
+                }
+              } else {
+                Swal.fire("Không có sản phẩm nào được chọn.");
+                return;
+              }
+              window.location.href = $(this).parent().attr("href");
+            })
+        })
+    </script>
+
 </div>
 </body>
 </html>
