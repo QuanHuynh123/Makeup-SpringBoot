@@ -33,8 +33,10 @@ public class CosplayController {
     public String home(Model model){
         List<ProductDTO> hotProducts = productService.getHotProducts();
         List<ProductDTO> newProducts = productService.getNewProducts();
+        List<ProductDTO> randomCustomerShow = productService.getCustomerShowRandom();
         model.addAttribute("hotProducts", hotProducts);
         model.addAttribute("newProducts", newProducts);
+        model.addAttribute("randomCustomerShow", randomCustomerShow);
         return "user/cosplay";
     }
 

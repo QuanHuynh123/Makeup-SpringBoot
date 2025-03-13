@@ -32,6 +32,15 @@ public class GlobalModelAttribute {
 
     @ModelAttribute
     public void addSessionUser(Model model, HttpSession session){
+        model.addAttribute("error","Bạn chưa thêm sản phẩm nào vào giỏ hàng!");
+        addCategoryHeaderCosplay(model);
+        addFeedGoodFeedBack(model);
+
+        /**
+         * Resource when authentication
+         * Cart
+         * Order
+        **/
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && !authentication.getName().equals("anonymousUser")) {
             boolean isAdmin = authentication.getAuthorities().stream()
@@ -42,8 +51,6 @@ public class GlobalModelAttribute {
                 model.addAttribute("user", userDTO);
 
                 addCartAndMiniCart(model, session , userDTO.getId());
-                addCategoryHeaderCosplay(model);
-                addFeedGoodFeedBack(model);
                 addMyOrder(model,userDTO.getId());
             }
             else
@@ -52,7 +59,6 @@ public class GlobalModelAttribute {
         else
             System.out.println("Welcome Anonymous");
     }
-
 
     public void addCartAndMiniCart(Model model, HttpSession session,  int userId){
 

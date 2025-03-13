@@ -84,16 +84,21 @@
                 <i class="fa fa-shopping-cart" alt="Cart" ></i>
                 <span class="cart-count" th:text="${countCart}"></span>
             </div>
+
             <!-- Giỏ hàng nhỏ (Mini Cart) -->
             <div id="mini-cart" class="mini-cart hidden">
+
                 <div class="mini-cart-header">
                     <h4>Your Shopping Cart</h4>
                     <button onclick="toggleCart()">X</button>
                 </div>
+
                 <div class="mini-cart-body">
+
                     <div th:if="${error != null and error != ''}" id="cart-empty-msg" >
                         <p th:text="'You have no items in your shopping cart.'"></p>
                     </div>
+
                     <ul id="cart-mini-items">
                         <li th:each="item : ${cartItems}">
                             <div class="content_item_cart">
@@ -111,12 +116,17 @@
                             </div>
                         </li>
                     </ul>
+
                 </div>
+
                 <div class="mini-cart-footer">
                     <a id="btn-viewcart" href="/cart/home"><button >View Cart</button></a>
-                    <a id="btn-checkout" href="/cart/checkOut"><button >Checkout</button></a>
+                    <a id="btn-checkout" href="/cart/checkOut">
+                        <button type="button">Checkout</button>
+                    </a>
                 </div>
             </div>
+
         </div>
     </div>
 </div>
@@ -291,6 +301,40 @@
 });
 
 </script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+          let cartMiniItems = document.getElementById("cart-mini-items");
+            let cartEmptyMsg = document.getElementById("cart-empty-msg");
+
+            let localCart = JSON.parse(localStorage.getItem("cart")) || [];
+            if (localCart.length > 0) {
+               cartEmptyMsg.style.display = "none"; // Ẩn thông báo giỏ hàng trống
+                localCart.forEach(item => {
+                    let cartItem = `
+                        <li>
+                            <div class="content_item_cart">
+                                <input class="cart-id" style="display:none;" value="${item.productId}">
+                                <div class="content_item_cart_left">
+                                   <h3 class="text_name_product">${item.productName || "No Name"}</h3>
+                                    <p class="p_use_date small-text">Use date: ${item.useDate || "N/A"}</p>
+                                    <p class="p_quantity small-text">Quantity: ${item.quantity || 1}</p>
+                                    <p class="p_price small-text">Price: ${item.price || 0}</p>
+                                    <button class="btn_delete"><i class="fa-solid fa-x"></i></button>
+                                </div>
+                                <div class="content_item_cart_right">
+                                    <img class="img_item_cart" src="/images/product/${item.imageFirst || 'default.jpg'}" alt="Product Image">
+                                </div>
+                            </div>
+                        </li>
+                    `;
+
+                    cartMiniItems.innerHTML += cartItem;
+                });
+            }
+    });
+
+</script>
+
     <script src="/js/cart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <div th:replace="~{:: js}"></div>

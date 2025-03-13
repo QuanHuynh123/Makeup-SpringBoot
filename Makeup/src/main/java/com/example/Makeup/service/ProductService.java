@@ -18,6 +18,7 @@ import java.nio.file.Paths;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -74,6 +75,19 @@ public class ProductService {
         }
         return products.stream()
                 .map(productMapper::toProductDTO)
+                .collect(Collectors.toList());
+    }
+
+    // Need fix performance
+    public List<ProductDTO> getCustomerShowRandom() {
+        List<Product> allProducts = productRepository.findAll();
+        if (allProducts.isEmpty()) {
+            throw new AppException(ErrorCode.PRODUCT_NOT_FOUND);
+        }
+        Collections.shuffle(allProducts); // Xáo trộn danh sách
+        return allProducts.stream()
+                .limit(10) // Giới hạn chỉ lấy 6 sản phẩm
+                .map(productMapper::toProductDTO) // Chuyển đổi sang DTO
                 .collect(Collectors.toList());
     }
 
