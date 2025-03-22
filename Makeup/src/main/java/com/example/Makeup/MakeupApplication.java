@@ -22,6 +22,7 @@ public class MakeupApplication {
 //		FirebaseApp.initializeApp(options);
 
 		// fqfqfq
+// test 2
 	}
 
 }
