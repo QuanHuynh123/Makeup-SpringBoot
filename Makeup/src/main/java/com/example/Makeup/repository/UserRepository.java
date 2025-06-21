@@ -2,19 +2,22 @@ package com.example.Makeup.repository;
 
 import com.example.Makeup.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Repository
-public interface UserRepository extends JpaRepository<User,Integer> {
-    User findByFullName(String fullName);
-    @Query("SELECT u FROM User u WHERE u.phone = :phone AND u.account IS NOT NULL")
-    User findByPhoneAndAccountNotNull(@Param("phone") String phone);
+public interface UserRepository extends JpaRepository<User, UUID> {
 
-    User findByAccountId(int accountId);
+    User findByFullName(String fullName);
+
+    Optional<User> findByAccount_userName(String userName);
+
+    Optional<User> findByAccount_Id(UUID id);
+
+    User findByAccountId(UUID accountId);
+
     Optional<User> findByEmailAndPhone(String email, String phone);
 
 }

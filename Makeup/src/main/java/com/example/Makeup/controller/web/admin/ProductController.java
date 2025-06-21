@@ -4,10 +4,12 @@
  */
 package com.example.Makeup.controller.web.admin;
 
-import com.example.Makeup.dto.ProductDTO;
-import com.example.Makeup.dto.SubCategoryDTO;
+import com.example.Makeup.dto.model.ProductDTO;
+import com.example.Makeup.dto.model.SubCategoryDTO;
 import java.util.List;
+import java.util.UUID;
 
+import com.example.Makeup.enums.ApiResponse;
 import com.example.Makeup.service.ProductService;
 import com.example.Makeup.service.SubCategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,30 +30,29 @@ public class ProductController {
 
     @GetMapping("/create")
     public String createProductPage(Model model){
-        List<SubCategoryDTO> subCategories = subCategoryService.getAll();
-        model.addAttribute("subCategories", subCategories);
+        ApiResponse<List<SubCategoryDTO>> subCategories = subCategoryService.getAll();
+        model.addAttribute("subCategories", subCategories.getResult());
 
         return "admin/create-product";
     }
 
     @GetMapping
-    public String getProducts(Model model){
-        List<ProductDTO> products = productService.getProducts();
-        model.addAttribute("products", products);
+    public String getAllProducts(Model model){
+        ApiResponse<List<ProductDTO>> products = productService.getAllProducts();
+        model.addAttribute("products", products.getResult());
         return "admin/products";
     }
 
 
     @GetMapping("/edit/{id}")
-    public String editProductPage(Model model, @PathVariable("id") int id){
-        List<SubCategoryDTO> subCategories = subCategoryService.getAll();
-        model.addAttribute("subCategories", subCategories);
+    public String editProductPage(Model model, @PathVariable("id") UUID id){
+        ApiResponse<List<SubCategoryDTO>> subCategories = subCategoryService.getAll();
+        model.addAttribute("subCategories", subCategories.getResult());
         
-        ProductDTO productDTO = productService.findById(id);
-        System.out.println(productDTO.getDescribe());
+        ApiResponse<ProductDTO> productDTO = productService.findProductById(id);
         
-        String[] imageList = productDTO.getImage().split(",");
-        model.addAttribute("product", productDTO);
+        String[] imageList = productDTO.getResult().getImage().split(",");
+        model.addAttribute("product", productDTO.getResult());
         model.addAttribute("images", imageList);
         return "admin/edit-product";
     }

@@ -3,21 +3,25 @@ package com.example.Makeup.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.sql.Date;
+import java.util.UUID;
 
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
-@Table(name = "feedBack")
+@Table(name = "feed_back")
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class FeedBack {
+public class FeedBack extends Base{
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
-    int id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "id", updatable = false, nullable = false, columnDefinition = "CHAR(36)")
+    @JdbcTypeCode(SqlTypes.CHAR)
+    private UUID id;
 
     @Column(name = "rating")
     int rating  ;
@@ -25,14 +29,11 @@ public class FeedBack {
     @Column(name = "comment", length = 250, nullable = false)
     String comment;
 
-    @Column(name = "reviewDate",  nullable = false)
-    Date reviewDate;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     User user;
 
     @ManyToOne( fetch = FetchType.LAZY)
-    @JoinColumn(name = "serviceMakeup_id", nullable = false)
+    @JoinColumn(name = "service_makeup_id", nullable = false)
     ServiceMakeup serviceMakeup;
 }

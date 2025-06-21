@@ -1,26 +1,36 @@
 package com.example.Makeup.service;
 
-import com.example.Makeup.dto.CategoryDTO;
+import com.example.Makeup.dto.model.CategoryDTO;
 import com.example.Makeup.entity.Category;
+import com.example.Makeup.enums.ApiResponse;
+import com.example.Makeup.enums.AppException;
+import com.example.Makeup.enums.ErrorCode;
 import com.example.Makeup.mapper.CategoryMapper;
 import com.example.Makeup.repository.CategoryRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class CategoryService {
 
-    @Autowired
-    CategoryRepository categoryRepository;
-    @Autowired
-    CategoryMapper categoryMapper;
-    public List<CategoryDTO> getAllCategory(){
+    private final CategoryRepository categoryRepository;
+    private final CategoryMapper categoryMapper;
+
+    public ApiResponse<List<CategoryDTO>> getAllCategory(){
         List<Category> categories = categoryRepository.findAll();
-        return categories.stream()
-                .map(categoryMapper::toCategoryDTO)
-                .collect(Collectors.toList());
+        if (categories.isEmpty()) {
+            throw new AppException(ErrorCode.IS_EMPTY);
+        }
+        return ApiResponse.<List<CategoryDTO>>builder()
+                .code(200)
+                .message("Category list")
+                .result(categories.stream()
+                        .map(categoryMapper::toCategoryDTO)
+                        .collect(Collectors.toList()))
+                .build();
     }
 }

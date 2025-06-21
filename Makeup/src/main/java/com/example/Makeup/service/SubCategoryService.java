@@ -4,43 +4,48 @@
  */
 package com.example.Makeup.service;
 
-import com.example.Makeup.dto.SubCategoryDTO;
+import com.example.Makeup.dto.model.SubCategoryDTO;
 import com.example.Makeup.entity.SubCategory;
+import com.example.Makeup.enums.ApiResponse;
 import com.example.Makeup.enums.AppException;
 import com.example.Makeup.enums.ErrorCode;
 import com.example.Makeup.mapper.SubCategoryMapper;
 import com.example.Makeup.repository.SubCategoryRepository;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class SubCategoryService {
-    @Autowired
-    SubCategoryRepository subCategoryRepository;
 
-    @Autowired
-    SubCategoryMapper subCategoryMapper;
+    private final SubCategoryRepository subCategoryRepository;
+    private final SubCategoryMapper subCategoryMapper;
 
-    public SubCategoryDTO findById(int id){
-        // Dùng orElseThrow để ném ngoại lệ nếu không tìm thấy
+    public ApiResponse<SubCategoryDTO> findById(int id){
         SubCategory optSubCategory = subCategoryRepository.findById(id)
-                .orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOT_FOUND));
+                .orElseThrow(() -> new AppException(ErrorCode.CANT_FOUND));
 
-        // Tiến hành xử lý
-        return subCategoryMapper.toSubCategoryDTO(optSubCategory);
+        return ApiResponse.<SubCategoryDTO>builder()
+                .code(200)
+                .message("Subcategory found")
+                .result(subCategoryMapper.toSubCategoryDTO(optSubCategory))
+                .build();
     }
 
-    public List<SubCategoryDTO> getAll(){
+    public ApiResponse<List<SubCategoryDTO>> getAll(){
         List<SubCategory> subCategories = subCategoryRepository.findAll();
-
-        return subCategories.stream()
-                .map(subCategoryMapper::toSubCategoryDTO)
-                .collect(Collectors.toList());
+        if (subCategories.isEmpty()) {
+            throw new AppException(ErrorCode.IS_EMPTY);
+        }
+        return ApiResponse.<List<SubCategoryDTO>>builder()
+                .code(200)
+                .message("Subcategories found")
+                .result(subCategories.stream().map(subCategoryMapper::toSubCategoryDTO).collect(Collectors.toList()))
+                .build();
     }
 
 }

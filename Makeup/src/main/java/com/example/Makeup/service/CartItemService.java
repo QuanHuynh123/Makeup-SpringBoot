@@ -1,74 +1,111 @@
 package com.example.Makeup.service;
 
-import com.example.Makeup.dto.CartItemDTO;
-import com.example.Makeup.dto.ProductDTO;
+import com.example.Makeup.dto.model.CartDTO;
+import com.example.Makeup.dto.model.CartItemDTO;
+import com.example.Makeup.dto.model.ProductDTO;
 import com.example.Makeup.entity.CartItem;
+import com.example.Makeup.enums.ApiResponse;
 import com.example.Makeup.enums.AppException;
 import com.example.Makeup.enums.ErrorCode;
 import com.example.Makeup.mapper.CartItemMapper;
 import com.example.Makeup.repository.CartItemRepository;
 import jakarta.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class CartItemService {
 
-    @Autowired
-    CartItemRepository cartItemRepository;
+    private final CartItemRepository cartItemRepository;
+    private final CartService cartService;
+    private final CartItemMapper cartItemMapper;
+    private final ProductService productService;
 
-    @Autowired
-    CartService cartService;
 
-    @Autowired
-    CartItemMapper cartItemMapper;
-
-    @Autowired
-    ProductService productService;
-
-    public List<CartItemDTO> getCartItemByCartId(int cartId){
+    public ApiResponse<List<CartItemDTO>> getCartItemByCartId(UUID cartId) {
+        if (!cartService.checkCartAndUser(cartId)) {
+            throw new AppException(ErrorCode.CANT_FOUND);
+        }
         List<CartItem> cartItem = cartItemRepository.findAllByCartId(cartId);
-
-        return cartItem.stream()
-                .map(cartItemMapper::toCartItemDTO)
-                .collect(Collectors.toList());
+        if (cartItem.isEmpty()) {
+            throw new AppException(ErrorCode.IS_EMPTY);
+        }
+        return ApiResponse.<List<CartItemDTO>>builder()
+                .code(200)
+                .message("Cart item list")
+                .result(cartItem.stream()
+                        .map(cartItemMapper::toCartItemDTO)
+                        .collect(Collectors.toList()))
+                .build();
     }
 
-    public boolean addCartItem ( CartItemDTO cartItemDTO , int cartId){
-        ProductDTO productDTO = productService.findById(cartItemDTO.getProductId());
+    @Transactional
+    public ApiResponse<Boolean> addCartItem(CartItemDTO cartItemDTO, UUID cartId) {
+        if (!cartService.checkCartAndUser(cartId)) {
+            throw new AppException(ErrorCode.CANT_FOUND);
+        }
+        ProductDTO productDTO = productService.findProductById(cartItemDTO.getProductId()).getResult();
         cartItemDTO.setPrice(productDTO.getPrice() * cartItemDTO.getQuantity());
         cartItemDTO.setCartId(cartId);
         cartItemRepository.save(cartItemMapper.toCartItemEntity(cartItemDTO));
 
-        return cartService.updateCartTotals( cartId);
+        return ApiResponse.<Boolean>builder()
+                .code(200)
+                .message("Add cart item success")
+                .result(true)
+                .build();
     }
 
     @Transactional
-    public boolean deleteCartItem(int cartItemId , int cartId){
+    public ApiResponse<Boolean> deleteCartItem(UUID cartItemId, UUID cartId) {
+        if (!cartService.checkCartAndUser(cartId)) {
+            throw new AppException(ErrorCode.CANT_FOUND);
+        }
+
         CartItem cartItem = cartItemRepository.findById(cartItemId)
                 .orElseThrow(() -> new AppException(ErrorCode.CANT_FOUND));
         cartItemRepository.delete(cartItem);
-        return cartService.updateCartTotals(cartId);
+        return ApiResponse.<Boolean>builder()
+                .code(200)
+                .message("Delete cart item success")
+                .result(true)
+                .build();
     }
 
     @Transactional
-    public boolean deleteAllCartItem(int cartId){
-        cartItemRepository.deleteAllByCartId(cartId);
-        return cartService.updateCartTotals(cartId);
+    public ApiResponse<Boolean> deleteAllCartItem(UUID cartId) {
+        if (!cartService.checkCartAndUser(cartId)) {
+            throw new AppException(ErrorCode.CANT_FOUND);
+        }
+        int check = cartItemRepository.deleteAllByCartId(cartId);
+        if (check == 0) {
+            throw new AppException(ErrorCode.CANT_FOUND);
+        }
+        return ApiResponse.<Boolean>builder()
+                .code(200)
+                .message("Delete all cart item success")
+                .result(true)
+                .build();
     }
 
-    public boolean updateCartItem(CartItemDTO cartItemDTO, int cartId){
-        ProductDTO productDTO = productService.findById(cartItemDTO.getProductId());
+    @Transactional
+    public ApiResponse<CartDTO> updateCartItem(CartItemDTO cartItemDTO, UUID cartId) {
+        if (!cartService.checkCartAndUser(cartId)) {
+            throw new AppException(ErrorCode.CANT_FOUND);
+        }
+        ApiResponse<ProductDTO> productDTO = productService.findProductById(cartItemDTO.getProductId());
 
-        CartItem existingCartItem = cartItemRepository.findById(cartItemDTO.getCartItemId())
+        CartItem existingCartItem = cartItemRepository.findById(cartItemDTO.getId())
                 .orElseThrow(() -> new AppException(ErrorCode.CANT_FOUND));
         existingCartItem.setQuantity(cartItemDTO.getQuantity());
-        existingCartItem.setPrice(productDTO.getPrice() * cartItemDTO.getQuantity());
-        existingCartItem.setUseDate((Date) cartItemDTO.getUseDate());
+        existingCartItem.setPrice(productDTO.getResult().getPrice() * cartItemDTO.getQuantity());
+        existingCartItem.setRentalDate( cartItemDTO.getRentalDate());
         cartItemRepository.save(existingCartItem);
         return cartService.updateCartTotals(cartId);
     }

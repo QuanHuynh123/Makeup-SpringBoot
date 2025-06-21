@@ -5,6 +5,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @NoArgsConstructor
@@ -13,8 +14,7 @@ import java.util.List;
 @Setter
 @Table(name = "category")
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Category {
-
+public class Category extends Base{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -27,10 +27,4 @@ public class Category {
     @OneToMany(mappedBy = "category", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<SubCategory> subCategories;
 
-    public Category(String name){
-        this.name = name;
-    }
-    public Category(int  id){
-        this.id = id;
-    }
 }

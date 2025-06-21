@@ -3,8 +3,11 @@ package com.example.Makeup.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @AllArgsConstructor
@@ -13,11 +16,12 @@ import java.util.List;
 @Setter
 @Table(name = "staff")
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Staff {
+public class Staff extends Base{
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
-    int id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "id", updatable = false, nullable = false, columnDefinition = "CHAR(36)")
+    @JdbcTypeCode(SqlTypes.CHAR)
+    private UUID id;
 
     @Column(name = "name", length = 40)
     String nameStaff;
@@ -26,9 +30,9 @@ public class Staff {
     String phone;
 
     @OneToMany(mappedBy = "staff", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    List<Appointment> appointments; // Một nhân viên có thể có nhiều cuộc hẹn
+    List<Appointment> appointments;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "account_id")  // Thêm khóa ngoại account_id
+    @JoinColumn(name = "account_id")
     Account account;
 }

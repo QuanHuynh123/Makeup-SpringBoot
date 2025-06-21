@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
+
 @RestController
 @RequestMapping("api/admin/order")
 public class OrderAdminRestController {
@@ -13,7 +15,7 @@ public class OrderAdminRestController {
 
     @PostMapping("/approve/{orderId}")
     @ResponseBody
-    public ResponseEntity<String> approveOrder(@PathVariable("orderId") int orderId) {
+    public ResponseEntity<String> approveOrder(@PathVariable("orderId") UUID orderId) {
         try {
             orderService.checkOrder(orderId);
             return ResponseEntity.ok("Approve successfully!");

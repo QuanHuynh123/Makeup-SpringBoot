@@ -1,13 +1,11 @@
 package com.example.Makeup.controller.web.admin;
-
-import com.example.Makeup.dto.AppointmentDetailDTO;
-import com.example.Makeup.dto.StaffDTO;
-import com.example.Makeup.dto.StaffDetailDTO;
+import com.example.Makeup.dto.model.StaffDTO;
+import com.example.Makeup.enums.ApiResponse;
+import com.example.Makeup.dto.model.AppointmentDTO;
 import com.example.Makeup.repository.AppointmentRepository;
 import com.example.Makeup.repository.OrderRepository;
 import com.example.Makeup.service.AppointmentService;
 import com.example.Makeup.service.StaffService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -20,20 +18,23 @@ import java.util.*;
 @Controller
 @RequestMapping("/admin/")
 public class AdminController {
-    @Autowired
-    private AppointmentRepository appointmentRepository;
-    @Autowired
-    private StaffService staffService;
 
-    @Autowired
-    private AppointmentService appointmentService;
+    private final AppointmentRepository appointmentRepository;
+    private final StaffService staffService;
 
-    @Autowired
-    private OrderRepository orderRepository;
+    private final AppointmentService appointmentService;
+    private final OrderRepository orderRepository;
+
+    public AdminController(AppointmentRepository appointmentRepository, StaffService staffService, AppointmentService appointmentService, OrderRepository orderRepository) {
+        this.appointmentRepository = appointmentRepository;
+        this.staffService = staffService;
+        this.appointmentService = appointmentService;
+        this.orderRepository = orderRepository;
+    }
 
     @GetMapping("staff")
-    public String loginPage(Model model) {
-        List<StaffDetailDTO> staffList = staffService.getAllStaffDetail();
+    public String staffPage(Model model) {
+        ApiResponse<List<StaffDTO>> staffList = staffService.getAllStaffDetail();
         model.addAttribute("staffList", staffList); // Truyền danh sách nhân viên vào model
         return "admin/staff-all";
     }
@@ -45,9 +46,8 @@ public class AdminController {
 
     @GetMapping("appointment")
     public String loginPage4(Model model) {
-        List<AppointmentDetailDTO> appointmentList = appointmentService.getAllAppointmentsDetail();
-//        appointmentList.forEach(appointment -> System.out.println("Appointment: " + appointment));
-        model.addAttribute("appointmentList", appointmentList); // Truyền vào model
+        ApiResponse<List<AppointmentDTO>> appointmentList = appointmentService.getAllAppointmentsDetail();
+        model.addAttribute("appointmentList", appointmentList.getResult());
         return "admin/appointment-all";
     }
 

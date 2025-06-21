@@ -1,33 +1,51 @@
 package com.example.Makeup.service;
 
-import com.example.Makeup.dto.AccountDTO;
+import com.example.Makeup.dto.model.AccountDTO;
+import com.example.Makeup.dto.request.RegisterRequest;
+import com.example.Makeup.dto.request.UpdateAccountRequest;
 import com.example.Makeup.entity.Account;
+import com.example.Makeup.entity.RefreshToken;
 import com.example.Makeup.entity.Role;
+import com.example.Makeup.entity.User;
+import com.example.Makeup.enums.ApiResponse;
 import com.example.Makeup.enums.AppException;
 import com.example.Makeup.enums.ErrorCode;
 import com.example.Makeup.mapper.AccountMapper;
 import com.example.Makeup.repository.AccountRepository;
+import com.example.Makeup.repository.RefreshTokenRepository;
 import com.example.Makeup.repository.RoleRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.Makeup.repository.UserRepository;
+import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
+@Slf4j
 @Service
+@RequiredArgsConstructor
 public class AccountService implements UserDetailsService {
 
-    @Autowired
-    AccountRepository accountRepository;
+    private final AccountRepository accountRepository;
+    private final RoleRepository roleRepository;
+    private final AccountMapper accountMapper;
+    private final JWTService jwtService;
+    private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    private final UserRepository userRepository;
+    private final RefreshTokenRepository refreshTokenRepository;
 
-    @Autowired
-    RoleRepository roleRepository;
+    @Value("${refresh.expiration}")
+    private long  expiredRefreshToken ;
 
-    @Autowired
-    AccountMapper accountMapper;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -50,51 +68,150 @@ public class AccountService implements UserDetailsService {
                 : new String[]{"USER"};
     }
 
+    @Transactional
+    public ApiResponse<String> authenticate(String username, String password) {
 
-    public Account save(AccountDTO account){
+        Account account = accountRepository.findByUserName(username)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+
+        if (!passwordEncoder.matches(password, account.getPassWord())) {
+            throw new AppException(ErrorCode.PASSWORD_NOT_MATCH);
+        }
+
+        log.info("Pass authentication for user: {}", username);
+        log.debug("Checking existing refresh token for user: {}", username);
+
+
+        RefreshToken refreshToken;
+
+        Optional<RefreshToken> optionalToken = refreshTokenRepository
+                .findLatestValidTokenByAccount(account.getId());
+
+        if (optionalToken.isPresent() && optionalToken.get().getExpiryDate().isAfter(LocalDateTime.now())) {
+            // Using existing valid token
+            log.info("Using existing valid refresh token for user: {}", username);
+            refreshToken = optionalToken.get();
+        } else {
+            // If no valid token exists, revoke all existing tokens
+            refreshTokenRepository.revokeAllByAccount(account.getId());
+
+            // Create a new refresh token
+            refreshToken = new RefreshToken();
+            refreshToken.setToken(UUID.randomUUID().toString());
+            refreshToken.setExpiryDate(LocalDateTime.now().plusDays(expiredRefreshToken / (1000 * 60 * 60 * 24)));
+            refreshToken.setAccount(account);
+            refreshToken.setRevoked(false);
+            refreshTokenRepository.save(refreshToken);
+        }
+
+        // Generate JWT token
+        String token = jwtService.generateToken(username, account.getRole().getId());
+
+        return ApiResponse.<String>builder()
+                .code(200)
+                .message("Login success")
+                .result(token)
+                .build();
+    }
+
+    @Transactional
+    public ApiResponse<String> signUp(RegisterRequest registerRequest) {
+        if (accountRepository.existsByUserName(registerRequest.getUserName())) {
+            throw new AppException(ErrorCode.USER_ALREADY_EXISTED);
+        }
+        Account account = new Account();
+        account.setUserName(registerRequest.getUserName());
+        account.setPassWord(passwordEncoder.encode(registerRequest.getPassWord()));
+        Role role = roleRepository.findById(2)
+                .orElseThrow(() -> new AppException(ErrorCode.CANT_FOUND));
+        account.setRole(role);
+        accountRepository.save(account);
+        System.out.println("UUID account: " + account.getId());
+
+        User user = new User();
+        user.setFullName(account.getUserName());
+        user.setAccount(account);
+        user.setPhone("000-000-0000"); // Normalize phone number or set a default value
+        userRepository.save(user);
+        return ApiResponse.<String>builder()
+                .code(200)
+                .message("Sign up success")
+                .result("Account created successfully")
+                .build();
+    }
+
+
+    @Transactional
+    public ApiResponse<Boolean> createAccount(AccountDTO account){
+        if (accountRepository.existsByUserName(account.getUserName())) {
+            throw new AppException(ErrorCode.USER_ALREADY_EXISTED);
+        }
         Role role = roleRepository.findById(account.getRoleId())
                 .orElseThrow(()-> new AppException(ErrorCode.CANT_FOUND));
         Account saveAccount = accountMapper.toEntity(account);
         saveAccount.setRole(role);
-        return accountRepository.save(saveAccount);
+        accountRepository.save(saveAccount);
+        return ApiResponse.<Boolean>builder()
+                .code(200)
+                .message("Create account success")
+                .result(true)
+                .build();
     }
 
-    public boolean checkExists(String userName){
-        return accountRepository.existsByUserName(userName);
+
+    public ApiResponse<List<AccountDTO>> getAllAccounts() {
+        return ApiResponse.<List<AccountDTO>>builder()
+                .code(200)
+                .message("Get all accounts success")
+                .result(accountRepository.findAll().stream()
+                        .map(accountMapper::toDTO)
+                        .toList())
+                .build();
+    }
+    public ApiResponse<AccountDTO> getAccountById(UUID id) {
+        Account account =  accountRepository.findById(id).orElseThrow(
+                () -> new AppException(ErrorCode.CANT_FOUND));
+        return ApiResponse.<AccountDTO>builder()
+                .code(200)
+                .message("Get account success")
+                .result(accountMapper.toDTO(account))
+                .build();
     }
 
-    // Lấy tất cả tài khoản
-    public List<Account> findAll() {
-        return accountRepository.findAll();
+    @Transactional
+    public ApiResponse<Boolean> delete(UUID userId) {
+        Account account = accountRepository.findById(userId)
+                .orElseThrow(() -> new AppException(ErrorCode.CANT_FOUND));
+        accountRepository.delete(account);
+        return ApiResponse.<Boolean>builder()
+                .code(200)
+                .message("Delete account success")
+                .result(true)
+                .build();
     }
-    // Tìm tài khoản theo ID
-    public Optional<Account> findById(int id) {
-        return accountRepository.findById(id);
-    }
-    // Xóa tài khoản
-    public boolean delete(int id) {
-        if (accountRepository.existsById(id)) {
-            accountRepository.deleteById(id);
-            return true;
-        }
-        return false;
-    }
-    // Cập nhật tài khoản
-    public Account update(AccountDTO accountDTO, int id) {
-        Optional<Account> existingAccountOpt = accountRepository.findById(id);
-        if (existingAccountOpt.isPresent()) {
-            Account existingAccount = existingAccountOpt.get();
-            Account updatedAccount = accountMapper.toEntity(accountDTO);
-            // Chỉ cập nhật những trường cần thiết
-            existingAccount.setUserName(updatedAccount.getUserName());
-            existingAccount.setPassWord(updatedAccount.getPassWord());
-            Role role = roleRepository.findById(accountDTO.getRoleId())
-                    .orElseThrow(() -> new AppException(ErrorCode.CANT_FOUND));
-            existingAccount.setRole(role);
-            return accountRepository.save(existingAccount);
-        } else {
-            throw new AppException(ErrorCode.CANT_FOUND);
-        }
+
+    @Transactional
+    public ApiResponse<Account> updateAccount(UpdateAccountRequest updateAccountRequest, int accountId) {
+//        Account existingAccountOpt = accountRepository.findById(accountId)
+//                .orElseThrow(()-> new AppException(ErrorCode.USER_NOT_EXISTED));
+//        if (existingAccountOpt.isPresent()) {
+//            Account existingAccount = existingAccountOpt.get();
+//            Account updatedAccount = accountMapper.toEntity(accountDTO);
+//            // Chỉ cập nhật những trường cần thiết
+//            existingAccount.setUserName(updatedAccount.getUserName());
+//            existingAccount.setPassWord(updatedAccount.getPassWord());
+//            Role role = roleRepository.findById(accountDTO.getRoleId())
+//                    .orElseThrow(() -> new AppException(ErrorCode.CANT_FOUND));
+//            existingAccount.setRole(role);
+//            return ApiResponse.<Account>builder()
+//                    .code(200)
+//                    .message("Update account success")
+//                    .result(accountRepository.save(existingAccount))
+//                    .build();
+//        } else {
+//            throw new AppException(ErrorCode.CANT_FOUND);
+//        }
+        return null ;
     }
 
     public boolean isUsernameExists(String username) {

@@ -11,9 +11,10 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Repository
-public interface ProductRepository extends JpaRepository<Product,Integer> {
+public interface ProductRepository extends JpaRepository<Product, UUID> {
 
     @Query(value = "SELECT * FROM makeup.product p ORDER BY p.rental_count DESC", nativeQuery = true)
     List<Product> findTopRentalCount(PageRequest pageable);
@@ -26,6 +27,5 @@ public interface ProductRepository extends JpaRepository<Product,Integer> {
 
     @Query("SELECT COUNT(p) FROM Product p WHERE p.subCategory.id = :subCategoryId")
     int countProductsBySubcategoryId(@Param("subCategoryId") Integer subCategoryId);
-
 
 }
