@@ -10,6 +10,4 @@ import java.util.Optional;
 @Repository
 public interface RoleRepository extends JpaRepository<Role,Integer> {
 
-    @Override
-    Optional<Role> findById(Integer integer);
 }

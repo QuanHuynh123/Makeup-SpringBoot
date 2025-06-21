@@ -88,80 +88,11 @@
 </div>
 
 <div th:fragment="js">
-    <script src="/js/jquery.min.js"></script>
-    <script src="/js/popper.min.js"></script>
-    <script src="/js/bootstrap.bundle.min.js"></script>
-    <script src="/js/jquery-3.0.0.min.js"></script>
-
-    <script>
-        $(document).ready(function() {
-         $('.pagination a').on('click', function(event) {
-             event.preventDefault();
-             const page = $(this).attr('data-page') || 0;
-             const size = 10;  // Số sản phẩm trên mỗi trang
-             const categoryId = $('#categoryId').data('category-id');
-             const totalPages = $('#totalPages').data('total-pages');
-
-            if (!categoryId || isNaN(page) || isNaN(size)) {
-                console.error('Tham số không hợp lệ:', { categoryId, page, size });
-                return;
-            }
-
-            // Kiểm tra để tránh vượt quá totalPages
-            if (page < 0 || page >= totalPages) {
-                console.warn('Trang không hợp lệ:', page);
-                return;
-            }
-
-             $.ajax({
-                 url: '/api/category/' + categoryId + '?page=' + page + '&size=' + size,
-                 method: 'GET',
-                 success: function(response) {
-                     $('#container_product .product-list').html(generateProductHtml(response.products));
-                     updatePagination(response.currentPage, response.totalPages);
-                 },
-                 error: function() {
-                     alert('Có lỗi xảy ra khi tải dữ liệu!');
-                 }
-             });
-         });
-     });
-
-
-        function generateProductHtml(products) {
-        let html = '';
-        products.forEach(function(product) {
-            html += `
-                <li class="product-item">
-                    <a href="/productDetail/${product.id}">
-                        <img src="/images/product/${product.firstImage}" alt="${product.nameProduct}">
-                        <div class="product-info">
-                            <h4>${product.nameProduct || 'No name available'}</h4>
-                            <p class="product-price">${product.price || 'N/A'} VNĐ</p>
-                        </div>
-                    </a>
-                </li>`;
-        });
-        return html;
-    }
-
-    function updatePagination(currentPage, totalPages) {
-        const paginationLinks = $('.pagination a');
-
-        // Reset tất cả các thẻ để xóa lớp active
-        paginationLinks.removeClass('active');
-
-        // Đặt lại trạng thái active cho trang hiện tại
-        paginationLinks.each(function() {
-            const page = $(this).data('page');
-            if (page === currentPage) {
-                $(this).addClass('active');
-            }
-        });
-    }
-
-    </script>
-
+    <script src="/js/libs/jquery.min.js"></script>
+    <script src="/js/libs/popper.min.js"></script>
+    <script src="/js/libs/bootstrap.bundle.min.js"></script>
+    <script src="/js/libs/jquery-3.0.0.min.js"></script>
+    <script src="/js/service/product.js"></script>
 </div>
 </body>
 </html>

@@ -1,10 +1,9 @@
 package com.example.Makeup.mapper;
 
-import com.example.Makeup.dto.AccountDTO;
+import com.example.Makeup.dto.model.AccountDTO;
 import com.example.Makeup.entity.Account;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.factory.Mappers;
 
 @Mapper(componentModel = "spring")
 public interface AccountMapper {

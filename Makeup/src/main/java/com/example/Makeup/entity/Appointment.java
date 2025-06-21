@@ -3,9 +3,12 @@ package com.example.Makeup.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
-import java.sql.Date;
 import java.sql.Time;
+import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @NoArgsConstructor
@@ -14,20 +17,21 @@ import java.sql.Time;
 @Setter
 @Table(name = "appointment")
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Appointment {
+public class Appointment extends Base{
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
-    int id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "id", updatable = false, nullable = false, columnDefinition = "CHAR(36)")
+    @JdbcTypeCode(SqlTypes.CHAR)
+    private UUID id;
 
-    @Column(name = "startTime", nullable = false)
+    @Column(name = "start_time", nullable = false)
     Time startTime  ;
 
-    @Column(name = "endTime", nullable = false)
+    @Column(name = "end_time", nullable = false)
     Time endTime  ;
 
-    @Column(name = "makeupDate",  nullable = false)
-    Date makeupDate;
+    @Column(name = "makeup_date",  nullable = false)
+    LocalDateTime makeupDate;
 
     @Column(name = "status",  nullable = false)
     boolean status;
@@ -37,15 +41,10 @@ public class Appointment {
     User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "serviceMakeup_id", nullable = false)
-    ServiceMakeup serviceMakeup; // Kết nối đến dịch vụ makeup
+    @JoinColumn(name = "service_makeup_id", nullable = false)
+    ServiceMakeup serviceMakeup;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "staff_id")
-    Staff staff; // Liên kết với nhân viên
-
-    public boolean getStatus() {
-        return status;
-    }
-
+    Staff staff;
 }

@@ -6,21 +6,22 @@ import lombok.experimental.FieldDefaults;
 
 import java.sql.Time;
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
-@Table(name = "serviceMakeup")
+@Table(name = "service_makeup")
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class ServiceMakeup {
+public class ServiceMakeup extends Base{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     int id;
 
-    @Column(name = "nameservice", nullable = false)
+    @Column(name = "name_service", nullable = false)
     String nameService  ;
 
     @Column(name = "description", length = 250)
@@ -29,14 +30,7 @@ public class ServiceMakeup {
     @Column(name = "price" , nullable = false)
     double price  ;
 
-    @Column(name = "time")
-    int time  ;
+    @Column(name = "time_service")
+    int timeService  ;
 
-
-    public ServiceMakeup(String nameService, String description, double price, int time) {
-        this.nameService = nameService;
-        this.description = description;
-        this.price = price;
-        this.time=time;
-    }
 }

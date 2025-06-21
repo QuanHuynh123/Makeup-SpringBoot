@@ -1,28 +1,29 @@
 package com.example.Makeup.service;
 
 import com.example.Makeup.entity.Role;
+import com.example.Makeup.enums.ApiResponse;
+import com.example.Makeup.enums.AppException;
+import com.example.Makeup.enums.ErrorCode;
 import com.example.Makeup.repository.RoleRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
+import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class RoleService {
 
-    @Autowired
-    RoleRepository roleRepository;
+    private final RoleRepository roleRepository;
 
-    public Optional<Role> getRole(Integer id){
-        return roleRepository.findById(id);
-    }
-
-    public Role getRoleById(int roleId) {
-        Optional<Role> role = roleRepository.findById(roleId);
-        if (role.isPresent()) {
-            return role.get();
-        } else {
-            throw new RuntimeException("Role not found for id: " + roleId);
+    public ApiResponse<List<Role>> getListRole() {
+        List<Role> roleList = roleRepository.findAll();
+        if (roleList.isEmpty()) {
+            throw new AppException(ErrorCode.IS_EMPTY);
         }
+        return ApiResponse.<List<Role>>builder()
+                .code(200)
+                .message("List of roles")
+                .result(roleList)
+                .build();
     }
 }

@@ -12,9 +12,9 @@ public class SchedulingConfig {
     @Bean
     public ThreadPoolTaskScheduler taskScheduler() {
         ThreadPoolTaskScheduler scheduler = new ThreadPoolTaskScheduler();
-        scheduler.setPoolSize(10);  // Số lượng thread tối đa trong pool
-        scheduler.setThreadNamePrefix("scheduled-task-"); // Tiền tố tên thread
-        scheduler.setDaemon(true); // Đảm bảo các thread là daemon để ứng dụng không bị dừng khi còn thread đang chạy
+        scheduler.setPoolSize(10);
+        scheduler.setThreadNamePrefix("scheduled-task-");
+        scheduler.setDaemon(true);
         return scheduler;
     }
 }

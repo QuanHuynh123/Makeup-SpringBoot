@@ -1,0 +1,18 @@
+CREATE TABLE staff (
+    id CHAR(36) NOT NULL PRIMARY KEY,
+    name VARCHAR(40),
+    phone VARCHAR(20),
+    account_id CHAR(36) UNIQUE,
+    created_at TIMESTAMP,
+    updated_at TIMESTAMP,
+    CONSTRAINT fk_staff_account FOREIGN KEY (account_id) REFERENCES account(id)
+);
+
+
+INSERT INTO staff (id, name, phone, created_at, updated_at)
+VALUES
+(UUID(), 'Ngọc Mây', '0909582411', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(UUID(), 'Nguyễn Túy Vân', '0242412345',CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(UUID(), 'Trúc Mai', '0922112334',  CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(UUID(), 'Ngọc Trinh', '0714424242',CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+(UUID(), 'Trần Hà Linh', '0825241411', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);

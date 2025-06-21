@@ -124,9 +124,11 @@
 
 
     <div th:fragment="js">
-        <script src="/js/bootstrap.bundle.min.js"></script>
-        <script src="/js/custom.js"></script>
+        <script src="/js/libs/bootstrap.bundle.min.js"></script>
+        <script src="/js/service/custom.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script src="/js/service/cart.js"></script>
+        <script src="/js/service/product.js"></script>
 
         <script>
             $('a[href^="#"]').on('click', function(event) {
@@ -161,61 +163,6 @@
             }
         </script>
 
-        <script>
-
-            $(document).ready(function () {
-                $('#add_cart_btn').on('click', function (e) {
-                    e.preventDefault();
-
-                    const productId = document.getElementById('productId').getAttribute('product-id');
-                    const gender = $('#gender').val();
-                    const size = $('#size').val();
-                    const useDate = $('#use-date').val();
-                    const quantity = $('#quantity').val();
-
-                    const currentDate = new Date().toISOString().split('T')[0]; // Lấy ngày hiện tại theo định dạng yyyy-mm-dd
-                    if (useDate < currentDate) {
-                        Swal.fire("Ngày sử dụng không thể là ngày trong quá khứ. Vui lòng chọn lại.");
-                        return;
-                    }
-
-                    if (!productId|| !gender || !size || !useDate || quantity <= 0) {
-                        Swal.fire("Vui lòng chọn đầy đủ thông tin trước khi thêm vào giỏ hàng.!");
-                        return;
-                    }
-
-                    $.ajax({
-                        url: '/api/cart/add',
-                        method: 'POST',
-                        contentType: 'application/json',
-                        data: JSON.stringify({
-                            productId: productId,
-                            useDate: useDate,
-                            quantity: quantity
-                        }),
-                        success: function (response) {
-                            Swal.fire({
-                              position: "top-end",
-                              icon: "success",
-                              title: "Thêm sản phẩm vào giỏ thành công!",
-                              showConfirmButton: false,
-                              timer: 1500
-                            }).then(() => {
-                            location.reload();  // Reload trang sau khi thông báo kết thúc
-                            });
-                        },
-                        error: function (error) {
-                            Swal.fire({
-                              icon: "error",
-                              title: "Oops...",
-                              text: "Thêm hàng vào giỏ thất bại!",
-                              footer: '<a href="#">Why do I have this issue?</a>'
-                            });
-                        }
-                    });
-                });
-            });
-        </script>
     </div>
 </body>
 </html>

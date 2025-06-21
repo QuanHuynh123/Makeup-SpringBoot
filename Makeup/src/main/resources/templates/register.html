@@ -19,7 +19,7 @@
 		<form id="registrationForm"> <!-- Thêm ID cho form -->
 			<h3>Sign Up</h3>
 			<div class="form-holder">
-				<input type="text" id="phone" placeholder="Phone Number" class="form-control"> <!-- Thay đổi đây -->
+				<input type="text" id="username" placeholder="User name" class="form-control"> <!-- Thay đổi đây -->
 			</div>
 			<div class="form-holder">
 				<input type="password" id="password" placeholder="Password" class="form-control" style="font-size: 15px;">
@@ -44,72 +44,6 @@
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script>
-	$(document).ready(function() {
-		$('#btn_register').on('click', function(event) {
-			event.preventDefault(); // Ngăn chặn việc submit mặc định của form
-
-			function validatePhoneNumber(phone) {
-				var re = /^\d{10}$/; // Kiểm tra số điện thoại 10 chữ số
-				return re.test(phone);
-			}
-
-			var phone = $('#phone').val(); // Lấy số điện thoại
-			var password = $('#password').val();
-			var confirmPassword = $('#confirmPassword').val();
-
-			if (!validatePhoneNumber(phone)) {
-				Swal.fire({
-				  icon: "error",
-				  title: "Oops...",
-				  text: "Please enter a valid phone number (10 digits).",
-				  footer: '<a href="#">Why do I have this issue?</a>'
-				});
-				return;
-			}
-			if (password !== confirmPassword) {
-				Swal.fire({
-				  icon: "error",
-				  title: "Oops...",
-				  text: "Passwords do not match.",
-				  footer: '<a href="#">Why do I have this issue?</a>'
-				});
-				return;
-			}
-
-			$.ajax({
-				url: '/api/registerUser', // Đường dẫn API
-				type: 'POST',
-				contentType: 'application/json',
-				data: JSON.stringify({
-					userName: phone,
-					passWord: password
-				}),
-				success: function(response) {
-					Swal.fire({
-					  position: "mid",
-					  icon: "success",
-					  title: response,
-					  showConfirmButton: false,
-					  timer: 1500
-					});
-				},
-				error: function(xhr, status, error) {
-					 let errorMessage = "Registration failed";
-					if (xhr.responseText) {
-						errorMessage += ": " + xhr.responseText;
-					}
-					Swal.fire({
-					  icon: "error",
-					  title: "Oops...",
-					  text: xhr.responseText,
-					  footer: '<a href="#">Why do I have this issue?</a>'
-					});
-				}
-			});
-
-		});
-	});
-</script>
+<script src="/js/service/register.js"> </script>
 </body>
 </html>

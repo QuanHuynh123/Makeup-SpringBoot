@@ -1,20 +1,31 @@
 package com.example.Makeup.service;
 
+import com.example.Makeup.dto.model.ServiceMakeupDTO;
 import com.example.Makeup.entity.ServiceMakeup;
+import com.example.Makeup.enums.ApiResponse;
+import com.example.Makeup.mapper.ServiceMakeupMapper;
 import com.example.Makeup.repository.ServiceMakeupRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class ServiceMakeupService {
 
-    @Autowired
-    private ServiceMakeupRepository serviceMakeupRepository;
+    private final ServiceMakeupRepository serviceMakeupRepository;
+    private final ServiceMakeupMapper serviceMakeupMapper;
 
-    // Phương thức lấy tất cả các dịch vụ Makeup
-    public List<ServiceMakeup> getAllServices() {
-        return serviceMakeupRepository.findAll();
+    public ApiResponse<List<ServiceMakeupDTO>> getAllServices() {
+        List<ServiceMakeup> serviceMakeups = serviceMakeupRepository.findAll();
+        return ApiResponse.<List<ServiceMakeupDTO>>builder()
+                .code(200)
+                .message("Get all services success")
+                .result(serviceMakeups.stream()
+                        .map(serviceMakeupMapper::toServiceMakeupDTO)
+                        .collect(Collectors.toList()))
+                .build();
     }
 }

@@ -1,37 +1,33 @@
 package com.example.Makeup.controller.api.web;
 
-import com.example.Makeup.dto.ApiResponse;
-import com.example.Makeup.dto.AppointmentDTO;
-import com.example.Makeup.dto.AppointmentDetailDTO;
-import com.example.Makeup.dto.WeekAppointmentsDTO;
-import com.example.Makeup.entity.Appointment;
+import com.example.Makeup.dto.model.AppointmentDTO;
+import com.example.Makeup.dto.model.WeekAppointmentsDTO;
+import com.example.Makeup.dto.request.AppointmentRequestDTO;
+import com.example.Makeup.enums.ApiResponse;
 import com.example.Makeup.service.AppointmentService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/appointments")
 public class AppointmentRestController {
-
-    @Autowired
-    private AppointmentService appointmentService;
+    private final AppointmentService appointmentService;
 
     /**
      * Get 1 appointment by Month
      */
     @GetMapping("/by-month")
-    public List<WeekAppointmentsDTO> getAppointmentsByMonth(
+    public ApiResponse<List<WeekAppointmentsDTO>> getAppointmentsByMonth(
             @RequestParam int month,
             @RequestParam int year,
-            @RequestParam(required = false) Integer staffID) {
+            @RequestParam(required = false) UUID staffID) {
         return appointmentService.getAppointmentsByMonth(month, year, staffID);
     }
 
@@ -39,30 +35,25 @@ public class AppointmentRestController {
      * Get all appointment by Month
      */
     @GetMapping
-    public ResponseEntity<List<AppointmentDetailDTO>> getAllAppointments() {
-        List<AppointmentDetailDTO> appointments = appointmentService.getAllAppointmentsDetail();
-        return ResponseEntity.ok(appointments);
+    public ApiResponse<List<AppointmentDTO>> getAllAppointments() {
+        return appointmentService.getAllAppointmentsDetail();
     }
 
     /**
      * Get 1 appointment by ID
      */
     @GetMapping("/{id}")
-    public AppointmentDTO getAppointmentById(@PathVariable int id) {
-        return appointmentService.getAppointmentById(id);
+    public ApiResponse<AppointmentDTO> getAppointmentById(@PathVariable("id") UUID appointmentId) {
+        return appointmentService.getAppointmentById(appointmentId);
     }
 
     /**
      * Get 1 detail appointment by Id
      */
     @GetMapping("/appointmentDetail/{id}")
-    public ResponseEntity<AppointmentDetailDTO> getAppointmentDetailById(@PathVariable int id) {
-        AppointmentDetailDTO appointment = appointmentService.getAppointmentDetailById(id);
-        if (appointment != null) {
-            return ResponseEntity.ok(appointment);
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        }
+    public ApiResponse<AppointmentDTO> getAppointmentDetailById(@PathVariable UUID id) {
+        return appointmentService.getAppointmentDetailById(id);
+
     }
 
 
@@ -73,61 +64,39 @@ public class AppointmentRestController {
      *  - service
      */
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponse<AppointmentDTO>> updateAppointment(
-            @PathVariable int id,
+    public ApiResponse<AppointmentDTO> updateAppointment(
+            @PathVariable UUID appointmentId,
             @RequestBody AppointmentDTO appointmentDTO) {
-        try {
-            ApiResponse<AppointmentDTO> response = appointmentService.updateAppointment(id, appointmentDTO);
-            return ResponseEntity.ok(response);
-        } catch (RuntimeException e) {
-            // Trả về thông báo lỗi
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(ApiResponse.<AppointmentDTO>builder()
-                            .code(400)
-                            .message("Có lỗi xảy ra: " + e.getMessage())
-                            .build());
+            return  appointmentService.updateAppointment(appointmentId, appointmentDTO);
         }
-    }
 
 
     /**
      * Delete 1 appointment by Id
      */
     @DeleteMapping("/{id}")
-    public void deleteAppointment(@PathVariable int id) {
-        appointmentService.deleteAppointment(id);
+    public ApiResponse<Boolean> deleteAppointment(@PathVariable UUID appointmentId) {
+        return appointmentService.deleteAppointment(appointmentId);
     }
 
     /**
      * Create 1 appointment
      */
     @PostMapping("/create")
-    public ResponseEntity<?> addAppointment(@RequestBody AppointmentDTO appointmentDTO) {
-        try {
-            AppointmentDTO savedAppointment = appointmentService.addAppointment(appointmentDTO);
-            return ResponseEntity.ok(savedAppointment);
-        } catch (RuntimeException e) {
-            // Trả về thông báo lỗi dưới dạng chuỗi
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }
+    public ApiResponse<AppointmentDTO> createAppointment(@RequestBody AppointmentRequestDTO appointment) {
+        return  appointmentService.createAppointment(appointment);
     }
 
     /**
      * Get all booked appointment times of a staff member on a specific date.
      */
     @GetMapping("/by-date")
-    public ResponseEntity<?> getAppointmentsByDate(
-            @RequestParam int staffId,
+    public ApiResponse<List<AppointmentDTO>> getAppointmentsByDate(
+            @RequestParam UUID staffId,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate makeupDate) {
 
         Date sqlDate = Date.valueOf(makeupDate);
-        List<AppointmentDTO> appointments = appointmentService.getAppointmentsByDateAndStaff(staffId, sqlDate);
-
-        if (appointments.isEmpty()) {
-            return ResponseEntity.ok("No appointment");
-        }
-
-        return ResponseEntity.ok(appointments);
+        return appointmentService.getAppointmentsByDateAndStaff(staffId, sqlDate);
     }
 
 }

@@ -1,7 +1,5 @@
 package com.example.Makeup.controller.web.web;
 
-import com.example.Makeup.dto.CartItemDTO;
-import com.example.Makeup.entity.OrderItem;
 import com.example.Makeup.service.OrderItemService;
 import com.example.Makeup.service.OrderService;
 import com.example.Makeup.service.VNPAYService;
@@ -14,9 +12,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import java.util.List;
-import java.util.Map;
 
 
 @Controller
@@ -87,29 +82,29 @@ public class VNPAYController {
     }
 
     public String cutOrderInfo(String orderInfo, double totalPrice, int cartId) {
-        System.out.println(orderInfo);
-        String phoneNumber = "", email = "", name = "", message = "";
-        int quantity = 0;
-
-        // Kiểm tra nếu chuỗi không trống
-        if (orderInfo != null && orderInfo.length() > 0) {
-            // Cắt chuỗi, tách các tham số bằng dấu ','
-            String[] parts = orderInfo.split(",");
-
-            // Kiểm tra nếu đủ số lượng tham số
-            if (parts.length >= 5) {
-                phoneNumber = parts[1].trim();   // Lấy số điện thoại
-                email = parts[2].trim();         // Lấy email
-                name = parts[3].trim();          // Lấy tên
-                message = parts[4].trim();       // Lấy thông điệp
-                quantity = Integer.parseInt(parts[5].trim()); // Lấy số lượng (ép kiểu sang int)
-            }
-        }
-
-        System.out.println(phoneNumber + ", " + email + ", " + name + ", " + message + ", " + quantity);
-        totalPrice = totalPrice / 2300000;
-        int orderId = orderService.createOrder(email,name,phoneNumber,message,2,quantity,totalPrice);
-        orderItemService.createOrderItem(cartId,orderId);
+//        System.out.println(orderInfo);
+//        String phoneNumber = "", email = "", name = "", message = "";
+//        int quantity = 0;
+//
+//        // Kiểm tra nếu chuỗi không trống
+//        if (orderInfo != null && orderInfo.length() > 0) {
+//            // Cắt chuỗi, tách các tham số bằng dấu ','
+//            String[] parts = orderInfo.split(",");
+//
+//            // Kiểm tra nếu đủ số lượng tham số
+//            if (parts.length >= 5) {
+//                phoneNumber = parts[1].trim();   // Lấy số điện thoại
+//                email = parts[2].trim();         // Lấy email
+//                name = parts[3].trim();          // Lấy tên
+//                message = parts[4].trim();       // Lấy thông điệp
+//                quantity = Integer.parseInt(parts[5].trim()); // Lấy số lượng (ép kiểu sang int)
+//            }
+//        }
+//
+//        System.out.println(phoneNumber + ", " + email + ", " + name + ", " + message + ", " + quantity);
+//        totalPrice = totalPrice / 2300000;
+//        int orderId = orderService.createOrder(email,name,phoneNumber,message,2,quantity,totalPrice);
+//        orderItemService.createOrderItem(cartId,orderId);
 
         return " " ;
     }

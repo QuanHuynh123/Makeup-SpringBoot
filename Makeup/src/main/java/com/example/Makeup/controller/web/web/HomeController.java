@@ -1,25 +1,31 @@
 package com.example.Makeup.controller.web.web;
-import com.example.Makeup.dto.UserDTO;
-import com.example.Makeup.service.UserService;
-import jakarta.servlet.http.HttpSession;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+import com.example.Makeup.dto.model.ServiceMakeupDTO;
+import com.example.Makeup.dto.model.StaffDTO;
+import com.example.Makeup.service.ServiceMakeupService;
+import com.example.Makeup.service.StaffService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.List;
+
 
 @Controller
+@RequiredArgsConstructor
 public class HomeController {
 
-    @RequestMapping("/home")
+    private final ServiceMakeupService serviceMakeupService;
+    private final StaffService staffService;
+
+    @RequestMapping({"/home","/"})
     public String home(ModelMap model) throws InterruptedException {
+
+        List<ServiceMakeupDTO> serviceList = serviceMakeupService.getAllServices().getResult();
+        List<StaffDTO> staffList = staffService.getAllStaff().getResult();
+        model.addAttribute("serviceList", serviceList);
+        model.addAttribute("staffList", staffList);
         return "user/index";
     }
 
-    @RequestMapping("/")
-    public String redirectToHome() {
-        return "redirect:/home"; // Chuyển hướng đến /home
-    }
 }

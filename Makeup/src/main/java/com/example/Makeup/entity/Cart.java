@@ -3,8 +3,10 @@ package com.example.Makeup.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
-import java.sql.Date;
+import java.util.UUID;
 
 @Entity
 @NoArgsConstructor
@@ -13,29 +15,20 @@ import java.sql.Date;
 @Setter
 @Table(name = "cart")
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Cart {
+public class Cart extends Base{
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
-    int id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "id", updatable = false, nullable = false, columnDefinition = "CHAR(36)")
+    @JdbcTypeCode(SqlTypes.CHAR)
+    private UUID id;
 
-    @Column(name = "totalPrice", nullable = false)
-    double totalPrice  ;
+    @Column(name = "total_price", nullable = false)
+    double totalPrice ;
 
-    @Column(name = "totalQuantity", nullable = false)
-    int totalQuantity  ;
-
-    @Column(name = "createDate",  nullable = false)
-    Date createDate;
+    @Column(name = "total_quantity", nullable = false)
+    int totalQuantity;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     User user;
 
-
-    public Cart(double totalPrice, int totalQuantity, Date createDate, User user) {
-        this.totalPrice = totalPrice;
-        this.totalQuantity = totalQuantity;
-        this.createDate = createDate;
-        this.user = user;
-    }
 }

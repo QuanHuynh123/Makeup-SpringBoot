@@ -63,8 +63,8 @@
 
 
 <div th:fragment="js">
-    <script src="/js/bootstrap.bundle.min.js"></script>
-    <script src="/js/custom.js"></script>
+    <script src="/js/libs/bootstrap.bundle.min.js"></script>
+    <script src="/js/service/custom.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         $('a[href^="#"]').on('click', function(event) {
@@ -79,121 +79,6 @@
          }
 
         });
-    </script>
-
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const increaseButtons = document.querySelectorAll(".quantity-increase");
-            const decreaseButtons = document.querySelectorAll(".quantity-decrease");
-
-            increaseButtons.forEach(button => {
-                button.addEventListener("click", function () {
-                    const input = this.parentElement.querySelector(".quantity-input");
-                    let currentValue = parseInt(input.value) || 0;
-                    input.value = currentValue + 1;
-                });
-            });
-
-            decreaseButtons.forEach(button => {
-                button.addEventListener("click", function () {
-                    const input = this.parentElement.querySelector(".quantity-input");
-                    let currentValue = parseInt(input.value) || 0;
-                    if (currentValue > 1) {
-                        input.value = currentValue - 1;
-                    }
-                });
-            });
-        });
-
-    </script>
-
-    <script>
-       document.addEventListener("DOMContentLoaded", function () {
-          const updateButtons = document.querySelectorAll(".btn-update-cart-item");
-          updateButtons.forEach(button => {
-          button.addEventListener("click", function () {
-              const cartItem = this.closest(".cart-item-info");
-
-              const itemId = cartItem.getAttribute("cart-id");
-              const productId = cartItem.querySelector(".product-id");
-              const newQuantity = cartItem.querySelector(".quantity-input");
-              const useDate = cartItem.querySelector(".use-date");
-
-                const currentDate = new Date().toISOString().split('T')[0]; // Lấy ngày hiện tại theo định dạng yyyy-mm-dd
-                if (useDate < currentDate) {
-                    Swal.fire("Ngày sử dụng không thể là ngày trong quá khứ. Vui lòng chọn lại.");
-                    return;
-                }
-
-                $.ajax({
-                    url: '/api/cart/update',
-                    method: 'POST',
-                    contentType: 'application/json',
-                    data: JSON.stringify({
-                        cartItemId: itemId ,
-                        productId : productId.value,
-                        quantity: newQuantity.value,
-                        useDate : useDate.value
-                    }),
-                    success: function (response) {
-                    Swal.fire({
-                          position: "top-end",
-                          icon: "success",
-                          title: "Cập nhật thành công!",
-                          showConfirmButton: false,
-                          timer: 1500
-                        }).then(() => {
-                        location.reload();  // Reload trang sau khi thông báo kết thúc
-                        });
-                    },
-                    error: function (error) {
-                        Swal.fire({
-                          icon: "error",
-                          title: "Oops...",
-                          text: "Cập nhật thất bại!",
-                          footer: '<a href="#">Why do I have this issue?</a>'
-                        });
-                    }
-                });
-          });
-        });
-    });
-    </script>
-
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-          const deleteButtons = document.querySelectorAll(".btn-delete-cart-item");
-              deleteButtons.forEach(button => {
-                  button.addEventListener("click", function () {
-                    const cartItem = this.closest(".cart-item-info");
-                    const itemId = cartItem.getAttribute("cart-id");
-
-                      $.ajax({
-                        url: '/api/cart/delete?cartItemId=' + itemId,
-                        method: 'DELETE',
-                        success: function (response) {
-                        Swal.fire({
-                              position: "top-end",
-                              icon: "success",
-                              title: "Xóa thành công!",
-                              showConfirmButton: false,
-                              timer: 3000
-                            }).then(() => {
-                            location.reload();  // Reload trang sau khi thông báo kết thúc
-                            });
-                        },
-                        error: function (error) {
-                            Swal.fire({
-                              icon: "error",
-                              title: "Oops...",
-                              text: "Xóa thất bại!",
-                              footer: '<a href="#">Why do I have this issue?</a>'
-                            });
-                        }
-                    });
-                  });
-              });
-          });
     </script>
 </div>
 </body>

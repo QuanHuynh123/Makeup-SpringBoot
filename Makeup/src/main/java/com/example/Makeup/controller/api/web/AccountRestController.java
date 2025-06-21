@@ -1,82 +1,61 @@
 package com.example.Makeup.controller.api.web;
 
-import com.example.Makeup.dto.AccountDTO;
-import com.example.Makeup.entity.Account;
+import com.example.Makeup.dto.model.AccountDTO;
+import com.example.Makeup.dto.request.UpdateAccountRequest;
+import com.example.Makeup.enums.ApiResponse;
 import com.example.Makeup.mapper.AccountMapper;
 import com.example.Makeup.service.AccountService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/accounts") // Đường dẫn API
+@RequiredArgsConstructor
 public class AccountRestController {
 
-    @Autowired
-    private AccountService accountService;
-
-    @Autowired
-    private AccountMapper accountMapper;
+    private final AccountService accountService;
 
     /**
-     * Lấy tất cả tài khoản
+     * Get all accounts
      */
     @GetMapping
-    public ResponseEntity<List<AccountDTO>> getAllAccounts() {
-        List<Account> accounts = accountService.findAll();
-        List<AccountDTO> accountDTOs = accounts.stream()
-                .map(accountMapper::toDTO)
-                .toList();
-        return ResponseEntity.ok(accountDTOs);
+    public ApiResponse<List<AccountDTO>> getAllAccounts() {
+        return accountService.getAllAccounts();
     }
 
     /**
-     * Lấy thông tin tài khoản theo ID
+     * Get account by ID
      */
     @GetMapping("/{id}")
-    public ResponseEntity<AccountDTO> getAccountById(@PathVariable("id") int id) {
-        Optional<Account> accountOpt = accountService.findById(id);
-        return accountOpt.map(account -> ResponseEntity.ok(accountMapper.toDTO(account)))
-                .orElse(ResponseEntity.status(404).body(null));
+    public ApiResponse<AccountDTO> getAccountById(@PathVariable("id") UUID accountId) {
+        return accountService.getAccountById(accountId);
     }
 
     /**
-     * Tạo tài khoản mới
+     * Create account
      */
     @PostMapping("/create")
-    public ResponseEntity<String> create(@RequestBody AccountDTO accountDTO) {
-        if (accountService.checkExists(accountDTO.getUserName())) {
-            return ResponseEntity.status(400).body("Tài khoản đã tồn tại");
-        }
-        Account createdAccount = accountService.save(accountDTO);
-        return ResponseEntity.ok("Tạo tài khoản thành công: " + createdAccount.getId());
+    public ApiResponse<Boolean> createAccount(@RequestBody AccountDTO accountDTO) {
+        return accountService.createAccount(accountDTO);
     }
 
     /**
-     * Sửa tài khoản
+     * Update account
      */
     @PutMapping("/edit/{id}")
-    public ResponseEntity<String> edit(@RequestBody AccountDTO accountDTO, @PathVariable("id") int id) {
-        try {
-            accountService.update(accountDTO, id);
-            return ResponseEntity.ok("Sửa tài khoản thành công");
-        } catch (Exception e) {
-            return ResponseEntity.status(404).body("Không tìm thấy tài khoản");
-        }
+    public ResponseEntity<Boolean> updateAccount(@RequestBody UpdateAccountRequest updateAccountRequest, @PathVariable("id") UUID accountId) {
+         return null  ;  //accountService.updateAccount(updateAccountRequest, accountId);
     }
 
     /**
-     * Xóa tài khoản
+     * Delete account
      */
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<String> delete(@PathVariable("id") int id) {
-        boolean deleted = accountService.delete(id);
-        if (deleted) {
-            return ResponseEntity.ok("Xóa tài khoản thành công");
-        }
-        return ResponseEntity.status(404).body("Không tìm thấy tài khoản");
+    public ApiResponse<Boolean> delete(@PathVariable("id") UUID accountId) {
+        return accountService.delete(accountId);
     }
 }

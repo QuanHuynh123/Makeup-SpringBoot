@@ -1,25 +1,27 @@
 package com.example.Makeup.repository;
 
-import com.example.Makeup.dto.AppointmentDetailDTO;
+import com.example.Makeup.dto.model.AppointmentDTO;
 import com.example.Makeup.entity.Appointment;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Time;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 @Repository
-public interface AppointmentRepository extends JpaRepository<Appointment, Integer> {
+public interface AppointmentRepository extends JpaRepository<Appointment, UUID> {
     List<Appointment> findByMakeupDateBetween(Date startDate, Date endDate);
-    List<Appointment> findByStaffId(int staffId);
 
-    List<Appointment> findAllByUserId(int userId);
+    List<Appointment> findByStaffId(UUID staffId);
 
-    @Query("SELECT new com.example.Makeup.dto.AppointmentDetailDTO(" +
+    List<Appointment> findAllByUserId(UUID userId);
+
+    @Query("SELECT new com.example.Makeup.dto.model.AppointmentDTO(" +
             "a.id, a.startTime, a.endTime, a.makeupDate, a.status, " +
             "u.fullName, u.phone, s.nameService, st.nameStaff, " +
             "u.id, s.id, st.id) " +
@@ -28,9 +30,9 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Intege
             "JOIN a.serviceMakeup s " +
             "JOIN a.staff st " +
             "WHERE MONTH(a.makeupDate) = :month AND YEAR(a.makeupDate) = :year")
-    List<AppointmentDetailDTO> findAppointmentsByMonth(@Param("month") int month, @Param("year") int year);
+    List<AppointmentDTO> findAppointmentsByMonth(@Param("month") int month, @Param("year") int year);
 
-    @Query("SELECT new com.example.Makeup.dto.AppointmentDetailDTO(" +
+    @Query("SELECT new com.example.Makeup.dto.model.AppointmentDTO(" +
             "a.id, a.startTime, a.endTime, a.makeupDate, a.status, " +
             "u.fullName, u.phone, s.nameService, st.nameStaff, " +
             "u.id, s.id, st.id) " +
@@ -39,7 +41,7 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Intege
             "JOIN a.serviceMakeup s " +
             "JOIN a.staff st " +
             "WHERE MONTH(a.makeupDate) = :month AND YEAR(a.makeupDate) = :year AND st.id = :staffID")
-    List<AppointmentDetailDTO> findAppointmentsByMonthAndStaff(@Param("month") int month, @Param("year") int year, @Param("staffID") int staffID);
+    List<AppointmentDTO> findAppointmentsByMonthAndStaff(@Param("month") int month, @Param("year") int year, @Param("staffID") UUID staffID);
 
 
     @Query("SELECT a FROM Appointment a WHERE a.staff.id = :staffId " +
@@ -50,8 +52,8 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Intege
             "OR (a.startTime BETWEEN :startTime AND :endTime) " +
             "OR (a.endTime BETWEEN :startTime AND :endTime))")
     List<Appointment> findConflictingAppointments(
-            @Param("staffId") int staffId,
-            @Param("makeupDate") Date makeupDate,
+            @Param("staffId") UUID staffId,
+            @Param("makeupDate") LocalDateTime makeupDate,
             @Param("startTime") Time startTime,
             @Param("endTime") Time endTime
     );
@@ -79,7 +81,7 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Intege
             "ORDER BY DAY(a.makeupDate) ASC")
     List<Object[]> findAppointmentsCountByCurrentMonth(@Param("currentMonth") int currentMonth, @Param("currentYear") int currentYear);
 
-    @Query("SELECT new com.example.Makeup.dto.AppointmentDetailDTO(" +
+    @Query("SELECT new com.example.Makeup.dto.model.AppointmentDTO(" +
             "a.id, a.startTime, a.endTime, a.makeupDate, a.status, " +
             "u.fullName, u.phone, s.nameService, st.nameStaff, " +
             "u.id, s.id, st.id) " +
@@ -87,9 +89,9 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Intege
             "JOIN a.user u " +
             "JOIN a.serviceMakeup s " +
             "JOIN a.staff st")
-    List<AppointmentDetailDTO> findAllAppointmentsWithDetails();
+    List<AppointmentDTO> findAllAppointmentsWithDetails();
 
-    @Query("SELECT new com.example.Makeup.dto.AppointmentDetailDTO(" +
+    @Query("SELECT new com.example.Makeup.dto.model.AppointmentDTO(" +
             "a.id, a.startTime, a.endTime, a.makeupDate, a.status, " +
             "u.fullName, u.phone, s.nameService, st.nameStaff, " +
             "u.id, s.id, st.id) " +
@@ -98,12 +100,12 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Intege
             "JOIN a.serviceMakeup s " +
             "JOIN a.staff st " +
             "WHERE a.id = :id")
-    AppointmentDetailDTO findAppointmentWithDetailsById(@Param("id") int id);
+    AppointmentDTO findAppointmentWithDetailsById(@Param("id") int id);
 
 
     @Query("SELECT a FROM Appointment a WHERE a.staff.id = :staffId AND a.makeupDate = :makeupDate")
     List<Appointment> findAppointmentsByDateAndStaff(
-            @Param("staffId") int staffId,
+            @Param("staffId") UUID staffId,
             @Param("makeupDate") Date makeupDate
     );
 
