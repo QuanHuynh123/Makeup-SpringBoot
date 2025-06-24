@@ -34,17 +34,31 @@ function updateTimeSlots(appointments, selectedDate) {
     appointments.forEach(appointment => {
         const startHour = parseInt(appointment.startTime.split(":")[0]);
         const endHour = parseInt(appointment.endTime.split(":")[0]);
-        workingHours.forEach(hour => {
-            const hourInt = parseInt(hour);
+        //console.log("Start Hour: " + startHour + ", End Hour: " + endHour);
+       workingHours.forEach(hour => {
+            const hourInt = parseInt(hour, 10);
+            console.log(`🕒 Checking hour: ${hourInt}`);
+
             if (hourInt >= startHour && hourInt < endHour) {
-                document.querySelector(`.${hourInt}`).classList.add("isPicked");
-                document.querySelector(`.${hourInt}`).style.pointerEvents = "none";
+                //console.log(`✅ Picked hour in range: ${hourInt}`);
+                const el = document.querySelector(`[data-value='${hourInt}']`);
+                //console.log("Element found:", el);
+                if (el) {
+                    el.classList.add("isPicked");
+                    el.style.pointerEvents = "none";
+                }
             } else if (hourInt + 1 === startHour) {
-                document.querySelector(`.${hourInt}`).classList.add("isPicked");
-                document.querySelector(`.${hourInt}`).style.pointerEvents = "none";
+                //console.log(`⚠️ Previous hour of start matched: ${hourInt}`);
+                const el = document.querySelector(`[data-value='${hourInt}']`);
+                //console.log("Element found:", el);
+                if (el) {
+                    el.classList.add("isPicked");
+                    el.style.pointerEvents = "none";
+                }
             }
         });
     });
+
 }
 
 // Hàm reset time slots
@@ -55,7 +69,7 @@ function resetTimeSlots() {
     for (let i = 7; i <= 18; i++) {
         if (i === 11 || i === 12) continue;
         const timeSlot = document.createElement("div");
-        timeSlot.classList.add("time-slot", `${i}`);
+        timeSlot.classList.add("time-slot", `hour-${i}`);
         timeSlot.dataset.value = i;
         timeSlot.textContent = i < 12 ? `${i}:00 AM` : `${i - 12}:00 PM`;
         timeGrid.appendChild(timeSlot);
@@ -105,10 +119,17 @@ function handleBooking(event) {
         return;
     }
 
-    const startTime = `${selectedTime.toString().padStart(2, "0")}:00:00`;
+    const pad = n => n.toString().padStart(2, "0");
+
+    const startTime = `${pad(selectedTime)}:00:00`;
     const startDate = new Date(`${date}T${startTime}`);
-    startDate.setHours(startDate.getHours() + 2);
-    const endTime = startDate.toISOString().split("T")[1].split(".")[0];
+
+    const endDate = new Date(startDate.getTime());
+    endDate.setHours(endDate.getHours() + 2);
+
+    const endHour = pad(endDate.getHours());
+    const endTime = `${endHour}:00:00`;
+
 
     if (!validateEmail(email) || !validatePhoneNumber(phoneNumber) || !name || !phoneNumber || !message || !serviceOption || !date || !startTime) {
         alert("Please fill out all required fields or enter valid data.");
@@ -176,7 +197,12 @@ document.addEventListener("DOMContentLoaded", () => {
                 type: "GET",
                 data: { staffId: selectedStaff, makeupDate: selectedDate },
                 success: function (response) {
-                    response !== "No appointment" ? updateTimeSlots(response, selectedDate) : resetTimeSlots();
+                    console.log("Response: ", response);
+                    if (response.code === 200 && response.result && response.result.length > 0) {
+                        updateTimeSlots(response.result, selectedDate);
+                    } else {
+                        resetTimeSlots();
+                    }
                 },
                 error: function () {
                     resetTimeSlots(); // Reset nếu có lỗi
