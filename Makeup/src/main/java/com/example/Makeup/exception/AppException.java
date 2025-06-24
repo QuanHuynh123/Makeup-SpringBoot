@@ -1,5 +1,6 @@
-package com.example.Makeup.enums;
+package com.example.Makeup.exception;
 
+import com.example.Makeup.enums.ErrorCode;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
