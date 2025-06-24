@@ -1,6 +1,6 @@
 package com.example.Makeup.controller.web.admin;
 import com.example.Makeup.dto.model.StaffDTO;
-import com.example.Makeup.enums.ApiResponse;
+import com.example.Makeup.dto.response.common.ApiResponse;
 import com.example.Makeup.dto.model.AppointmentDTO;
 import com.example.Makeup.repository.AppointmentRepository;
 import com.example.Makeup.repository.OrderRepository;

@@ -2,7 +2,8 @@ package com.example.Makeup.controller.web.web;
 
 import com.example.Makeup.dto.model.ProductDTO;
 import com.example.Makeup.dto.model.SubCategoryDTO;
-import com.example.Makeup.enums.AppException;
+import com.example.Makeup.dto.response.ShortProductListResponse;
+import com.example.Makeup.exception.AppException;
 import com.example.Makeup.service.ProductService;
 import java.util.List;
 
@@ -23,8 +24,8 @@ public class CosplayController {
     
     @GetMapping("/home")
     public String home(Model model){
-        List<ProductDTO> hotProducts = productService.getHotProducts().getResult();
-        List<ProductDTO> newProducts = productService.getNewProducts().getResult();
+        List<ShortProductListResponse> hotProducts = productService.getHotProducts().getResult();
+        List<ShortProductListResponse> newProducts = productService.getNewProducts().getResult();
         model.addAttribute("hotProducts", hotProducts);
         model.addAttribute("newProducts", newProducts);
         return "user/cosplay";

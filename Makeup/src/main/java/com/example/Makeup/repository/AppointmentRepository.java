@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Time;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
@@ -15,7 +16,6 @@ import java.util.UUID;
 
 @Repository
 public interface AppointmentRepository extends JpaRepository<Appointment, UUID> {
-    List<Appointment> findByMakeupDateBetween(Date startDate, Date endDate);
 
     List<Appointment> findByStaffId(UUID staffId);
 
@@ -44,16 +44,16 @@ public interface AppointmentRepository extends JpaRepository<Appointment, UUID> 
     List<AppointmentDTO> findAppointmentsByMonthAndStaff(@Param("month") int month, @Param("year") int year, @Param("staffID") UUID staffID);
 
 
-    @Query("SELECT a FROM Appointment a WHERE a.staff.id = :staffId " +
-            "AND a.makeupDate = :makeupDate " +
-            "AND a.status = true " +  // Thêm điều kiện status = 1
-            "AND ((:startTime BETWEEN a.startTime AND a.endTime) " +
-            "OR (:endTime BETWEEN a.startTime AND a.endTime) " +
-            "OR (a.startTime BETWEEN :startTime AND :endTime) " +
-            "OR (a.endTime BETWEEN :startTime AND :endTime))")
+    @Query("""
+    SELECT a FROM Appointment a
+    WHERE a.staff.id = :staffId
+    AND a.makeupDate = :makeupDate
+    AND a.status = true
+    AND (:startTime < a.endTime AND :endTime > a.startTime)
+    """)
     List<Appointment> findConflictingAppointments(
             @Param("staffId") UUID staffId,
-            @Param("makeupDate") LocalDateTime makeupDate,
+            @Param("makeupDate") LocalDate makeupDate,
             @Param("startTime") Time startTime,
             @Param("endTime") Time endTime
     );
@@ -103,11 +103,11 @@ public interface AppointmentRepository extends JpaRepository<Appointment, UUID> 
     AppointmentDTO findAppointmentWithDetailsById(@Param("id") int id);
 
 
-    @Query("SELECT a FROM Appointment a WHERE a.staff.id = :staffId AND a.makeupDate = :makeupDate")
+    @Query("SELECT a FROM Appointment a WHERE a.staff.id = :staffId AND a.status = true " +
+            "AND a.makeupDate = :makeupDate")
     List<Appointment> findAppointmentsByDateAndStaff(
             @Param("staffId") UUID staffId,
-            @Param("makeupDate") Date makeupDate
-    );
+            @Param("makeupDate") LocalDate makeupDate);
 
 
 }

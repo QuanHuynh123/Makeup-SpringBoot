@@ -2,7 +2,8 @@ package com.example.Makeup.controller.api.admin;
 
 import com.example.Makeup.dto.request.LoginRequest;
 import com.example.Makeup.dto.request.RegisterRequest;
-import com.example.Makeup.enums.ApiResponse;
+import com.example.Makeup.dto.response.common.ApiResponse;
+import com.example.Makeup.security.JWTProvider;
 import com.example.Makeup.service.*;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
@@ -19,8 +20,9 @@ public class AuthApiRestController {
 
     @Value("${cookie.maxAge}")
     private int cookieMaxAge;
-    private final JWTService jwtService;
+    private final JWTProvider jwtProvider;
     private final AccountService accountService;
+    private final RefreshTokenService refreshTokenService;
 
     @PostMapping("/login")
     public ApiResponse<?> createToken(@RequestBody LoginRequest loginRequest, HttpServletResponse response) {
@@ -42,5 +44,12 @@ public class AuthApiRestController {
 
         return accountService.signUp(registerRequest);
     }
+
+
+//    @PostMapping("/refresh-token")
+//    public ApiResponse<String> refreshToken(@RequestBody RefreshTokenRequest refreshTokenRequest) {
+//        return refreshTokenService.refreshToken(refreshTokenRequest.getRefreshToken());
+//    }
+
 
 }

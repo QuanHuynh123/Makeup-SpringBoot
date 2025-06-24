@@ -6,8 +6,8 @@ package com.example.Makeup.service;
 
 import com.example.Makeup.dto.model.SubCategoryDTO;
 import com.example.Makeup.entity.SubCategory;
-import com.example.Makeup.enums.ApiResponse;
-import com.example.Makeup.enums.AppException;
+import com.example.Makeup.dto.response.common.ApiResponse;
+import com.example.Makeup.exception.AppException;
 import com.example.Makeup.enums.ErrorCode;
 import com.example.Makeup.mapper.SubCategoryMapper;
 import com.example.Makeup.repository.SubCategoryRepository;
@@ -27,7 +27,7 @@ public class SubCategoryService {
 
     public ApiResponse<SubCategoryDTO> findById(int id){
         SubCategory optSubCategory = subCategoryRepository.findById(id)
-                .orElseThrow(() -> new AppException(ErrorCode.CANT_FOUND));
+                .orElseThrow(() -> new AppException(ErrorCode.COMMON_RESOURCE_NOT_FOUND));
 
         return ApiResponse.<SubCategoryDTO>builder()
                 .code(200)
@@ -39,7 +39,7 @@ public class SubCategoryService {
     public ApiResponse<List<SubCategoryDTO>> getAll(){
         List<SubCategory> subCategories = subCategoryRepository.findAll();
         if (subCategories.isEmpty()) {
-            throw new AppException(ErrorCode.IS_EMPTY);
+            throw new AppException(ErrorCode.COMMON_RESOURCE_NOT_FOUND);
         }
         return ApiResponse.<List<SubCategoryDTO>>builder()
                 .code(200)

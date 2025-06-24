@@ -1,13 +1,13 @@
 package com.example.Makeup.controller.web.web;
 
 import com.example.Makeup.dto.model.*;
-import com.example.Makeup.enums.ApiResponse;
+import com.example.Makeup.dto.response.common.ApiResponse;
+import com.example.Makeup.security.JWTProvider;
 import com.example.Makeup.service.*;
 import lombok.extern.slf4j.Slf4j;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -27,16 +27,16 @@ public class GlobalModelAttribute {
     private final FeedBackService feedBackService;
     private final UserService userService;
     private final OrderService orderService;
-    private final JWTService jwtService;
+    private final JWTProvider jwtProvider;
 
     @ModelAttribute
     public void addInformationUser(Model model, HttpServletRequest request) {
         log.info("Welcome User");
         String token = getJwtFromRequest(request);
-        if (token != null && jwtService.isTokenValid(token)) { // Use isTokenValid to check if the token is valid
+        if (token != null && jwtProvider.isTokenValid(token)) { // Use isTokenValid to check if the token is valid
             log.info("Token is valid, extracting user information");
             try {
-                String userName = jwtService.extractUserName(token);
+                String userName = jwtProvider.extractUserName(token);
                 log.info("Extracted username: {}", userName);
                 UserDTO userDTO = userService.getUserDetailByUserName(userName).getResult();
                 model.addAttribute("user", userDTO != null ? userDTO : null);
@@ -99,21 +99,30 @@ public class GlobalModelAttribute {
 
     @ModelAttribute("categoryAttributes")
     public void addCategoryHeaderCosplay(Model model ){
-        ApiResponse<List<CategoryDTO>> categories = categoryService.getAllCategory();
-        if (categories.getCode() == 200) {
-            model.addAttribute("category", categories.getResult());
-        } else {
-            log.warn("Failed to load categories");
+        try {
+            ApiResponse<List<CategoryDTO>> categoryDTOS = categoryService.getAllCategory();
+            if (categoryDTOS.getCode() == 200) {
+                model.addAttribute("categories", categoryDTOS.getResult());
+            } else {
+                log.warn("Failed to load categories: {}", categoryDTOS.getMessage());
+            }
+        } catch (Exception ex) {
+            log.error("Exception while loading categories: {}", ex.getMessage(), ex);
         }
     }
 
     @ModelAttribute("feedbackAttributes")
-    public void addFeedGoodFeedBack(Model model){
-        ApiResponse<List<FeedBackDTO>> feedBackDTOS = feedBackService.getGoodFeedback(4);
-        if (feedBackDTOS.getCode() == 200) {
-            model.addAttribute("feedbacks", feedBackDTOS.getResult());
-        } else {
-            log.warn("Failed to load feedback");
+    public void addFeedGoodFeedBack(Model model) {
+        try {
+            ApiResponse<List<FeedBackDTO>> feedBackDTOS = feedBackService.getGoodFeedback(4);
+            if (feedBackDTOS.getCode() == 200) {
+                model.addAttribute("feedbacks", feedBackDTOS.getResult());
+            } else {
+                log.warn("Failed to load feedback: {}", feedBackDTOS.getMessage());
+            }
+        } catch (Exception ex) {
+            log.error("Exception while loading feedback: {}", ex.getMessage(), ex);
         }
     }
+
 }

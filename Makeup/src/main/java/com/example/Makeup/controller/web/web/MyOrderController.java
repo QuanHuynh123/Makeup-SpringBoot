@@ -3,7 +3,7 @@ package com.example.Makeup.controller.web.web;
 import com.example.Makeup.dto.model.OrderDTO;
 import com.example.Makeup.dto.model.OrderItemDTO;
 import com.example.Makeup.dto.model.UserDTO;
-import com.example.Makeup.enums.ApiResponse;
+import com.example.Makeup.dto.response.common.ApiResponse;
 import com.example.Makeup.service.OrderItemService;
 import com.example.Makeup.service.OrderService;
 import lombok.RequiredArgsConstructor;

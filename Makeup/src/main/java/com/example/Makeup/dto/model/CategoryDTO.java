@@ -16,6 +16,6 @@ public class CategoryDTO {
     int id;
     String name;
     List<SubCategoryDTO> subCategories;
-    LocalDateTime createDate;
-    LocalDateTime updateDate;
+    LocalDateTime createdAt;
+    LocalDateTime updatedAt;
 }

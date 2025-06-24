@@ -44,8 +44,8 @@
 
          <div id="new">
              <h1 class="title_product">New</h1>
-             <th:block th:if="${hotProducts != null}" >
-                 <th:block th:each="product, state : ${hotProducts}">
+             <th:block th:if="${newProducts != null}" >
+                 <th:block th:each="product, state : ${newProducts}">
                      <th:block th:if="${state.first}"><ul class="row"></th:block>
                          <a th:href="@{/productDetail/{id}(id=${product.id})}">
                             <li class="product-card">
@@ -72,8 +72,8 @@
 
         <div id="hot">
             <h1 class="title_product">Hot</h1>
-            <th:block th:if="${newProducts != null}" >
-                <th:block th:each="product, state : ${newProducts}">
+            <th:block th:if="${hotProducts != null}" >
+                <th:block th:each="product, state : ${hotProducts}">
                     <th:block th:if="${state.first}"><ul class="row"></th:block>
                         <a th:href="@{/productDetail/{id}(id=${product.id})}">
                             <li class="product-card">

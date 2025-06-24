@@ -1,11 +1,9 @@
 package com.example.Makeup.controller.api.web;
 
 import com.example.Makeup.dto.model.UserDTO;
-import com.example.Makeup.enums.ApiResponse;
+import com.example.Makeup.dto.response.common.ApiResponse;
 import com.example.Makeup.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

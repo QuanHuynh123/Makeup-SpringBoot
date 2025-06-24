@@ -19,4 +19,13 @@ public interface ProductMapper {
     @Mapping(source = "describe", target = "description")
     Product toProductEntity(ProductDTO productDTO);
 
+    @AfterMapping
+    default void mapFirstImage(@MappingTarget ProductDTO productDTO, Product product) {
+        if (product.getImage() != null && product.getImage().contains(",")) {
+            productDTO.setFirstImage(product.getImage().substring(0, product.getImage().indexOf(",")));
+        } else {
+            productDTO.setFirstImage(product.getImage()); // If there's no comma, use the whole image string
+        }
+    }
+
 }

@@ -2,8 +2,7 @@ package com.example.Makeup.controller.api.web;
 
 import com.example.Makeup.dto.model.AccountDTO;
 import com.example.Makeup.dto.request.UpdateAccountRequest;
-import com.example.Makeup.enums.ApiResponse;
-import com.example.Makeup.mapper.AccountMapper;
+import com.example.Makeup.dto.response.common.ApiResponse;
 import com.example.Makeup.service.AccountService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

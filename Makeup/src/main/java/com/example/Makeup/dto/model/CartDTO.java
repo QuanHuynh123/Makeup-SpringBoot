@@ -16,6 +16,6 @@ public class CartDTO {
     double totalPrice;
     int totalQuantity;
     UUID userId;
-    LocalDateTime createDate;
-    LocalDateTime updateDate;
+    LocalDateTime createdAt;
+    LocalDateTime updatedAt;
 }

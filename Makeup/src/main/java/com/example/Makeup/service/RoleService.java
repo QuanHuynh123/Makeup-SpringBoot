@@ -1,8 +1,8 @@
 package com.example.Makeup.service;
 
 import com.example.Makeup.entity.Role;
-import com.example.Makeup.enums.ApiResponse;
-import com.example.Makeup.enums.AppException;
+import com.example.Makeup.dto.response.common.ApiResponse;
+import com.example.Makeup.exception.AppException;
 import com.example.Makeup.enums.ErrorCode;
 import com.example.Makeup.repository.RoleRepository;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +18,7 @@ public class RoleService {
     public ApiResponse<List<Role>> getListRole() {
         List<Role> roleList = roleRepository.findAll();
         if (roleList.isEmpty()) {
-            throw new AppException(ErrorCode.IS_EMPTY);
+            throw new AppException(ErrorCode.COMMON_RESOURCE_NOT_FOUND);
         }
         return ApiResponse.<List<Role>>builder()
                 .code(200)

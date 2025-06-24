@@ -19,6 +19,6 @@ public class CartItemDTO {
     LocalDateTime rentalDate;
     UUID cartId;
     UUID productId;
-    LocalDateTime createDate;
-    LocalDateTime updateDate;
+    LocalDateTime createdAt;
+    LocalDateTime updatedAt;
 }
