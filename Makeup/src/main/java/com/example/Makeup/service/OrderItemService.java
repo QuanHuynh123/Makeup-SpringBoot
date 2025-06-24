@@ -4,14 +4,15 @@ import com.example.Makeup.dto.model.OrderItemDTO;
 import com.example.Makeup.entity.CartItem;
 import com.example.Makeup.entity.Order;
 import com.example.Makeup.entity.OrderItem;
-import com.example.Makeup.enums.ApiResponse;
-import com.example.Makeup.enums.AppException;
+import com.example.Makeup.dto.response.common.ApiResponse;
+import com.example.Makeup.exception.AppException;
 import com.example.Makeup.enums.ErrorCode;
 import com.example.Makeup.enums.OrderItemStatus;
 import com.example.Makeup.mapper.OrderItemMapper;
 import com.example.Makeup.repository.CartItemRepository;
 import com.example.Makeup.repository.OrderItemRepository;
 import com.example.Makeup.repository.OrderRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,23 +20,17 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class OrderItemService {
     private final CartItemRepository cartItemRepository;
     private final OrderRepository orderRepository;
     private final OrderItemRepository orderItemRepository;
     private final OrderItemMapper orderItemMapper;
 
-    public OrderItemService(CartItemRepository cartItemRepository, OrderRepository orderRepository, OrderItemRepository orderItemRepository, OrderItemMapper orderItemMapper) {
-        this.cartItemRepository = cartItemRepository;
-        this.orderRepository = orderRepository;
-        this.orderItemRepository = orderItemRepository;
-        this.orderItemMapper = orderItemMapper;
-    }
-
     public ApiResponse<String> createOrderItem(UUID cartId, UUID orderId){
         List<CartItem> cartItemList = cartItemRepository.findAllByCartId(cartId);
         if (cartItemList.isEmpty()){
-            throw new AppException(ErrorCode.CANT_FOUND);
+            throw new AppException(ErrorCode.CART_IS_EMPTY);
         }
 
         Order order = orderRepository.findById(orderId)
@@ -63,7 +58,7 @@ public class OrderItemService {
     public ApiResponse<List<OrderItemDTO>> getOrderDetail(UUID orderId){
             List<OrderItem> orderItems =   orderItemRepository.findAllByOrderId(orderId);
             if (orderItems.isEmpty()){
-                throw new AppException(ErrorCode.IS_EMPTY);
+                throw new AppException(ErrorCode.ORDER_IS_EMPTY);
             }
             return ApiResponse.<List<OrderItemDTO>>builder()
                     .code(200)

@@ -3,7 +3,7 @@ package com.example.Makeup.controller.api.web;
 import com.example.Makeup.dto.model.ProductDTO;
 import com.example.Makeup.dto.request.CreateProductRequest;
 import com.example.Makeup.dto.request.UpdateProductRequest;
-import com.example.Makeup.enums.ApiResponse;
+import com.example.Makeup.dto.response.common.ApiResponse;
 import com.example.Makeup.service.ProductService;
 import java.io.IOException;
 import java.util.UUID;

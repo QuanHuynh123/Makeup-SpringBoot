@@ -14,6 +14,6 @@ public class PaymentDTO {
     int id;
     String namePaymentMethod;
     boolean status;
-    LocalDateTime createDate;
-    LocalDateTime updateDate;
+    LocalDateTime createdAt;
+    LocalDateTime updatedAt;
 }

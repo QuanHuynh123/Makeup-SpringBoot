@@ -2,8 +2,8 @@ package com.example.Makeup.service;
 
 import com.example.Makeup.dto.model.OrderDTO;
 import com.example.Makeup.entity.*;
-import com.example.Makeup.enums.ApiResponse;
-import com.example.Makeup.enums.AppException;
+import com.example.Makeup.dto.response.common.ApiResponse;
+import com.example.Makeup.exception.AppException;
 import com.example.Makeup.enums.ErrorCode;
 import com.example.Makeup.enums.OrderStatus;
 import com.example.Makeup.mapper.OrderMapper;
@@ -41,7 +41,7 @@ public class OrderService {
 
     @Transactional
     public ApiResponse<OrderDTO> createOrder(String email, String firstName, String phoneNumber, String message, int paymentMethod, int quantity, double totalPrice) {
-        Payment payment = paymentRepository.findById(paymentMethod).orElseThrow(()-> new AppException(ErrorCode.CANT_FOUND));
+        Payment payment = paymentRepository.findById(paymentMethod).orElseThrow(()-> new AppException(ErrorCode.COMMON_RESOURCE_NOT_FOUND));
         User user = new User(email, firstName, phoneNumber, message);
         LocalDateTime localDate = LocalDateTime.now();
 
@@ -92,7 +92,7 @@ public class OrderService {
 
             int remaining = product.getCurrentQuantity() - orderItem.getQuantity();
             if (remaining < 0) {
-                throw new AppException(ErrorCode.QUANTITY_NOT_ENOUGH);
+                throw new AppException(ErrorCode.PRODUCT_QUANTITY_NOT_ENOUGH);
             }
             product.setCurrentQuantity(remaining);
 
@@ -113,7 +113,7 @@ public class OrderService {
     public ApiResponse<List<OrderDTO>> getAllApproveOrder(){
         List<Order> orders = orderRepository.findByStatus(OrderStatus.COMPLETED);
         if (orders.isEmpty()){
-            throw new AppException(ErrorCode.IS_EMPTY);
+            throw new AppException(ErrorCode.ORDER_IS_EMPTY);
         }
         return ApiResponse.<List<OrderDTO>>builder()
                 .code(200)
@@ -127,7 +127,7 @@ public class OrderService {
     public ApiResponse<List<OrderDTO>> getAllOrder(){
         List<Order> orders = orderRepository.findByStatus(OrderStatus.PENDING);
         if (orders.isEmpty()){
-            throw new AppException(ErrorCode.IS_EMPTY);
+            throw new AppException(ErrorCode.ORDER_IS_EMPTY);
         }
         return ApiResponse.<List<OrderDTO>>builder()
                 .code(200)
@@ -165,13 +165,9 @@ public class OrderService {
     public ApiResponse<List<OrderDTO>> getMyOrder(UUID userId){
             List<Order> orders =  orderRepository.findByUserId(userId);
             Collections.reverse(orders);
-            if (orders.isEmpty()){
-                return ApiResponse.<List<OrderDTO>>builder()
-                        .code(404)
-                        .message("No orders found for this user")
-                        .result(Collections.emptyList())
-                        .build();
-            }
+            if (orders.isEmpty())
+                throw new AppException(ErrorCode.COMMON_IS_EMPTY);
+
             return ApiResponse.<List<OrderDTO>>builder()
                     .code(200)
                     .message("Get my order successfully")

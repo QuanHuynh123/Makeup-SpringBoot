@@ -17,6 +17,6 @@ public class FeedBackDTO {
     String comment;
     UUID userId;
     int serviceMakeupId;
-    LocalDateTime createDate;
-    LocalDateTime updateDate;
+    LocalDateTime createdAt;
+    LocalDateTime updatedAt;
 }

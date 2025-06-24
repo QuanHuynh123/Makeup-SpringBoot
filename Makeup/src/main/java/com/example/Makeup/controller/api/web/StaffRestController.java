@@ -2,7 +2,7 @@ package com.example.Makeup.controller.api.web;
 
 import com.example.Makeup.dto.model.StaffDTO;
 import com.example.Makeup.dto.request.CreateStaffRequest;
-import com.example.Makeup.enums.ApiResponse;
+import com.example.Makeup.dto.response.common.ApiResponse;
 import com.example.Makeup.service.StaffService;
 import org.springframework.web.bind.annotation.*;
 

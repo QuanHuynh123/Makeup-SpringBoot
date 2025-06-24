@@ -2,8 +2,8 @@ package com.example.Makeup.service;
 
 import com.example.Makeup.dto.model.UserDTO;
 import com.example.Makeup.entity.User;
-import com.example.Makeup.enums.ApiResponse;
-import com.example.Makeup.enums.AppException;
+import com.example.Makeup.dto.response.common.ApiResponse;
+import com.example.Makeup.exception.AppException;
 import com.example.Makeup.enums.ErrorCode;
 import com.example.Makeup.mapper.UserMapper;
 import com.example.Makeup.repository.UserRepository;

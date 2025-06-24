@@ -9,7 +9,7 @@ import com.example.Makeup.dto.model.SubCategoryDTO;
 import java.util.List;
 import java.util.UUID;
 
-import com.example.Makeup.enums.ApiResponse;
+import com.example.Makeup.dto.response.common.ApiResponse;
 import com.example.Makeup.service.ProductService;
 import com.example.Makeup.service.SubCategoryService;
 import org.springframework.beans.factory.annotation.Autowired;

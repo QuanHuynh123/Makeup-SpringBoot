@@ -4,6 +4,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.sql.Time;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -15,11 +16,11 @@ public class AppointmentDTO {
     final UUID id;
     Time startTime;
     Time endTime;
-    LocalDateTime makeupDate;
+    LocalDate makeupDate;
     boolean status;
     UUID userId;
     int serviceMakeupId;
     UUID staffId;
-    LocalDateTime createDate;
-    LocalDateTime updateDate;
+    LocalDateTime createdAt;
+    LocalDateTime updatedAt;
 }

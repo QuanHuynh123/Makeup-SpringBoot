@@ -3,13 +3,11 @@ package com.example.Makeup.controller.api.web;
 import com.example.Makeup.dto.model.AppointmentDTO;
 import com.example.Makeup.dto.model.WeekAppointmentsDTO;
 import com.example.Makeup.dto.request.AppointmentRequestDTO;
-import com.example.Makeup.enums.ApiResponse;
+import com.example.Makeup.dto.response.common.ApiResponse;
 import com.example.Makeup.service.AppointmentService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
@@ -93,10 +91,9 @@ public class AppointmentRestController {
     @GetMapping("/by-date")
     public ApiResponse<List<AppointmentDTO>> getAppointmentsByDate(
             @RequestParam UUID staffId,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate makeupDate) {
+            @RequestParam LocalDate makeupDate) {
 
-        Date sqlDate = Date.valueOf(makeupDate);
-        return appointmentService.getAppointmentsByDateAndStaff(staffId, sqlDate);
+        return appointmentService.getAppointmentsByDateAndStaff(staffId, makeupDate);
     }
 
 }

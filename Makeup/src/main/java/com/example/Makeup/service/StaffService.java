@@ -1,12 +1,12 @@
 package com.example.Makeup.service;
 import com.example.Makeup.dto.request.CreateStaffRequest;
-import com.example.Makeup.enums.ApiResponse;
+import com.example.Makeup.dto.response.common.ApiResponse;
 import com.example.Makeup.dto.model.StaffDTO;
 import com.example.Makeup.entity.Account;
 import com.example.Makeup.entity.Appointment;
 import com.example.Makeup.entity.Role;
 import com.example.Makeup.entity.Staff;
-import com.example.Makeup.enums.AppException;
+import com.example.Makeup.exception.AppException;
 import com.example.Makeup.enums.ErrorCode;
 import com.example.Makeup.mapper.StaffMapper;
 import com.example.Makeup.repository.AccountRepository;
@@ -39,7 +39,7 @@ public class StaffService {
 
         List<Staff> staffList = staffRepository.findAll();
         if (staffList.isEmpty()) {
-            throw new AppException(ErrorCode.IS_EMPTY);
+            throw new AppException(ErrorCode.STAFF_IS_EMPTY);
         }
 
         return ApiResponse.<List<StaffDTO>>builder()
@@ -55,7 +55,7 @@ public class StaffService {
         List<StaffDTO> staffDetailList =  null ;
         //staffRepository.findAllStaff();
         if (staffDetailList.isEmpty()) {
-            throw new AppException(ErrorCode.IS_EMPTY);
+            throw new AppException(ErrorCode.STAFF_IS_EMPTY);
         }
         return ApiResponse.<List<StaffDTO>>builder()
                 .code(200)
@@ -66,7 +66,7 @@ public class StaffService {
 
     public ApiResponse<StaffDTO> getStaffById(UUID staffId) {
         Staff staff = staffRepository.findById(staffId)
-                .orElseThrow(() -> new AppException(ErrorCode.CANT_FOUND));
+                .orElseThrow(() -> new AppException(ErrorCode.STAFF_NOT_FOUND));
         return ApiResponse.<StaffDTO>builder()
                 .code(200)
                 .message("Get staff by ID success")
@@ -76,12 +76,9 @@ public class StaffService {
 
     public ApiResponse<StaffDTO>  addStaff(CreateStaffRequest newStaff) {
 
-        if (accountRepository.existsByUserName(newStaff.getUserName())) {
-            return ApiResponse.<StaffDTO>builder()
-                    .code(400)
-                    .message(ErrorCode.USER_ALREADY_EXISTED.getMessage())
-                    .build();
-        }
+        if (accountRepository.existsByUserName(newStaff.getUserName()))
+            throw new AppException(ErrorCode.USER_ALREADY_EXISTED);
+
 
         String encodedPassword = passwordEncoder.encode(newStaff.getPassword());
         Staff createStaff = new Staff(null, newStaff.getNameStaff(), newStaff.getPhone(), null, null);
@@ -92,7 +89,7 @@ public class StaffService {
         account.setPassWord(encodedPassword);
 
         Role role = roleRepository.findById(newStaff.getRole())
-                .orElseThrow(() -> new AppException(ErrorCode.CANT_FOUND));
+                .orElseThrow(() -> new AppException(ErrorCode.COMMON_RESOURCE_NOT_FOUND));
         account.setRole(role);
 
         Account savedAccount =  accountRepository.save(account);
@@ -108,7 +105,7 @@ public class StaffService {
 
     public ApiResponse<String> deleteStaffIfNoAppointments(UUID staffId) {
         Staff staff = staffRepository.findById(staffId)
-                .orElseThrow(() -> new AppException(ErrorCode.CANT_FOUND));
+                .orElseThrow(() -> new AppException(ErrorCode.STAFF_NOT_FOUND));
 
         // Kiểm tra xem có lịch hẹn không
         List<Appointment> appointments = appointmentRepository.findByStaffId(staffId);
@@ -128,7 +125,7 @@ public class StaffService {
     public ApiResponse<StaffDTO> getStaffDetailById(UUID staffId) {
         StaffDTO staffDetailDTO = staffRepository.findStaffDetailById(staffId);
         if (staffDetailDTO == null) {
-            throw new AppException(ErrorCode.CANT_FOUND);
+            throw new AppException(ErrorCode.STAFF_NOT_FOUND);
         }
 
         return ApiResponse.<StaffDTO>builder()
@@ -142,7 +139,7 @@ public class StaffService {
     public ApiResponse<StaffDTO> updateStaff(StaffDTO staffDTO) {
 
         Staff staff = staffRepository.findById(staffDTO.getId())
-                .orElseThrow(() -> new AppException(ErrorCode.CANT_FOUND));
+                .orElseThrow(() -> new AppException(ErrorCode.STAFF_NOT_FOUND));
 
 
         staff.setNameStaff(staffDTO.getNameStaff());

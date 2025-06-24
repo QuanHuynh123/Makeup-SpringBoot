@@ -1,7 +1,7 @@
 package com.example.Makeup.controller.web.admin;
 
 import com.example.Makeup.dto.model.OrderDTO;
-import com.example.Makeup.enums.ApiResponse;
+import com.example.Makeup.dto.response.common.ApiResponse;
 import com.example.Makeup.service.OrderService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

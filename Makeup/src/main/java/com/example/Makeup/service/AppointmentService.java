@@ -7,8 +7,8 @@ import com.example.Makeup.entity.Appointment;
 import com.example.Makeup.entity.ServiceMakeup;
 import com.example.Makeup.entity.Staff;
 import com.example.Makeup.entity.User;
-import com.example.Makeup.enums.ApiResponse;
-import com.example.Makeup.enums.AppException;
+import com.example.Makeup.dto.response.common.ApiResponse;
+import com.example.Makeup.exception.AppException;
 import com.example.Makeup.enums.ErrorCode;
 import com.example.Makeup.mapper.AppointmentMapper;
 import com.example.Makeup.repository.AppointmentRepository;
@@ -21,12 +21,11 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.WeekFields;
 import java.util.*;
 import java.util.stream.Collectors;
-
-import static io.lettuce.core.LettuceVersion.getName;
 
 @Service
 @RequiredArgsConstructor
@@ -91,7 +90,7 @@ public class AppointmentService {
     }
 
     // Tính tuần trong tháng dựa trên ngày
-    private int getWeekOfMonth(LocalDateTime date) {
+    private int getWeekOfMonth(LocalDate date) {
         WeekFields weekFields = WeekFields.of(Locale.getDefault());
         return date.get(weekFields.weekOfMonth());
     }
@@ -107,7 +106,7 @@ public class AppointmentService {
     public ApiResponse<List<AppointmentDTO>> getAllAppointments() {
         List<Appointment> appointments = appointmentRepository.findAll();
         if (appointments.isEmpty()) {
-            throw new AppException(ErrorCode.IS_EMPTY);
+            throw new AppException(ErrorCode.COMMON_IS_EMPTY);
         }
         return ApiResponse.<List<AppointmentDTO>>builder()
                 .code(200)
@@ -119,7 +118,7 @@ public class AppointmentService {
     }
 
     public ApiResponse<AppointmentDTO> getAppointmentById(UUID appointmentId) {
-        Appointment appointment = appointmentRepository.findById(appointmentId).orElseThrow(() -> new AppException(ErrorCode.CANT_FOUND));
+        Appointment appointment = appointmentRepository.findById(appointmentId).orElseThrow(() -> new AppException(ErrorCode.COMMON_RESOURCE_NOT_FOUND));
 
         return ApiResponse.<AppointmentDTO>builder()
                 .code(200)
@@ -137,7 +136,7 @@ public class AppointmentService {
 
     public ApiResponse<AppointmentDTO> updateAppointment(UUID idAppointment, AppointmentDTO appointmentDTO) {
         Appointment appointment = appointmentRepository.findById(idAppointment)
-                .orElseThrow(() -> new AppException(ErrorCode.CANT_FOUND));
+                .orElseThrow(() -> new AppException(ErrorCode.COMMON_RESOURCE_NOT_FOUND));
 
         AppointmentDTO asd = appointmentMapper.toAppointmentDTO(appointment);
 
@@ -194,7 +193,7 @@ public class AppointmentService {
     @Transactional
     public ApiResponse<Boolean> deleteAppointment(UUID appointmentId) {
         if (!appointmentRepository.existsById(appointmentId)) {
-            throw new AppException(ErrorCode.CANT_FOUND);
+            throw new AppException(ErrorCode.APPOINTMENT_IS_EMPTY);
         }
         appointmentRepository.deleteById(appointmentId);
         return ApiResponse.<Boolean>builder()
@@ -210,18 +209,20 @@ public class AppointmentService {
         Appointment appointment = new Appointment();
         appointment.setStartTime(newAppointment.getStartTime());
         appointment.setEndTime(newAppointment.getEndTime());
-        appointment.setMakeupDate(newAppointment.getMakeupDate());
-        Staff staff = staffRepository.findById(newAppointment.getStaffId()).orElseThrow(() -> new AppException(ErrorCode.CANT_FOUND));
+        appointment.setMakeupDate(LocalDate.from(newAppointment.getMakeupDate()));
+
+        Staff staff = staffRepository.findById(newAppointment.getStaffId())
+                .orElseThrow(() -> new AppException(ErrorCode.STAFF_NOT_FOUND));
         appointment.setStaff(staff);
-        ServiceMakeup serviceMakeup =  serviceMakeupRepository.findById(newAppointment.getServiceMakeupId())
-                .orElseThrow(() -> new AppException(ErrorCode.CANT_FOUND));
+
+        ServiceMakeup serviceMakeup = serviceMakeupRepository.findById(newAppointment.getServiceMakeupId())
+                .orElseThrow(() -> new AppException(ErrorCode.COMMON_RESOURCE_NOT_FOUND));
         appointment.setServiceMakeup(serviceMakeup);
 
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        User user;
 
-        User user ;
-        if (username == null || username.isEmpty() || "anonymousUser".equals(username) ) {
-            // If user is not logged in, create a guest user
+        if (username == null || username.isEmpty() || "anonymousUser".equals(username)) {
             user = new User();
             user.setFullName(newAppointment.getGuestInfo().getFullName());
             user.setEmail(newAppointment.getGuestInfo().getEmail());
@@ -231,23 +232,14 @@ public class AppointmentService {
             user.setGuestToken(UUID.randomUUID().toString());
             user = userRepository.save(user);
         } else {
-            // Get user is logged in
             user = userRepository.findByAccount_userName(username)
                     .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
         }
 
         appointment.setUser(user);
 
-        // Check conflict with existing appointments
-        List<Appointment> conflictingAppointments = appointmentRepository.findConflictingAppointments(
-                appointment.getStaff().getId(),
-                appointment.getMakeupDate(),
-                appointment.getStartTime(),
-                appointment.getEndTime()
-        );
-        if (!conflictingAppointments.isEmpty()) {
-            throw new AppException(ErrorCode.STAFF_ALREADY_BOOKED);
-        }
+        // ✅ Check conflict
+        checkAppointmentConflict(appointment);
 
         Appointment savedAppointment = appointmentRepository.save(appointment);
 
@@ -258,10 +250,23 @@ public class AppointmentService {
                 .build();
     }
 
+    private void checkAppointmentConflict(Appointment appointment) {
+        List<Appointment> conflicts = appointmentRepository.findConflictingAppointments(
+                appointment.getStaff().getId(),
+                appointment.getMakeupDate(),
+                appointment.getStartTime(),
+                appointment.getEndTime()
+        );
+        if (!conflicts.isEmpty()) {
+            throw new AppException(ErrorCode.STAFF_ALREADY_BOOKED);
+        }
+    }
+
+
     public ApiResponse<List<AppointmentDTO>> getAllAppointmentsDetail() {
         List<AppointmentDTO> appointments = appointmentRepository.findAllAppointmentsWithDetails();
         if (appointments.isEmpty()) {
-            throw new AppException(ErrorCode.IS_EMPTY);
+            throw new AppException(ErrorCode.APPOINTMENT_IS_EMPTY);
             }
         return ApiResponse.<List<AppointmentDTO>>builder()
                 .code(200)
@@ -272,7 +277,7 @@ public class AppointmentService {
 
     public ApiResponse<AppointmentDTO> getAppointmentDetailById(UUID appointmentId) {
         Appointment appointment = appointmentRepository.findById(appointmentId)
-                .orElseThrow(() -> new AppException(ErrorCode.CANT_FOUND));
+                .orElseThrow(() -> new AppException(ErrorCode.APPOINTMENT_IS_EMPTY));
         return ApiResponse.<AppointmentDTO>builder()
                 .code(200)
                 .message("Lấy chi tiết lịch hẹn thành công!")
@@ -282,15 +287,18 @@ public class AppointmentService {
 
     private List<AppointmentDTO> getAppointmentUser(UUID userId){
         List<Appointment> appointments = appointmentRepository.findAllByUserId(userId);
+        if (appointments.isEmpty()) {
+            throw new AppException(ErrorCode.APPOINTMENT_IS_EMPTY);
+        }
         return appointments.stream()
                 .map(appointmentMapper::toAppointmentDTO)
                 .collect(Collectors.toList());
     }
 
-    public ApiResponse<List<AppointmentDTO>> getAppointmentsByDateAndStaff(UUID staffId, Date makeupDate) {
+    public ApiResponse<List<AppointmentDTO>> getAppointmentsByDateAndStaff(UUID staffId, LocalDate makeupDate) {
         List<Appointment> appointments = appointmentRepository.findAppointmentsByDateAndStaff(staffId, makeupDate);
         if (appointments.isEmpty()) {
-            throw new AppException(ErrorCode.IS_EMPTY);
+            throw new AppException(ErrorCode.APPOINTMENT_IS_EMPTY);
         }
         return ApiResponse.<List<AppointmentDTO>>builder()
                 .code(200)
@@ -300,5 +308,6 @@ public class AppointmentService {
                         .collect(Collectors.toList()))
                 .build();
     }
+
 
 }

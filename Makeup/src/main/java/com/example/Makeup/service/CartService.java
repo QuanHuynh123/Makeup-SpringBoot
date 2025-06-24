@@ -5,8 +5,8 @@ import com.example.Makeup.dto.model.UserDTO;
 import com.example.Makeup.entity.Cart;
 import com.example.Makeup.entity.CartItem;
 import com.example.Makeup.entity.User;
-import com.example.Makeup.enums.ApiResponse;
-import com.example.Makeup.enums.AppException;
+import com.example.Makeup.dto.response.common.ApiResponse;
+import com.example.Makeup.exception.AppException;
 import com.example.Makeup.enums.ErrorCode;
 import com.example.Makeup.mapper.CartMapper;
 import com.example.Makeup.repository.CartItemRepository;
@@ -28,13 +28,12 @@ public class CartService {
 
     private final CartRepository cartRepository;
     private final CartMapper cartMapper;
-    private final UserService userService;
     private final UserRepository userRepository;
     private final CartItemRepository cartItemRepository;
 
 
     public ApiResponse<CartDTO> getCart (UUID userId){
-        Cart cart = cartRepository.findByUserId(userId).orElseThrow(() -> new AppException(ErrorCode.CANT_FOUND));
+        Cart cart = cartRepository.findByUserId(userId).orElseThrow(() -> new AppException(ErrorCode.CART_NOT_FOUND));
         return ApiResponse.<CartDTO>builder()
                 .code(200)
                 .message("Get cart success")
@@ -59,10 +58,10 @@ public class CartService {
     @Transactional
     public ApiResponse<CartDTO> updateCartTotals( UUID cartId){
         Cart cart = cartRepository.findById(cartId)
-                .orElseThrow(() -> new AppException(ErrorCode.CANT_FOUND));
+                .orElseThrow(() -> new AppException(ErrorCode.CART_NOT_FOUND));
 
         if (!checkCartAndUser(cartId)) {
-            throw new AppException(ErrorCode.CANT_FOUND);
+            throw new AppException(ErrorCode.CART_NOT_FOUND);
         }
 
         List<CartItem> cartItemList = cartItemRepository.findAllByCartId(cartId);

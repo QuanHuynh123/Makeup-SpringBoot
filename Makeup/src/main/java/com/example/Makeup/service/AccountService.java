@@ -7,14 +7,15 @@ import com.example.Makeup.entity.Account;
 import com.example.Makeup.entity.RefreshToken;
 import com.example.Makeup.entity.Role;
 import com.example.Makeup.entity.User;
-import com.example.Makeup.enums.ApiResponse;
-import com.example.Makeup.enums.AppException;
+import com.example.Makeup.dto.response.common.ApiResponse;
+import com.example.Makeup.exception.AppException;
 import com.example.Makeup.enums.ErrorCode;
 import com.example.Makeup.mapper.AccountMapper;
 import com.example.Makeup.repository.AccountRepository;
 import com.example.Makeup.repository.RefreshTokenRepository;
 import com.example.Makeup.repository.RoleRepository;
 import com.example.Makeup.repository.UserRepository;
+import com.example.Makeup.security.JWTProvider;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -38,7 +39,7 @@ public class AccountService implements UserDetailsService {
     private final AccountRepository accountRepository;
     private final RoleRepository roleRepository;
     private final AccountMapper accountMapper;
-    private final JWTService jwtService;
+    private final JWTProvider jwtProvider;
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
     private final UserRepository userRepository;
     private final RefreshTokenRepository refreshTokenRepository;
@@ -75,7 +76,7 @@ public class AccountService implements UserDetailsService {
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
 
         if (!passwordEncoder.matches(password, account.getPassWord())) {
-            throw new AppException(ErrorCode.PASSWORD_NOT_MATCH);
+            throw new AppException(ErrorCode.USER_PASSWORD_NOT_MATCH);
         }
 
         log.info("Pass authentication for user: {}", username);
@@ -105,7 +106,7 @@ public class AccountService implements UserDetailsService {
         }
 
         // Generate JWT token
-        String token = jwtService.generateToken(username, account.getRole().getId());
+        String token = jwtProvider.generateToken(username, account.getRole().getId() , account.getId());
 
         return ApiResponse.<String>builder()
                 .code(200)
@@ -123,7 +124,7 @@ public class AccountService implements UserDetailsService {
         account.setUserName(registerRequest.getUserName());
         account.setPassWord(passwordEncoder.encode(registerRequest.getPassWord()));
         Role role = roleRepository.findById(2)
-                .orElseThrow(() -> new AppException(ErrorCode.CANT_FOUND));
+                .orElseThrow(() -> new AppException(ErrorCode.COMMON_RESOURCE_NOT_FOUND));
         account.setRole(role);
         accountRepository.save(account);
         System.out.println("UUID account: " + account.getId());
@@ -147,7 +148,7 @@ public class AccountService implements UserDetailsService {
             throw new AppException(ErrorCode.USER_ALREADY_EXISTED);
         }
         Role role = roleRepository.findById(account.getRoleId())
-                .orElseThrow(()-> new AppException(ErrorCode.CANT_FOUND));
+                .orElseThrow(()-> new AppException(ErrorCode.COMMON_RESOURCE_NOT_FOUND));
         Account saveAccount = accountMapper.toEntity(account);
         saveAccount.setRole(role);
         accountRepository.save(saveAccount);
@@ -158,7 +159,6 @@ public class AccountService implements UserDetailsService {
                 .build();
     }
 
-
     public ApiResponse<List<AccountDTO>> getAllAccounts() {
         return ApiResponse.<List<AccountDTO>>builder()
                 .code(200)
@@ -168,9 +168,10 @@ public class AccountService implements UserDetailsService {
                         .toList())
                 .build();
     }
+
     public ApiResponse<AccountDTO> getAccountById(UUID id) {
         Account account =  accountRepository.findById(id).orElseThrow(
-                () -> new AppException(ErrorCode.CANT_FOUND));
+                () -> new AppException(ErrorCode.USER_NOT_FOUND));
         return ApiResponse.<AccountDTO>builder()
                 .code(200)
                 .message("Get account success")
@@ -181,7 +182,7 @@ public class AccountService implements UserDetailsService {
     @Transactional
     public ApiResponse<Boolean> delete(UUID userId) {
         Account account = accountRepository.findById(userId)
-                .orElseThrow(() -> new AppException(ErrorCode.CANT_FOUND));
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
         accountRepository.delete(account);
         return ApiResponse.<Boolean>builder()
                 .code(200)

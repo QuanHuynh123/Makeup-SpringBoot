@@ -2,7 +2,9 @@ package com.example.Makeup.service;
 
 import com.example.Makeup.dto.model.ServiceMakeupDTO;
 import com.example.Makeup.entity.ServiceMakeup;
-import com.example.Makeup.enums.ApiResponse;
+import com.example.Makeup.dto.response.common.ApiResponse;
+import com.example.Makeup.enums.ErrorCode;
+import com.example.Makeup.exception.AppException;
 import com.example.Makeup.mapper.ServiceMakeupMapper;
 import com.example.Makeup.repository.ServiceMakeupRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +22,9 @@ public class ServiceMakeupService {
 
     public ApiResponse<List<ServiceMakeupDTO>> getAllServices() {
         List<ServiceMakeup> serviceMakeups = serviceMakeupRepository.findAll();
+        if (serviceMakeups.isEmpty()) {
+            throw new AppException(ErrorCode.COMMON_RESOURCE_NOT_FOUND);
+        }
         return ApiResponse.<List<ServiceMakeupDTO>>builder()
                 .code(200)
                 .message("Get all services success")

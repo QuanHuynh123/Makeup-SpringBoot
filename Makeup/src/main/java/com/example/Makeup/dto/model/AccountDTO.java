@@ -18,6 +18,6 @@ public class AccountDTO {
     int roleId;
     UUID staffId;
     UUID userId;
-    LocalDateTime createDate;
-    LocalDateTime updateDate;
+    LocalDateTime createdAt;
+    LocalDateTime updatedAt;
 }

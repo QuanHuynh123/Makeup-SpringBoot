@@ -3,20 +3,20 @@ package com.example.Makeup.service;
 import com.example.Makeup.dto.model.ProductDTO;
 import com.example.Makeup.dto.request.CreateProductRequest;
 import com.example.Makeup.dto.request.UpdateProductRequest;
+import com.example.Makeup.dto.response.ShortProductListResponse;
 import com.example.Makeup.entity.Product;
 import com.example.Makeup.entity.SubCategory;
-import com.example.Makeup.enums.ApiResponse;
+import com.example.Makeup.dto.response.common.ApiResponse;
 import com.example.Makeup.repository.SubCategoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import com.example.Makeup.enums.AppException;
+import com.example.Makeup.exception.AppException;
 import com.example.Makeup.enums.ErrorCode;
 import com.example.Makeup.mapper.ProductMapper;
 import com.example.Makeup.repository.ProductRepository;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -59,30 +59,41 @@ public class ProductService {
                 .build();
     }
 
-    public ApiResponse<List<ProductDTO>> getHotProducts() {
+    public ApiResponse<List<ShortProductListResponse>> getHotProducts() {
         List<Product> products = productRepository.findTopRentalCount(PageRequest.of(0,12));
         if (products.isEmpty()) {
             throw new AppException(ErrorCode.PRODUCT_NOT_FOUND);
         }
-        return ApiResponse.<List<ProductDTO>>builder()
+
+        return ApiResponse.<List<ShortProductListResponse>>builder()
                 .code(200)
                 .message("Products found")
                 .result(products.stream()
-                        .map(productMapper::toProductDTO)
+                        .map(product -> new ShortProductListResponse(
+                                product.getId(),
+                                product.getNameProduct(),
+                                product.getPrice(),
+                                product.getImage().split(",")[0]))
                         .collect(Collectors.toList()))
                 .build();
+
     }
 
-    public ApiResponse<List<ProductDTO>> getNewProducts() {
-        List<Product> products = productRepository.findTopCreatedAt(PageRequest.of(0,8));
+    public ApiResponse<List<ShortProductListResponse>> getNewProducts() {
+        List<Product> products = productRepository.findNewProducts(PageRequest.of(0,8));
         if (products.isEmpty()) {
             throw new AppException(ErrorCode.PRODUCT_NOT_FOUND);
         }
-        return ApiResponse.<List<ProductDTO>>builder()
+
+        return ApiResponse.<List<ShortProductListResponse>>builder()
                 .code(200)
                 .message("Products found")
                 .result(products.stream()
-                        .map(productMapper::toProductDTO)
+                        .map(product -> new ShortProductListResponse(
+                                product.getId(),
+                                product.getNameProduct(),
+                                product.getPrice(),
+                                product.getImage().split(",")[0]))
                         .collect(Collectors.toList()))
                 .build();
     }
@@ -90,9 +101,7 @@ public class ProductService {
     @Transactional
     public ApiResponse<ProductDTO> createProduct(CreateProductRequest createProduct) throws IOException{
         SubCategory subCategory = subCategoryRepository.findById(createProduct.getSubCategoryId())
-                .orElseThrow(() -> new AppException(ErrorCode.CANT_FOUND));
-
-        LocalDate localDate = LocalDate.now();
+                .orElseThrow(() -> new AppException(ErrorCode.COMMON_RESOURCE_NOT_FOUND));
 
         Product product = new Product();
         product.setNameProduct(createProduct.getName());
@@ -132,13 +141,11 @@ public class ProductService {
     }
 
     public ApiResponse<Page<ProductDTO>> getProductBySubcategoryId(int subCategoryId, int page, int size) {
-        Pageable pageable = PageRequest.of(page, size); // Tạo đối tượng phân trang
+        Pageable pageable = PageRequest.of(page, size);
         Page<Product> productPage = productRepository.findBySubCategoryId(subCategoryId, pageable);
 
-
-        if (productPage.isEmpty()) {
-            throw new AppException(ErrorCode.IS_EMPTY);
-        }
+        if (productPage.isEmpty())
+            throw new AppException(ErrorCode.PRODUCT_IS_EMPTY);
 
         return ApiResponse.<Page<ProductDTO>>builder()
                 .code(200)
@@ -154,7 +161,7 @@ public class ProductService {
     @Transactional
     public ApiResponse<ProductDTO> updateProduct(UpdateProductRequest updateProduct, UUID productId) throws IOException{
         SubCategory subCategory = subCategoryRepository.findById(updateProduct.getSubCategoryId())
-                .orElseThrow(() -> new AppException(ErrorCode.CANT_FOUND));
+                .orElseThrow(() -> new AppException(ErrorCode.COMMON_RESOURCE_NOT_FOUND));
 
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOT_FOUND));

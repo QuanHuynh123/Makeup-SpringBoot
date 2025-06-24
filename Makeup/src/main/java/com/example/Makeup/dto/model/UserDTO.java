@@ -19,6 +19,6 @@ public class UserDTO {
     Integer role ;
     UUID cartId;
     UUID accountId;
-    LocalDateTime  createdAt;
-    LocalDateTime  updatedAt;
+    LocalDateTime createdAt;
+    LocalDateTime updatedAt;
 }

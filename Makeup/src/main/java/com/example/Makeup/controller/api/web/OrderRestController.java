@@ -1,14 +1,10 @@
 package com.example.Makeup.controller.api.web;
 
 import com.example.Makeup.dto.model.OrderDTO;
-import com.example.Makeup.enums.ApiResponse;
-import com.example.Makeup.service.CartItemService;
+import com.example.Makeup.dto.response.common.ApiResponse;
 import com.example.Makeup.service.OrderItemService;
 import com.example.Makeup.service.OrderService;
-import jakarta.servlet.http.HttpSession;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
