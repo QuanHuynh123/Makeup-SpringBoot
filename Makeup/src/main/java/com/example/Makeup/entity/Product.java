@@ -16,7 +16,6 @@ import org.hibernate.type.SqlTypes;
 
 @Entity
 @NoArgsConstructor
-@AllArgsConstructor
 @Getter
 @Setter
 @Table(name = "product")
@@ -47,7 +46,7 @@ public class Product extends Base{
     String image;
 
     @Column(name = "current_quantity", nullable = false)
-    int currentQuantity; // Số lượng còn lại trong kho
+    int currentQuantity; // This is the current available quantity of the product
 
     @Column(name = "quantity", nullable = false)
     int quantity;

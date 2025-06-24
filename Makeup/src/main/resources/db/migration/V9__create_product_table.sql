@@ -20,8 +20,8 @@ CREATE TABLE product (
 
 INSERT INTO `product` (id, name_product, description, size, price, status, image, current_quantity, quantity, version, rental_count, sub_category_id, created_at, updated_at)
 VALUES
-(UUID(), 'Christmas Elf Women Girls Family Costumes', 'a', 'X', 30, 1, 'elfwoment1.jpg,elfwomen2.jpg,elfwomen3.jpg,elfwomen4.jpg,elfwoment5.jpg', 100, 100, 1, 1, 19, NOW(), NOW()),
-(UUID(), 'Red Children Christmas Costumes with Cute Hat', 'a', 'X', 30, 1, 'rechild1.jpg,redchild2.jpg', 100, 100, 1, 2, 19, NOW(), NOW()),
+(UUID(), 'Christmas Elf Women Girls Family Costumes', 'a', 'X', 30, 1, 'elfwomen1.jpg,elfwomen2.jpg,elfwomen3.jpg,elfwomen4.jpg,elfwomen5.jpg', 100, 100, 1, 1, 19, NOW(), NOW()),
+(UUID(), 'Red Children Christmas Costumes with Cute Hat', 'a', 'X', 30, 1, 'redchild1.jpg,redchild2.jpg', 100, 100, 1, 2, 19, NOW(), NOW()),
 (UUID(), 'Green Child Christmas Costume with Colorful Snowball', 'a', 'X', 30, 1, 'greenchild1.jpg,greenchild2.png,greenchild3.jpg', 100, 100, 1, 1, 19, NOW(), NOW()),
 (UUID(), 'Christmas costumes women party dress with white gloves', 'a', 'X', 30, 1, 'christmas1.jpg,christmas2.jpg,christmas3.jpg', 100, 100, 1, 1, 19, NOW(), NOW()),
 (UUID(), 'Christmas Santa Claus Costume With The Beard So Smart', 'a', 'X', 30, 1, 'santa1.png,santa3.jpg,santa2.png,santa4.jpg,santa5.jpg', 100, 100, 1, 1, 19, NOW(), NOW()),

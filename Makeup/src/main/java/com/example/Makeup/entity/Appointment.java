@@ -7,7 +7,7 @@ import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
 import java.sql.Time;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Entity
@@ -31,7 +31,7 @@ public class Appointment extends Base{
     Time endTime  ;
 
     @Column(name = "makeup_date",  nullable = false)
-    LocalDateTime makeupDate;
+    LocalDate makeupDate;
 
     @Column(name = "status",  nullable = false)
     boolean status;

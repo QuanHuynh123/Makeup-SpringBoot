@@ -2,7 +2,7 @@ CREATE TABLE appointment (
     id CHAR(36) NOT NULL PRIMARY KEY,
     start_time TIME NOT NULL,
     end_time TIME NOT NULL,
-    makeup_date TIMESTAMP NOT NULL,
+    makeup_date DATE  NOT NULL,
     status BOOLEAN NOT NULL,
     user_id CHAR(36) NOT NULL ,
     service_makeup_id BIGINT UNSIGNED NOT NULL,
