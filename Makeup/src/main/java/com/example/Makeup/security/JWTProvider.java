@@ -1,5 +1,6 @@
-package com.example.Makeup.service;
+package com.example.Makeup.security;
 
+import io.jsonwebtoken.ExpiredJwtException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import io.jsonwebtoken.Claims;
@@ -7,18 +8,19 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 import java.util.function.Function;
 
 
 @Slf4j
-@Service
-public class JWTService {
+@Component
+public class JWTProvider {
 
     @Value("${jwt.secret}")
     private String secretkey ;
@@ -26,10 +28,11 @@ public class JWTService {
     @Value("${jwt.expiration}")
     private long expirationMs;
 
-    public String generateToken(String username,Integer role) {
+    public String generateToken(String username,Integer role , UUID accountId) {
         log.info("Generating JWT token for user: {}", username);
         Map<String, Object> claims = new HashMap<>();
         claims.put("role", role);
+        claims.put("accountId", accountId.toString());
         return Jwts.builder()
                 .claims()
                 .add(claims)
@@ -47,7 +50,6 @@ public class JWTService {
     }
 
     public String extractUserName(String token) {
-        // extract the username from jwt token
         return extractClaim(token, Claims::getSubject);
     }
 
@@ -90,6 +92,31 @@ public class JWTService {
 
     private Date extractExpiration(String token) {
         return extractClaim(token, Claims::getExpiration);
+    }
+
+    public String extractUserNameAllowExpired(String token) {
+        return extractAllClaimsAllowExpired(token).getSubject();
+    }
+
+    public UUID extractAccountIdAllowExpired(String token) {
+        String accountIdStr = extractAllClaimsAllowExpired(token).get("accountId", String.class);
+        return UUID.fromString(accountIdStr);
+    }
+
+    public Integer extractRoleAllowExpired(String token) {
+        return extractAllClaimsAllowExpired(token).get("role", Integer.class);
+    }
+
+    private Claims extractAllClaimsAllowExpired(String token) {
+        try {
+            return Jwts.parser()
+                    .verifyWith(getKey())
+                    .build()
+                    .parseSignedClaims(token)
+                    .getPayload();
+        } catch (ExpiredJwtException e) {
+            return e.getClaims();
+        }
     }
 
 }
