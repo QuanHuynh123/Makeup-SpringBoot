@@ -1,4 +1,4 @@
-package com.example.Makeup.enums;
+package com.example.Makeup.dto.response.common;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
