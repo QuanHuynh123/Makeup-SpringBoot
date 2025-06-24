@@ -1,7 +1,7 @@
 package com.example.Makeup.security;
 
-import com.example.Makeup.service.AccountService;
-import com.example.Makeup.service.JWTService;
+import com.example.Makeup.entity.RefreshToken;
+import com.example.Makeup.service.RefreshTokenService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
@@ -18,69 +18,95 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 @Slf4j
 @Component
 @RequiredArgsConstructor
 public class JwtFilter extends OncePerRequestFilter {
 
-    private final JWTService jwtService;
-    private final AccountService accountService;
+    private final JWTProvider jwtProvider;
+    private final RefreshTokenService refreshTokenService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-        String token = null ;
-        String username = null ;
 
-        String authHeader = request.getHeader("Authorization");
-        // Check token in Authorization header
-        if (authHeader != null && authHeader.startsWith("Bearer ")) {
-            token = authHeader.substring(7);
-        }
-
-        // Check token in cookies if not found in header
+        String token = resolveToken(request);
         if (token == null) {
-            Cookie[] cookies = request.getCookies();
-            if (cookies != null) {
-                for (Cookie cookie : cookies) {
-                    if ("jwt".equals(cookie.getName())) {
-                        token = cookie.getValue();
-                        break;
-                    }
+            filterChain.doFilter(request, response);
+            return;
+        }
+
+        try {
+            String username = null;
+
+            if (jwtProvider.isTokenValid(token)) {
+                username = jwtProvider.extractUserName(token);
+            } else {
+                token = tryRefreshToken(token, response);
+                username = jwtProvider.extractUserName(token); // re-extract username after refreshing token
+            }
+
+            if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+                setupAuthenticationContext(token, username, request);
+            }
+
+        } catch (Exception e) {
+            log.warn("Cannot set user authentication: {}", e.getMessage());
+            SecurityContextHolder.clearContext();
+        }
+
+        filterChain.doFilter(request, response);
+    }
+
+    private String resolveToken(HttpServletRequest request) {
+        String authHeader = request.getHeader("Authorization");
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+            return authHeader.substring(7);
+        }
+
+        if (request.getCookies() != null) {
+            for (Cookie cookie : request.getCookies()) {
+                if ("jwt".equals(cookie.getName())) {
+                    return cookie.getValue();
                 }
             }
         }
+        return null;
+    }
 
-        if (token != null && jwtService.isTokenValid(token)) {
-            username = jwtService.extractUserName(token);
+    private String tryRefreshToken(String expiredToken, HttpServletResponse response) {
+        UUID accountId = jwtProvider.extractAccountIdAllowExpired(expiredToken);
+        RefreshToken refreshToken = refreshTokenService.getTokenByAccountId(accountId);
+        if (refreshToken == null || refreshToken.isRevoked() || refreshToken.getExpiryDate().isBefore(LocalDateTime.now())) {
+            throw new RuntimeException("Refresh token invalid or expired");
         }
 
-        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            try {
-                if (jwtService.isTokenValid(token)) {
-                    Integer roleId = jwtService.extractRole(token); // Get roleId from the token
-                    String role = mapRoleToAuthority(roleId);
+        String newAccessToken = refreshTokenService.refreshToken(expiredToken, accountId).getResult();
 
-                    // Crate List of authorities
-                    List<GrantedAuthority> authorities = Collections.singletonList(new SimpleGrantedAuthority(role));
+        Cookie cookie = new Cookie("jwt", newAccessToken);
+        cookie.setHttpOnly(true);
+        cookie.setSecure(false);
+        cookie.setPath("/");
+        cookie.setMaxAge(7200);
+        response.addCookie(cookie);
 
-                    // Create Context with user details
-                    UsernamePasswordAuthenticationToken authToken =
-                            new UsernamePasswordAuthenticationToken(username, null, authorities);
-                    authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                    SecurityContextHolder.getContext().setAuthentication(authToken);
-                }else {
-                    log.warn("Token invalid or expired for username: {}, proceeding as anonymous", username);
-                }
+        return newAccessToken;
+    }
 
-            } catch (Exception e) {
-                logger.warn("Cannot set user authentication");
-            }
-        }
-        filterChain.doFilter(request,response);
+    private void setupAuthenticationContext(String token, String username, HttpServletRequest request) {
+        Integer roleId = jwtProvider.extractRole(token);
+        String role = mapRoleToAuthority(roleId);
+        List<GrantedAuthority> authorities = Collections.singletonList(new SimpleGrantedAuthority(role));
+
+        UsernamePasswordAuthenticationToken authToken =
+                new UsernamePasswordAuthenticationToken(username, null, authorities);
+        authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+        SecurityContextHolder.getContext().setAuthentication(authToken);
     }
 
     private String mapRoleToAuthority(Integer roleId) {

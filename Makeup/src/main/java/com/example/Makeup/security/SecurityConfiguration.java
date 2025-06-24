@@ -16,6 +16,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
@@ -30,6 +35,7 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(csrf -> csrf.disable()) // Disable CSRF protection for stateless APIs
                 .authorizeHttpRequests(request -> request
                         // Endpoint not requiring authentication
@@ -38,7 +44,8 @@ public class SecurityConfiguration {
                                 "/error/**",
                                 "/productDetail",
                                 "/register/**", "/login/**",
-                                "/static/**", "/js/**", "/css/**", "/icon/**", "/images/**", "/fonts/**"
+                                "/static/**", "/js/**", "/css/**", "/icon/**", "/images/**", "/fonts/**",
+                                "api/appointments/create"
                         ).permitAll()
                         // Endpoint requiring ADMIN role
                         .requestMatchers(
@@ -83,6 +90,20 @@ public class SecurityConfiguration {
     }
 
     @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration config = new CorsConfiguration();
+        config.setAllowedOrigins(List.of("http://localhost:3000")); // or specify your frontend URL
+        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        config.setAllowedHeaders(List.of("*"));
+        config.setAllowCredentials(true);
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", config);
+        return source;
+    }
+
+
+    @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }
@@ -93,54 +114,54 @@ public class SecurityConfiguration {
     }
 
 
-    // Authentication with form login customization
-//    @Bean
-//    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
-//        return httpSecurity
-//        .csrf(AbstractHttpConfigurer::disable)
-//        .authorizeHttpRequests(registry -> {
-//            registry.requestMatchers("/home",
-//                            "/cosplay",
-//                            "/productDetail",
-//                            "/makeup",
-//                            "/register/**",
-//                            "/static/**",
-//                            "/js/**",
-//                            "/css/**",
-//                            "/icon/**",
-//                            "/images/**",
-//                            "/fonts/**")
-//                    .permitAll();
-//            registry.requestMatchers("/admin/**","/api/accounts/**"
-//                    ,"api/admin/order/**").hasRole("ADMIN");
-//            registry.requestMatchers("/user/**","/api/user/**").hasRole("USER");
-//            registry.anyRequest().permitAll();
-//        })
-//        .formLogin(form -> form
-//                .loginPage("/login")
-//                .successHandler(new AuthenticationSuccessHandler())
-//                .permitAll()
-//        )
-//        .logout(logout -> logout
-//                .logoutUrl("/logout")
-//                .permitAll()
-//        )
-//        .build();
-//    }
+/*
+    Authentication with form login customization
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
+        return httpSecurity
+        .csrf(AbstractHttpConfigurer::disable)
+        .authorizeHttpRequests(registry -> {
+            registry.requestMatchers("/home",
+                            "/cosplay",
+                            "/productDetail",
+                            "/makeup",
+                            "/register/**",
+                            "/static/**",
+                            "/js/**",
+                            "/css/**",
+                            "/icon/**",
+                            "/images/**",
+                            "/fonts/**")
+                    .permitAll();
+            registry.requestMatchers("/admin/**","/api/accounts/**"
+                    ,"api/admin/order/**").hasRole("ADMIN");
+            registry.requestMatchers("/user/**","/api/user/**").hasRole("USER");
+            registry.anyRequest().permitAll();
+        })
+        .formLogin(form -> form
+                .loginPage("/login")
+                .successHandler(new AuthenticationSuccessHandler())
+                .permitAll()
+        )
+        .logout(logout -> logout
+                .logoutUrl("/logout")
+                .permitAll()
+        )
+        .build();
+    }
 
-//    @Bean
-//    public AuthenticationProvider authenticationProvider(){
-//        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-//        provider.setUserDetailsService(accountService);
-//        provider.setPasswordEncoder(passwordEncoder());
-//        return provider;
-//    }
+    @Bean
+    public AuthenticationProvider authenticationProvider(){
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+        provider.setUserDetailsService(accountService);
+        provider.setPasswordEncoder(passwordEncoder());
+        return provider;
+    }
 
-
-//    @Bean
-//    public UserDetailsService userDetailsService(){
-//        return accountService;
-//    }
-
+    @Bean
+    public UserDetailsService userDetailsService(){
+        return accountService;
+    }
+*/
 
 }

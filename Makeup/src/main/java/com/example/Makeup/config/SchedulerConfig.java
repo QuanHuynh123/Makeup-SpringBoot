@@ -7,7 +7,7 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 
 @Configuration
 @EnableScheduling
-public class SchedulingConfig {
+public class SchedulerConfig {
 
     @Bean
     public ThreadPoolTaskScheduler taskScheduler() {
