@@ -1,9 +1,6 @@
 package com.example.Makeup.dto.response;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDateTime;
@@ -13,8 +10,9 @@ import java.util.UUID;
 @Getter
 @Setter
 @AllArgsConstructor
+@NoArgsConstructor
 public class ShortProductListResponse {
-    final UUID id;
+    UUID id;
     String nameProduct;
     double price;
     String firstImage;
