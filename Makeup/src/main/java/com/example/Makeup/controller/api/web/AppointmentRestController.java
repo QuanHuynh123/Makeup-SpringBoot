@@ -4,7 +4,7 @@ import com.example.Makeup.dto.model.AppointmentDTO;
 import com.example.Makeup.dto.model.WeekAppointmentsDTO;
 import com.example.Makeup.dto.request.AppointmentRequestDTO;
 import com.example.Makeup.dto.response.common.ApiResponse;
-import com.example.Makeup.service.AppointmentService;
+import com.example.Makeup.service.IAppointmentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,7 +16,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @RequestMapping("/api/appointments")
 public class AppointmentRestController {
-    private final AppointmentService appointmentService;
+    private final IAppointmentService appointmentService;
 
     /**
      * Get 1 appointment by Month
@@ -34,7 +34,7 @@ public class AppointmentRestController {
      */
     @GetMapping
     public ApiResponse<List<AppointmentDTO>> getAllAppointments() {
-        return appointmentService.getAllAppointmentsDetail();
+        return appointmentService.getAllAppointments();
     }
 
     /**
@@ -48,11 +48,11 @@ public class AppointmentRestController {
     /**
      * Get 1 detail appointment by Id
      */
-    @GetMapping("/appointmentDetail/{id}")
-    public ApiResponse<AppointmentDTO> getAppointmentDetailById(@PathVariable UUID id) {
-        return appointmentService.getAppointmentDetailById(id);
-
-    }
+//    @GetMapping("/appointmentDetail/{id}")
+//    public ApiResponse<AppointmentDTO> getAppointmentById(@PathVariable UUID id) {
+//        return appointmentService.getAppointmentById(id);
+//
+//    }
 
 
     /**

@@ -3,7 +3,12 @@ package com.example.Makeup.controller.web.web;
 import com.example.Makeup.dto.model.*;
 import com.example.Makeup.dto.response.common.ApiResponse;
 import com.example.Makeup.security.JWTProvider;
-import com.example.Makeup.service.*;
+import com.example.Makeup.service.ICartItemService;
+import com.example.Makeup.service.ICartService;
+import com.example.Makeup.service.ICategoryService;
+import com.example.Makeup.service.IUserService;
+import com.example.Makeup.service.common.CacheCategoryService;
+import com.example.Makeup.service.impl.*;
 import lombok.extern.slf4j.Slf4j;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -21,13 +26,11 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class GlobalModelAttribute {
 
-    private final CartService cartService;
-    private final CartItemService cartItemService;
-    private final CategoryService categoryService;
-    private final FeedBackService feedBackService;
-    private final UserService userService;
-    private final OrderService orderService;
+    private final ICartService cartService;
+    private final ICartItemService cartItemService;
+    private final IUserService userService;
     private final JWTProvider jwtProvider;
+    private final CacheCategoryService cacheCategoryService;
 
     @ModelAttribute
     public void addInformationUser(Model model, HttpServletRequest request) {
@@ -82,17 +85,19 @@ public class GlobalModelAttribute {
                 ApiResponse<CartDTO> cart = cartService.getCart(userId);
                 if (cart.getCode() == 200) {
                     ApiResponse<List<CartItemDTO>> cartItemDTOS = cartItemService.getCartItemByCartId(cart.getResult().getId());
-                    int count = cartService.countCartItem(cart.getResult().getId());
-                    if (cartItemDTOS.getCode() == 200) {
+                    int count = cartItemDTOS.getResult() != null ? cartItemDTOS.getResult().size() : 0;
+                    if (cartItemDTOS.getCode() == 200 && cart.getResult() != null) {
                         model.addAttribute("cartItems", cartItemDTOS.getResult());
                     }
                     model.addAttribute("cart", cart.getResult());
                     model.addAttribute("countCart", count);
                 } else {
-                    log.warn("Failed to load cart for userId: {}, code: {}", userId, cart.getCode());
+                    model.addAttribute("error", "Bạn chưa có giỏ hàng nào.");
+                    model.addAttribute("countCart", 0);
                 }
             } catch (Exception ex) {
                 log.error("Error loading cart for userId: {}, exception: {}", userId, ex.getMessage());
+                model.addAttribute("error", "Lỗi khi tải giỏ hàng.");
             }
         }
     }
@@ -100,7 +105,8 @@ public class GlobalModelAttribute {
     @ModelAttribute("categoryAttributes")
     public void addCategoryHeaderCosplay(Model model ){
         try {
-            ApiResponse<List<CategoryDTO>> categoryDTOS = categoryService.getAllCategory();
+            ApiResponse<List<CategoryDTO>> categoryDTOS = cacheCategoryService.cacheAllCategory();
+
             if (categoryDTOS.getCode() == 200) {
                 model.addAttribute("categories", categoryDTOS.getResult());
             } else {
@@ -111,18 +117,5 @@ public class GlobalModelAttribute {
         }
     }
 
-    @ModelAttribute("feedbackAttributes")
-    public void addFeedGoodFeedBack(Model model) {
-        try {
-            ApiResponse<List<FeedBackDTO>> feedBackDTOS = feedBackService.getGoodFeedback(4);
-            if (feedBackDTOS.getCode() == 200) {
-                model.addAttribute("feedbacks", feedBackDTOS.getResult());
-            } else {
-                log.warn("Failed to load feedback: {}", feedBackDTOS.getMessage());
-            }
-        } catch (Exception ex) {
-            log.error("Exception while loading feedback: {}", ex.getMessage(), ex);
-        }
-    }
 
 }

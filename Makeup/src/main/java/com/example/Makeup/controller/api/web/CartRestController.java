@@ -1,9 +1,12 @@
 package com.example.Makeup.controller.api.web;
 
 import com.example.Makeup.dto.model.CartItemDTO;
-import com.example.Makeup.service.CartItemService;
-import com.example.Makeup.service.CartService;
+import com.example.Makeup.service.ICartItemService;
+import com.example.Makeup.service.ICartService;
+import com.example.Makeup.service.impl.CartItemService;
+import com.example.Makeup.service.impl.CartService;
 import jakarta.servlet.http.HttpSession;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -13,13 +16,10 @@ import java.util.UUID;
 
 @Controller
 @RequestMapping("api/cart")
+@RequiredArgsConstructor
 public class CartRestController {
 
-    @Autowired
-    CartService cartService;
-
-    @Autowired
-    CartItemService cartItemService;
+    private final ICartItemService cartItemService;
 
     @PostMapping("/add")
     public ResponseEntity<String> addToCart(@RequestBody CartItemDTO cartRequest , HttpSession session)

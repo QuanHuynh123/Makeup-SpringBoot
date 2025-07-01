@@ -1,6 +1,6 @@
 package com.example.Makeup.controller.api.admin;
 
-import com.example.Makeup.service.OrderService;
+import com.example.Makeup.service.impl.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

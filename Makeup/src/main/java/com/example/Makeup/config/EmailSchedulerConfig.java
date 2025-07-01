@@ -1,6 +1,6 @@
 package com.example.Makeup.config;
 
-import com.example.Makeup.service.AppointmentService;
+import com.example.Makeup.service.impl.AppointmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

@@ -1,8 +1,8 @@
 package com.example.Makeup.controller.api.web;
 
 import com.example.Makeup.dto.model.ProductDTO;
-import com.example.Makeup.service.ProductService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.Makeup.service.IProductService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,10 +12,10 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/category")
+@RequiredArgsConstructor
 public class CosplayRestController {
 
-    @Autowired
-    private ProductService productService;
+    private final IProductService productService;
 
     // API trả về danh sách sản phẩm và thông tin phân trang dưới dạng JSON khi gọi AJAX
     @GetMapping("/{id}")

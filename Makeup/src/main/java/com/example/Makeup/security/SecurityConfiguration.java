@@ -1,13 +1,12 @@
 package com.example.Makeup.security;
 
-import com.example.Makeup.service.AccountService;
+import com.example.Makeup.service.impl.AccountService;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -42,25 +41,22 @@ public class SecurityConfiguration {
                         .requestMatchers(
                                 "/home","/", "/cosplay/**","/makeup",
                                 "/error/**",
-                                "/productDetail",
+                                "/productDetail/**",
                                 "/register/**", "/login/**",
                                 "/static/**", "/js/**", "/css/**", "/icon/**", "/images/**", "/fonts/**",
-                                "api/appointments/create"
+                                "api/appointments/create","api/appointments/by-date/**"
                         ).permitAll()
-                        // Endpoint requiring ADMIN role
                         .requestMatchers(
                                 "/admin/**",
+                                "/api/admin/order/**"
+                        ).hasAnyRole( "ADMIN", "STAFF")
+                        .requestMatchers(
                                 "/api/accounts/**"
                         ).hasRole("ADMIN")
-                        // Endpoint requiring STAFF role
-                        .requestMatchers(
-                                "/api/admin/order/**"
-                        ).hasRole("STAFF")
-                        // Endpoint requiring USER role
                         .requestMatchers(
                                 "/user/**",
                                 "/api/user/**"
-                        ).hasRole("USER")
+                        ).hasAnyRole("USER", "ADMIN", "STAFF")
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(exceptionHandling ->
@@ -112,6 +108,11 @@ public class SecurityConfiguration {
     public PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
     }
+
+
+
+
+
 
 
 /*

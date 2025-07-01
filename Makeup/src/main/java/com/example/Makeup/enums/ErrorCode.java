@@ -61,7 +61,9 @@ public enum ErrorCode {
     COMMON_IS_EMPTY("Empty!", HttpStatus.NO_CONTENT),
 
     // ===== DEFAULT / UNKNOWN =====
-    UNKNOWN_ERROR("Unknown error code", HttpStatus.INTERNAL_SERVER_ERROR);
+    UNKNOWN_ERROR("Unknown error code", HttpStatus.INTERNAL_SERVER_ERROR),
+    INTERNAL_SERVER_ERROR("Internal server error", HttpStatus.INTERNAL_SERVER_ERROR)
+
 ;
     String message;
     HttpStatusCode statusCode;

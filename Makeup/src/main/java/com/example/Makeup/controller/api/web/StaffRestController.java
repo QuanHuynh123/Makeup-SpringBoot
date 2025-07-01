@@ -3,20 +3,18 @@ package com.example.Makeup.controller.api.web;
 import com.example.Makeup.dto.model.StaffDTO;
 import com.example.Makeup.dto.request.CreateStaffRequest;
 import com.example.Makeup.dto.response.common.ApiResponse;
-import com.example.Makeup.service.StaffService;
+import com.example.Makeup.service.IStaffService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.UUID;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/staff")
 public class StaffRestController {
-    private final  StaffService staffService;
-
-    public StaffRestController(StaffService staffService) {
-        this.staffService = staffService;
-    }
+    private final IStaffService staffService;
 
     @GetMapping
     public ApiResponse<List<StaffDTO>> getAllStaff() {
