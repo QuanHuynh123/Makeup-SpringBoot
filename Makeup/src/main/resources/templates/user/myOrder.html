@@ -2,8 +2,10 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8">
-        <title>beautySGU</title>
-
+        <title>Order</title>
+        <!-- mobile metas -->
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="viewport" content="initial-scale=1, maximum-scale=1">
         <link rel="stylesheet" href="/css/myOrder.css">
         <!-- Responsive-->
         <link rel="stylesheet" href="/css/responsive.css">
@@ -22,7 +24,10 @@
         <!-- header inner -->
         <div class="header">
             <div class="col-xl-1 col-lg-2 col-md-3 col-sm-4 div_btn_home">
-                <a href="/home"><button class="btn_home"><i class="fa-solid fa-house"></i> Home</i></button></a>
+                <a href="/home"><button class="btn_home">Makeup</button></a>
+                <a href="/user/myOrder"><button class="btn_home">Đơn hàng</button></a>
+                <a href="/user/myAppointment"><button class="btn_home">Lịch hẹn</button></a>
+                <a href="/user/myCart"><button class="btn_home">Giỏ hàng</button></a>
             </div>
 
             <div class="col-xl-5 col-lg-5 col-md-9 col-sm-9">
@@ -38,9 +43,14 @@
     <!-- end header -->
 <!-- content-->
     <div id="content_order">
-        <div class="col-12">
+        <div class="col-12 padding-div">
             <h2 class="h3 mb-3 text-black">Đơn hàng của tôi</h2>
-            <div class="row" th:each="item : ${myOrder}">
+
+            <div th:if="${myOrder == null or #lists.isEmpty(myOrder)}">
+                <p class="text-muted">Bạn chưa có đơn hàng nào.</p>
+            </div>
+
+            <div class="row" th:if="${myOrder != null and not #lists.isEmpty(myOrder)}" th:each="item : ${myOrder}">
                 <div class="alert alert-light col-12" role="alert">
                     <h5 class="alert-heading">
                         <span th:text="'Mã đơn hàng: ' + ${item.id} + ' / Ngày: ' + ${item.orderDate}"></span>

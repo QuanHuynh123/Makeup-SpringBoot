@@ -108,7 +108,7 @@ li {
 
 /* Left bottom header (logo) */
 #left_bottom_header img {
-    height: 70px;
+    height: 60px;
     width: auto;
     margin-left: 50px;
 }
@@ -559,6 +559,27 @@ li {
     .cart-summary {
         width: 100%;
     }
+
+    #left_bottom_header{
+        display: none;
+    }
+
+    #container_bottom_header{
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .nav_main{
+        width: 100%;
+    }
+
+    #middle_bottom_header .nav_main li {
+        margin-right: 0 !important;
+    }
+
+    #middle_bottom_header .nav_main li > .fa-caret-down {
+        display: none;
+    }
 }
 
 /* Responsive cho màn hình rất nhỏ (điện thoại) */
@@ -596,5 +617,26 @@ li {
 
     .cart-summary {
         width: 100%;
+    }
+
+    #left_bottom_header{
+        display: none;
+    }
+
+    #container_bottom_header{
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .nav_main{
+        width: 100%;
+    }
+
+    #middle_bottom_header .nav_main li {
+        margin-right: 0 !important;
+    }
+
+    #middle_bottom_header .nav_main li > .fa-caret-down {
+        display: none;
     }
 }

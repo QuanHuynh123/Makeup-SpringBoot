@@ -34,19 +34,6 @@ body {
     display: flex;
 }
 
-.div_btn_home{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.btn_home{
-    background: none;
-    border: none;
-    color: white;
-    font-size: 22px;
-	margin-left: 50px;
-}
 /* end-header */
 
 .container {

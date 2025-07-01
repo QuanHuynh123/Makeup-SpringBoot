@@ -104,50 +104,16 @@
         <div class="bottom-slider-wrapper">
             <button class="bottom-prev" onclick="moveSlide(-1)">&#10094;</button>
 
-            <div class="bottom-slider">
-                <div class="bottom-slide">
-                    <img src="/images/item1.jpg" alt="Item 1">
-                    <div class="bottom-caption">
-                        <h3>LOL</h3>
-                        <p>Foxfire Ahri</p>
-                        <span>Pre-Sale</span>
-                    </div>
-                </div>
-                <div class="bottom-slide">
-                    <img src="/images/item2.jpg" alt="Item 2">
-                    <div class="bottom-caption">
-                        <h3>Zenless Zone Zero</h3>
-                        <p>Tsukishiro Yanagi</p>
-                        <span>Pre-Sale</span>
-                    </div>
-                </div>
-                <div class="bottom-slide">
-                    <img src="/images/item3.jpg" alt="Item 3">
-                    <div class="bottom-caption">
-                        <h3>Battle Academia Lux</h3>
-                        <span>Officially on Sale</span>
-                    </div>
-                </div>
-                <div class="bottom-slide">
-                    <img src="/images/item3.jpg" alt="Item 3">
-                    <div class="bottom-caption">
-                        <h3>Battle Academia Lux</h3>
-                        <span>Officially on Sale</span>
-                    </div>
-                </div>
-                <div class="bottom-slide">
-                    <img src="/images/item3.jpg" alt="Item 3">
-                    <div class="bottom-caption">
-                        <h3>Battle Academia Lux</h3>
-                        <span>Officially on Sale</span>
-                    </div>
-                </div>
-                <div class="bottom-slide">
-                    <img src="/images/item3.jpg" alt="Item 3">
-                    <div class="bottom-caption">
-                        <h3>Battle Academia Lux</h3>
-                        <span>Officially on Sale</span>
-                    </div>
+            <div class="bottom-slider" >
+                <div class="bottom-slide" th:each="product: ${customerShowProducts}">
+                    <a th:href="@{/productDetail/{id}(id=${product.id})}">
+                        <img th:src="@{'/images/product/' + ${product.firstImage}}" alt="Product Image">
+                        <div class="bottom-caption">
+                            <h3 th:text="${product.nameProduct ?: 'Name available'}"></h3>
+                            <p>Officially on Sale</p>
+                            <span th:text="${product.price ?: 'Pre-Sale'}"></span>
+                        </div>
+                    </a>
                 </div>
             </div>
 

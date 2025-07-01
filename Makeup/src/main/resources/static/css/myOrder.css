@@ -1,7 +1,8 @@
 /* header */
 .header{
     top: 0;
-    background-color: black;
+    left: 0;
+    background-color: #343a40 !important;
     height: 70px;
     position: fixed;
     z-index: 10;
@@ -13,26 +14,33 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    margin-left: 15px;
 }
 
 .btn_home{
     background: none;
     border: none;
     color: white;
-    font-size: 22px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-right: 20px;
+}
+
+.btn_home:hover {
+    color: #ff0000;
 }
 
 .search-bar {
     display: flex;
     align-items: center;
-    width: 100%;
-    max-width: 1000px; /* Đảm bảo kích thước hợp lý */
-    background-color: #ffffff;
-    border: 1px solid #ccc;
+    width: 700px;
+    height: 80%;
+    max-width: 1000px;
     border-radius: 5px;
     overflow: hidden;
-    margin-top: 30px;
     margin-left: 100px;
+    background-color: #343a40;
+    padding: 5px;
 }
 
 .search-input {
@@ -41,18 +49,19 @@
     padding: 10px;
     font-size: 16px;
     outline: none;
+    border-radius: 5px 0px 0px 5px;
 }
 
 .search-button {
     background-color: #007bff;
     color: white;
     border: none;
-    padding: 10px 15px;
+    padding: 11px 15px;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 3px;
+    border-radius: 0px 5px 5px 0;
     margin-right: 5px;
 }
 
@@ -121,4 +130,23 @@
     border: 1px solid transparent;
     border-radius: .25rem;
     padding: .75rem 1.25rem;
+}
+
+.padding-div{
+    padding: 30px;
+}
+
+/* Responsive cho màn hình nhỏ hơn */
+@media (max-width: 768px) {
+    .search-bar {
+        width: auto;
+    }
+}
+
+/* Responsive cho màn hình rất nhỏ (điện thoại) */
+@media (max-width: 480px) {
+
+    .search-bar {
+        width: auto;
+    }
 }
