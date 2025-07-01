@@ -6,7 +6,6 @@ import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
-import java.sql.Date;
 import java.util.UUID;
 
 @Entity
@@ -34,6 +33,6 @@ public class FeedBack extends Base{
     User user;
 
     @ManyToOne( fetch = FetchType.LAZY)
-    @JoinColumn(name = "service_makeup_id", nullable = false)
-    ServiceMakeup serviceMakeup;
+    @JoinColumn(name = "type_makeup_id", nullable = false)
+    TypeMakeup typeMakeup;
 }

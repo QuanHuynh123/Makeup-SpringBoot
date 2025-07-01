@@ -34,7 +34,7 @@ public class Order extends Base {
     LocalDateTime orderDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "users_id", nullable = false)
+    @JoinColumn(name = "user_id", nullable = false)
     User user;
 
     @Column(name = "pickup_date") // ngày khách đến lấy đồ
