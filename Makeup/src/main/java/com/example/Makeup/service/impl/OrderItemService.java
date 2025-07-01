@@ -1,4 +1,4 @@
-package com.example.Makeup.service;
+package com.example.Makeup.service.impl;
 
 import com.example.Makeup.dto.model.OrderItemDTO;
 import com.example.Makeup.entity.CartItem;
@@ -12,6 +12,7 @@ import com.example.Makeup.mapper.OrderItemMapper;
 import com.example.Makeup.repository.CartItemRepository;
 import com.example.Makeup.repository.OrderItemRepository;
 import com.example.Makeup.repository.OrderRepository;
+import com.example.Makeup.service.IOrderItemService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -21,12 +22,13 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class OrderItemService {
+public class OrderItemService implements IOrderItemService {
     private final CartItemRepository cartItemRepository;
     private final OrderRepository orderRepository;
     private final OrderItemRepository orderItemRepository;
     private final OrderItemMapper orderItemMapper;
 
+    @Override
     public ApiResponse<String> createOrderItem(UUID cartId, UUID orderId){
         List<CartItem> cartItemList = cartItemRepository.findAllByCartId(cartId);
         if (cartItemList.isEmpty()){
@@ -48,22 +50,19 @@ public class OrderItemService {
         }
 
         cartItemRepository.deleteAll(cartItemList);
-        return ApiResponse.<String>builder()
-                .code(200)
-                .message("Order item created successfully")
-                .result("Order item created successfully")
-                .build();
+        return ApiResponse.success("Order items created successfully", null);
     }
 
+    @Override
     public ApiResponse<List<OrderItemDTO>> getOrderDetail(UUID orderId){
             List<OrderItem> orderItems =   orderItemRepository.findAllByOrderId(orderId);
             if (orderItems.isEmpty()){
                 throw new AppException(ErrorCode.ORDER_IS_EMPTY);
             }
-            return ApiResponse.<List<OrderItemDTO>>builder()
-                    .code(200)
-                    .message("Order item found")
-                    .result(orderItems.stream().map(orderItemMapper::toOrderItemDTO).collect(Collectors.toList()))
-                    .build();
+
+            List<OrderItemDTO> orderItemDTOs = orderItems.stream()
+                    .map(orderItemMapper::toOrderItemDTO)
+                    .collect(Collectors.toList());
+            return ApiResponse.success("Order items retrieved successfully", orderItemDTOs);
     }
 }

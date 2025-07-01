@@ -1,4 +1,4 @@
-package com.example.Makeup.service;
+package com.example.Makeup.service.impl;
 import com.example.Makeup.dto.request.CreateStaffRequest;
 import com.example.Makeup.dto.response.common.ApiResponse;
 import com.example.Makeup.dto.model.StaffDTO;
@@ -13,57 +13,59 @@ import com.example.Makeup.repository.AccountRepository;
 import com.example.Makeup.repository.AppointmentRepository;
 import com.example.Makeup.repository.RoleRepository;
 import com.example.Makeup.repository.StaffRepository;
+import com.example.Makeup.service.IStaffService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Duration;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class StaffService {
+public class StaffService implements IStaffService {
 
+    private static final String STAFF_CACHE_KEY = "staffs";
     private final StaffRepository staffRepository;
     private final AppointmentRepository appointmentRepository;
     private final StaffMapper staffMapper;
     private final AccountRepository accountRepository;
     private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
     private final RoleRepository roleRepository;
+    private final RedisTemplate<String, Object> redisTemplate;
 
 
+    @Override
     public ApiResponse<List<StaffDTO>> getAllStaff() {
-
         List<Staff> staffList = staffRepository.findAll();
-        if (staffList.isEmpty()) {
-            throw new AppException(ErrorCode.STAFF_IS_EMPTY);
+        List<StaffDTO> dtos = staffList.stream()
+                .map(staffMapper::toStaffDTO)
+                .collect(Collectors.toList());
+
+        try {
+            redisTemplate.opsForValue().set(STAFF_CACHE_KEY, dtos, Duration.ofMinutes(30));
+        } catch (Exception e) {
+            System.out.println("⚠️ Redis SET failed: " + e.getMessage());
         }
 
-        return ApiResponse.<List<StaffDTO>>builder()
-                .code(200)
-                .message("Get all staff success")
-                .result(staffList.stream()
-                        .map(staffMapper::toStaffDTO)
-                        .collect(Collectors.toList()))
-                .build();
+        return ApiResponse.success("Get all staff success (from DB)", dtos);
     }
 
+    @Override
     public ApiResponse<List<StaffDTO>> getAllStaffDetail() {
-        List<StaffDTO> staffDetailList =  null ;
-        //staffRepository.findAllStaff();
+        List<StaffDTO> staffDetailList =  staffRepository.findAllStaff();
         if (staffDetailList.isEmpty()) {
             throw new AppException(ErrorCode.STAFF_IS_EMPTY);
         }
-        return ApiResponse.<List<StaffDTO>>builder()
-                .code(200)
-                .message("Get all staff details success")
-                .result(staffDetailList)
-                .build();
+        return ApiResponse.success("Get all staff details success", staffDetailList);
     }
 
+    @Override
     public ApiResponse<StaffDTO> getStaffById(UUID staffId) {
         Staff staff = staffRepository.findById(staffId)
                 .orElseThrow(() -> new AppException(ErrorCode.STAFF_NOT_FOUND));
@@ -74,6 +76,7 @@ public class StaffService {
                 .build();
     }
 
+    @Override
     public ApiResponse<StaffDTO>  addStaff(CreateStaffRequest newStaff) {
 
         if (accountRepository.existsByUserName(newStaff.getUserName()))
@@ -103,6 +106,7 @@ public class StaffService {
                 .build();
     }
 
+    @Override
     public ApiResponse<String> deleteStaffIfNoAppointments(UUID staffId) {
         Staff staff = staffRepository.findById(staffId)
                 .orElseThrow(() -> new AppException(ErrorCode.STAFF_NOT_FOUND));
@@ -121,20 +125,17 @@ public class StaffService {
                 .build();
     }
 
-
+    @Override
     public ApiResponse<StaffDTO> getStaffDetailById(UUID staffId) {
         StaffDTO staffDetailDTO = staffRepository.findStaffDetailById(staffId);
         if (staffDetailDTO == null) {
             throw new AppException(ErrorCode.STAFF_NOT_FOUND);
         }
 
-        return ApiResponse.<StaffDTO>builder()
-                .code(200)
-                .message("Get staff detail by ID success")
-                .result(staffDetailDTO)
-                .build();
+        return ApiResponse.success("Get staff detail by ID success", staffDetailDTO);
     }
 
+    @Override
     @Transactional
     public ApiResponse<StaffDTO> updateStaff(StaffDTO staffDTO) {
 
@@ -146,11 +147,7 @@ public class StaffService {
         staff.setPhone(staffDTO.getPhone());
         staffRepository.save(staff);
 
-        return ApiResponse.<StaffDTO>builder()
-                .code(200)
-                .message("Update staff success")
-                .result(staffMapper.toStaffDTO(staffRepository.save(staff)))
-                .build();
+        return ApiResponse.success("Update staff success", staffMapper.toStaffDTO(staff));
     }
 
 }

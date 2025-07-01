@@ -1,4 +1,4 @@
-package com.example.Makeup.service;
+package com.example.Makeup.service.impl;
 
 import com.example.Makeup.dto.model.OrderDTO;
 import com.example.Makeup.entity.*;
@@ -8,8 +8,11 @@ import com.example.Makeup.enums.ErrorCode;
 import com.example.Makeup.enums.OrderStatus;
 import com.example.Makeup.mapper.OrderMapper;
 import com.example.Makeup.repository.*;
+import com.example.Makeup.service.IOrderService;
 import jakarta.persistence.OptimisticLockException;
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -20,25 +23,16 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
-public class OrderService {
+@RequiredArgsConstructor
+@Slf4j
+public class OrderService implements IOrderService {
     private final PaymentRepository paymentRepository;
     private final OrderRepository orderRepository;
     private final OrderItemRepository orderItemRepository;
-    private final UserRepository userRepository;
     private final OrderMapper orderMapper;
     private final ProductRepository productRepository;
-    private final SendEmailService sendEmailService;
 
-    public OrderService(PaymentRepository paymentRepository, OrderRepository orderRepository, OrderItemRepository orderItemRepository, UserRepository userRepository, OrderMapper orderMapper, ProductRepository productRepository, SendEmailService sendEmailService) {
-        this.paymentRepository = paymentRepository;
-        this.orderRepository = orderRepository;
-        this.orderItemRepository = orderItemRepository;
-        this.userRepository = userRepository;
-        this.orderMapper = orderMapper;
-        this.productRepository = productRepository;
-        this.sendEmailService = sendEmailService;
-    }
-
+    @Override
     @Transactional
     public ApiResponse<OrderDTO> createOrder(String email, String firstName, String phoneNumber, String message, int paymentMethod, int quantity, double totalPrice) {
         Payment payment = paymentRepository.findById(paymentMethod).orElseThrow(()-> new AppException(ErrorCode.COMMON_RESOURCE_NOT_FOUND));
@@ -58,22 +52,16 @@ public class OrderService {
 
         //sendEmailService.sendEmail(user.getEmail(), order, subject);
 
-        return ApiResponse.<OrderDTO>builder()
-                .code(200)
-                .message("Create order successfully")
-                .result(orderMapper.toOrderDTO(order))
-                .build();
+        return ApiResponse.success("Create order successfully", orderMapper.toOrderDTO(order));
     }
 
+    @Override
     public ApiResponse<OrderDTO> getOrder(UUID orderId){
         Order order  = orderRepository.findById(orderId).orElseThrow(()-> new AppException(ErrorCode.ORDER_NOT_FOUND));
-        return ApiResponse.<OrderDTO>builder()
-                .code(200)
-                .message("Get order successfully")
-                .result(orderMapper.toOrderDTO(order))
-                .build();
+        return ApiResponse.success("Get order successfully", orderMapper.toOrderDTO(order));
     }
 
+    @Override
     @Transactional
     public ApiResponse<Boolean> checkOrder(UUID orderId){
         Order order = orderRepository.findById(orderId).orElseThrow(()-> new AppException(ErrorCode.ORDER_NOT_FOUND));
@@ -103,43 +91,36 @@ public class OrderService {
             }
         }
 
-        return ApiResponse.<Boolean>builder()
-                .code(200)
-                .message("Check order successfully")
-                .result(true)
-                .build();
+        return ApiResponse.success("Check order successfully", true);
     }
 
+    @Override
     public ApiResponse<List<OrderDTO>> getAllApproveOrder(){
         List<Order> orders = orderRepository.findByStatus(OrderStatus.COMPLETED);
         if (orders.isEmpty()){
             throw new AppException(ErrorCode.ORDER_IS_EMPTY);
         }
-        return ApiResponse.<List<OrderDTO>>builder()
-                .code(200)
-                .message("Get all approve order successfully")
-                .result(orders.stream()
-                        .map(orderMapper::toOrderDTO)
-                        .collect(Collectors.toList()))
-                .build();
+        List<OrderDTO> orderDTOs = orders.stream()
+                .map(orderMapper::toOrderDTO)
+                .collect(Collectors.toList());
+        return ApiResponse.success("Get all approve order successfully", orderDTOs);
     }
 
+    @Override
     public ApiResponse<List<OrderDTO>> getAllOrder(){
         List<Order> orders = orderRepository.findByStatus(OrderStatus.PENDING);
         if (orders.isEmpty()){
             throw new AppException(ErrorCode.ORDER_IS_EMPTY);
         }
-        return ApiResponse.<List<OrderDTO>>builder()
-                .code(200)
-                .message("Get all order successfully")
-                .result(orders.stream()
-                        .map(orderMapper::toOrderDTO)
-                        .collect(Collectors.toList()))
-                .build();
+        List<OrderDTO> orderDTOs = orders.stream()
+                .map(orderMapper::toOrderDTO)
+                .collect(Collectors.toList());
+        return ApiResponse.success("Get all order successfully", orderDTOs);
     }
 
+    @Override
     public ApiResponse<Boolean> returnProductOfOrder(UUID orderId) {
-        Order order = orderRepository.findById(orderId).orElseThrow(() -> new AppException(ErrorCode.ORDER_NOT_FOUND));
+        orderRepository.findById(orderId).orElseThrow(() -> new AppException(ErrorCode.ORDER_NOT_FOUND));
         List<OrderItem> orderItems = orderItemRepository.findAllByOrderId(orderId);
 
         for (OrderItem orderItem : orderItems) {
@@ -155,25 +136,17 @@ public class OrderService {
             }
         }
 
-        return ApiResponse.<Boolean>builder()
-                .code(200)
-                .message("Return product successfully")
-                .result(true)
-                .build();
+        return ApiResponse.success("Return product of order successfully", true);
     }
 
+    @Override
     public ApiResponse<List<OrderDTO>> getMyOrder(UUID userId){
             List<Order> orders =  orderRepository.findByUserId(userId);
             Collections.reverse(orders);
-            if (orders.isEmpty())
-                throw new AppException(ErrorCode.COMMON_IS_EMPTY);
 
-            return ApiResponse.<List<OrderDTO>>builder()
-                    .code(200)
-                    .message("Get my order successfully")
-                    .result(orders.stream()
-                            .map(orderMapper::toOrderDTO)
-                            .collect(Collectors.toList()))
-                    .build();
+            List<OrderDTO> orderDTOs = orders.stream()
+                    .map(orderMapper::toOrderDTO)
+                    .collect(Collectors.toList());
+            return ApiResponse.success("Get my order success", orderDTOs);
     }
 }

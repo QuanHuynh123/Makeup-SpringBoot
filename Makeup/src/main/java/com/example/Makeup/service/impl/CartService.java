@@ -1,4 +1,4 @@
-package com.example.Makeup.service;
+package com.example.Makeup.service.impl;
 
 import com.example.Makeup.dto.model.CartDTO;
 import com.example.Makeup.dto.model.UserDTO;
@@ -12,6 +12,7 @@ import com.example.Makeup.mapper.CartMapper;
 import com.example.Makeup.repository.CartItemRepository;
 import com.example.Makeup.repository.CartRepository;
 import com.example.Makeup.repository.UserRepository;
+import com.example.Makeup.service.ICartService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
@@ -24,7 +25,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class CartService {
+public class CartService implements ICartService {
 
     private final CartRepository cartRepository;
     private final CartMapper cartMapper;
@@ -34,11 +35,7 @@ public class CartService {
 
     public ApiResponse<CartDTO> getCart (UUID userId){
         Cart cart = cartRepository.findByUserId(userId).orElseThrow(() -> new AppException(ErrorCode.CART_NOT_FOUND));
-        return ApiResponse.<CartDTO>builder()
-                .code(200)
-                .message("Get cart success")
-                .result(cartMapper.toCartDTO(cart))
-                .build();
+        return ApiResponse.success("Get cart success", cartMapper.toCartDTO(cart));
     }
 
     @Transactional
@@ -48,11 +45,7 @@ public class CartService {
         User user = userRepository.findByAccountId(accountId);
         Cart cart = new Cart(null,0,0, user);
         cartRepository.save(cart);
-        return ApiResponse.<CartDTO>builder()
-                .code(200)
-                .message("Create cart success")
-                .result(cartMapper.toCartDTO(cart))
-                .build();
+        return ApiResponse.success("Create cart success", cartMapper.toCartDTO(cart));
     }
 
     @Transactional
@@ -69,22 +62,13 @@ public class CartService {
         int quantityCart = 0;
         double totalPrice = 0;
         for (CartItem cartItem : cartItemList) {
-            quantityCart += cartItem.getQuantity(); // dùng quantity thực sự
+            quantityCart += cartItem.getQuantity();
             totalPrice += cartItem.getPrice();
         }
 
         cart.setTotalPrice(totalPrice);
         cart.setTotalQuantity(quantityCart);
-        //cartRepository.save(cart); // không cần save lại vì @Transactional sẽ tự động save khi kết thúc transaction
-        return ApiResponse.<CartDTO>builder()
-                .code(200)
-                .message("Update cart success")
-                .result(cartMapper.toCartDTO(cart))
-                .build();
-    }
-
-    public int countCartItem(UUID cartId){
-        return cartItemRepository.countByCartId(cartId);
+        return ApiResponse.success("Update cart totals success", cartMapper.toCartDTO(cart));
     }
 
     public boolean checkCartAndUser(UUID cartId) {
@@ -99,6 +83,8 @@ public class CartService {
         return cartRepository.existsByIdAndUserId(cartId, userId);
     }
 
-
+    public int countCartItem(UUID cartId){
+        return cartItemRepository.countByCartId(cartId);
+    }
 
 }

@@ -1,4 +1,4 @@
-package com.example.Makeup.service;
+package com.example.Makeup.service.common;
 
 
 import com.example.Makeup.entity.RefreshToken;
@@ -7,6 +7,7 @@ import com.example.Makeup.exception.AppException;
 import com.example.Makeup.enums.ErrorCode;
 import com.example.Makeup.repository.RefreshTokenRepository;
 import com.example.Makeup.security.JWTProvider;
+import com.example.Makeup.service.IRefreshTokenService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +20,7 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class RefreshTokenService {
+public class RefreshTokenService implements IRefreshTokenService {
 
     private final RefreshTokenRepository refreshTokenRepository;
     private final JWTProvider jwtProvider;
@@ -46,7 +47,7 @@ public class RefreshTokenService {
         throw new AppException(ErrorCode.AUTH_REFRESH_TOKEN_NOT_FOUND);
     }
 
-    public RefreshToken  getTokenByAccountId(UUID accountId) {
+    public RefreshToken getTokenByAccountId(UUID accountId) {
         log.info("Fetching latest valid refresh token for account ID: {}", accountId);
         return refreshTokenRepository.findLatestValidTokenByAccount(accountId)
                 .orElseThrow(() -> new AppException(ErrorCode.AUTH_REFRESH_TOKEN_NOT_FOUND));
