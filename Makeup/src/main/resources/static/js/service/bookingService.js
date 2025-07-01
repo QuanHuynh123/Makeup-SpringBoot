@@ -26,7 +26,7 @@ function updateTimeSlots(appointments, selectedDate) {
         workingHours.push(i);
         const timeSlot = document.createElement("div");
         timeSlot.classList.add("time-slot", `${i}`);
-        timeSlot.dataset.value = i;
+        timeSlot.dataset.value = i.toString();
         timeSlot.textContent = i < 12 ? `${i}:00 AM` : `${i - 12}:00 PM`;
         timeGrid.appendChild(timeSlot);
     }
@@ -41,7 +41,7 @@ function updateTimeSlots(appointments, selectedDate) {
 
             if (hourInt >= startHour && hourInt < endHour) {
                 //console.log(`✅ Picked hour in range: ${hourInt}`);
-                const el = document.querySelector(`[data-value='${hourInt}']`);
+                const el = document.querySelector(`.time-slot[data-value="${hourInt}"]`);
                 //console.log("Element found:", el);
                 if (el) {
                     el.classList.add("isPicked");
@@ -49,7 +49,7 @@ function updateTimeSlots(appointments, selectedDate) {
                 }
             } else if (hourInt + 1 === startHour) {
                 //console.log(`⚠️ Previous hour of start matched: ${hourInt}`);
-                const el = document.querySelector(`[data-value='${hourInt}']`);
+                const el = document.querySelector(`.time-slot[data-value="${hourInt}"]`);
                 //console.log("Element found:", el);
                 if (el) {
                     el.classList.add("isPicked");
@@ -144,7 +144,7 @@ function handleBooking(event) {
                 startTime,
                 endTime,
                 makeupDate: selectedDate,
-                serviceMakeupId: serviceOption,
+                typeMakeupId: serviceOption,
                 staffId: serviceStaff,
                 guestInfo: {
                     fullName: name,

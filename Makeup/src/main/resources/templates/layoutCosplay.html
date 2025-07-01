@@ -30,7 +30,8 @@
     <div class="container_top_header">
         <div class="custom-header">
             <div class="header-left">
-                <a href="/home" class="header-link">Home</a>
+                <a href="/cosplay/home" class="header-link">Home</a>
+                <a href="/home" class="header-link">Makeup</a>
                 <a href="/login" class="header-link">Login</a>
             </div>
             <div class="header-right">
@@ -44,8 +45,8 @@
                     <th:block th:if="${user != null}">
                         <ul class="profile_menu">
                             <li><a href="/user/profile">Thông tin  </a></li>
-                            <li><a href="/user/myOder">Đơn hàng của tôi</a></li>
-                            <li><a href="/cart/home">Giỏ hàng</a></li>
+                            <li><a href="/user/myOrder">Đơn hàng của tôi</a></li>
+                            <li><a href="/user/myCart">Giỏ hàng</a></li>
                             <li><a href="/logout">Đăng xuất</a></li>
                         </ul>
                     </th:block>
@@ -62,7 +63,7 @@
         <div id="middle_bottom_header">
             <ul class="nav_main">
                 <!-- Lặp qua các danh mục -->
-                <li class="center" th:each="category : ${category}">
+                <li class="center" th:each="category : ${categories}">
                     <a class="title_category_cosplay" th:text="${category.name}" href="#"></a>
                     <!-- Dropdown cho danh mục con -->
                     <ul class="dropdown_submenu" th:if="${category.subCategories != null}">

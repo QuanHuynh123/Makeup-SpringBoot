@@ -80,7 +80,7 @@
                                 <li><a href="/user/profile">Thông tin</a></li>
                                 <li><a href="/user/myAppointment">Lịch hẹn của tôi</a></li>
                                 <li><a href="/user/myOrder">Đơn hàng của tôi</a></li>
-                                <li><a href="/cart/home">Giỏ hàng</a></li>
+                                <li><a href="/user/myCart">Giỏ hàng</a></li>
                                 <li><a href="/logout">Đăng xuất</a></li>
                             </ul>
                         </th:block>
@@ -153,10 +153,10 @@
                         <div class="col-md-12">
                             <select class="contactus" id="optionsMakeup" name="Option">
                                 <option value="">--Choose a service--</option>
-                                <option th:each="service : ${serviceList}"
-                                        th:value="${service.id}"
-                                        th:text="${service.nameService} + ' - ' + ${service.timeService} + 'h'"
-                                        th:data-time="${service.timeService}"></option>
+                                <option th:each="type : ${typeMakeupList}"
+                                        th:value="${type.id}"
+                                        th:text="${type.nameMakeup} + ' - ' + ${type.timeMakeup} + 'h'"
+                                        th:data-time="${type.timeMakeup}"></option>
                             </select>
                         </div>
 
@@ -174,16 +174,16 @@
                                             <h3 id="title_date_picker">Wednesday 30 June 2024</h3>
                                         </div>
                                         <div class="time-grid">
-                                            <div class="time-slot">7:00 AM</div>
-                                            <div class="time-slot">8:00 AM</div>
-                                            <div class="time-slot">9:00 AM</div>
-                                            <div class="time-slot">10:00 AM</div>
-                                            <div class="time-slot">01:00 PM</div>
-                                            <div class="time-slot">02:00 PM</div>
-                                            <div class="time-slot">03:00 PM</div>
-                                            <div class="time-slot">04:00 PM</div>
-                                            <div class="time-slot">05:00 PM</div>
-                                            <div class="time-slot">06:00 PM</div>
+                                            <div class="time-slot" data-value="7">7:00 AM</div>
+                                            <div class="time-slot" data-value="8">8:00 AM</div>
+                                            <div class="time-slot" data-value="9">9:00 AM</div>
+                                            <div class="time-slot" data-value="10">10:00 AM</div>
+                                            <div class="time-slot" data-value="13">1:00 PM</div>
+                                            <div class="time-slot" data-value="14">2:00 PM</div>
+                                            <div class="time-slot" data-value="15">3:00 PM</div>
+                                            <div class="time-slot" data-value="16">4:00 PM</div>
+                                            <div class="time-slot" data-value="17">5:00 PM</div>
+                                            <div class="time-slot" data-value="18">6:00 PM</div>
                                         </div>
                                     </div>
                                 </div>
