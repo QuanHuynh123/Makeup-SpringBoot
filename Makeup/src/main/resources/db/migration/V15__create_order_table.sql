@@ -1,8 +1,8 @@
 CREATE TABLE orders (
     id CHAR(36) NOT NULL PRIMARY KEY,
-    totalPrice DOUBLE NOT NULL,
-    totalQuantity INT NOT NULL,
-    orderDate TIMESTAMP NOT NULL,
+    total_price DOUBLE NOT NULL,
+    total_quantity INT NOT NULL,
+    order_date TIMESTAMP NOT NULL,
     pickup_date TIMESTAMP,
     return_date TIMESTAMP,
     status VARCHAR(50),

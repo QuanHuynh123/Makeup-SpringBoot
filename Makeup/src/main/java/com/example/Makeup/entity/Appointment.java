@@ -33,6 +33,9 @@ public class Appointment extends Base{
     @Column(name = "makeup_date",  nullable = false)
     LocalDate makeupDate;
 
+    @Column(name = "price", nullable = false)
+    Double price;
+
     @Column(name = "status",  nullable = false)
     boolean status;
 
@@ -41,8 +44,8 @@ public class Appointment extends Base{
     User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "service_makeup_id", nullable = false)
-    ServiceMakeup serviceMakeup;
+    @JoinColumn(name = "type_makeup_id", nullable = false)
+    TypeMakeup typeMakeup;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "staff_id")
