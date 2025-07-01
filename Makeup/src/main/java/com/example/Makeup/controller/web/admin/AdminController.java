@@ -1,11 +1,12 @@
 package com.example.Makeup.controller.web.admin;
+import com.example.Makeup.dto.model.AppointmentDTO;
 import com.example.Makeup.dto.model.StaffDTO;
 import com.example.Makeup.dto.response.common.ApiResponse;
-import com.example.Makeup.dto.model.AppointmentDTO;
 import com.example.Makeup.repository.AppointmentRepository;
 import com.example.Makeup.repository.OrderRepository;
-import com.example.Makeup.service.AppointmentService;
-import com.example.Makeup.service.StaffService;
+import com.example.Makeup.service.IAppointmentService;
+import com.example.Makeup.service.IStaffService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -16,20 +17,18 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Controller
+@RequiredArgsConstructor
 @RequestMapping("/admin/")
 public class AdminController {
 
     private final AppointmentRepository appointmentRepository;
-    private final StaffService staffService;
-
-    private final AppointmentService appointmentService;
+    private final IStaffService staffService;
+    private final IAppointmentService appointmentService;
     private final OrderRepository orderRepository;
 
-    public AdminController(AppointmentRepository appointmentRepository, StaffService staffService, AppointmentService appointmentService, OrderRepository orderRepository) {
-        this.appointmentRepository = appointmentRepository;
-        this.staffService = staffService;
-        this.appointmentService = appointmentService;
-        this.orderRepository = orderRepository;
+    @GetMapping("home")
+    public String adminPage() {
+        return "admin/admin";
     }
 
     @GetMapping("staff")
@@ -39,14 +38,10 @@ public class AdminController {
         return "admin/staff-all";
     }
 
-    @GetMapping("home")
-    public String loginPage2() {
-        return "admin/admin";
-    }
 
     @GetMapping("appointment")
-    public String loginPage4(Model model) {
-        ApiResponse<List<AppointmentDTO>> appointmentList = appointmentService.getAllAppointmentsDetail();
+    public String appointmentAdminPage(Model model) {
+        ApiResponse<List<AppointmentDTO>> appointmentList = appointmentService.getAllAppointments();
         model.addAttribute("appointmentList", appointmentList.getResult());
         return "admin/appointment-all";
     }

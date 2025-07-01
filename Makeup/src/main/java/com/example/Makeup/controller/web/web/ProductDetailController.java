@@ -1,7 +1,9 @@
 package com.example.Makeup.controller.web.web;
 
 import com.example.Makeup.dto.model.ProductDTO;
-import com.example.Makeup.service.ProductService;
+import com.example.Makeup.service.IProductService;
+import com.example.Makeup.service.impl.ProductService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,10 +16,10 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Controller
+@RequiredArgsConstructor
 public class ProductDetailController {
 
-    @Autowired
-    ProductService productService;
+    private final IProductService productService;
 
     @GetMapping("/productDetail/{id}")
     public String home(Model model , @PathVariable("id") UUID idProduct){

@@ -4,8 +4,8 @@ import com.example.Makeup.dto.model.OrderDTO;
 import com.example.Makeup.dto.model.OrderItemDTO;
 import com.example.Makeup.dto.model.UserDTO;
 import com.example.Makeup.dto.response.common.ApiResponse;
-import com.example.Makeup.service.OrderItemService;
-import com.example.Makeup.service.OrderService;
+import com.example.Makeup.service.IOrderItemService;
+import com.example.Makeup.service.IOrderService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -22,21 +22,17 @@ import java.util.UUID;
 @Controller
 @RequestMapping("/user")
 @RequiredArgsConstructor
-public class MyOrderController {
+public class OrderController {
 
-    private final OrderItemService orderItemService;
-    private final OrderService orderService;
+    private final IOrderItemService orderItemService;
+    private final IOrderService orderService;
 
     @GetMapping("/myOrder")
     public String myOrder(Model model, @ModelAttribute("user") UserDTO userDTO) {
         if (userDTO != null) {
             UUID userId = userDTO.getId();
             ApiResponse<List<OrderDTO>> orders = orderService.getMyOrder(userId);
-            if (orders.getCode() == 200) {
-                model.addAttribute("myOrder", orders.getResult());
-            } else {
-                log.warn("Failed to load orders for userId: {}", userId);
-            }
+            model.addAttribute("myOrder", orders.getResult());
         }
         return "/user/myOrder";
     }

@@ -3,7 +3,7 @@ package com.example.Makeup.controller.api.web;
 import com.example.Makeup.dto.model.AccountDTO;
 import com.example.Makeup.dto.request.UpdateAccountRequest;
 import com.example.Makeup.dto.response.common.ApiResponse;
-import com.example.Makeup.service.AccountService;
+import com.example.Makeup.service.IAccountService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,7 +16,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class AccountRestController {
 
-    private final AccountService accountService;
+    private final IAccountService accountService;
 
     /**
      * Get all accounts
@@ -38,7 +38,7 @@ public class AccountRestController {
      * Create account
      */
     @PostMapping("/create")
-    public ApiResponse<Boolean> createAccount(@RequestBody AccountDTO accountDTO) {
+    public ApiResponse<AccountDTO> createAccount(@RequestBody AccountDTO accountDTO) {
         return accountService.createAccount(accountDTO);
     }
 
@@ -54,7 +54,7 @@ public class AccountRestController {
      * Delete account
      */
     @DeleteMapping("/delete/{id}")
-    public ApiResponse<Boolean> delete(@PathVariable("id") UUID accountId) {
-        return accountService.delete(accountId);
+    public ApiResponse<Boolean> deleteAccount(@PathVariable("id") UUID accountId) {
+        return accountService.deleteAccount(accountId);
     }
 }

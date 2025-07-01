@@ -2,7 +2,7 @@ package com.example.Makeup.controller.api.web;
 
 import com.example.Makeup.dto.model.UserDTO;
 import com.example.Makeup.dto.response.common.ApiResponse;
-import com.example.Makeup.service.UserService;
+import com.example.Makeup.service.IUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/users")
 public class UserRestController {
 
-    private final UserService userService;
+    private final IUserService userService;
 
     @PostMapping("/create")
     public ApiResponse<UserDTO> createUser(@RequestBody UserDTO userDTO) {

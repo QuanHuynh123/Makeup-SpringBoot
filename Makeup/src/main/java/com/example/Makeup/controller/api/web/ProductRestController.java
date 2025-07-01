@@ -4,10 +4,12 @@ import com.example.Makeup.dto.model.ProductDTO;
 import com.example.Makeup.dto.request.CreateProductRequest;
 import com.example.Makeup.dto.request.UpdateProductRequest;
 import com.example.Makeup.dto.response.common.ApiResponse;
-import com.example.Makeup.service.ProductService;
+import com.example.Makeup.service.IProductService;
+import com.example.Makeup.service.impl.ProductService;
 import java.io.IOException;
 import java.util.UUID;
 
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -19,10 +21,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 
 @Controller
+@AllArgsConstructor
 @RequestMapping("/api/products")
 public class ProductRestController {
     @Autowired
-    ProductService productService;
+    private final IProductService productService;
 
     @PostMapping("/create")
     public ApiResponse<ProductDTO> createProduct(@ModelAttribute CreateProductRequest createProduct) throws IOException{

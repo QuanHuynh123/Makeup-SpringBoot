@@ -1,7 +1,7 @@
 package com.example.Makeup.security;
 
 import com.example.Makeup.entity.RefreshToken;
-import com.example.Makeup.service.RefreshTokenService;
+import com.example.Makeup.service.common.RefreshTokenService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;

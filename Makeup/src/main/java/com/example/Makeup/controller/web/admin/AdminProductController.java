@@ -10,9 +10,9 @@ import java.util.List;
 import java.util.UUID;
 
 import com.example.Makeup.dto.response.common.ApiResponse;
-import com.example.Makeup.service.ProductService;
-import com.example.Makeup.service.SubCategoryService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.Makeup.service.IProductService;
+import com.example.Makeup.service.ISubCategoryService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,13 +20,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
+@RequiredArgsConstructor
 @RequestMapping("/admin/products")
-public class ProductController {
-    @Autowired
-    ProductService productService;
+public class AdminProductController {
 
-    @Autowired
-    SubCategoryService subCategoryService;
+    private final IProductService productService;
+    private final ISubCategoryService subCategoryService;
 
     @GetMapping("/create")
     public String createProductPage(Model model){
@@ -36,7 +35,7 @@ public class ProductController {
         return "admin/create-product";
     }
 
-    @GetMapping
+    @GetMapping("/products")
     public String getAllProducts(Model model){
         ApiResponse<List<ProductDTO>> products = productService.getAllProducts();
         model.addAttribute("products", products.getResult());

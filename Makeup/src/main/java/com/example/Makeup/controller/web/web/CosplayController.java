@@ -4,10 +4,12 @@ import com.example.Makeup.dto.model.ProductDTO;
 import com.example.Makeup.dto.model.SubCategoryDTO;
 import com.example.Makeup.dto.response.ShortProductListResponse;
 import com.example.Makeup.exception.AppException;
-import com.example.Makeup.service.ProductService;
+import com.example.Makeup.service.common.CacheProductService;
+import com.example.Makeup.service.impl.ProductService;
 import java.util.List;
 
-import com.example.Makeup.service.SubCategoryService;
+import com.example.Makeup.service.impl.SubCategoryService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -15,19 +17,22 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
+@RequiredArgsConstructor
 @RequestMapping("/cosplay")
 public class CosplayController {
-    @Autowired
-    ProductService productService;
-    @Autowired
-    SubCategoryService subCategoryService;
+
+    private final CacheProductService cacheProductService;
+    private final ProductService productService;
+    private final SubCategoryService subCategoryService;
     
     @GetMapping("/home")
     public String home(Model model){
-        List<ShortProductListResponse> hotProducts = productService.getHotProducts().getResult();
-        List<ShortProductListResponse> newProducts = productService.getNewProducts().getResult();
+        List<ShortProductListResponse> hotProducts = cacheProductService.cacheHotProducts().getResult();
+        List<ShortProductListResponse> newProducts = cacheProductService.cacheNewProducts().getResult();
+        List<ShortProductListResponse> customerShowProducts = cacheProductService.cacheCustomerShow().getResult();
         model.addAttribute("hotProducts", hotProducts);
         model.addAttribute("newProducts", newProducts);
+        model.addAttribute("customerShowProducts", customerShowProducts);
         return "user/cosplay";
     }
 

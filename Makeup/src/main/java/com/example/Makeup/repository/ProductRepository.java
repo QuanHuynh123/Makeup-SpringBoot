@@ -1,9 +1,7 @@
 package com.example.Makeup.repository;
 
-import com.example.Makeup.dto.response.ShortProductListResponse;
 import com.example.Makeup.entity.Product;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -28,5 +26,9 @@ public interface ProductRepository extends JpaRepository<Product, UUID> {
 
     @Query("SELECT COUNT(p) FROM Product p WHERE p.subCategory.id = :subCategoryId")
     int countProductsBySubcategoryId(@Param("subCategoryId") Integer subCategoryId);
+
+    @Query(value = "SELECT * FROM product ORDER BY RAND()", nativeQuery = true)
+    List<Product> findRandomProducts(Pageable pageable);
+
 
 }
