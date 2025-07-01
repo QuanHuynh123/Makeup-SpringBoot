@@ -1,4 +1,4 @@
-package com.example.Makeup.service;
+package com.example.Makeup.service.impl;
 
 import com.example.Makeup.dto.model.UserDTO;
 import com.example.Makeup.entity.User;
@@ -7,6 +7,7 @@ import com.example.Makeup.exception.AppException;
 import com.example.Makeup.enums.ErrorCode;
 import com.example.Makeup.mapper.UserMapper;
 import com.example.Makeup.repository.UserRepository;
+import com.example.Makeup.service.IUserService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,11 +16,11 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class UserService {
+public class UserService implements IUserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
 
-
+    @Override
     public ApiResponse<UserDTO> getUserDetailByUserName(String userName){
         User user =  userRepository.findByAccount_userName(userName)
                 .orElseThrow(()-> new AppException(ErrorCode.USER_NOT_FOUND));
@@ -30,6 +31,7 @@ public class UserService {
                 .build();
     }
 
+    @Override
     @Transactional
     public ApiResponse<UserDTO> updateUser(UUID accountId , String name , String email , String address  ) {
         User user = userRepository.findByAccount_Id(accountId).orElseThrow(
@@ -47,6 +49,7 @@ public class UserService {
                 .build();
     }
 
+    @Override
     public ApiResponse<UserDTO> createUser(UserDTO userDTO) {
 
         User newUser = new User();
