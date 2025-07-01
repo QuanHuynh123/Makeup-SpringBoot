@@ -3,7 +3,6 @@ package com.example.Makeup.dto.model;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import java.sql.Time;
 import java.time.LocalDateTime;
 
 @FieldDefaults(level = AccessLevel.PRIVATE)
@@ -11,12 +10,12 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ServiceMakeupDTO {
+public class TypeMakeupDTO {
     int id;
-    String nameService;
+    String nameMakeup;
     String description;
     double price;
-    int timeService;
+    int timeMakeup;
     LocalDateTime createdAt;
     LocalDateTime updatedAt;
 }
