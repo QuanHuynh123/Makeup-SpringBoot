@@ -16,7 +16,7 @@ public class FeedBackDTO {
     int rating;
     String comment;
     UUID userId;
-    int serviceMakeupId;
+    int typeMakeupId;
     LocalDateTime createdAt;
     LocalDateTime updatedAt;
 }

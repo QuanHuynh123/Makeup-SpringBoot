@@ -1,4 +1,4 @@
-package com.example.Makeup.dto.model;
+package com.example.Makeup.dto.response;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -13,16 +13,18 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class AppointmentDTO {
+public class UserAppointmentResponse {
     UUID id;
     Time startTime;
     Time endTime;
-    Double price;
     LocalDate makeupDate;
     boolean status;
+    Double price;
     UUID userId;
     int typeMakeupId;
     UUID staffId;
+    String nameStaff;
+    String nameMakeup;
     LocalDateTime createdAt;
     LocalDateTime updatedAt;
 }

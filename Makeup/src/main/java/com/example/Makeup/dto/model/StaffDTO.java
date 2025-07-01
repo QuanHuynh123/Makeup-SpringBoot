@@ -11,8 +11,9 @@ import java.util.UUID;
 @Getter
 @Setter
 @AllArgsConstructor
+@NoArgsConstructor
 public class StaffDTO {
-    final UUID id;
+    UUID id;
     String nameStaff;
     String phone;
     String accountId;

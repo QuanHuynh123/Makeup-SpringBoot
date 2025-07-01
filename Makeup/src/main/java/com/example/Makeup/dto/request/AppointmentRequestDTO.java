@@ -17,7 +17,7 @@ public class AppointmentRequestDTO {
     Time startTime;
     Time endTime;
     LocalDate makeupDate;
-    Integer serviceMakeupId;
+    Integer typeMakeupId;
     UUID staffId;
     GuestInfo guestInfo;
 
