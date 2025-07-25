@@ -1,9 +1,10 @@
 package com.example.Makeup.service.impl;
 
 import com.example.Makeup.dto.model.AppointmentDTO;
+import com.example.Makeup.dto.model.UserDTO;
 import com.example.Makeup.dto.model.WeekAppointmentsDTO;
-import com.example.Makeup.dto.request.AppointmentRequestDTO;
-import com.example.Makeup.dto.response.UserAppointmentResponse;
+import com.example.Makeup.dto.request.AppointmentRequest;
+import com.example.Makeup.dto.response.AppointmentsAdminResponse;
 import com.example.Makeup.entity.Appointment;
 import com.example.Makeup.entity.Staff;
 import com.example.Makeup.entity.TypeMakeup;
@@ -19,6 +20,7 @@ import com.example.Makeup.repository.UserRepository;
 import com.example.Makeup.service.IAppointmentService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -30,7 +32,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class AppointmentService implements IAppointmentService {
+public class AppointmentServiceImpl implements IAppointmentService {
 
     private final AppointmentRepository appointmentRepository;
     private final UserRepository userRepository;
@@ -51,16 +53,12 @@ public class AppointmentService implements IAppointmentService {
     }
 
     @Override
-    public ApiResponse<List<AppointmentDTO>> getAllAppointments() {
-        List<Appointment> appointments = appointmentRepository.findAll();
+    public ApiResponse<List<AppointmentsAdminResponse>> getAllAppointments() {
+        List<AppointmentsAdminResponse> appointments = appointmentRepository.findAllAppointments();
         if (appointments.isEmpty()) {
             throw new AppException(ErrorCode.COMMON_IS_EMPTY);
         }
-        List<AppointmentDTO> appointmentDTOs = appointments.stream()
-                .map(appointmentMapper::toAppointmentDTO)
-                .collect(Collectors.toList());
-
-        return ApiResponse.success("Get all appointments success", appointmentDTOs);
+        return ApiResponse.success("Get all appointments success", appointments);
     }
 
     @Override
@@ -71,8 +69,8 @@ public class AppointmentService implements IAppointmentService {
     }
 
     @Override
-    public ApiResponse<List<UserAppointmentResponse>> getAppointmentByUserId(UUID userId) {
-        List<UserAppointmentResponse> appointment = appointmentRepository.findAllByUserId(userId);
+    public ApiResponse<List<AppointmentsAdminResponse>> getAppointmentByUserId(UUID userId) {
+        List<AppointmentsAdminResponse> appointment = appointmentRepository.findAllByUserId(userId);
         return ApiResponse.success("Get appointment by ID success", appointment);
     }
 
@@ -141,7 +139,7 @@ public class AppointmentService implements IAppointmentService {
 
     @Override
     @Transactional
-    public ApiResponse<AppointmentDTO> createAppointment(AppointmentRequestDTO newAppointment) {
+    public ApiResponse<AppointmentDTO> createAppointment(AppointmentRequest newAppointment) {
 
         Appointment appointment = new Appointment();
         appointment.setStartTime(newAppointment.getStartTime());
@@ -157,10 +155,15 @@ public class AppointmentService implements IAppointmentService {
         appointment.setTypeMakeup(typeMakeup);
         appointment.setPrice(typeMakeup.getPrice());
 
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Object principal = authentication.getPrincipal();
+        UserDTO userDTO = null;
+        if (principal instanceof UserDTO) {
+            userDTO = (UserDTO) principal;
+        }
         User user;
 
-        if (username == null || username.isEmpty() || "anonymousUser".equals(username)) {
+        if (userDTO == null) {
             user = new User();
             user.setFullName(newAppointment.getGuestInfo().getFullName());
             user.setEmail(newAppointment.getGuestInfo().getEmail());
@@ -170,7 +173,7 @@ public class AppointmentService implements IAppointmentService {
             user.setGuestToken(UUID.randomUUID().toString());
             user = userRepository.save(user);
         } else {
-            user = userRepository.findByAccount_userName(username)
+            user = userRepository.findByAccountId(userDTO.getAccountId())
                     .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
         }
 

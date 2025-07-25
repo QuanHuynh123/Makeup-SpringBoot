@@ -34,11 +34,13 @@ import org.springframework.web.multipart.MultipartFile;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class ProductService implements IProductService {
+public class ProductServiceImpl implements IProductService {
 
     private static final String HOT_PRODUCTS_CACHE_KEY = "products-hot";
     private static final String NEW_PRODUCTS_CACHE_KEY = "products-new";
     private static final String CUSTOMER_SHOW_CACHE_KEY = "products-customer-show";
+    private static final int QUANTITY_NEW_PRODUCTS = 10;
+    private static final int QUANTITY_HOT_PRODUCTS = 15;
 
     private final ProductRepository productRepository;
     private final SubCategoryRepository subCategoryRepository;
@@ -72,7 +74,7 @@ public class ProductService implements IProductService {
 
     @Override
     public ApiResponse<List<ShortProductListResponse>> getHotProducts() {
-        List<Product> products = productRepository.findTopRentalCount(PageRequest.of(0,12));
+        List<Product> products = productRepository.findTopRentalCount(PageRequest.of(0,QUANTITY_HOT_PRODUCTS));
         List<ShortProductListResponse> dtos = products.stream()
                 .map(product -> new ShortProductListResponse(
                         product.getId(),
@@ -92,7 +94,7 @@ public class ProductService implements IProductService {
 
     @Override
     public ApiResponse<List<ShortProductListResponse>> getNewProducts() {
-        List<Product> products = productRepository.findNewProducts(PageRequest.of(0,8));
+        List<Product> products = productRepository.findNewProducts(PageRequest.of(0,QUANTITY_NEW_PRODUCTS));
         List<ShortProductListResponse> dtos = products.stream()
                 .map(product -> new ShortProductListResponse(
                         product.getId(),
@@ -174,23 +176,28 @@ public class ProductService implements IProductService {
         }
     }
 
+
     @Override
-    public ApiResponse<Page<ProductDTO>> getProductBySubcategoryId(int subCategoryId, int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        Page<Product> productPage = productRepository.findBySubCategoryId(subCategoryId, pageable);
-
-        if (productPage.isEmpty())
+    public ApiResponse<Page<ProductDTO>> searchProduct(Integer subCategoryId,String search,  Pageable pageable) {
+        Page<Product> productPage = productRepository.searchProducts(subCategoryId,search, pageable);
+        if (productPage.isEmpty()) {
             throw new AppException(ErrorCode.PRODUCT_IS_EMPTY);
+        }
 
-        return ApiResponse.<Page<ProductDTO>>builder()
-                .code(200)
-                .message("Products found")
-                .result(productPage.map(productMapper::toProductDTO))
-                .build();
+        return ApiResponse.success("Product found",productPage.map(productMapper::toProductDTO));
     }
 
-    public int countProductsBySubcategoryId(int subCategoryId){
-        return productRepository.countProductsBySubcategoryId(subCategoryId);
+
+    @Override
+    public ApiResponse<List<ProductDTO>> getRelatedProducts(Integer subCategoryId, UUID excludedId, Pageable pageable) {
+        Page<Product> page = productRepository.findBySubCategoryIdAndIdNot(subCategoryId, excludedId, pageable);
+        List<ProductDTO> result = page.getContent()
+                .stream()
+                .map(productMapper::toProductDTO)
+                .peek(dto -> dto.setImage(dto.getImage().split(",")[0]))
+                .collect(Collectors.toList());
+
+        return ApiResponse.success("Get related products", result);
     }
 
     @Override

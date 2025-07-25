@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class TypeMakeupService implements ITypeMakeupService {
+public class TypeMakeupServiceImpl implements ITypeMakeupService {
 
     private static final String SERVICE_MAKEUP_CACHE_KEY = "type-makeup";
 

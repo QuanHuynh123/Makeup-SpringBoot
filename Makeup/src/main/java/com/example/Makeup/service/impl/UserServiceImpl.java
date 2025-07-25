@@ -1,6 +1,7 @@
 package com.example.Makeup.service.impl;
 
 import com.example.Makeup.dto.model.UserDTO;
+import com.example.Makeup.dto.request.UpdateProfileUserRequest;
 import com.example.Makeup.entity.User;
 import com.example.Makeup.dto.response.common.ApiResponse;
 import com.example.Makeup.exception.AppException;
@@ -16,7 +17,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class UserService implements IUserService {
+public class UserServiceImpl implements IUserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
 
@@ -24,29 +25,22 @@ public class UserService implements IUserService {
     public ApiResponse<UserDTO> getUserDetailByUserName(String userName){
         User user =  userRepository.findByAccount_userName(userName)
                 .orElseThrow(()-> new AppException(ErrorCode.USER_NOT_FOUND));
-        return ApiResponse.<UserDTO>builder()
-                .code(200)
-                .message("Get user success")
-                .result(userMapper.toUserDTO(user))
-                .build();
+        return ApiResponse.success("Get user detail success", userMapper.toUserDTO(user));
     }
 
     @Override
     @Transactional
-    public ApiResponse<UserDTO> updateUser(UUID accountId , String name , String email , String address  ) {
+    public ApiResponse<UserDTO> updateUser(UpdateProfileUserRequest profileUserRequest, UUID accountId) {
         User user = userRepository.findByAccount_Id(accountId).orElseThrow(
                 () -> new AppException(ErrorCode.USER_NOT_FOUND)
         );
 
-        user.setAddress(address);
-        user.setEmail(email);
-        user.setFullName(name);
+        user.setAddress(profileUserRequest.getAddress());
+        user.setEmail(profileUserRequest.getEmail());
+        user.setFullName(profileUserRequest.getName());
+        user.setPhone(profileUserRequest.getPhone());
         User userUpdateSuccess = userRepository.save(user);
-        return ApiResponse.<UserDTO>builder()
-                .code(200)
-                .message("Get user success")
-                .result(userMapper.toUserDTO(userUpdateSuccess))
-                .build();
+        return ApiResponse.success("Update user success", userMapper.toUserDTO(userUpdateSuccess));
     }
 
     @Override
@@ -62,11 +56,20 @@ public class UserService implements IUserService {
 
         User savedUser = userRepository.save(newUser);
 
-        return ApiResponse.<UserDTO>builder()
-                .code(200)
-                .message("Create user success")
-                .result(userMapper.toUserDTO(savedUser))
-                .build();
+        return ApiResponse.success("Create user success",userMapper.toUserDTO(savedUser));
     }
 
+    @Override
+    public UserDTO loadUserDTOByUsername(String username) {
+        return userRepository.findByAccount_userName(username)
+                .map(userMapper::toUserDTO)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+    }
+
+    @Override
+    public UserDTO loadUserDTOById(UUID userId) {
+        return userRepository.findById(userId)
+                .map(userMapper::toUserDTO)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+    }
 }

@@ -5,22 +5,17 @@ import com.example.Makeup.dto.request.CreateProductRequest;
 import com.example.Makeup.dto.request.UpdateProductRequest;
 import com.example.Makeup.dto.response.common.ApiResponse;
 import com.example.Makeup.service.IProductService;
-import com.example.Makeup.service.impl.ProductService;
+
 import java.io.IOException;
 import java.util.UUID;
 
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 
-@Controller
+@RestController
 @AllArgsConstructor
 @RequestMapping("/api/products")
 public class ProductRestController {

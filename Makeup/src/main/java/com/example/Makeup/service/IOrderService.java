@@ -1,18 +1,24 @@
 package com.example.Makeup.service;
 
 import com.example.Makeup.dto.model.OrderDTO;
+import com.example.Makeup.dto.request.OrderRequest;
+import com.example.Makeup.dto.response.OrderItemDetailResponse;
+import com.example.Makeup.dto.response.OrdersAdminResponse;
 import com.example.Makeup.dto.response.common.ApiResponse;
+import com.example.Makeup.enums.OrderStatus;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.UUID;
 
 public interface IOrderService {
 
-    ApiResponse<OrderDTO> createOrder(String email, String firstName, String phoneNumber, String message, int paymentMethod, int quantity, double totalPrice);
+    ApiResponse<OrderDTO> createOrder(OrderRequest orderRequest);
     ApiResponse<OrderDTO> getOrder(UUID orderId);
     ApiResponse<Boolean> checkOrder(UUID orderId);
-    ApiResponse<List<OrderDTO>> getAllApproveOrder();
-    ApiResponse<List<OrderDTO>> getAllOrder();
+    ApiResponse<Page<OrdersAdminResponse>> getAllOrder(Pageable pageable, OrderStatus status);
     ApiResponse<Boolean> returnProductOfOrder(UUID orderId);
-    ApiResponse<List<OrderDTO>> getMyOrder(UUID userId);
+    ApiResponse<List<OrderDTO>> getMyOrders();
+    ApiResponse<List<OrderItemDetailResponse>> getItemsDetail(UUID orderId);
 }

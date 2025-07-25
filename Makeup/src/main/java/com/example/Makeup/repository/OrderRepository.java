@@ -1,5 +1,6 @@
 package com.example.Makeup.repository;
 
+import com.example.Makeup.dto.response.OrdersAdminResponse;
 import com.example.Makeup.entity.Order;
 import com.example.Makeup.enums.OrderStatus;
 import org.springframework.data.domain.Page;
@@ -10,7 +11,6 @@ import org.springframework.data.repository.query.Param;
 
 import java.sql.Date;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 public interface OrderRepository extends JpaRepository<Order, UUID> {
@@ -30,7 +30,14 @@ public interface OrderRepository extends JpaRepository<Order, UUID> {
 
     List<Order> findByUserId(UUID userId);
 
-    List<Order> findByStatus(OrderStatus status);
+    @Query("SELECT new com.example.Makeup.dto.response.OrdersAdminResponse(" +
+            "o.id, o.totalPrice, o.totalQuantity, o.orderDate, o.pickupDate, o.returnDate, o.status, " +
+            "u.id, u.fullName, u.phone, p.id, p.namePaymentMethod, o.createdAt, o.updatedAt) " +
+            "FROM Order o " +
+            "JOIN o.user u " +
+            "JOIN o.payment p " +
+            "WHERE (:status IS NULL OR o.status = :status)")
+    Page<OrdersAdminResponse> findAllOrders(@Param("status") OrderStatus status, Pageable pageable);
 
 
     Page<Order> findAll(Pageable pageable);

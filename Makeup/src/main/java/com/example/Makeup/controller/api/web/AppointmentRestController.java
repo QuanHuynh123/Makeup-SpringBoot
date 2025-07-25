@@ -1,10 +1,13 @@
 package com.example.Makeup.controller.api.web;
 
 import com.example.Makeup.dto.model.AppointmentDTO;
+import com.example.Makeup.dto.model.UserDTO;
 import com.example.Makeup.dto.model.WeekAppointmentsDTO;
-import com.example.Makeup.dto.request.AppointmentRequestDTO;
+import com.example.Makeup.dto.request.AppointmentRequest;
+import com.example.Makeup.dto.response.AppointmentsAdminResponse;
 import com.example.Makeup.dto.response.common.ApiResponse;
 import com.example.Makeup.service.IAppointmentService;
+import com.example.Makeup.utils.SecurityUserUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,6 +22,14 @@ public class AppointmentRestController {
     private final IAppointmentService appointmentService;
 
     /**
+     * Get all appointment by Month
+     */
+    @GetMapping
+    public ApiResponse<List<AppointmentsAdminResponse>> getAllAppointments() {
+        return appointmentService.getAllAppointments();
+    }
+
+    /**
      * Get 1 appointment by Month
      */
     @GetMapping("/by-month")
@@ -30,30 +41,12 @@ public class AppointmentRestController {
     }
 
     /**
-     * Get all appointment by Month
-     */
-    @GetMapping
-    public ApiResponse<List<AppointmentDTO>> getAllAppointments() {
-        return appointmentService.getAllAppointments();
-    }
-
-    /**
      * Get 1 appointment by ID
      */
     @GetMapping("/{id}")
     public ApiResponse<AppointmentDTO> getAppointmentById(@PathVariable("id") UUID appointmentId) {
         return appointmentService.getAppointmentById(appointmentId);
     }
-
-    /**
-     * Get 1 detail appointment by Id
-     */
-//    @GetMapping("/appointmentDetail/{id}")
-//    public ApiResponse<AppointmentDTO> getAppointmentById(@PathVariable UUID id) {
-//        return appointmentService.getAppointmentById(id);
-//
-//    }
-
 
     /**
      * Update 1 appointment :
@@ -81,7 +74,7 @@ public class AppointmentRestController {
      * Create 1 appointment
      */
     @PostMapping("/create")
-    public ApiResponse<AppointmentDTO> createAppointment(@RequestBody AppointmentRequestDTO appointment) {
+    public ApiResponse<AppointmentDTO> createAppointment(@RequestBody AppointmentRequest appointment) {
         return  appointmentService.createAppointment(appointment);
     }
 
@@ -96,4 +89,11 @@ public class AppointmentRestController {
         return appointmentService.getAppointmentsByDateAndStaff(staffId, makeupDate);
     }
 
+    @GetMapping("/my-appointments")
+    public ApiResponse<List<AppointmentsAdminResponse>> getMyAppointments( ) {
+
+        UserDTO userDTO = SecurityUserUtil.getCurrentUser();
+
+        return appointmentService.getAppointmentByUserId(userDTO.getId());
+    }
 }

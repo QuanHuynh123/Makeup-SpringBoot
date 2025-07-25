@@ -22,7 +22,14 @@ public interface ProductRepository extends JpaRepository<Product, UUID> {
             nativeQuery = true)
     List<Product> findNewProducts(Pageable  pageable);
 
-    Page<Product> findBySubCategoryId(Integer subCategoryId, Pageable pageable);
+    @Query("SELECT p FROM Product p WHERE (:subCategoryId IS NULL OR p.subCategory.id = :subCategoryId) OR " +
+            "(:search IS NULL OR LOWER(p.nameProduct) LIKE LOWER(CONCAT('%', :search, '%')))")
+    Page<Product> searchProducts(@Param("subCategoryId") Integer subCategoryId, // Nullable Integer
+                                 @Param("search") String search,
+                                 Pageable pageable);
+
+
+    Page<Product> findBySubCategoryIdAndIdNot(Integer subCategoryId, UUID excludedId, Pageable pageable);
 
     @Query("SELECT COUNT(p) FROM Product p WHERE p.subCategory.id = :subCategoryId")
     int countProductsBySubcategoryId(@Param("subCategoryId") Integer subCategoryId);

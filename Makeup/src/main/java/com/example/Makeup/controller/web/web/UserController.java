@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("/user")
-public class ProfileController {
+public class UserController {
 
     @GetMapping("/profile")
     public String profile(ModelMap modelMap){

@@ -1,7 +1,7 @@
 package com.example.Makeup.repository;
 
 import com.example.Makeup.dto.model.AppointmentDTO;
-import com.example.Makeup.dto.response.UserAppointmentResponse;
+import com.example.Makeup.dto.response.AppointmentsAdminResponse;
 import com.example.Makeup.entity.Appointment;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -10,7 +10,6 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.Time;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -20,16 +19,24 @@ public interface AppointmentRepository extends JpaRepository<Appointment, UUID> 
 
     List<Appointment> findByStaffId(UUID staffId);
 
-    @Query("SELECT new com.example.Makeup.dto.response.UserAppointmentResponse(" +
+    @Query("SELECT new com.example.Makeup.dto.response.AppointmentsAdminResponse(" +
             "a.id, a.startTime, a.endTime, a.makeupDate, a.status, s.price, " +
-            "u.id, s.id, st.id, st.nameStaff, s.nameMakeup, a.createdAt, a.updatedAt) " +
+            "u.id, s.id, st.id, st.nameStaff, s.nameMakeup, u.fullName ,  a.createdAt, a.updatedAt) " +
             "FROM Appointment a " +
             "JOIN a.user u " +
             "JOIN a.typeMakeup s " +
             "JOIN a.staff st " +
             "WHERE a.user.id = :userId")
-    List<UserAppointmentResponse> findAllByUserId(UUID userId);
+    List<AppointmentsAdminResponse> findAllByUserId(UUID userId);
 
+    @Query("SELECT new com.example.Makeup.dto.response.AppointmentsAdminResponse(" +
+            "a.id, a.startTime, a.endTime, a.makeupDate, a.status, s.price, " +
+            "u.id, s.id, st.id, st.nameStaff, s.nameMakeup, u.fullName ,  a.createdAt, a.updatedAt) " +
+            "FROM Appointment a " +
+            "JOIN a.user u " +
+            "JOIN a.typeMakeup s " +
+            "JOIN a.staff st " )
+    List<AppointmentsAdminResponse> findAllAppointments();
 
     @Query("SELECT new com.example.Makeup.dto.model.AppointmentDTO(" +
             "a.id, a.startTime, a.endTime, a.makeupDate, a.status, " +

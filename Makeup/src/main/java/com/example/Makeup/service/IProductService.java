@@ -6,6 +6,7 @@ import com.example.Makeup.dto.request.UpdateProductRequest;
 import com.example.Makeup.dto.response.ShortProductListResponse;
 import com.example.Makeup.dto.response.common.ApiResponse;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.io.IOException;
 import java.util.List;
@@ -20,6 +21,7 @@ public interface IProductService {
     ApiResponse<List<ShortProductListResponse>> getCustomerShowProducts();
     ApiResponse<ProductDTO> createProduct(CreateProductRequest createProduct) throws IOException;
     ApiResponse<String> deleteProduct(UUID productId);
-    ApiResponse<Page<ProductDTO>> getProductBySubcategoryId(int subCategoryId, int page, int size);
+    ApiResponse<Page<ProductDTO>> searchProduct(Integer subCategoryId,String search,  Pageable pageable);
     ApiResponse<ProductDTO> updateProduct(UpdateProductRequest updateProduct, UUID productId) throws IOException;
+    ApiResponse<List<ProductDTO>> getRelatedProducts(Integer subCategoryId, UUID excludedId, Pageable pageable);
 }

@@ -1,10 +1,12 @@
 package com.example.Makeup.service.impl;
 
 import com.example.Makeup.dto.model.OrderItemDTO;
+import com.example.Makeup.dto.request.OrderItemRequest;
 import com.example.Makeup.entity.CartItem;
 import com.example.Makeup.entity.Order;
 import com.example.Makeup.entity.OrderItem;
 import com.example.Makeup.dto.response.common.ApiResponse;
+import com.example.Makeup.entity.Product;
 import com.example.Makeup.exception.AppException;
 import com.example.Makeup.enums.ErrorCode;
 import com.example.Makeup.enums.OrderItemStatus;
@@ -12,7 +14,9 @@ import com.example.Makeup.mapper.OrderItemMapper;
 import com.example.Makeup.repository.CartItemRepository;
 import com.example.Makeup.repository.OrderItemRepository;
 import com.example.Makeup.repository.OrderRepository;
+import com.example.Makeup.repository.ProductRepository;
 import com.example.Makeup.service.IOrderItemService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -22,34 +26,34 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class OrderItemService implements IOrderItemService {
-    private final CartItemRepository cartItemRepository;
+public class OrderItemServiceImpl implements IOrderItemService {
+    private final CartItemServiceImpl  cartItemService;
     private final OrderRepository orderRepository;
     private final OrderItemRepository orderItemRepository;
     private final OrderItemMapper orderItemMapper;
+    private final ProductRepository productRepository;
 
     @Override
-    public ApiResponse<String> createOrderItem(UUID cartId, UUID orderId){
-        List<CartItem> cartItemList = cartItemRepository.findAllByCartId(cartId);
-        if (cartItemList.isEmpty()){
-            throw new AppException(ErrorCode.CART_IS_EMPTY);
-        }
+    @Transactional
+    public ApiResponse<String> createOrderItem(UUID orderId, List<OrderItemRequest> orderItemRequest) {
 
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(()-> new AppException(ErrorCode.ORDER_NOT_FOUND));
 
-        for (CartItem cartItem : cartItemList){
+        for (OrderItemRequest item : orderItemRequest){
+            Product product = productRepository.findById(item.getProductId())
+                    .orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOT_FOUND));
             OrderItem orderItem = new OrderItem();
-            orderItem.setPrice(cartItem.getPrice());
-            orderItem.setProduct(cartItem.getProduct());
-            orderItem.setQuantity(cartItem.getQuantity());
-            orderItem.setRentalDate(cartItem.getRentalDate());
+            orderItem.setPrice(item.getPrice());
+            orderItem.setProduct(product);
+            orderItem.setQuantity(item.getQuantity());
+            orderItem.setRentalDate(item.getRentalDate().atStartOfDay());
             orderItem.setStatus(OrderItemStatus.PENDING);
             orderItem.setOrder(order);
             orderItemRepository.save(orderItem);
         }
 
-        cartItemRepository.deleteAll(cartItemList);
+        cartItemService.deleteAllCartItem();
         return ApiResponse.success("Order items created successfully", null);
     }
 
