@@ -1,0 +1,65 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8
+    container_name: mysql-container
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_DATABASE: makeup
+      MYSQL_USER: ${MYSQL_USERNAME}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+      - spring-net
+
+  redis:
+    image: redis
+    container_name: redis-dev
+    ports:
+      - "6379:6379"
+    networks:
+      - spring-net
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672" # RabbitMQ UI
+    networks:
+      - spring-net
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: spring-container
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mysql
+      - redis
+      - rabbitmq
+    env_file:
+      - secrets.env
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-container:3306/makeup
+      SPRING_DATASOURCE_USERNAME: ${MYSQL_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${MYSQL_PASSWORD}
+      SPRING_REDIS_HOST: redis-dev
+      SPRING_RABBITMQ_HOST: rabbitmq
+
+    networks:
+      - spring-net
+
+volumes:
+  mysql-data:
+
+networks:
+  spring-net:
+    driver: bridge
