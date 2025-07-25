@@ -6,6 +6,14 @@ CREATE TABLE orders (
     pickup_date TIMESTAMP,
     return_date TIMESTAMP,
     status VARCHAR(50),
+
+    receiver_name VARCHAR(40),
+    receiver_email VARCHAR(100),
+    receiver_phone VARCHAR(20),
+    receiver_message VARCHAR(200),
+    receiver_address VARCHAR(200),
+    type_shipping VARCHAR(50),
+
     user_id CHAR(36) NOT NULL,
     payment_id BIGINT UNSIGNED  NOT NULL,
     created_at TIMESTAMP,
