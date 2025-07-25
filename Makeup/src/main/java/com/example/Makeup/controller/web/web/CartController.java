@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/user/myCart")
+@RequestMapping("/user/my-cart")
 public class CartController {
 
     @GetMapping("")
@@ -13,8 +13,8 @@ public class CartController {
         return "user/cart";
     }
 
-    @GetMapping("/checkOut")
+    @GetMapping("/check-out")
     public String checkOut() {
-        return "user/checkOut";
+        return "user/check-out";
     }
 }
