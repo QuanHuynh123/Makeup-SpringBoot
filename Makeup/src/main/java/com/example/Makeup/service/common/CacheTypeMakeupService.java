@@ -2,9 +2,11 @@ package com.example.Makeup.service.common;
 
 import com.example.Makeup.dto.model.TypeMakeupDTO;
 import com.example.Makeup.dto.response.common.ApiResponse;
-import com.example.Makeup.service.impl.TypeMakeupService;
+import com.example.Makeup.service.impl.TypeMakeupServiceImpl;
+import com.example.Makeup.utils.RedisStatusManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.RedisConnectionFailureException;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -17,18 +19,23 @@ public class CacheTypeMakeupService {
 
     private static final String SERVICE_MAKEUP_CACHE_KEY = "type-makeup";
     private final RedisTemplate<String, Object> redisTemplate;
-    private final TypeMakeupService typeMakeupService;
+    private final TypeMakeupServiceImpl typeMakeupServiceImpl;
 
     public ApiResponse<List<TypeMakeupDTO>> cacheAllTypeMakeup() {
+        if (!RedisStatusManager.isRedisAvailable()) {
+            return typeMakeupServiceImpl.getAllTypeMakeup();
+        }
         try {
             Object cached = redisTemplate.opsForValue().get(SERVICE_MAKEUP_CACHE_KEY);
             if (cached instanceof List<?> list && !list.isEmpty()) {
                 ApiResponse.success("Services list (from cache)",(List<TypeMakeupDTO>) list);
             }
+        } catch (RedisConnectionFailureException e) {
+            log.warn("⚠️ Redis connection failed (type makeup): {}", e.getMessage());
+            RedisStatusManager.setRedisAvailable(false);
         } catch (Exception e) {
-            System.out.println("⚠️ Redis GET failed: " + e.getMessage());
+            log.warn("⚠️ Redis GET failed (type makeup), fallback to DB: {}", e.getMessage());
         }
-
-        return typeMakeupService.getAllTypeMakeup();
+        return typeMakeupServiceImpl.getAllTypeMakeup();
     }
 }
