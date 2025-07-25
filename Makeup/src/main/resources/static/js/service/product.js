@@ -1,63 +1,99 @@
 $(document).ready(function () {
-    // Lọc sản phẩm theo subCategory
-    $('#subCategory').on('change', function () {
-        const subCategoryId = $(this).val();
-        if (!subCategoryId) return;
-
-        $.ajax({
-            url: '/api/products/by-sub-category/' + subCategoryId,
-            method: 'GET',
-            success: function (response) {
-                if (response && response.length > 0) {
-                    $('#container_product .product-list').html(generateProductHtml(response));
-                    $('.pagination').hide(); // Ẩn phân trang khi lọc
-                } else {
-                    $('#container_product .product-list').html('<p>Không có sản phẩm nào trong mục này.</p>');
-                    $('.pagination').hide();
-                }
-            },
-            error: function () {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    text: 'Không thể tải sản phẩm từ danh mục con đã chọn.'
-                });
-            }
+    // Hàm tạo HTML cho sản phẩm
+    function generateProductHtml(products) {
+        let html = '';
+        products.forEach(product => {
+            html += `
+                <li class="product-item">
+                    <a href="/productDetail/${product.id}">
+                        <img src="/images/product/${product.firstImage}" alt="Product Image">
+                        <div class="product-info">
+                            <h4>${product.nameProduct || 'No name available'}</h4>
+                            <p class="product-price">${product.price || 'N/A'}</p>
+                        </div>
+                    </a>
+                </li>
+            `;
         });
-    });
-
-    // Reset form sau khi tạo sản phẩm thành công
-    function resetProductForm() {
-        $('#name').val('');
-        $('#price').val('');
-        $('#description').val('');
-        $('input[name="size"]').prop('checked', false);
-        $('#subCategory').val('');
-        fileList = [];
-        $('.upload-img').empty();
-        $('.upload-info-value').text('0');
-        $('.upload-img').css('padding', '0');
+        return html;
     }
 
-    // Hover hình ảnh hiển thị nút xóa (hiệu ứng nhỏ)
-    $(document).on('mouseenter', '.uploaded-img', function () {
-        $(this).find('.remove-btn').fadeIn(150);
-    });
+    // Hàm tạo HTML cho phân trang
+    function generatePaginationHtml(categoryId, currentPage, totalPages) {
+        let html = '';
+        if (currentPage > 0) {
+            html += `<li><a href="#" class="page-link" data-action="prev">< Prev</a></li>`;
+        }
+        for (let i = 0; i < totalPages; i++) {
+            html += `<li><a href="#" class="page-link ${i === currentPage ? 'active' : ''}" data-page="${i}">${i + 1}</a></li>`;
+        }
+        if (currentPage < totalPages - 1) {
+            html += `<li><a href="#" class="page-link" data-action="next">Next ></a></li>`;
+        }
+        return html;
+    }
 
-    $(document).on('mouseleave', '.uploaded-img', function () {
-        $(this).find('.remove-btn').fadeOut(150);
-    });
+    // Hàm tải sản phẩm bằng AJAX
+    function loadProducts(categoryId, page , searchQuery) {
 
-    // Preview hình ảnh đầu tiên lớn hơn (nếu cần UI đẹp hơn)
-    $(document).on('click', '.uploaded-img img', function () {
-        const src = $(this).attr('src');
-        Swal.fire({
-            imageUrl: src,
-            imageAlt: 'Preview',
-            showCloseButton: true,
-            showConfirmButton: false,
-            width: 'auto',
-            padding: '1em',
+        $.ajax({
+            url: `/api/category?id=${categoryId}&page=${page}&searchKey=${searchQuery}`,
+            method: 'GET',
+            success: function (response) {
+                if (!response || !response.result) {
+                    $('#productList').html('<p style="margin-top:10px;">Không có sản phẩm nào.</p>');
+                    $('#paginationContainer').hide();
+                    return;
+                }
+                if (response.result.products.length > 0) {
+                    $('#productList').html(generateProductHtml(response.result.products));
+                    $('#currentPage').data('current-page', response.result.currentPage);
+                    $('#totalPages').data('total-pages', response.result.totalPages);
+                    $('#paginationList').html(generatePaginationHtml(categoryId, response.result.currentPage, response.result.totalPages));
+                    $('#paginationContainer').show();
+                } else {
+                    $('#productList').html('<p>Không có sản phẩm nào trong mục này.</p>');
+                    $('#paginationContainer').hide();
+                }
+            },
+            error: function (xhr) {
+                $('#paginationContainer').hide();
+            }
         });
+    }
+
+    // Xử lý phân trang
+    $(document).on('click', '.page-link', function (e) {
+        e.preventDefault();
+        const categoryId = $('#categoryId').data('category-id') || -1;
+        let currentPage = $('#currentPage').data('current-page');
+        const totalPages = $('#totalPages').data('total-pages');
+
+        // Xóa class active khỏi tất cả các page-link
+        $('.page-link').removeClass('active');
+
+        // Xử lý logic phân trang
+        if ($(this).data('action') === 'prev' && currentPage > 0) {
+            currentPage--;
+        } else if ($(this).data('action') === 'next' && currentPage < totalPages - 1) {
+            currentPage++;
+        } else if ($(this).data('page') !== undefined) {
+            currentPage = parseInt($(this).data('page'));
+        }
+
+        // Thêm class active cho trang được chọn
+        if ($(this).data('page') !== undefined) {
+            $(this).addClass('active');
+        }
+
+        if (currentPage >= 0 && currentPage < totalPages) {
+            loadProducts(categoryId, currentPage , $('#searchKey').data('search-key') || null);
+        }
     });
+
+    // Tải sản phẩm khi trang được tải
+    const categoryId = $('#categoryId').data('category-id') || -1;
+    const currentPage = $('#currentPage').data('current-page') || 0;
+    const searchQuery = $('#searchKey').data('search-key') || null;
+    loadProducts(categoryId, currentPage, searchQuery);
 });

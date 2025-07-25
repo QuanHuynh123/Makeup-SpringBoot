@@ -21,7 +21,7 @@ a{
 /* Bộ lọc */
 .filters {
     position: sticky; /* Giữ vị trí cố định khi cuộn */
-    top: 115px; /* Cố định tại vị trí cách đầu trang 0px */
+    top: 100px; /* Cố định tại vị trí cách đầu trang 0px */
     z-index: 1; /* Đảm bảo thanh lọc luôn nằm trên các thành phần khác */
     background-color: white; /* Màu nền để thanh không bị lẫn */
     padding: 10px;

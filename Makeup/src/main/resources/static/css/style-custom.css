@@ -168,3 +168,26 @@ img{
     height: 120px;
     object-fit: cover; 
 }
+
+.sortable i {
+    margin-left: 5px;
+    transition: transform 0.3s ease;
+}
+.sortable.asc i {
+    transform: rotate(180deg);
+}
+.sortable.desc i {
+    transform: rotate(0deg);
+}
+
+.filter-container {
+    display: flex;
+    justify-content: flex-end;
+    gap: 2px; /* Khoảng cách giữa nhãn và select */
+    margin-bottom: 1rem; /* Khoảng cách dưới cùng */
+    flex-direction : column;
+}
+
+.filter-container > label {
+    margin : 0 ;
+}

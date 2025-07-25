@@ -225,6 +225,9 @@ form input {
     padding: 10px;
     text-align: center;
     box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .related-product img {
@@ -238,6 +241,14 @@ form input {
     margin: 10px 0;
     color: #333;
 }
+
+.related-product h4 {
+    max-width: 180px;         /* Giới hạn chiều ngang */
+    text-overflow: ellipsis;  /*
+    overflow: hidden;         /* Ẩn phần bị tràn */Thêm dấu ... */
+    display: block;
+}
+
 
 /* END - DANH MỤC LIÊN QUAN */
 

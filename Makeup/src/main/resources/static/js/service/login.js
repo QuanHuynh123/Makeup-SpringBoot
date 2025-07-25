@@ -4,11 +4,7 @@ $('#loginForm').on('submit', function (event) {
           const password = $('#password').val().trim();
 
           if (!username || !password) {
-              Swal.fire({
-                  icon: 'error',
-                  title: 'Lỗi...',
-                  text: 'Tên người dùng và mật khẩu không được để trống.'
-              });
+                showError('Username and password cannot be empty.');
               return;
           }
 
@@ -35,11 +31,7 @@ $('#loginForm').on('submit', function (event) {
               },
               error: function (xhr) {
                   const msg = xhr.responseJSON?.message || 'Đăng nhập thất bại. Vui lòng thử lại.';
-                  Swal.fire({
-                      icon: 'error',
-                      title: 'Lỗi...',
-                      text: msg
-                  });
+                  showError(msg);
               }
           });
       });
@@ -47,7 +39,7 @@ $('#loginForm').on('submit', function (event) {
   function showError(message) {
       Swal.fire({
           icon: 'error',
-          title: 'Lỗi...',
+          title: 'Error...',
           text: message
       });
   }

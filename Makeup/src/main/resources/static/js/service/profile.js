@@ -56,7 +56,7 @@ function getData() {
             type: 'POST',
             contentType: 'application/json',
             data: JSON.stringify({
-                fullName: name,
+                name: name,
                 email: email,
                 phone: phone,
                 address: address,
@@ -65,7 +65,7 @@ function getData() {
                 console.log(response);
                 Swal.fire({
                     icon: 'success',
-                    title: response,
+                    title: "Cập nhật thành công",
                     text: 'Thông tin của bạn đã được cập nhật.',
                 });
             },
