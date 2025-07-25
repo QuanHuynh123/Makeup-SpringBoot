@@ -60,7 +60,7 @@
                 <label for="quantity">Qty:</label>
                 <input type="number" id="quantity" min="1" value="1">
 
-                <button type="submit" class="add-to-cart" id="add_cart_btn">Add to Cart</button>
+                <button type="button" class="add-to-cart" id="add_cart_btn">Add to Cart</button>
             </form>
         </div>
     </div>
@@ -81,7 +81,7 @@
                 <div class="product attibute description">
                     <div class="value">
                         <p><strong>Features:</strong></p>
-                        <p>Comfortable fabric ensures all-day wearability for Feixiao cosplay.<br>Exquisite accessories add authenticity to Feixiao’s fanart design.<br>Leather belt adds a bold, stylish touch to the overall look.<br>Perfect for Honkai: Star Rail fans, bring Feixiao to life with ease.<br>Ideal for cosplay events, embody Feixiao’s unique, striking style!</p>
+                        <p>Comfortable fabric ensures all-day wearability for Feixiao cosplay.Exquisite accessories add authenticity to Feixiao’s fanart design.Leather belt adds a bold, stylish touch to the overall look.Perfect for Honkai: Star Rail fans, bring Feixiao to life with ease.Ideal for cosplay events, embody Feixiao’s unique, striking style!</p>
                         <div id="list_img" th:each="image : ${images}">
                             <img th:src="@{'/images/product/' + ${image}}" alt="Thumbnail">
                         </div>
@@ -96,26 +96,13 @@
     <h1>Danh mục liên quan </h1>
     <!-- Các danh mục đã có -->
     <div id="list_related_product">
-        <div class="related-product">
-            <img src="https://d2rbvftet3l7m9.cloudfront.net/media/.renditions/wysiwyg/Mobile_Suit_Gundam_SEED_FREEDOM_Shinn_Asuka_Cosplay_Costume1.jpg" alt="New Cosplay Costume">
-            <h4>New Cosplay Costume</h4>
-            <p>$99.99</p>
-        </div>
-        <div class="related-product">
-            <img src="https://d2rbvftet3l7m9.cloudfront.net/media/.renditions/wysiwyg/Mobile_Suit_Gundam_SEED_FREEDOM_Shinn_Asuka_Cosplay_Costume1.jpg" alt="New Cosplay Costume">
-            <h4>New Cosplay Costume</h4>
-            <p>$99.99</p>
-        </div>
-        <div class="related-product">
-            <img src="https://d2rbvftet3l7m9.cloudfront.net/media/.renditions/wysiwyg/Mobile_Suit_Gundam_SEED_FREEDOM_Shinn_Asuka_Cosplay_Costume1.jpg" alt="New Cosplay Costume">
-            <h4>New Cosplay Costume</h4>
-            <p>$99.99</p>
-        </div>
-        <div class="related-product">
-            <img src="https://d2rbvftet3l7m9.cloudfront.net/media/.renditions/wysiwyg/Mobile_Suit_Gundam_SEED_FREEDOM_Shinn_Asuka_Cosplay_Costume1.jpg" alt="New Cosplay Costume">
-            <h4>New Cosplay Costume</h4>
-            <p>$99.99</p>
-        </div>
+        <th:block th:each="item : ${relatedProducts}">
+            <a th:href="@{/productDetail/{id}(id=${item.id})}" class="related-product">
+                <img th:src="@{'/images/product/' + ${item.firstImage}}" alt="New Cosplay Costume">
+                <h4 th:text="${item.nameProduct}"></h4>
+                <p th:text="${item.price}"></p>
+            </a>
+        </th:block>
     </div>
 </div>
 

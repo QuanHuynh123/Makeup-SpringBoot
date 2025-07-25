@@ -10,6 +10,7 @@
 
    <body class="main-layout" >
    <div layout:fragment="content">
+   <input type="hidden" id="searchContext" value="cosplay">
     <!-- banner -->
         <div id="banner_cosplay">
         <div class="carousel">
@@ -60,8 +61,8 @@
                              </li>
                          </a>
                      <!-- Nếu index chia hết cho 4 và không phải phần tử cuối thì đóng và mở `<ul>` mới -->
-                     <th:block th:if="${((state.index + 1  ) % 4 == 0) or (state.index + 1 == state.size ) }">
-                        </ul>
+                     <th:block th:if="${((state.index + 1) % 5 == 0) or (state.index + 1 == state.size)}">
+                     </ul>
                         <th:block th:if="${( state.index + 1) < state.size}"> <ul class="row"> </th:block>
                      </th:block>
                  </th:block>
@@ -87,7 +88,7 @@
                             </li>
                         </a>
                     <!-- Nếu index chia hết cho 4 và không phải phần tử cuối thì đóng và mở `<ul>` mới -->
-                    <th:block th:if="${((state.index + 1  ) % 4 == 0) or (state.index + 1 == state.size ) }">
+                    <th:block th:if="${((state.index + 1) % 5 == 0) or (state.index + 1 == state.size)}">
                         </ul>
                         <th:block th:if="${( state.index + 1) < state.size}"> <ul class="row"> </th:block>
                     </th:block>
@@ -130,11 +131,8 @@
    </div>
 
    <div th:fragment="js">
-      <script src="/js/libs/jquery.min.js"></script>
-      <script src="/js/libs/popper.min.js"></script>
-      <script src="/js/libs/bootstrap.bundle.min.js"></script>
-      <script src="/js/libs/jquery-3.0.0.min.js"></script>
-      <script src="/js/service/custom.js"></script>
+   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+   <script src="/js/service/custom.js"></script>
 
       <script>
         let currentSlide = 0;

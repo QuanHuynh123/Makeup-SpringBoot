@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Import CSS Example</title>
+    <title>Admin</title>
     <link rel="stylesheet" href="/css/adminStyle.css">
     <link rel="stylesheet" href="/css/scheduleStyle.css">
     <link rel="stylesheet" href="/css/customer.css">
@@ -16,7 +16,7 @@
 
     <script>document.getElementsByTagName("html")[0].className += " js";</script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="/js/loadSchedule.js"></script>
+    <script src="/js/service/loadSchedule.js"></script>
     <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -36,7 +36,7 @@
                 </svg>
             </button>
         </div>
-        <div class="admin-header-logo" style="cursor: pointer;">SGU Admin Pro</div>
+        <div class="admin-header-logo" style="cursor: pointer;">Admin SGU</div>
         <div class="admin-header-searchbar">
             <div class="admin-header-searchbar-container"><input type="search" placeholder="Search"
                                                                  aria-label="Search">
@@ -138,13 +138,7 @@
                                             </span>Order
                                     </div>
                                 </div>
-                                <div class="Submenu">
-                                    <div class="Submenu-title" id="tab-approveOrder">
-                                            <span style="margin-right: 8px; padding-right: 8px;">
-                                                <i class="fa-solid fa-cart-shopping"></i>
-                                            </span>Approve Order
-                                    </div>
-                                </div>
+
                                 <div class="Submenu">
                                     <div class="Submenu-title" id="tab-product">
                                             <span style="margin-right: 8px; padding-right: 8px;">
@@ -827,19 +821,24 @@
             <div id="appointment" class="d-none mt-3"></div>
             <div id="product" class="d-none mt-3"></div>
             <div id="order" class="d-none mt-3"></div>
-            <div id="approveOrder" class="d-none mt-3"></div>
             <div id="create-product" class="d-none mt-3"></div>
             <div id="edit-product" class="d-none mt-3"></div>
         </div>
     </div>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<!--****************** SERVICE TAB *****************-->
 <script src="/js/service/util.js"></script>
 <script src="/js/service/main.js"></script>
-<script src="/js/service/staff.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<!-- <script src="js/appointment.js"></script> -->
-<script src="/js/service/adminControl.js"></script>
-<script src="/js/service/order.js"></script>
+<!--<script src="/js/service/staff.js"></script>-->
+<!--<script src="/js/service/adminControl.js"></script>-->
+<!--<script src="/js/service/my-order.js"></script>-->
+<!--<script src="/js/service/appointment.js"></script>-->
+<script type="module" src="/js/service/admin-ui-handler.js"></script>
+<script type="module" src="/js/service/adminControl.js"></script>
+
 </body>
 
 </html>
