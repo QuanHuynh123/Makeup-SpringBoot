@@ -1,3 +1,11 @@
+body {
+  overflow: auto !important;
+}
+
+
+.main-layout{
+    padding: 0px 0px 0px 0px !important;
+}
 
 /* Cart mini */
 ul {
@@ -32,10 +40,16 @@ ul {
     border-bottom: 1px solid #ddd;
 }
 
+.mini-cart-header > button {
+    border: none;
+    font-size: 25px;
+    background: #ffffff00;
+}
+
 .mini-cart-body {
     flex: 1; /* Chiếm toàn bộ không gian còn lại */
     padding: 10px;
-    overflow-y: auto; /* Cuộn nếu nội dung quá dài */
+    overflow-y: auto !important; /* Cuộn nếu nội dung quá dài */
 }
 
 
@@ -46,6 +60,8 @@ ul {
     background-color: #f4f4f4;
     border-top: 1px solid #ddd;
     box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: space-evenly;
 }
 
 .cart-icon {
@@ -82,11 +98,14 @@ ul {
 }
 .content_item_cart_left h3{
     font-size: 16px;
+    height: 150px;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 .content_item_cart_left .fa-x{
     margin-top: auto;
     font-size: 25px;
-    color: white;
+    color: red;
     margin-left: 50%;
 }
 
@@ -108,17 +127,21 @@ ul {
 }
 
 .btn_delete{
-    background-color: red;
+    background-color: #ff000000;
     border: none;
     width : 50%;
     border-radius: 3px;
 }
 
+.btn_delete > i{
+
+}
+
 #btn-viewcart > button{
-    background-color: #e95836;
+    background-color: red;
     color: WHITE;
     border: none;
-    padding: 7px 15px 7px 15px;
+    padding: 7px 35px 7px 35px;
     border-radius: 5px;
 }
 
@@ -126,7 +149,7 @@ ul {
     background-color: #1aa40c;
     color: WHITE;
     border: none;
-    padding: 7px 15px 7px 15px;
+    padding: 7px 35px 7px 35px;
     border-radius: 5px;
     margin-left: 30px;
 }
@@ -205,7 +228,6 @@ ul {
 .quantity-input {
     width: 40px;
     text-align: center;
-    margin: 0 10px;
     padding: 5px;
     font-size: 16px;
     border: none;
@@ -272,7 +294,6 @@ ul {
 .btn-delete-cart-item{
     margin-left: 10px;
     color: red;
-    font-size: 30px;
     border: none;
     background-color: #f9f9f9;
 }
@@ -346,6 +367,14 @@ ul {
     flex-direction: column;
     text-align: left;
 }
+
+.cart-table {
+    transition: opacity 0.2s ease;
+}
+.cart-table.loading {
+    opacity: 0.5;
+}
+
 /* End - Cart-container */
 
 

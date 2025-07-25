@@ -173,3 +173,15 @@ textarea , input {
     border: none;
     border-radius: 5px;
 }
+
+.shipping-option {
+    margin: 15px 0;
+}
+
+.shipping-option input[type="checkbox"] {
+    margin-right: 10px;
+}
+
+.shipping-option label {
+    font-size: 16px;
+}

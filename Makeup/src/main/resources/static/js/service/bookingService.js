@@ -110,12 +110,12 @@ function handleBooking(event) {
     const selectedDate = new Date(date);
 
     if (selectedDate < currentDate) {
-        alert("Please select a valid date. The date cannot be in the past.");
+        showError("Please select a valid date. The date cannot be in the past.");
         return;
     }
 
     if (!selectedTime || isNaN(selectedTime)) {
-        alert("Invalid start time");
+        showError("Invalid start time");
         return;
     }
 
@@ -132,7 +132,7 @@ function handleBooking(event) {
 
 
     if (!validateEmail(email) || !validatePhoneNumber(phoneNumber) || !name || !phoneNumber || !message || !serviceOption || !date || !startTime) {
-        alert("Please fill out all required fields or enter valid data.");
+        showError("Please fill out all required fields or enter valid data.");
         return;
     }
 
@@ -211,3 +211,13 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 });
+
+function showError(message) {
+    Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: message,
+        confirmButtonColor: '#d33',
+        confirmButtonText: 'Close'
+    });
+}
