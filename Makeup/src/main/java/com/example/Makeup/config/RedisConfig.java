@@ -1,6 +1,7 @@
 package com.example.Makeup.config;
 
 import com.example.Makeup.exception.CustomCacheErrorHandler;
+import com.example.Makeup.utils.RedisStatusManager;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -48,8 +49,8 @@ public class RedisConfig {
     }
 
     @Bean
-    public CacheErrorHandler cacheErrorHandler() {
-        return new CustomCacheErrorHandler();
+    public CacheErrorHandler cacheErrorHandler(RedisStatusManager redisStatusManager) {
+        return new CustomCacheErrorHandler(redisStatusManager);
     }
 
 }

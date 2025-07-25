@@ -1,6 +1,8 @@
 package com.example.Makeup.security;
 
+import com.example.Makeup.dto.model.UserDTO;
 import com.example.Makeup.entity.RefreshToken;
+import com.example.Makeup.service.IUserService;
 import com.example.Makeup.service.common.RefreshTokenService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -30,6 +32,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
     private final JWTProvider jwtProvider;
     private final RefreshTokenService refreshTokenService;
+    private final IUserService userService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -103,8 +106,10 @@ public class JwtFilter extends OncePerRequestFilter {
         String role = mapRoleToAuthority(roleId);
         List<GrantedAuthority> authorities = Collections.singletonList(new SimpleGrantedAuthority(role));
 
+        UserDTO userDTO = userService.loadUserDTOByUsername(username);
+
         UsernamePasswordAuthenticationToken authToken =
-                new UsernamePasswordAuthenticationToken(username, null, authorities);
+                new UsernamePasswordAuthenticationToken(userDTO, null, authorities);
         authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
         SecurityContextHolder.getContext().setAuthentication(authToken);
     }
