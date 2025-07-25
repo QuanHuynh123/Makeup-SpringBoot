@@ -21,7 +21,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class SubCategoryService implements ISubCategoryService {
+public class SubCategoryServiceImpl implements ISubCategoryService {
 
     private final SubCategoryRepository subCategoryRepository;
     private final SubCategoryMapper subCategoryMapper;

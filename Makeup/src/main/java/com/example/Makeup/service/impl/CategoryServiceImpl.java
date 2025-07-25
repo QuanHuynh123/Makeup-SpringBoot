@@ -16,7 +16,7 @@ import java.util.List;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class CategoryService implements ICategoryService {
+public class CategoryServiceImpl implements ICategoryService {
 
     private final RedisTemplate<String, Object> redisTemplate;
     private final CategoryRepository categoryRepository;

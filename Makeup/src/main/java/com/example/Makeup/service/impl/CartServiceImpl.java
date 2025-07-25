@@ -19,45 +19,39 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class CartService implements ICartService {
+public class CartServiceImpl implements ICartService {
 
     private final CartRepository cartRepository;
     private final CartMapper cartMapper;
     private final UserRepository userRepository;
     private final CartItemRepository cartItemRepository;
 
-
+    @Override
     public ApiResponse<CartDTO> getCart (UUID userId){
+        System.out.println("Get cart for user: " + userId);
         Cart cart = cartRepository.findByUserId(userId).orElseThrow(() -> new AppException(ErrorCode.CART_NOT_FOUND));
         return ApiResponse.success("Get cart success", cartMapper.toCartDTO(cart));
     }
 
+    @Override
     @Transactional
     public ApiResponse<CartDTO> createCart(UUID accountId){
-        LocalDateTime localDate = LocalDateTime.now();
-
-        User user = userRepository.findByAccountId(accountId);
+        User user = userRepository.findByAccountId(accountId)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
         Cart cart = new Cart(null,0,0, user);
         cartRepository.save(cart);
         return ApiResponse.success("Create cart success", cartMapper.toCartDTO(cart));
     }
 
     @Transactional
-    public ApiResponse<CartDTO> updateCartTotals( UUID cartId){
-        Cart cart = cartRepository.findById(cartId)
-                .orElseThrow(() -> new AppException(ErrorCode.CART_NOT_FOUND));
+    public CartDTO updateCartTotals(Cart cart){
 
-        if (!checkCartAndUser(cartId)) {
-            throw new AppException(ErrorCode.CART_NOT_FOUND);
-        }
-
-        List<CartItem> cartItemList = cartItemRepository.findAllByCartId(cartId);
+        List<CartItem> cartItemList = cartItemRepository.findAllByCartId(cart.getId());
 
         int quantityCart = 0;
         double totalPrice = 0;
@@ -68,20 +62,29 @@ public class CartService implements ICartService {
 
         cart.setTotalPrice(totalPrice);
         cart.setTotalQuantity(quantityCart);
-        return ApiResponse.success("Update cart totals success", cartMapper.toCartDTO(cart));
+        return  cartMapper.toCartDTO(cart);
     }
 
-    public boolean checkCartAndUser(UUID cartId) {
+    public Cart checkCartAndUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        if (!(authentication != null && authentication.isAuthenticated()
-                && authentication.getPrincipal() instanceof UserDTO userDTO)) {
-            return false;
+        if (authentication == null || !authentication.isAuthenticated()) {
+            throw new AppException(ErrorCode.USER_IN_AUTHENTICATED_NOT_FOUND);
+        }
+
+        Object principal = authentication.getPrincipal();
+        if (!(principal instanceof UserDTO userDTO)) {
+            throw new AppException(ErrorCode.USER_IN_AUTHENTICATED_NOT_FOUND);
         }
 
         UUID userId = userDTO.getId();
-        return cartRepository.existsByIdAndUserId(cartId, userId);
+        Cart cart = cartRepository.findByUserId(userId)
+                .orElseThrow(() -> new AppException(ErrorCode.CART_NOT_FOUND));
+
+        return cartRepository.findByIdForUpdate(cart.getId())
+                .orElseThrow(() -> new AppException(ErrorCode.CART_IS_LOCKED_FOR_UPDATE));
     }
+
 
     public int countCartItem(UUID cartId){
         return cartItemRepository.countByCartId(cartId);

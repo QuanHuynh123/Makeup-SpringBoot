@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class StaffService implements IStaffService {
+public class StaffServiceImpl implements IStaffService {
 
     private static final String STAFF_CACHE_KEY = "staffs";
     private final StaffRepository staffRepository;

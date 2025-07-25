@@ -40,7 +40,6 @@ public class AuthApiRestController {
 
     @PostMapping("/register")
     public ApiResponse<String> createAccount(@RequestBody RegisterRequest registerRequest) {
-
         return accountService.signUp(registerRequest);
     }
 

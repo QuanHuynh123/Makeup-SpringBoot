@@ -22,7 +22,8 @@ public enum ErrorCode {
     USER_NOT_FOUND("User not found!", HttpStatus.NOT_FOUND),
     USER_NOT_EXISTED("User not existed!", HttpStatus.NOT_FOUND),
     USER_ALREADY_EXISTED("User already existed!", HttpStatus.CONFLICT),
-    USER_PASSWORD_NOT_MATCH("Password not match!", HttpStatus.BAD_REQUEST),
+    USER_PASSWORD_NOT_MATCH("Your username or password may be incorrect!", HttpStatus.BAD_REQUEST),
+    USER_IN_AUTHENTICATED_NOT_FOUND("User in authenticated not found!", HttpStatus.NOT_FOUND),
 
     // ===== PRODUCT =====
     PRODUCT_NOT_FOUND("Product not found!", HttpStatus.NOT_FOUND),
@@ -36,6 +37,7 @@ public enum ErrorCode {
     CART_ITEM_NOT_FOUND("Cart item not found!", HttpStatus.NOT_FOUND),
     CART_IS_EMPTY("Cart is empty!", HttpStatus.NO_CONTENT),
     CART_ITEM_DELETE_FAILED("Delete cart item failed!", HttpStatus.BAD_REQUEST),
+    CART_IS_LOCKED_FOR_UPDATE("Cart is locked for update!", HttpStatus.CONFLICT),
 
     // ===== ORDER =====
     ORDER_NOT_FOUND("Order not found!", HttpStatus.NOT_FOUND),

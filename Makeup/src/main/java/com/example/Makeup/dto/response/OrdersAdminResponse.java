@@ -1,9 +1,11 @@
-package com.example.Makeup.dto.model;
+package com.example.Makeup.dto.response;
 
 import com.example.Makeup.enums.OrderStatus;
-import com.example.Makeup.enums.ShippingType;
-import jakarta.persistence.Column;
-import lombok.*;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDateTime;
@@ -13,25 +15,24 @@ import java.util.UUID;
 @Getter
 @Setter
 @AllArgsConstructor
-public class OrderDTO {
+public class OrdersAdminResponse {
+
     final UUID id;
     double totalPrice;
     int totalQuantity;
+    @JsonFormat(pattern = "yyyy-MM-dd")
     LocalDateTime orderDate;
+    @JsonFormat(pattern = "yyyy-MM-dd")
     LocalDateTime pickupDate;
+    @JsonFormat(pattern = "yyyy-MM-dd")
     LocalDateTime returnDate;
     OrderStatus status;
     UUID userId;
+    String nameUser;
+    String phone;
     int paymentId;
-    boolean returnStatus;
-
-    String receiverName;
-    String receiverEmail;
-    String receiverPhone;
-    String receiverMessage;
-    String receiverAddress;
-    ShippingType typeShipping;
-
+    String paymentMethod;
     LocalDateTime createdAt;
     LocalDateTime updatedAt;
+
 }

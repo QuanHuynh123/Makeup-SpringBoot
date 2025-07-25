@@ -12,7 +12,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class AppointmentRequestDTO {
+public class AppointmentRequest {
 
     Time startTime;
     Time endTime;

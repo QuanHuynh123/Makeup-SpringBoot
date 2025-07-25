@@ -8,14 +8,19 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;
 
 @Service
-public class SendEmailService {
+public class EmailService {
 
     @Autowired
     private JavaMailSender javaMailSender;
 
-    @Value("$(spring.mail.username)")
+    @Autowired
+    private TemplateEngine templateEngine;
+
+    @Value("${spring.mail.username}")
     private String fromEmailId;
 
     public void sendEmail(String recipient, Order order, String subject) throws MessagingException {
@@ -26,16 +31,13 @@ public class SendEmailService {
         helper.setTo(recipient);
         helper.setSubject(subject);
 
-        String body = "<p style='color:blue;'>Chào bạn, đây là nội dung đặt hàng  </p>"
-                + "<p> Số lượng : " + order.getTotalQuantity() + "</p>"
-                + "<p> Giá trị : " + order.getTotalPrice() + "</p>"
-                + "<p> Ngày đặt : " + order.getOrderDate() + "</p>"
-                + "<p> Chúng tôi sẽ chuẩn bị hàng và sớm thông báo ngày nhận ! </p> "
-                + "<p style='color:red;'>Xin cảm ơn!</p>";
+        // Create a context for Thymeleaf template
+        Context context = new Context();
+        context.setVariable("order", order);
 
+        String htmlBody = templateEngine.process("email/confirmation", context);
 
-        // Sử dụng nội dung HTML trong body
-        helper.setText(body, true); // `true` để kích hoạt HTML
+        helper.setText(htmlBody, true);
 
         javaMailSender.send(mimeMessage);
     }

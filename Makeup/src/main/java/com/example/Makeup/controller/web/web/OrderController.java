@@ -27,14 +27,9 @@ public class OrderController {
     private final IOrderItemService orderItemService;
     private final IOrderService orderService;
 
-    @GetMapping("/myOrder")
-    public String myOrder(Model model, @ModelAttribute("user") UserDTO userDTO) {
-        if (userDTO != null) {
-            UUID userId = userDTO.getId();
-            ApiResponse<List<OrderDTO>> orders = orderService.getMyOrder(userId);
-            model.addAttribute("myOrder", orders.getResult());
-        }
-        return "/user/myOrder";
+    @GetMapping("/my-order")
+    public String myOrder() {
+        return "/user/my-order";
     }
 
     @GetMapping("/orderDetail/{orderId}")

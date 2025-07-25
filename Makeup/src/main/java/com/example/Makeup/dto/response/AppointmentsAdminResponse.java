@@ -13,7 +13,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class UserAppointmentResponse {
+public class AppointmentsAdminResponse {
     UUID id;
     Time startTime;
     Time endTime;
@@ -24,7 +24,8 @@ public class UserAppointmentResponse {
     int typeMakeupId;
     UUID staffId;
     String nameStaff;
-    String nameMakeup;
+    String typeMakeupName;
+    String nameUser;
     LocalDateTime createdAt;
     LocalDateTime updatedAt;
 }

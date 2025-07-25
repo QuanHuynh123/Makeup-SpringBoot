@@ -22,13 +22,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/admin/products")
-public class AdminProductController {
+public class ProductAdminController {
 
     private final IProductService productService;
     private final ISubCategoryService subCategoryService;
 
     @GetMapping("/create")
-    public String createProductPage(Model model){
+    public String createProductAdminPage(Model model){
         ApiResponse<List<SubCategoryDTO>> subCategories = subCategoryService.getAll();
         model.addAttribute("subCategories", subCategories.getResult());
 
@@ -36,15 +36,14 @@ public class AdminProductController {
     }
 
     @GetMapping("/products")
-    public String getAllProducts(Model model){
+    public String getAllProductsAdminPage(Model model){
         ApiResponse<List<ProductDTO>> products = productService.getAllProducts();
         model.addAttribute("products", products.getResult());
         return "admin/products";
     }
 
-
     @GetMapping("/edit/{id}")
-    public String editProductPage(Model model, @PathVariable("id") UUID id){
+    public String editProductAdminPage(Model model, @PathVariable("id") UUID id){
         ApiResponse<List<SubCategoryDTO>> subCategories = subCategoryService.getAll();
         model.addAttribute("subCategories", subCategories.getResult());
         

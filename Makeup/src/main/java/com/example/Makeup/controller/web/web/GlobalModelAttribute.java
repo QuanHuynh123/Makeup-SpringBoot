@@ -1,14 +1,14 @@
 package com.example.Makeup.controller.web.web;
 
 import com.example.Makeup.dto.model.*;
+import com.example.Makeup.dto.response.CartItemResponse;
 import com.example.Makeup.dto.response.common.ApiResponse;
 import com.example.Makeup.security.JWTProvider;
 import com.example.Makeup.service.ICartItemService;
 import com.example.Makeup.service.ICartService;
-import com.example.Makeup.service.ICategoryService;
 import com.example.Makeup.service.IUserService;
 import com.example.Makeup.service.common.CacheCategoryService;
-import com.example.Makeup.service.impl.*;
+import com.example.Makeup.utils.SecurityUserUtil;
 import lombok.extern.slf4j.Slf4j;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
 import java.util.List;
-import java.util.UUID;
 
 @Slf4j
 @ControllerAdvice(annotations = Controller.class)
@@ -78,29 +77,38 @@ public class GlobalModelAttribute {
     }
 
     @ModelAttribute("cartAttributes")
-    public void addCartAndMiniCart(Model model, @ModelAttribute("user") UserDTO userDTO) {
-        if (userDTO != null && userDTO.getId() != null) {
-            UUID userId = userDTO.getId();
+    public void addCartAndMiniCart(Model model) {
+        UserDTO userDTO = null;
+        try {
+            userDTO = SecurityUserUtil.getCurrentUser();
+        } catch (Exception e) {
+            userDTO = null;
+        }
+
+        if (userDTO != null) {
             try {
-                ApiResponse<CartDTO> cart = cartService.getCart(userId);
-                if (cart.getCode() == 200) {
-                    ApiResponse<List<CartItemDTO>> cartItemDTOS = cartItemService.getCartItemByCartId(cart.getResult().getId());
-                    int count = cartItemDTOS.getResult() != null ? cartItemDTOS.getResult().size() : 0;
-                    if (cartItemDTOS.getCode() == 200 && cart.getResult() != null) {
-                        model.addAttribute("cartItems", cartItemDTOS.getResult());
-                    }
-                    model.addAttribute("cart", cart.getResult());
+                CartDTO cart = cartService.getCart(userDTO.getId()).getResult();
+                if (cart != null && cart.getId() != null) {
+                    List<CartItemResponse> cartItemDTOS = cartItemService.getCartItemByCartId().getResult();
+                    int count = cartItemDTOS != null ? cartItemDTOS.size() : 0;
+                    model.addAttribute("cartItems", cartItemDTOS);
+                    model.addAttribute("cart", cart);
                     model.addAttribute("countCart", count);
                 } else {
                     model.addAttribute("error", "Bạn chưa có giỏ hàng nào.");
                     model.addAttribute("countCart", 0);
                 }
             } catch (Exception ex) {
-                log.error("Error loading cart for userId: {}, exception: {}", userId, ex.getMessage());
-                model.addAttribute("error", "Lỗi khi tải giỏ hàng.");
+                log.error("Error loading cart for userId: {}, exception: {}", userDTO.getId(), ex.getMessage());
+                model.addAttribute("error", "Giỏ hàng trống. Vui lòng thêm sản phẩm vào giỏ hàng.");
             }
+        }else {
+            log.warn("User ID is null, cannot load cart");
+            model.addAttribute("error", "Không tìm thấy người dùng.");
+            model.addAttribute("countCart", 0);
         }
     }
+
 
     @ModelAttribute("categoryAttributes")
     public void addCategoryHeaderCosplay(Model model ){
@@ -116,6 +124,5 @@ public class GlobalModelAttribute {
             log.error("Exception while loading categories: {}", ex.getMessage(), ex);
         }
     }
-
 
 }

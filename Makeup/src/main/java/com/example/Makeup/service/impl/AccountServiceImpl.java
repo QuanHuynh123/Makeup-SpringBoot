@@ -1,6 +1,7 @@
 package com.example.Makeup.service.impl;
 
 import com.example.Makeup.dto.model.AccountDTO;
+import com.example.Makeup.dto.model.UserDTO;
 import com.example.Makeup.dto.request.RegisterRequest;
 import com.example.Makeup.dto.request.UpdateAccountRequest;
 import com.example.Makeup.entity.Account;
@@ -35,7 +36,7 @@ import java.util.UUID;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class AccountService implements UserDetailsService, IAccountService {
+public class AccountServiceImpl implements UserDetailsService, IAccountService {
 
     private final AccountRepository accountRepository;
     private final RoleRepository roleRepository;
@@ -44,6 +45,7 @@ public class AccountService implements UserDetailsService, IAccountService {
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
     private final UserRepository userRepository;
     private final RefreshTokenRepository refreshTokenRepository;
+    private final CartServiceImpl cartServiceImpl;
 
     @Value("${refresh.expiration}")
     private long expiredRefreshToken ;
@@ -125,14 +127,15 @@ public class AccountService implements UserDetailsService, IAccountService {
         Role role = roleRepository.findById(2)
                 .orElseThrow(() -> new AppException(ErrorCode.COMMON_RESOURCE_NOT_FOUND));
         account.setRole(role);
-        accountRepository.save(account);
-        System.out.println("UUID account: " + account.getId());
+        accountRepository.saveAndFlush(account);
 
         User user = new User();
         user.setFullName(account.getUserName());
         user.setAccount(account);
         user.setPhone("000-000-0000"); // Normalize phone number or set a default value
-        userRepository.save(user);
+        userRepository.saveAndFlush(user);
+
+        cartServiceImpl.createCart(account.getId());
         return ApiResponse.success("Sign up success", account.getUserName());
     }
 

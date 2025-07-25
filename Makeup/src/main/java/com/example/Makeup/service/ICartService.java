@@ -9,5 +9,4 @@ public interface ICartService {
 
     ApiResponse<CartDTO> getCart(UUID userId);
     ApiResponse<CartDTO> createCart(UUID accountId);
-    ApiResponse<CartDTO> updateCartTotals(UUID cartId);
 }

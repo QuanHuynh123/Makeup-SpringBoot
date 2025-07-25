@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class FeedBackService implements IFeedBackService {
+public class FeedBackServiceImpl implements IFeedBackService {
 
     public static final String GOOD_FEEDBACK_CACHE_KEY = "feedbacks-good";
 
