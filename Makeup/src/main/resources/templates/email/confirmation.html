@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Order Confirmation</title>
+</head>
+<body>
+<p style="color:blue;">Chào bạn, đây là nội dung đặt hàng</p>
+<p>Số lượng: <strong th:text="${order.totalQuantity}"></strong></p>
+<p>Giá trị: <strong th:text="${order.totalPrice}"></strong></p>
+<p>Ngày đặt: <strong th:text="${order.orderDate}"></strong></p>
+<p>Chúng tôi sẽ chuẩn bị hàng và sớm thông báo ngày nhận!</p>
+<p style="color:red;">Xin cảm ơn!</p>
+</body>
+</html>

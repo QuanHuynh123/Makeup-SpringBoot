@@ -14,6 +14,7 @@
 <body class="main-layout">
 
 <div layout:fragment="content">
+    <input type="hidden" id="searchContext" value="cart">
     <!-- cart -->
     <div class="cart-container">
         <div class="cart-items">
@@ -32,45 +33,21 @@
                     <th class="align-th" style="width: 13%;">Total</th>
                     <th class="align-th" style="width: 4%;"></th>
                     <th class="align-th" style="width: 4%;"></th>
-            </tr>
+                </tr>
 
             <!-- Hiển thị giỏ hàng nếu không có lỗi -->
-            <block th:if="${error == null or error == ''}">
-<!--                <div th:if="${cartItems != null and !#lists.isEmpty(cartItems)}">-->
-<!--                    <div class="cart-item" th:each="item : ${cartItems}">-->
-<!--                        <img th:src="@{'/images/product/' + ${item.imageFirst}}" alt="Product Image" class="cart-item-image">-->
-<!--                        <div class="cart-item-info" th:attr="cart-id=${item.id}">-->
-<!--                            <input class="product-id" style="display:none;" th:value="${item.productId}">-->
-<!--                            <div class="text">-->
-<!--                                <h4 class="cart-item-name" th:text="${item.productName}">Product Name</h4>-->
-<!--                                <p class="cart-item-price" th:text="${item.price}">$45.90</p>-->
-<!--                                <p class="cart-item-size">Size : S</p>-->
-<!--                                <label>Use Date:</label>-->
-<!--                                <input type="date" class="use-date" th:value="${item.useDate}">-->
-<!--                            </div>-->
-<!--                            <div class="quantity">-->
-<!--                                <button class="quantity-decrease">-</button>-->
-<!--                                <input type="number" class="quantity-input" th:value="${item.quantity}">-->
-<!--                                <button class="quantity-increase">+</button>-->
-<!--                            </div>-->
-<!--                            <div class="function_edit_delete">-->
-<!--                                <button class="btn-update-cart-item"><i class="fa-solid fa-rotate-right"> update</i></button>-->
-<!--                                <button class="btn-delete-cart-item"><i class="fa-solid fa-delete-left"></i></button>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                </div>-->
-
-                <tr style="vertical-align: middle;" th:attr="cart-id=${item.id}">
+            <div class="content-cart-table" th:if="${error == null or error == ''}">
+                <tr style="vertical-align: middle;" th:each="item : ${cartItems}" th:attr="cart-id=${item.id}">
                     <td class="align-th cart-item-infor">
                         <div style="display: flex;">
-                            <img th:src="@{'/images/product/' + ${item.imageFirst}}" alt="Product Image"
+                            <img th:src="@{'/images/product/' + ${item.firstImage}}" alt="Product Image"
                                  style="width: 100px; height: 100px; object-fit: cover; object-position: center; display: block; border-radius: 2px;">
                             <input class="product-id" style="display:none;" th:value="${item.productId}">
                             <div class="infor">
                                 <p style="margin: 0; font-weight: 600;" th:text="${item.productName}">Product Name</p>
                                 <p style="margin: 2px 0; font-size: 14px;">Size : S</p>
-                                <input type="date" class="use-date" th:value="${item.useDate}" style="margin-top: 4px;">
+                                <input type="date" class="use-date"
+                                       th:value="${#temporals.format(item.rentalDate, 'yyyy-MM-dd')}">
                             </div>
                         </div>
                     </td>
@@ -99,7 +76,7 @@
                 <div th:if="${cartItems == null or #lists.isEmpty(cartItems)}">
                     <p>Giỏ hàng của bạn đang trống.</p>
                 </div>
-            </block>
+            </div>
             </table>
         </div>
 
@@ -135,13 +112,12 @@
 
                 <div class="grand-total">
                     <span style="font-weight: 500;">GRAND TOTAL</span>
-                    <span style="font-size: 30px;" th:if="${cart != null}" th:text="'Order Total: ' + ${cart.totalPrice}">$181.15</span>
+                    <span style="font-size: 30px;" th:if="${cart != null}" th:text="${cart.totalPrice}">$181.15</span>
                 </div>
             </div>
 
-            <a href="/cart/checkOut"><button class="checkout-btn">Proceed to Checkout</button></a>
-            <!-- <button class="checkout-vnpay-btn"></button> -->
-            <button class="clear-cart-btn">Clear Cart</button>
+            <a href="#" ><button class="checkout-btn" onclick="checkout()">Proceed to Checkout</button></a>
+            <button class="clear-cart-btn" onclick="clearCart()">Clear Cart</button>
         </div>
     </div>
     <!-- end cart -->
@@ -149,6 +125,7 @@
 
 <!-- JS -->
 <div th:fragment="js">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="/js/libs/bootstrap.bundle.min.js"></script>
     <script src="/js/service/custom.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

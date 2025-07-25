@@ -1,17 +1,18 @@
 <!DOCTYPE html>
 <html layout:decorate="layoutCosplay" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
-    <head>
-        <layout:fragment name="header">
-            <link rel="stylesheet" href="/css/cosplay.css">
-            <link rel="stylesheet" href="/css/footer.css">
-            <link rel="stylesheet" href="/css/listviewProduct.css">
-        </layout:fragment>
-    </head>
+<head>
+    <layout:fragment name="header">
+        <link rel="stylesheet" href="/css/cosplay.css">
+        <link rel="stylesheet" href="/css/footer.css">
+        <link rel="stylesheet" href="/css/listviewProduct.css">
+    </layout:fragment>
+</head>
 
-<body class="main-layout" >
+<body class="main-layout">
 <div layout:fragment="content">
     <h1 style="padding-top: 150px; text-align: center; font-size: 50px; background-color: white;">
-        <span class="base" th:text="${nameSub ?: 'N/A'}"> </span></h1>
+        <span class="base" th:text="${nameSub}"></span>
+    </h1>
 
     <!-- product -->
     <div id="container_product">
@@ -34,52 +35,22 @@
                 <button>Xếp theo: Giá</button>
             </div>
 
-            <div th:if="${nullProduct != null and nullProduct != ''}" class="alert alert-warning" role="alert">
-                <span th:text="${nullProduct}"></span>
-            </div>
-
             <div id="totalPages" style="display:none;" th:attr="data-total-pages=${totalPages}"></div>
             <div id="categoryId" style="display:none;" th:attr="data-category-id=${categoryId}"></div>
+            <div id="currentPage" style="display:none;" th:attr="data-current-page=${currentPage}"></div>
+            <div id="searchKey" style="display:none;" th:attr="data-search-key=${searchKey}"></div>
 
-            <div th:if="${nullProduct == null or nullProduct == ''}">
-            <ul class="product-list">
-                    <li class="product-item" th:each="product : ${products}">
-                        <a th:href="@{/productDetail/{id}(id=${product.id})}">
-                            <img th:src="@{'/images/product/' + ${product.firstImage}}" alt="Product Image">
-                            <div class="product-info">
-                                <h4 th:text="${product.nameProduct ?: 'No name available'}">Tên sản phẩm</h4>
-                                <p class="product-price" th:text="${product.price ?: 'N/A'}"></p>
-                            </div>
-                        </a>
-                    </li>
+            <ul class="product-list" id="productList">
             </ul>
-            </div>
         </div>
     </div>
 
     <!-- end-paginate-->
-    <div th:if="${nullProduct == null or nullProduct == ''}">
-        <div class="container-paginate middle">
-            <div class="pagination">
-                <ul>
-                    <li>
-                        <a href="#" data-page="${currentPage - 1}"
-                           th:if="${currentPage > 0}">&lt; Prev</a>
-                    </li>
+    <div th:if="${nullProduct == null or nullProduct == ''}" class="container-paginate middle" id="paginationContainer">
+        <div class="pagination">
+            <ul id="paginationList">
 
-                    <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}">
-                        <a href="#" th:text="${i + 1}"
-                           th:attr="data-page=${i}"
-                           th:classappend="${i == currentPage} ? 'active' : ''">>
-                        </a>
-                    </li>
-
-                    <li>
-                        <a href="#"  th:attr="data-page=${currentPage + 1}"
-                           th:if="${currentPage < totalPages - 1}">Next &gt;</a>
-                    </li>
-                </ul>
-            </div>
+            </ul>
         </div>
     </div>
     <!-- end-paginate-->
@@ -88,12 +59,9 @@
 </div>
 
 <div th:fragment="js">
-    <script src="/js/libs/jquery.min.js"></script>
-    <script src="/js/libs/popper.min.js"></script>
-    <script src="/js/libs/bootstrap.bundle.min.js"></script>
-    <script src="/js/libs/jquery-3.0.0.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="/js/service/product.js"></script>
 </div>
 </body>
 </html>
-

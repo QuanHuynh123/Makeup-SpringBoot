@@ -1,16 +1,17 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Appointment</title>
+    <meta charset="utf-8">
+    <title>Order</title>
     <!-- mobile metas -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="viewport" content="initial-scale=1, maximum-scale=1">
     <link rel="stylesheet" href="/css/myOrder.css">
-    <!-- Responsive-->
+    <!-- Responsive -->
     <link rel="stylesheet" href="/css/responsive.css">
     <!-- fevicon -->
     <link rel="icon" href="/images/fevicon.png" type="image/gif" />
-    <!-- Tweaks for older IEs-->
+    <!-- Tweaks for older IEs -->
     <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.css" media="screen">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
@@ -18,35 +19,56 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body class="main-layout">
-<input type="hidden" id="searchContext" value="myAppointment">
+<input type="hidden" id="searchContext" value="myOrder">
 <!-- header -->
 <header>
+    <!-- header inner -->
     <div class="header">
         <div class="col-xl-1 col-lg-2 col-md-3 col-sm-4 div_btn_home">
             <a href="/home"><button class="btn_home">Makeup</button></a>
             <a href="/user/my-order"><button class="btn_home">Đơn hàng</button></a>
-            <a href="/user//my-appointment"><button class="btn_home">Lịch hẹn</button></a>
+            <a href="/user/my-appointment"><button class="btn_home">Lịch hẹn</button></a>
             <a href="/user/my-cart"><button class="btn_home">Giỏ hàng</button></a>
         </div>
+
         <div class="col-xl-5 col-lg-5 col-md-9 col-sm-9">
             <div class="search-bar">
-                <input type="text" id="searchInput" class="search-input" placeholder="Nhập từ khóa tìm kiếm...">
-                <button class="search-button" id="searchButton">
+                <input type="text" id="orderSearch" class="search-input" placeholder="Tìm theo mã đơn hàng...">
+                <button class="search-button">
                     <i class="fas fa-search"></i>
                 </button>
             </div>
         </div>
     </div>
 </header>
-<!-- content-->
+<!-- end header -->
+<!-- content -->
 <div id="content_order">
-    <div class="col-12 child_content_order padding-div">
-        <h2 class="h3 mb-3 text-black">Lịch hẹn của tôi</h2>
-        <div id="appointmentList"></div>
+    <div class="col-12 padding-div">
+        <h2 class="h3 mb-3 text-black">Đơn hàng của tôi</h2>
+        <div class="filter-controls">
+            <select id="sortByDate" class="sort-select">
+                <option value="newest">Mới nhất</option>
+                <option value="oldest">Cũ nhất</option>
+            </select>
+        </div>
+        <div id="orderList">
+            <!-- Danh sách đơn hàng sẽ được render bằng JS -->
+        </div>
     </div>
 </div>
-<!-- end-content-->
+<!-- end-content -->
 
-<script src="/js/service/web/appointment.js"></script>
+<!-- Modal -->
+<div id="orderItemsModal" class="modal">
+    <div class="modal-content">
+        <span class="close">×</span>
+        <h3>Chi tiết đơn hàng</h3>
+        <div id="orderItemsList" class="order-items-list">
+            <!-- Danh sách items sẽ được render bằng JS -->
+        </div>
+    </div>
+</div>
+<script src="/js/service/web/my-order.js"></script>
 </body>
 </html>
