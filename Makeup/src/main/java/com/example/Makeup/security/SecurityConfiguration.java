@@ -1,6 +1,7 @@
 package com.example.Makeup.security;
 
-import com.example.Makeup.service.impl.AccountService;
+import com.example.Makeup.service.impl.AccountServiceImpl;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,7 @@ import java.util.List;
 @EnableWebSecurity
 public class SecurityConfiguration {
     @Autowired
-    private AccountService accountService;
+    private AccountServiceImpl accountServiceImpl;
 
     @Autowired
     private JwtFilter jwtFilter;
@@ -44,7 +45,8 @@ public class SecurityConfiguration {
                                 "/productDetail/**",
                                 "/register/**", "/login/**",
                                 "/static/**", "/js/**", "/css/**", "/icon/**", "/images/**", "/fonts/**",
-                                "api/appointments/create","api/appointments/by-date/**"
+                                "api/appointments/create","api/appointments/by-date/**",
+                                "/api/category/**"
                         ).permitAll()
                         .requestMatchers(
                                 "/admin/**",
@@ -58,13 +60,18 @@ public class SecurityConfiguration {
                                 "/api/user/**"
                         ).hasAnyRole("USER", "ADMIN", "STAFF")
                         .anyRequest().authenticated()
-                )
-                .exceptionHandling(exceptionHandling ->
-                        exceptionHandling.accessDeniedPage("/error/403")) // Custom access denied page
+                )// Custom access denied page
 
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Set session management to stateless
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class) // Add JWT filter before UsernamePasswordAuthenticationFilter
+                .exceptionHandling(exceptionHandling ->
+                        exceptionHandling
+                                .accessDeniedHandler((request, response, accessDeniedException) -> {
+                                    response.setStatus(HttpServletResponse.SC_FORBIDDEN); // 403
+                                    response.sendRedirect("/error/403");
+                                })
+                )
                 .logout(logout -> logout
                         .logoutUrl("/logout")
                         .addLogoutHandler(new CustomLogoutHandler()) // Use custom logout handler
@@ -80,7 +87,7 @@ public class SecurityConfiguration {
     public AuthenticationProvider authenticationProvider(){
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
         provider.setPasswordEncoder(new BCryptPasswordEncoder(12));
-        provider.setUserDetailsService(accountService);
+        provider.setUserDetailsService(accountServiceImpl);
 
         return provider;
     }
