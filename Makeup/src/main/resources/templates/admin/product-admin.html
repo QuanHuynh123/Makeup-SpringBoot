@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý sản phẩm</title>
+    <link rel="stylesheet" href="/css/adminStyle.css">
+    <link rel="stylesheet" href="/css/style-custom.css">
+    <link href="/css/sb-admin-2.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+<div class="admin-container">
+    <div class="admin-content">
+        <div class="admin-content-overlay show-overlay"></div>
+
+        <div class="container-fluid mt-2">
+            <h1 class="h3 mb-4 text-gray-800">Danh sách sản phẩm</h1>
+
+            <div class="d-flex justify-content-between mb-4">
+                <div id="tab-create-product" class="btn btn-primary">Thêm sản phẩm mới</div>
+                <div class="d-flex align-items-center">
+                    <select id="productFilter" class="form-control mr-2" style="width: 200px;">
+                        <option value="">Tất cả trạng thái</option>
+                        <option value="1">Còn đồ</option>
+                        <option value="0">Hết đồ</option>
+                    </select>
+                    <div class="admin-header-searchbar-container">
+                        <input id="searchProduct" type="search" placeholder="Tìm kiếm sản phẩm" aria-label="Search">
+                        <div class="admin-header-searchbar-container-icon">
+                            <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512" color="gray" height="19px" width="19px" xmlns="http://www.w3.org/2000/svg" style="color: gray;">
+                                <path d="M443.5 420.2L336.7 312.4c20.9-26.2 33.5-59.4 33.5-95.5 0-84.5-68.5-153-153.1-153S64 132.5 64 217s68.5 153 153.1 153c36.6 0 70.1-12.8 96.5-34.2l106.1 107.1c3.2 3.4 7.6 5.1 11.9 5.1 4.1 0 8.2-1.5 11.3-4.5 6.6-6.3 6.8-16.7.6-23.3zm-226.4-83.1c-32.1 0-62.3-12.5-85-35.2-22.7-22.7-35.2-52.9-35.2-84.9 0-32.1 12.5-62.3 35.2-84.9 22.7-22.7 52.9-35.2 85-35.2s62.3 12.5 85 35.2c22.7 22.7 35.2 52.9 35.2 84.9 0 32.1-12.5 62.3-35.2 84.9-22.7 22.7-52.9 35.2-85 35.2z"></path>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card shadow mb-4">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                            <thead>
+                            <tr>
+                                <th>STT</th>
+                                <th>Tên sản phẩm</th>
+                                <th>Loại</th>
+                                <th class="sortable" data-sort="price">Giá</th>
+                                <th class="sortable" data-sort="size">Kích cỡ</th>
+                                <th class="sortable" data-sort="status">Tình trạng</th>
+                                <th class="sortable" data-sort="rentalCount">Số lượng lượt thuê</th>
+                                <th class="sortable" data-sort="createdAt">Ngày tạo</th>
+                                <th>Sửa thông tin</th>
+                            </tr>
+                            </thead>
+                            <tbody id="table-content-products"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <nav aria-label="Page navigation">
+                <ul class="pagination justify-content-center" id="pagination"></ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</body>
+</html>
