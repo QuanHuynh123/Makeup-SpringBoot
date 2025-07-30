@@ -42,7 +42,11 @@
                 </div>
                 <div class="form-group">
                     <label for="address">Address</label>
-                    <input type="text" id="address" name="address" placeholder="Enter your address" required>
+                    <input type="text"
+                           id="address"
+                           name="address"
+                           placeholder="Enter your address"
+                           th:value="${user != null ? user.address : ''}" required>
                 </div>
                 <div class="form-group">
                     <label for="message">Message</label>
@@ -52,9 +56,9 @@
                 <!-- Shipping Option -->
                 <div class="form-group shipping-option">
                     <label>Shipping Option</label>
-                    <div>
-                        <input type="checkbox" id="shipping" name="shipping">
-                        <label for="shipping">Add Shipping (+$30)</label>
+                    <div style="display: flex; align-items: center;">
+                        <input type="checkbox" id="shipping" name="shipping" style="width:fit-content !important;">
+                        <label for="shipping" style="margin-bottom: 0 !important;">Add Shipping (+$30)</label>
                     </div>
                 </div>
 
@@ -64,12 +68,12 @@
                         <label>Payment Method</label>
                         <div id="div_directly">
                             <input type="radio" id="paymentInStore" name="paymentMethod" value="1" checked>
-                            <label for="paymentInStore">Directly at Store</label>
+                            <label for="paymentInStore" style="margin-bottom: 0 !important;">Directly at Store</label>
                         </div>
                         <div id="div_vnpay">
                             <input type="radio" id="vnpay" name="paymentMethod" value="2">
                             <label for="vnpay">
-                                <img src="/images/Logo-VNPAY-QR.webp" alt="VNPAY Logo" style="width: 50px;">
+                                <img src="/images/Logo-VNPAY-QR.webp" alt="VNPAY Logo" style="width: 50px; margin-bottom: 0 !important;">
                                 Thanh toán qua VNPAY
                             </label>
                         </div>

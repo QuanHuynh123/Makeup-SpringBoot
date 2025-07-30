@@ -10,10 +10,9 @@ import java.util.UUID;
 public interface IStaffService {
 
     ApiResponse<List<StaffDTO>> getAllStaff();
-    ApiResponse<List<StaffDTO>> getAllStaffDetail();
     ApiResponse<StaffDTO> getStaffById(UUID staffId);
     ApiResponse<StaffDTO> addStaff(CreateStaffRequest newStaff);
     ApiResponse<String> deleteStaffIfNoAppointments(UUID staffId);
     ApiResponse<StaffDTO> getStaffDetailById(UUID staffId);
-    ApiResponse<StaffDTO> updateStaff(StaffDTO staffDTO);
+    ApiResponse<StaffDTO> updateStaff(StaffDTO staffDTO, UUID staffId);
 }

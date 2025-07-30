@@ -1,280 +1,237 @@
 let staffListSelect2 = [];
-
-// Days of the week mapping
 const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-// Lấy tháng và tuần hiện tại theo múi giờ Việt Nam
 const vietnamTime = getCurrentVietnamTime();
-const currentMonth = vietnamTime.getMonth() + 1; // Tháng hiện tại (0 - 11)
-let currentWeekNumber = getWeekOfMonth(vietnamTime) - 1;
-var data = null;
+const currentMonth = vietnamTime.getMonth() + 1;
+let currentWeekNumber = getWeekOfMonth(vietnamTime);
+let data = null;
 
-// Đặt giá trị mặc định cho select
 function selectCurrentMonth() {
-	const monthSelect = document.getElementById("monthSelect");
-
-	if (monthSelect) {
-		// Đặt giá trị tương ứng với tháng hiện tại
-		monthSelect.value = currentMonth;
-	} else {
-		console.error("Không tìm thấy phần tử với ID 'monthSelect'");
-	}
+    const monthSelect = document.getElementById("monthSelect");
+    if (monthSelect) {
+        monthSelect.value = currentMonth;
+    } else {
+        console.error("Không tìm thấy phần tử với ID 'monthSelect'");
+    }
 }
 
-// Hàm lấy thời gian hiện tại theo múi giờ Việt Nam
 function getCurrentVietnamTime() {
-	const now = new Date();
-	const vietnamOffset = 7 * 60; // UTC+7, in minutes
-	const localOffset = now.getTimezoneOffset(); // Difference from UTC, in minutes
-	const vietnamTime = new Date(now.getTime() + (vietnamOffset + localOffset) * 60000);
-	return vietnamTime;
+    const now = new Date();
+    const vietnamOffset = 7 * 60;
+    const localOffset = now.getTimezoneOffset();
+    return new Date(now.getTime() + (vietnamOffset + localOffset) * 60000);
 }
 
 function getWeekOfMonth(date) {
-	const startOfMonth = new Date(date.getFullYear(), date.getMonth(), 1);
-	const dayOfMonth = date.getDate();
-	const startDay = (startOfMonth.getDay() + 6) % 7; // Adjust to make Monday the first day of the week
-
-	// Calculate the week number based on the adjusted start day
-	return Math.ceil((dayOfMonth + startDay) / 7);
+    const startOfMonth = new Date(date.getFullYear(), date.getMonth(), 1);
+    const dayOfMonth = date.getDate();
+    const startDay = (startOfMonth.getDay() + 6) % 7;
+    return Math.ceil((dayOfMonth + startDay) / 7);
 }
 
-// get Staff list
 function loadStaffSelectAppointment() {
-	fetch('/api/staff')
-		.then(response => response.json())
-		.then(staffDetails => {
-			const staffSelect = document.getElementById('staffSelect');
-
-			// Xóa các lựa chọn cũ trong select (nếu có)
-			staffSelect.innerHTML = ''; // Xóa tất cả các tùy chọn trước đó
-
-			// Thêm lựa chọn mặc định "Chọn nhân viên"
-			const defaultOption = document.createElement('option');
-			defaultOption.value = '';
-			defaultOption.disabled = true;
-			defaultOption.textContent = 'Chọn nhân viên';
-			staffSelect.appendChild(defaultOption);
-
-			// Lưu danh sách nhân viên
-			staffListSelect2 = staffDetails;
-
-			// Thêm các lựa chọn nhân viên
-			staffDetails.forEach((staff, index) => {
-				const option = document.createElement('option');
-				option.value = staff.id; // Giá trị là ID nhân viên
-				option.textContent = `${staff.id} - ${staff.nameStaff}`;
-
-				// Đặt nhân viên đầu tiên làm selected
-				if (index === 0) {
-					option.selected = true;
-				}
-
-				staffSelect.appendChild(option);
-			});
-		})
-		.catch(error => {
-			console.error('Error:', error);
-			showAlert('danger', 'Có lỗi xảy ra khi tải danh sách nhân viên!');
-		});
+    return fetch('/api/admin/staffs')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Error: ${response.status} - ${response.statusText}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            const staffDetails = data.result;
+            const staffSelect = document.getElementById('staffSelect');
+            if (!staffSelect) {
+                console.error('Không tìm thấy phần tử #staffSelect trong DOM');
+                return;
+            }
+            staffSelect.innerHTML = '';
+            const defaultOption = document.createElement('option');
+            defaultOption.value = '';
+            defaultOption.disabled = true;
+            defaultOption.textContent = 'Chọn nhân viên';
+            staffSelect.appendChild(defaultOption);
+            staffListSelect2 = staffDetails;
+            staffDetails.forEach((staff, index) => {
+                const option = document.createElement('option');
+                option.value = staff.id;
+                option.textContent = `${staff.nameStaff}`;
+                if (index === 0) option.selected = true;
+                staffSelect.appendChild(option);
+            });
+        })
+        .catch(error => {
+            console.error('Lỗi khi tải danh sách nhân viên:', error);
+        });
 }
-
 
 const loadAppointment = async (month, year, staffID) => {
-	try {
-		// Gửi yêu cầu GET đến API
-		const response = await fetch(`/api/appointments/by-month?month=${month}&year=${year}&staffID=${staffID}`);
-
-		// Kiểm tra xem phản hồi có thành công không
-		if (!response.ok) {
-			throw new Error(`Error: ${response.status} - ${response.statusText}`);
-		}
-
-		// Lấy dữ liệu JSON từ API
-		const dataRes = await response.json();
-
-		// Gán dữ liệu vào biến `data` và hiển thị lịch
-		data = dataRes;
-		renderScheduleForWeek(data, currentWeekNumber);
-	} catch (error) {
-		// Xử lý lỗi (log ra console và hiển thị thông báo)
-		console.error("Error fetching appointments:", error);
-		showAlert("danger", "Không thể tải dữ liệu cuộc hẹn. Vui lòng thử lại!");
-	}
+    try {
+        const response = await fetch(`/api/admin/appointments/by-month?month=${month}&year=${year}&staffID=${staffID}`);
+        if (response.status === 204) {
+            data = [];
+            renderScheduleForWeek(data, currentWeekNumber);
+            return data;
+        }
+        if (!response.ok) {
+            throw new Error(`Error: ${response.status} - ${response.statusText}`);
+        }
+        const dataRes = await response.json();
+        if (dataRes.code !== 200) {
+            throw new Error(dataRes.message || "Lỗi khi lấy dữ liệu lịch hẹn");
+        }
+        data = dataRes.result;
+        renderScheduleForWeek(data, currentWeekNumber);
+        return data;
+    } catch (error) {
+        console.error("Lỗi khi tải dữ liệu cuộc hẹn:", error);
+    }
 };
 
-
 $(document).ready(function () {
-	// Gọi API khi giá trị tháng thay đổi
-	$('#monthSelect').change(function () {
-		const selectedMonth = $(this).val(); // Lấy giá trị tháng được chọn
-		const year = 2024; // Có thể thay đổi hoặc lấy năm hiện tại nếu cần
-		currentWeekNumber = 1;
-
-		// Kiểm tra xem người dùng đã chọn tháng hay chưa
-		if (selectedMonth != "Choose month") {
-			loadAppointment(selectedMonth, year, document.getElementById('staffSelect').value); // Gọi API với tháng và năm đã chọn
-		}
-	});
+    selectCurrentMonth();
+    loadStaffSelectAppointment().then(() => {
+        const staffID = document.getElementById('staffSelect').value;
+        if (staffID) {
+            loadAppointment(currentMonth, 2024, staffID);
+        }
+    });
+    $('#monthSelect').change(function () {
+        const selectedMonth = $(this).val();
+        if (selectedMonth) {
+            currentWeekNumber = 1;
+            loadAppointment(selectedMonth, 2024, document.getElementById('staffSelect').value);
+        }
+    });
 });
 
-
-
-
-
-
-// Hàm tạo màu HSL ngẫu nhiên
 function getRandomColorHSL() {
-	const hue = Math.floor(Math.random() * 360); // Ngẫu nhiên giữa 0 và 360
-	const saturation = Math.floor(Math.random() * 30) + 70; // Độ bão hòa từ 70% đến 100%
-	const lightness = Math.floor(Math.random() * 30) + 40; // Độ sáng từ 40% đến 70%
-	return `hsl(${hue}, ${saturation}%, ${lightness}%)`;
+    const hue = Math.floor(Math.random() * 360);
+    const saturation = Math.floor(Math.random() * 30) + 70;
+    const lightness = Math.floor(Math.random() * 30) + 40;
+    return `hsl(${hue}, ${saturation}%, ${lightness}%)`;
 }
 
 function formatDateStringToDDMMYYYY(dateString) {
-	const date = new Date(dateString);
-	const day = String(date.getDate()).padStart(2, '0');
-	const month = String(date.getMonth() + 1).padStart(2, '0');
-	const year = date.getFullYear();
-	return `${day}/${month}/${year}`;
+    const date = new Date(dateString);
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
 }
 
 function renderScheduleForWeek(data, weekNumber) {
-	const selectedWeek = data.find(week => week.weekNumber === weekNumber);
-	document.getElementById('dateOfWeek').innerHTML =
-		"Week " + weekNumber + ": " +
-		formatDateStringToDDMMYYYY(selectedWeek.startDate) + " - " +
-		formatDateStringToDDMMYYYY(selectedWeek.endDate);
-
-	// Xóa tất cả các sự kiện lịch cũ mà không xóa cấu trúc lịch
-	document.querySelectorAll('.cd-schedule__event').forEach(event => event.remove());
-
-	if (!selectedWeek || selectedWeek.appointments.length === 0) {
-		console.log(`Tuần ${weekNumber} không có lịch hẹn nào.`);
-
-		// Hiển thị lịch trống nếu không có sự kiện nào
-		const dayElements = document.querySelectorAll('.cd-schedule__group span');
-		dayElements.forEach(dayElement => {
-			const ulElement = dayElement.closest('li').querySelector('ul');
-			ulElement.innerHTML = ''; // Đảm bảo xóa nội dung cũ trong các ngày
-			ulElement.insertAdjacentHTML('beforeend', '');
-		});
-		return;
-	}
-
-	// Nếu có lịch hẹn, thêm vào lịch như bình thường
-	selectedWeek.appointments.forEach(appointment => {
-		const appointmentDate = new Date(appointment.makeupDate);
-		const dayIndex = appointmentDate.getDay();
-		const dayName = daysOfWeek[dayIndex];
-
-		const randomColor = getRandomColorHSL();
-		appointment.color = randomColor;  // Lưu màu của appointment để sử dụng sau
-
-		const eventHTML = `
-          <li class="cd-schedule__event">
-            <a style="background-color: ${randomColor} !important;" 
-               data-start="${appointment.startTime}" 
-               data-end="${appointment.endTime}" 
-               data-id="${appointment.id}" 
-               href="#0">
-           <em class="cd-schedule__name">
-               ID: ${appointment.id}<br>
-               Customer: ${appointment.userName}<br>
-               Phone: ${appointment.userPhone}<br>
-           </em>
-            </a>
-          </li>
+    const selectedWeek = data.find(week => week.weekNumber === weekNumber);
+    if (!selectedWeek) {
+        console.warn(`Không có dữ liệu cho tuần số ${weekNumber}`);
+        document.querySelectorAll('.cd-schedule__group ul').forEach(ul => ul.innerHTML = '');
+        return;
+    }
+    document.getElementById('dateOfWeek').innerHTML =
+        `Week ${weekNumber}: ${formatDateStringToDDMMYYYY(selectedWeek.startDate)} - ${formatDateStringToDDMMYYYY(selectedWeek.endDate)}`;
+    document.querySelectorAll('.cd-schedule__group ul').forEach(ul => ul.innerHTML = '');
+    if (selectedWeek.appointments.length === 0) {
+        console.log(`Không có lịch hẹn nào trong tuần ${weekNumber}`);
+        return;
+    }
+    selectedWeek.appointments.forEach(appointment => {
+        const appointmentDate = new Date(appointment.makeupDate);
+        const dayIndex = appointmentDate.getDay();
+        const dayName = daysOfWeek[dayIndex];
+        const randomColor = getRandomColorHSL();
+        appointment.color = randomColor;
+        const eventHTML = `
+            <li class="cd-schedule__event">
+                <a style="background-color: ${randomColor} !important;"
+                   data-start="${appointment.startTime}"
+                   data-end="${appointment.endTime}"
+                   data-id="${appointment.id}"
+                   href="#0">
+                    <em class="cd-schedule__name">
+//                        ID: ${appointment.id}<br>
+                        Customer: ${appointment.nameUser}<br>
+                        Phone: ${appointment.phoneUser}<br>
+                    </em>
+                </a>
+            </li>
         `;
-
-		const dayElements = document.querySelectorAll('.cd-schedule__group span');
-		dayElements.forEach(dayElement => {
-			if (dayElement.textContent.trim() === dayName) {
-				dayElement.closest('li').querySelector('ul').insertAdjacentHTML('beforeend', eventHTML);
-			}
-		});
-		var scheduleTemplate = new ScheduleTemplate(document.querySelector('.cd-schedule'));
-
-        		// Gọi hàm placeEvents từ đối tượng
-        		scheduleTemplate.placeEvents();
-	});
-
-	// Gắn sự kiện nhấp chuột cho từng sự kiện trong lịch
-	document.querySelectorAll('.cd-schedule__event a').forEach(eventElement => {
-		eventElement.addEventListener('click', function (e) {
-			e.preventDefault();
-			const appointmentId = this.getAttribute('data-id');
-			showAppointmentDetails(appointmentId, selectedWeek.appointments);
-		});
-	});
+        document.querySelectorAll('.cd-schedule__group span').forEach(dayElement => {
+            if (dayElement.textContent.trim() === dayName) {
+                dayElement.closest('li').querySelector('ul').insertAdjacentHTML('beforeend', eventHTML);
+            }
+        });
+    });
+    const scheduleTemplate = new ScheduleTemplate(document.querySelector('.cd-schedule'));
+    scheduleTemplate.placeEvents();
+    document.querySelectorAll('.cd-schedule__event a').forEach(eventElement => {
+        eventElement.addEventListener('click', function (e) {
+            e.preventDefault();
+            const appointmentId = this.getAttribute('data-id');
+            showAppointmentDetails(appointmentId, selectedWeek.appointments);
+        });
+    });
 }
 
 function showAppointmentDetails(appointmentId, appointments) {
-	const appointment = appointments.find(app => app.id == appointmentId);
-
-	if (!appointment) {
-		console.error("Không tìm thấy thông tin chi tiết của lịch hẹn!");
-		return;
-	}
-
-	// Cập nhật nội dung của popup
-	const modal = document.querySelector('.cd-schedule-modal');
-	modal.querySelector('.cd-schedule-modal__date').textContent =
-		`${appointment.startTime} - ${appointment.endTime}`;
-	modal.querySelector('.cd-schedule-modal__name').textContent = appointment.title || `ID: ${appointment.id}`;
-	modal.querySelector('.cd-schedule-modal__event-info').innerHTML = `
-	<p><strong>Customer:</strong> ${appointment.userName || "N/A"}</p>
-	<p><strong>Phone:</strong> ${appointment.userPhone || "N/A"}</p>
-	<p><strong>Service:</strong> ${appointment.serviceMakeupName || "N/A"}</p>
-    <p><strong>Makeup Date:</strong> ${appointment.makeupDate || "N/A"}</p>
-    <p><strong>Start Time:</strong> ${appointment.startTime || "N/A"}</p>
-    <p><strong>End Time:</strong> ${appointment.endTime || "N/A"}</p>
-`;
-
-
-	// Thay đổi màu header của modal theo màu của appointment
-	const modalHeader = modal.querySelector('.cd-schedule-modal__header-bg');
-	modalHeader.style.backgroundColor = appointment.color;
-
-	// Hiển thị modal
-	modal.style.top = "50%";
-	modal.style.left = "calc(50% + 130px)";
-	modal.style.height = "500px";
-	modal.style.width = "800px";
-	modal.style.transform = "translate(-50%, -50%)";
-	modal.classList.add('active');
-
-	document.querySelector('.cd-schedule-modal__header').style.width = "130px";
-	document.querySelector('.cd-schedule-modal__body').style.marginLeft = "130px";
-	// Đóng modal khi nhấn nút close
-	const closeModal = modal.querySelector('.cd-schedule-modal__close');
-	closeModal.addEventListener('click', function () {
-		modal.classList.remove('active');
-	});
+    const appointment = appointments.find(app => app.id == appointmentId);
+    if (!appointment) {
+        console.error("Không tìm thấy thông tin chi tiết của lịch hẹn!");
+        return;
+    }
+    const modal = document.querySelector('.cd-schedule-modal');
+    modal.querySelector('.cd-schedule-modal__date').textContent =
+        `${appointment.startTime} - ${appointment.endTime}`;
+    modal.querySelector('.cd-schedule-modal__name').textContent = appointment.title || `ID: ${appointment.id}`;
+    modal.querySelector('.cd-schedule-modal__event-info').innerHTML = `
+        <p><strong>Customer:</strong> ${appointment.nameUser || "N/A"}</p>
+        <p><strong>Phone:</strong> ${appointment.phoneUser || "N/A"}</p>
+        <p><strong>Service:</strong> ${appointment.typeMakeupName || "N/A"}</p>
+        <p><strong>Makeup Date:</strong> ${appointment.makeupDate || "N/A"}</p>
+        <p><strong>Staff name:</strong> ${appointment.nameStaff || "N/A"}</p>
+        <p><strong>Staff ID:</strong> ${appointment.staffId || "N/A"}</p>
+        <p><strong>Start Time:</strong> ${appointment.startTime || "N/A"}</p>
+        <p><strong>End Time:</strong> ${appointment.endTime || "N/A"}</p>
+    `;
+    const modalHeader = modal.querySelector('.cd-schedule-modal__header-bg');
+    modalHeader.style.backgroundColor = appointment.color;
+    modal.style.top = "50%";
+    modal.style.left = "calc(50% + 130px)";
+    modal.style.height = "500px";
+    modal.style.width = "800px";
+    modal.style.transform = "translate(-50%, -50%)";
+    modal.classList.add('active');
+    document.querySelector('.cd-schedule-modal__header').style.width = "130px";
+    document.querySelector('.cd-schedule-modal__body').style.marginLeft = "130px";
+    const closeModal = modal.querySelector('.cd-schedule-modal__close');
+    closeModal.addEventListener('click', function () {
+        modal.classList.remove('active');
+    });
+    document.querySelector('.cd-schedule__cover-layer').addEventListener('click', function () {
+        modal.classList.remove('active');
+    });
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') {
+            modal.classList.remove('active');
+        }
+    });
 }
 
-
-
-// Hàm thay đổi tuần hiển thị
 function changeWeek(offset) {
-	currentWeekNumber += offset;
-	if (currentWeekNumber <= 0 || currentWeekNumber >= 6) {
-		currentWeekNumber -= offset;;
-		return;
-	}
-
-	const selectedWeek = data.find(week => week.weekNumber === currentWeekNumber);
-
-	if (selectedWeek) {
-		renderScheduleForWeek(data, currentWeekNumber);
-		var scheduleTemplate = new ScheduleTemplate(document.querySelector('.cd-schedule'));
-
-		// Gọi hàm placeEvents từ đối tượng
-		scheduleTemplate.placeEvents();
-	} else {
-		console.warn("Không có dữ liệu cho tuần số ", currentWeekNumber);
-		renderScheduleForWeek(data, currentWeekNumber);
-	}
+    currentWeekNumber += offset;
+    if (currentWeekNumber < 1) {
+        currentWeekNumber = 1;
+        console.log("Đây là tuần đầu tiên của tháng!");
+        return;
+    }
+    if (currentWeekNumber > 5) {
+        currentWeekNumber = 5;
+        console.log("Đây là tuần cuối cùng của tháng!");
+        return;
+    }
+    const selectedWeek = data.find(week => week.weekNumber === currentWeekNumber);
+    if (selectedWeek) {
+        renderScheduleForWeek(data, currentWeekNumber);
+        const scheduleTemplate = new ScheduleTemplate(document.querySelector('.cd-schedule'));
+        scheduleTemplate.placeEvents();
+    } else {
+        console.warn(`Không có dữ liệu cho tuần số ${currentWeekNumber}`);
+    }
 }
-
-// Gọi hàm renderScheduleForWeek sau khi tải dữ liệu từ API
-//renderScheduleForWeek(data, currentWeekNumber);
