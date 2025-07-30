@@ -1,4 +1,4 @@
-package com.example.Makeup.service.impl;
+package com.example.Makeup.service.common;
 
 import com.example.Makeup.config.VNPAYConfig;
 import jakarta.servlet.http.HttpServletRequest;
@@ -13,8 +13,7 @@ import java.util.*;
 @Service
 public class VNPAYService {
 
-    public String createOrder(HttpServletRequest request, int amount, String orderInfor, String urlReturn){
-        //Các bạn có thể tham khảo tài liệu hướng dẫn và điều chỉnh các tham số
+    public String createOrder(int total, String orderInfor, String urlReturn, HttpServletRequest request){
         String vnp_Version = "2.1.0";
         String vnp_Command = "pay";
         String vnp_TxnRef = VNPAYConfig.getRandomNumber(8);
@@ -26,12 +25,13 @@ public class VNPAYService {
         vnp_Params.put("vnp_Version", vnp_Version);
         vnp_Params.put("vnp_Command", vnp_Command);
         vnp_Params.put("vnp_TmnCode", vnp_TmnCode);
-        vnp_Params.put("vnp_Amount", String.valueOf(amount*100));
+        vnp_Params.put("vnp_Amount", String.valueOf(total*100));
         vnp_Params.put("vnp_CurrCode", "VND");
 
         vnp_Params.put("vnp_TxnRef", vnp_TxnRef);
         vnp_Params.put("vnp_OrderInfo", orderInfor);
         vnp_Params.put("vnp_OrderType", orderType);
+        vnp_Params.put("vnp_BankCode", "NCB");
 
         String locate = "vn";
         vnp_Params.put("vnp_Locale", locate);
@@ -77,8 +77,7 @@ public class VNPAYService {
             }
         }
         String queryUrl = query.toString();
-        String salt = VNPAYConfig.vnp_HashSecret;
-        String vnp_SecureHash = VNPAYConfig.hmacSHA512(salt, hashData.toString());
+        String vnp_SecureHash = VNPAYConfig.hmacSHA512(VNPAYConfig.vnp_HashSecret, hashData.toString());
         queryUrl += "&vnp_SecureHash=" + vnp_SecureHash;
         String paymentUrl = VNPAYConfig.vnp_PayUrl + "?" + queryUrl;
         return paymentUrl;
@@ -86,8 +85,7 @@ public class VNPAYService {
 
     public int orderReturn(HttpServletRequest request){
         Map fields = new HashMap();
-        for (Enumeration params = request.getParameterNames();
-            params.hasMoreElements();) {
+        for (Enumeration params = request.getParameterNames(); params.hasMoreElements();) {
             String fieldName = null;
             String fieldValue = null;
             try {

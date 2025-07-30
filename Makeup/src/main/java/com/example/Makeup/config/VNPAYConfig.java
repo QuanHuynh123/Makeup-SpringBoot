@@ -12,8 +12,8 @@ import java.util.*;
 public class VNPAYConfig {
     public static String vnp_PayUrl = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
     public static String vnp_Returnurl = "/vnpay-payment-return"; //  chuyển hướng người dùng trở lại sau khi thanh toán
-    public static String vnp_TmnCode = "BAVALJ15"; // Đăng ký, mã Terminal ID
-    public static String vnp_HashSecret = "FUGN0N7MI3SIE1EGVDEGA5D1P75DBT67"; // Đăng ký, khóa bí mật dùng để tạo chữ kí cho các giao dịch
+    public static String vnp_TmnCode = "3VFVKVFD"; // Đăng ký, mã Terminal ID
+    public static String vnp_HashSecret = "8KBSL9O1046P393LQHIKBR8WJ72RRFJG"; // Đăng ký, khóa bí mật dùng để tạo chữ kí cho các giao dịch
     public static String vnp_apiUrl = "https://sandbox.vnpayment.vn/merchant_webapi/api/transaction";
 
 
