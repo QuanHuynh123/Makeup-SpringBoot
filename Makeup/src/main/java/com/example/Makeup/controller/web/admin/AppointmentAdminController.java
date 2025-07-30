@@ -25,9 +25,8 @@ public class AppointmentAdminController {
 
     @GetMapping("appointment")
     public String appointmentAdminPage(Model model) {
-        return "admin/appointment-all";
+        return "admin/appointment-admin";
     }
-
 
     @GetMapping("/appointments/stats/{year}")
     public ResponseEntity<Map<Integer, Long>> getAppointmentStats(@PathVariable int year) {

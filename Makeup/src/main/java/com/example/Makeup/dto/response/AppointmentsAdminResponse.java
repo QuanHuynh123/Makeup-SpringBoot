@@ -26,6 +26,7 @@ public class AppointmentsAdminResponse {
     String nameStaff;
     String typeMakeupName;
     String nameUser;
+    String phoneUser;
     LocalDateTime createdAt;
     LocalDateTime updatedAt;
 }

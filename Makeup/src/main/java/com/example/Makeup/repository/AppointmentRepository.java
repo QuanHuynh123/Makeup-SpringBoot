@@ -21,7 +21,7 @@ public interface AppointmentRepository extends JpaRepository<Appointment, UUID> 
 
     @Query("SELECT new com.example.Makeup.dto.response.AppointmentsAdminResponse(" +
             "a.id, a.startTime, a.endTime, a.makeupDate, a.status, s.price, " +
-            "u.id, s.id, st.id, st.nameStaff, s.nameMakeup, u.fullName ,  a.createdAt, a.updatedAt) " +
+            "u.id, s.id, st.id, st.nameStaff, s.nameMakeup, u.fullName , u.phone,  a.createdAt, a.updatedAt) " +
             "FROM Appointment a " +
             "JOIN a.user u " +
             "JOIN a.typeMakeup s " +
@@ -31,35 +31,25 @@ public interface AppointmentRepository extends JpaRepository<Appointment, UUID> 
 
     @Query("SELECT new com.example.Makeup.dto.response.AppointmentsAdminResponse(" +
             "a.id, a.startTime, a.endTime, a.makeupDate, a.status, s.price, " +
-            "u.id, s.id, st.id, st.nameStaff, s.nameMakeup, u.fullName ,  a.createdAt, a.updatedAt) " +
+            "u.id, s.id, st.id, st.nameStaff, s.nameMakeup, u.fullName ,  u.phone,  a.createdAt, a.updatedAt) " +
             "FROM Appointment a " +
             "JOIN a.user u " +
             "JOIN a.typeMakeup s " +
             "JOIN a.staff st " )
     List<AppointmentsAdminResponse> findAllAppointments();
 
-    @Query("SELECT new com.example.Makeup.dto.model.AppointmentDTO(" +
-            "a.id, a.startTime, a.endTime, a.makeupDate, a.status, " +
-            "u.fullName, u.phone, s.nameMakeup, st.nameStaff, " +
-            "u.id, s.id, st.id) " +
+    @Query("SELECT new com.example.Makeup.dto.response.AppointmentsAdminResponse(" +
+            "a.id, a.startTime, a.endTime, a.makeupDate, a.status, s.price, " +
+            "u.id, s.id, st.id, st.nameStaff, s.nameMakeup, u.fullName , u.phone,  a.createdAt, a.updatedAt) " +
             "FROM Appointment a " +
             "JOIN a.user u " +
             "JOIN a.typeMakeup s " +
             "JOIN a.staff st " +
-            "WHERE MONTH(a.makeupDate) = :month AND YEAR(a.makeupDate) = :year")
-    List<AppointmentDTO> findAppointmentsByMonth(@Param("month") int month, @Param("year") int year);
-
-    @Query("SELECT new com.example.Makeup.dto.model.AppointmentDTO(" +
-            "a.id, a.startTime, a.endTime, a.makeupDate, a.status, " +
-            "u.fullName, u.phone, s.nameMakeup, st.nameStaff, " +
-            "u.id, s.id, st.id) " +
-            "FROM Appointment a " +
-            "JOIN a.user u " +
-            "JOIN a.typeMakeup s " +
-            "JOIN a.staff st " +
-            "WHERE MONTH(a.makeupDate) = :month AND YEAR(a.makeupDate) = :year AND st.id = :staffID")
-    List<AppointmentDTO> findAppointmentsByMonthAndStaff(@Param("month") int month, @Param("year") int year, @Param("staffID") UUID staffID);
-
+            "WHERE MONTH(a.makeupDate) = :month AND YEAR(a.makeupDate) = :year " +
+            "AND (:staffID IS NULL OR st.id = :staffID)")
+    List<AppointmentsAdminResponse> findAppointmentsByMonth(@Param("month") int month,
+                                                 @Param("year") int year,
+                                                 @Param("staffID") UUID staffID);
 
     @Query("""
     SELECT a FROM Appointment a

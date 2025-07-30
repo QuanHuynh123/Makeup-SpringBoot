@@ -2,7 +2,7 @@ package com.example.Makeup.service.impl;
 
 import com.example.Makeup.dto.model.AppointmentDTO;
 import com.example.Makeup.dto.model.UserDTO;
-import com.example.Makeup.dto.model.WeekAppointmentsDTO;
+import com.example.Makeup.dto.response.WeekAppointmentsDTO;
 import com.example.Makeup.dto.request.AppointmentRequest;
 import com.example.Makeup.dto.response.AppointmentsAdminResponse;
 import com.example.Makeup.entity.Appointment;
@@ -42,13 +42,10 @@ public class AppointmentServiceImpl implements IAppointmentService {
 
     @Override
     public ApiResponse<List<WeekAppointmentsDTO>> getAppointmentsByMonth(int month, int year, UUID staffID) {
-        List<AppointmentDTO> appointments;
-
-        if (staffID != null)
-            appointments = appointmentRepository.findAppointmentsByMonthAndStaff(month, year, staffID);
-        else
-            appointments = appointmentRepository.findAppointmentsByMonth(month, year);
-
+        List<AppointmentsAdminResponse> appointments =  appointmentRepository.findAppointmentsByMonth(month, year, staffID);
+        if (appointments.isEmpty()) {
+            appointments = new ArrayList<>();
+        }
         return ApiResponse.success("Get appointments by month success", groupAppointmentsByWeek(appointments, month, year));
     }
 
@@ -131,7 +128,7 @@ public class AppointmentServiceImpl implements IAppointmentService {
     @Transactional
     public ApiResponse<Boolean> deleteAppointment(UUID appointmentId) {
         if (!appointmentRepository.existsById(appointmentId)) {
-            throw new AppException(ErrorCode.APPOINTMENT_IS_EMPTY);
+            throw new AppException(ErrorCode.APPOINTMENT_NOT_FOUND);
         }
         appointmentRepository.deleteById(appointmentId);
         return ApiResponse.success("Delete appointment success", true);
@@ -214,15 +211,18 @@ public class AppointmentServiceImpl implements IAppointmentService {
 
     }
 
-    private List<WeekAppointmentsDTO> groupAppointmentsByWeek(List<AppointmentDTO> appointments, int month, int year) {
-        Map<Integer, List<AppointmentDTO>> weeklyAppointments = appointments.stream()
-                .collect(Collectors.groupingBy(a -> getWeekOfMonth(a.getMakeupDate())));
+    private List<WeekAppointmentsDTO> groupAppointmentsByWeek(List<AppointmentsAdminResponse> appointments, int month, int year) {
+        Map<Integer, List<AppointmentsAdminResponse>> weeklyAppointments = new HashMap<>();
+        if (appointments != null) {
+            weeklyAppointments = appointments.stream()
+                    .collect(Collectors.groupingBy(a -> getWeekOfMonth(a.getMakeupDate())));
+        }
 
         int totalWeeks = getWeeksInMonth(month, year);
         List<WeekAppointmentsDTO> weekAppointmentsDTOList = new ArrayList<>();
 
         for (int week = 1; week <= totalWeeks; week++) {
-            List<AppointmentDTO> weekAppointments = weeklyAppointments.getOrDefault(week, new ArrayList<>());
+            List<AppointmentsAdminResponse> weekAppointments = weeklyAppointments.getOrDefault(week, new ArrayList<>());
             Date startDate = getWeekStartDate(week, month, year);
             Date endDate = getWeekEndDate(week, month, year);
 
@@ -236,6 +236,10 @@ public class AppointmentServiceImpl implements IAppointmentService {
         Calendar cal = Calendar.getInstance();
         cal.set(year, month - 1, 1);
         cal.add(Calendar.DAY_OF_MONTH, (week - 1) * 7);
+
+        if (cal.get(Calendar.MONTH) != month - 1) {
+            cal.set(year, month - 1, 1);
+        }
         return new Date(cal.getTimeInMillis());
     }
 
@@ -248,20 +252,33 @@ public class AppointmentServiceImpl implements IAppointmentService {
         if (cal.get(Calendar.DAY_OF_MONTH) > maxDay) {
             cal.set(Calendar.DAY_OF_MONTH, maxDay);
         }
+
+        if (cal.get(Calendar.MONTH) != month - 1) {
+            cal.set(year, month - 1, maxDay);
+        }
+
         return new Date(cal.getTimeInMillis());
     }
 
-    // Tính tuần trong tháng dựa trên ngày
+    // Get 1 week of month
     private int getWeekOfMonth(LocalDate date) {
         WeekFields weekFields = WeekFields.of(Locale.getDefault());
         return date.get(weekFields.weekOfMonth());
     }
 
+    // Get total weeks in month
     private int getWeeksInMonth(int month, int year) {
-        Calendar cal = Calendar.getInstance();
-        cal.set(year, month - 1, 1);
-        int daysInMonth = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
-        return (int) Math.ceil(daysInMonth / 7.0);
+        LocalDate firstDay = LocalDate.of(year, month, 1);
+        LocalDate lastDay = firstDay.withDayOfMonth(firstDay.lengthOfMonth());
+        WeekFields weekFields = WeekFields.of(Locale.getDefault());
+
+        int lastWeek = lastDay.get(weekFields.weekOfMonth());
+        // If the last day of the month is not a Sunday, we need to add one more week
+        if (lastDay.getDayOfWeek().getValue() < 7) {
+            return lastWeek;
+        }
+        return lastWeek + 1;
     }
+
 
 }

@@ -51,7 +51,7 @@ export const AppointmentModule = {
     },
 
     loadAppointments() {
-        fetch('/api/appointments')
+        fetch('/api/admin/appointments')
             .then(response => response.ok ? response.json() : Promise.reject(response))
             .then(data => {
                 if (!data || !Array.isArray(data.result)) {
@@ -90,7 +90,7 @@ export const AppointmentModule = {
         endTime = endTime.match(/^\d{2}:\d{2}:\d{2}$/) ? endTime : `${endTime}:00`;
 
         const requestData = { userId, staffId, serviceMakeupId, makeupDate, startTime, endTime, status: parseInt(status) };
-        const url = id ? `/api/appointments/${id}` : '/api/appointments';
+        const url = id ? `/api/admin/appointments/${id}` : '/api/admin/appointments';
         const method = id ? 'PUT' : 'POST';
 
         fetch(url, {
@@ -121,7 +121,7 @@ export const AppointmentModule = {
         document.getElementById('addModalAppointmentLabel').innerHTML = 'Chỉnh sửa lịch hẹn';
         document.getElementById('appointmentId').classList.remove('d-none');
 
-        fetch(`/api/appointments/appointmentDetail/${id}`)
+        fetch(`/api/admin/appointments/appointmentDetail/${id}`)
             .then(response => response.ok ? response.json() : Promise.reject(response))
             .then(data => {
                 const appointment = data.result;
@@ -161,7 +161,7 @@ export const AppointmentModule = {
         confirmModal.show();
 
         document.getElementById('confirmDeleteButton').onclick = () => {
-            fetch(`/api/appointments/${id}`, {
+            fetch(`/api/admin/appointments/${id}`, {
                 method: 'DELETE'
             })
                 .then(response => {
@@ -184,7 +184,7 @@ export const AppointmentModule = {
         const searchInput = document.getElementById('searchAppointment').value.toLowerCase();
 
         if (this.appointmentList.length === 0) {
-            fetch('/api/appointments')
+            fetch('/api/admin/appointments')
                 .then(response => response.ok ? response.json() : Promise.reject(response))
                 .then(data => {
                     if (!data || !Array.isArray(data.result)) {
@@ -220,7 +220,7 @@ export const AppointmentModule = {
     },
 
     loadMakeUpServices() {
-        fetch('/api/makeup-services')
+        fetch('/api/admin/makeup-services')
             .then(response => response.json())
             .then(data => {
                 const select = document.getElementById('addServiceMakeupName');
@@ -236,7 +236,7 @@ export const AppointmentModule = {
     },
 
     loadStaffSelect() {
-        fetch('/api/staff')
+        fetch('/api/admin/staff')
             .then(response => response.json())
             .then(data => {
                 const select = document.getElementById('addNhanVien');
