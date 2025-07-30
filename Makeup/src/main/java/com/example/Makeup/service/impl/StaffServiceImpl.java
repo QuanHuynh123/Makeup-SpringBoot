@@ -14,7 +14,11 @@ import com.example.Makeup.repository.AppointmentRepository;
 import com.example.Makeup.repository.RoleRepository;
 import com.example.Makeup.repository.StaffRepository;
 import com.example.Makeup.service.IStaffService;
+import com.example.Makeup.utils.RedisStatusManager;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.redis.RedisConnectionFailureException;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -28,6 +32,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class StaffServiceImpl implements IStaffService {
 
     private static final String STAFF_CACHE_KEY = "staffs";
@@ -42,18 +47,29 @@ public class StaffServiceImpl implements IStaffService {
 
     @Override
     public ApiResponse<List<StaffDTO>> getAllStaff() {
+        if (RedisStatusManager.isRedisAvailable()) {
+            try {
+                Object cached = redisTemplate.opsForValue().get(STAFF_CACHE_KEY);
+                if (cached != null) {
+                    List<StaffDTO> staffList = (List<StaffDTO>) cached;
+                    log.info("Lấy danh sách nhân viên thành công (từ Redis)");
+                    return ApiResponse.success("Lấy danh sách nhân viên thành công (từ Redis)", staffList);
+                } else {
+                    log.info("Cache staff not found, fetching from DB");
+                }
+            } catch (RedisConnectionFailureException e) {
+                log.warn("⚠️ Redis connection failed: {}", e.getMessage());
+                RedisStatusManager.setRedisAvailable(false);
+            } catch (Exception e) {
+                log.warn("⚠️ Redis GET failed, fallback to DB: {}", e.getMessage());
+            }
+        }
+
         List<Staff> staffList = staffRepository.findAll();
         List<StaffDTO> dtos = staffList.stream()
                 .map(staffMapper::toStaffDTO)
                 .collect(Collectors.toList());
-
-        try {
-            redisTemplate.opsForValue().set(STAFF_CACHE_KEY, dtos, Duration.ofMinutes(30));
-        } catch (Exception e) {
-            System.out.println("⚠️ Redis SET failed: " + e.getMessage());
-        }
-
-        return ApiResponse.success("Get all staff success (from DB)", dtos);
+        return ApiResponse.success("Lấy danh sách nhân viên thành công (từ DB)", dtos);
     }
 
     @Override
@@ -137,11 +153,10 @@ public class StaffServiceImpl implements IStaffService {
 
     @Override
     @Transactional
-    public ApiResponse<StaffDTO> updateStaff(StaffDTO staffDTO) {
+    public ApiResponse<StaffDTO> updateStaff(StaffDTO staffDTO, UUID staffId) {
 
-        Staff staff = staffRepository.findById(staffDTO.getId())
+        Staff staff = staffRepository.findById(staffId)
                 .orElseThrow(() -> new AppException(ErrorCode.STAFF_NOT_FOUND));
-
 
         staff.setNameStaff(staffDTO.getNameStaff());
         staff.setPhone(staffDTO.getPhone());
