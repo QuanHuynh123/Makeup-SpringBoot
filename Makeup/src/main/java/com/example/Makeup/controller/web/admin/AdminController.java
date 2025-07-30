@@ -28,10 +28,4 @@ public class AdminController {
         return "admin/admin";
     }
 
-    @GetMapping("staff")
-    public String staffAdminPage(Model model) {
-        ApiResponse<List<StaffDTO>> staffList = staffService.getAllStaffDetail();
-        model.addAttribute("staffList", staffList);
-        return "admin/staff-all";
-    }
 }

@@ -15,7 +15,7 @@ import java.util.UUID;
 public interface IProductService {
 
     ApiResponse<ProductDTO> findProductById(UUID productId);
-    ApiResponse<List<ProductDTO>> getAllProducts();
+    ApiResponse<Page<ProductDTO>> getAllProducts(Pageable pageable);
     ApiResponse<List<ShortProductListResponse>> getHotProducts();
     ApiResponse<List<ShortProductListResponse>> getNewProducts();
     ApiResponse<List<ShortProductListResponse>> getCustomerShowProducts();

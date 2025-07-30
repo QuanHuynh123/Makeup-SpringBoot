@@ -50,26 +50,16 @@ public class ProductServiceImpl implements IProductService {
     @Override
     public ApiResponse<ProductDTO> findProductById(UUID productId) {
         Product product = productRepository.findById(productId).orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOT_FOUND));
-        return ApiResponse.<ProductDTO>builder()
-                .code(200)
-                .message("Product found")
-                .result(productMapper.toProductDTO(product))
-                .build();
+        return ApiResponse.success("Get product success",productMapper.toProductDTO(product));
     }
 
     @Override
-    public ApiResponse<List<ProductDTO>> getAllProducts(){
-        List<Product> products = productRepository.findAll();
+    public ApiResponse<Page<ProductDTO>> getAllProducts(Pageable pageable) {
+        Page<Product> products = productRepository.findAll(pageable);
         if (products.isEmpty()) {
             throw new AppException(ErrorCode.PRODUCT_NOT_FOUND);
         }
-        return ApiResponse.<List<ProductDTO>>builder()
-                .code(200)
-                .message("Products found")
-                .result(products.stream()
-                        .map(productMapper::toProductDTO)
-                        .collect(Collectors.toList()))
-                .build();
+        return ApiResponse.success("Get all products success", products.map(productMapper::toProductDTO));
     }
 
     @Override
@@ -154,11 +144,7 @@ public class ProductServiceImpl implements IProductService {
         }
         product.setImage(String.join(",", imagePaths));
 
-        return ApiResponse.<ProductDTO>builder()
-                .code(200)
-                .message("Product created successfully")
-                .result(productMapper.toProductDTO(productRepository.save(product)))
-                .build();
+        return ApiResponse.success("Product created successfully",productMapper.toProductDTO(productRepository.save(product)));
     }
 
     @Override
@@ -166,11 +152,7 @@ public class ProductServiceImpl implements IProductService {
     public ApiResponse<String> deleteProduct(UUID productId) {
         if (productRepository.existsById(productId)) {
             productRepository.deleteById(productId);
-            return ApiResponse.<String>builder()
-                    .code(200)
-                    .message("Product deleted successfully")
-                    .result("Product with ID " + productId + " deleted successfully.")
-                    .build();
+            return ApiResponse.success("Product deleted successfully", "Product with ID " + productId + " deleted successfully.");
         }else {
             throw new AppException(ErrorCode.PRODUCT_NOT_FOUND);
         }
@@ -230,11 +212,7 @@ public class ProductServiceImpl implements IProductService {
             product.setImage(String.join(",", imagePaths));
         }
 
-        return ApiResponse.<ProductDTO>builder()
-                .code(200)
-                .message("Product updated successfully")
-                .result(productMapper.toProductDTO(productRepository.save(product)))
-                .build();
+        return ApiResponse.success("Product updated successfully",productMapper.toProductDTO(productRepository.save(product)));
     }
 
     private String saveImage(MultipartFile file) throws IOException {
@@ -244,21 +222,19 @@ public class ProductServiceImpl implements IProductService {
         return "/images/product/" + fileName;
     }
 
-    private boolean deleteImage(String imagePath){
+    private void deleteImage(String imagePath){
         String filePath = Paths.get("src/main/resources/static", imagePath).toString();
 
         File file = new File(filePath);
 
         if (!file.exists())
-            return false;
+            return;
 
         boolean deleted = file.delete();
         if (deleted) {
             System.out.println("File deleted successfully: " + filePath);
-            return true;
         } else {
             System.out.println("Failed to delete file: " + filePath);
-            return false;
         }
 
     }

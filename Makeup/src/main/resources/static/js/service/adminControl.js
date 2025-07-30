@@ -1,6 +1,9 @@
 import { UIManager } from '/js/service/admin-ui-handler.js';
 import { AppointmentModule } from '/js/service/appointment.js';
 import { OrderModule } from '/js/service/order.js';
+import { ProductModule } from '/js/service/admin/product.js';
+import { StaffModule} from '/js/service/admin/staff.js';
+//import { ScheduleModule } from '/js/service/schedule.js';
 
 // Hàm tải tab mặc định
 function loadDefaultTab() {
@@ -59,7 +62,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     const productId = clickedDiv.id.split('-')[3];
                     console.log('Product ID for editing: ' + productId);
                     UIManager.toggleTabContent('edit-product');
-                    fetch(`/admin/products/edit/${productId}`)
+                    fetch(`/api/admin/products/edit/${productId}`)
                         .then(response => response.text())
                         .then(data => {
                             document.getElementById('edit-product').innerHTML = data;
@@ -75,7 +78,13 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById('tab-schedule').addEventListener('click', function () {
         UIManager.toggleTabContent('schedule');
         loadStaffSelectAppointment();
-        loadAppointment(12, 2024, document.getElementById('staffSelect').value);
+
+        const now = new Date();
+        const currentMonth = now.getMonth() + 1;
+        const currentYear = now.getFullYear();
+        const staffId = document.getElementById('staffSelect').value;
+
+        loadAppointment(currentMonth, currentYear, staffId);
     });
 
     // Tab dashboard
@@ -90,7 +99,7 @@ document.addEventListener("DOMContentLoaded", () => {
             .then(response => response.text())
             .then(data => {
                 document.getElementById('staff').innerHTML = data;
-                loadStaffs();
+                StaffModule.init();
             })
             .catch(error => console.error('Error loading HTML:', error));
     });
@@ -104,6 +113,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 document.getElementById('product').innerHTML = data;
                 setupProductCreateEvent();
                 setupProductEditEvent();
+                ProductModule.init();
             })
             .catch(error => console.error('Error loading HTML:', error));
     });
