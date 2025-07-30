@@ -3,7 +3,7 @@ export const OrderModule = {
     currentPage: 0,
     pageSize: 10,
     totalPages: 0,
-    sortDirection: {},
+    sortDirection: null, // Đổi thành null hoặc string để chỉ lưu một trường sắp xếp
     currentStatus: 0,
 
     showAlert(type, message) {
@@ -45,7 +45,7 @@ export const OrderModule = {
                             <i class="fa-solid fa-check"></i>
                         </button>
                         <button class="btn btn-danger btn-sm btn-delete" data-id="${o.id}">
-                            <i class="fa-solid fa-trash"></i>
+                            <i class="fa-solid fa-ban"></i>
                         </button>
                     </td>
                 </tr>`;
@@ -90,8 +90,7 @@ export const OrderModule = {
     },
 
     loadPagedOrders() {
-        const sortStr = Object.keys(this.sortDirection)
-            .map(k => `${k},${this.sortDirection[k]}`).join('|') || 'orderDate,desc';
+        const sortStr = this.sortDirection || 'orderDate,desc'; // Chỉ dùng một trường sắp xếp
 
         fetch(`/api/admin/orders?page=${this.currentPage}&size=${this.pageSize}&sort=${sortStr}&status=${this.currentStatus}`)
             .then(res => {
@@ -101,7 +100,7 @@ export const OrderModule = {
             .then(data => {
                 if (data && data.result && data.result.content) {
                     this.ordersList = data.result.content;
-                    this.totalPages = data.result.totalPages || 1; // Đặt mặc định totalPages = 1 nếu null
+                    this.totalPages = data.result.totalPages || 1;
                     this.renderOrders(this.ordersList);
                 } else {
                     this.showAlert('danger', 'Không có dữ liệu!');
@@ -112,7 +111,6 @@ export const OrderModule = {
             })
             .catch(err => {
                 console.error('Lỗi:', err);
-                this.showAlert('danger', 'Tải dữ liệu thất bại!');
                 this.ordersList = [];
                 this.totalPages = 1;
                 this.renderOrders([]);
@@ -120,10 +118,13 @@ export const OrderModule = {
     },
 
     sortTable(column) {
-        const direction = this.sortDirection[column] === 'asc' ? 'desc' : 'asc';
-        this.sortDirection[column] = direction;
-        this.currentPage = 0; // Reset về trang đầu khi sắp xếp
-        this.loadPagedOrders(); // Tải lại từ API với sort mới
+        // Chỉ giữ một trường sắp xếp
+        const direction = this.sortDirection && this.sortDirection.startsWith(column + ',')
+            ? (this.sortDirection.endsWith('asc') ? 'desc' : 'asc')
+            : 'asc';
+        this.sortDirection = `${column},${direction}`;
+        this.currentPage = 0;
+        this.loadPagedOrders();
     },
 
     searchOrder() {
@@ -147,29 +148,59 @@ export const OrderModule = {
     },
 
     approveOrder(orderId) {
-        fetch(`/api/admin/orders/approve/${orderId}`, { method: 'POST' })
-            .then(res => res.ok ? res.json() : Promise.reject(res))
-            .then(data => {
-                this.showAlert('success', data.message || 'Duyệt thành công!');
-                this.loadPagedOrders();
-            })
-            .catch(err => {
-                console.error('Lỗi duyệt:', err);
-                this.showAlert('danger', 'Duyệt thất bại!');
-            });
+        Swal.fire({
+            title: 'Xác nhận duyệt đơn hàng',
+            text: 'Bạn có chắc chắn muốn duyệt đơn hàng này?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Duyệt',
+            cancelButtonText: 'Hủy',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                const status = 1;
+                fetch(`/api/admin/orders/${orderId}/update-status?status=${status}`, {
+                    method: 'PUT'
+                })
+                .then(res => res.ok ? res.json() : Promise.reject(res))
+                .then(data => {
+                    this.showAlert('success', data.message || 'Duyệt thành công!');
+                    this.loadPagedOrders();
+                })
+                .catch(err => {
+                    console.error('Lỗi duyệt:', err);
+                    this.showAlert('danger', 'Duyệt thất bại!');
+                });
+            }
+        });
     },
 
-    deleteOrder(orderId) {
-        fetch(`/api/admin/orders/delete/${orderId}`, { method: 'DELETE' })
-            .then(res => res.ok ? res.json() : Promise.reject(res))
-            .then(data => {
-                this.showAlert('success', data.message || 'Xóa thành công!');
-                this.loadPagedOrders();
-            })
-            .catch(err => {
-                console.error('Lỗi xóa:', err);
-                this.showAlert('danger', 'Xóa thất bại!');
-            });
+    cancelOrder(orderId) {
+        Swal.fire({
+            title: 'Xác nhận hủy đơn hàng',
+            text: 'Bạn có chắc chắn muốn hủy đơn hàng này?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Hủy đơn',
+            cancelButtonText: 'Không',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                const status = 3;
+                fetch(`/api/admin/orders/${orderId}/update-status?status=${status}`, {
+                    method: 'PUT'
+                })
+                .then(res => res.ok ? res.json() : Promise.reject(res))
+                .then(data => {
+                    this.showAlert('success', data.message || 'Hủy thành công!');
+                    this.loadPagedOrders();
+                })
+                .catch(err => {
+                    console.error('Lỗi xóa:', err);
+                    this.showAlert('danger', 'Hủy thất bại!');
+                });
+            }
+        });
     },
 
     init() {
@@ -194,7 +225,7 @@ export const OrderModule = {
                 const deleteBtn = e.target.closest('.btn-delete');
                 const id = (approveBtn || deleteBtn)?.getAttribute('data-id');
                 if (approveBtn) this.approveOrder(id);
-                else if (deleteBtn) this.deleteOrder(id);
+                else if (deleteBtn) this.cancelOrder(id);
             });
     }
 };

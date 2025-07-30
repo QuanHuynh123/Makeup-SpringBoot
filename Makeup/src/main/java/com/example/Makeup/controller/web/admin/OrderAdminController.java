@@ -27,7 +27,7 @@ public class OrderAdminController {
 
     @GetMapping("order")
     public String orderAdminPage(){
-        return "admin/order-all";
+        return "admin/order-admin";
     }
 
     @GetMapping("/orders/stats/{year}")

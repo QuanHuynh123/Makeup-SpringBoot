@@ -9,7 +9,10 @@ public enum OrderStatus {
     IN_PROGRESS(1, "Order is in progress"),
     HAS_PICKED_UP(1, "Order has been picked up"),
     COMPLETED(2, "Order has been completed"),
-    CANCELLED(3, "Order has been cancelled");
+    CANCELLED(3, "Order has been cancelled"),
+    PAYMENT_NOT_COMPLETED(4, "Payment has not been completed")
+
+;
 
     private final int id;
     private final String description;

@@ -17,8 +17,10 @@ public interface IOrderService {
     ApiResponse<OrderDTO> createOrder(OrderRequest orderRequest);
     ApiResponse<OrderDTO> getOrder(UUID orderId);
     ApiResponse<Boolean> checkOrder(UUID orderId);
-    ApiResponse<Page<OrdersAdminResponse>> getAllOrder(Pageable pageable, OrderStatus status);
+    ApiResponse<Page<OrdersAdminResponse>> getAllOrder(Pageable pageable, Integer status);
     ApiResponse<Boolean> returnProductOfOrder(UUID orderId);
     ApiResponse<List<OrderDTO>> getMyOrders();
     ApiResponse<List<OrderItemDetailResponse>> getItemsDetail(UUID orderId);
+    ApiResponse<String> updateOrderStatus(UUID orderId,int status);
+    ApiResponse<Boolean> checkRepaymentCondition(UUID orderId);
 }

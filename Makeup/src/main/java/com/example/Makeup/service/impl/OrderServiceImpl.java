@@ -23,10 +23,12 @@ import jakarta.persistence.OptimisticLockException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.AmqpConnectException;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -63,7 +65,7 @@ public class OrderServiceImpl implements IOrderService {
         Order order = new Order();
         order.setPayment(payment);
         order.setUser(user);
-        order.setStatus(OrderStatus.PENDING);
+        order.setStatus(orderRequest.getPaymentMethod() == 1 ? OrderStatus.PENDING : OrderStatus.PAYMENT_NOT_COMPLETED);
         order.setOrderDate(localDate);
         order.setTotalQuantity(orderRequest.getQuantity());
         order.setTotalPrice(orderRequest.getTotalPrice());
@@ -81,10 +83,21 @@ public class OrderServiceImpl implements IOrderService {
 
         orderItemServiceImpl.createOrderItem(order.getId(), orderRequest.getOrderItems());
 
-        rabbitTemplate.convertAndSend(RabbitMQConfig.EXCHANGE, RabbitMQConfig.ROUTING_KEY,
-                new OrderEmailMessage(user.getEmail(), order.getId().toString(), order.getReceiverName()));
+        sendEmailNotification( new OrderEmailMessage(user.getEmail(), order.getId().toString(), order.getReceiverName()));
 
         return ApiResponse.success("Create order successfully", orderMapper.toOrderDTO(order));
+    }
+
+    @Transactional(Transactional.TxType.NOT_SUPPORTED)
+    public void sendEmailNotification(OrderEmailMessage message) {
+        try {
+            rabbitTemplate.convertAndSend(RabbitMQConfig.EXCHANGE, RabbitMQConfig.ROUTING_KEY, message);
+            log.info("Order email message sent successfully for orderId: {}", message.getOrderId());
+        } catch (AmqpConnectException e) {
+            log.warn("Failed to connect to RabbitMQ, skipping email notification for orderId: {}. Error: {}", message.getOrderId(), e.getMessage());
+        } catch (Exception e) {
+            log.error("Unexpected error while sending email notification for orderId: {}. Error: {}", message.getOrderId(), e.getMessage());
+        }
     }
 
     @Override
@@ -128,7 +141,11 @@ public class OrderServiceImpl implements IOrderService {
 
 
     @Override
-    public ApiResponse<Page<OrdersAdminResponse>> getAllOrder(Pageable pageable, OrderStatus status) {
+    public ApiResponse<Page<OrdersAdminResponse>> getAllOrder(Pageable pageable, Integer statusId) {
+        OrderStatus status = null;
+        if (statusId != null && statusId > 0)
+            status = OrderStatus.fromId(statusId);
+
         Page<OrdersAdminResponse> orders = orderRepository.findAllOrders(status, pageable);
         if (orders.isEmpty()) {
             throw new AppException(ErrorCode.ORDER_IS_EMPTY);
@@ -137,6 +154,7 @@ public class OrderServiceImpl implements IOrderService {
     }
 
     @Override
+    @Transactional
     public ApiResponse<Boolean> returnProductOfOrder(UUID orderId) {
         orderRepository.findById(orderId).orElseThrow(() -> new AppException(ErrorCode.ORDER_NOT_FOUND));
         List<OrderItem> orderItems = orderItemRepository.findAllByOrderId(orderId);
@@ -192,5 +210,30 @@ public class OrderServiceImpl implements IOrderService {
                 ))
                 .toList();
         return ApiResponse.success("Get order items detail successfully", responses);
+    }
+
+    @Override
+    @Transactional
+    public ApiResponse<String> updateOrderStatus(UUID orderId, int status) {
+        orderRepository.findById(orderId).orElseThrow(() -> new AppException(ErrorCode.ORDER_NOT_FOUND));
+        OrderStatus orderStatus =  OrderStatus.fromId(status); // Validate status
+        int updatedRows = orderRepository.updateOrderStatus(orderId, orderStatus);
+        if (updatedRows == 0) {
+            throw new AppException(ErrorCode.INTERNAL_SERVER_ERROR);
+        }
+        return ApiResponse.success("Update order status successfully", "Order status updated to PENDING");
+    }
+
+    @Override
+    public ApiResponse<Boolean> checkRepaymentCondition(UUID orderId) {
+        Order order = orderRepository.findById(orderId).orElseThrow(() -> new AppException(ErrorCode.ORDER_NOT_FOUND));
+        if (order.getStatus() != OrderStatus.PAYMENT_NOT_COMPLETED) {
+            throw new AppException(ErrorCode.ORDER_REPAYMENT_CONDITION_NOT_MET);
+        }
+        if (order.getCreatedAt().isAfter(LocalDateTime.now().minusDays(7))) {
+            throw new AppException(ErrorCode.ORDER_REPAYMENT_CONDITION_NOT_MET);
+        }
+
+        return ApiResponse.success("Check repayment condition successfully", true);
     }
 }

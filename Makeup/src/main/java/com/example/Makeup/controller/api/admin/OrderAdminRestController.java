@@ -12,6 +12,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("api/admin/orders")
@@ -24,24 +25,16 @@ public class OrderAdminRestController {
             @RequestParam(value = "page", defaultValue = "0") Integer page,
             @RequestParam(value = "size", defaultValue = "10") Integer size,
             @RequestParam(value = "sort", defaultValue = "orderDate,desc") String sort,
-            @RequestParam(value = "status", defaultValue = "0") Integer statusId
+            @RequestParam(value = "status") Integer statusId
     ) {
-        OrderStatus status = OrderStatus.fromId(statusId);
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(sort.split(",")[1]), sort.split(",")[0]));
-        System.out.println("Fetching orders with pageable: " + pageable + " and status: " + status);
-        return orderService.getAllOrder(pageable, status);
+        return orderService.getAllOrder(pageable, statusId);
     }
 
-
-//    @PostMapping("/approve/{orderId}")
-//    @ResponseBody
-//    public ResponseEntity<String> approveOrder(@PathVariable("orderId") UUID orderId) {
-//        try {
-//            orderService.checkOrder(orderId);
-//            return ResponseEntity.ok("Approve successfully!");
-//        }catch (Exception e){
-//            return ResponseEntity.badRequest().body("fail");
-//        }
-//    }
+    @PutMapping("{id}/update-status")
+    public ApiResponse<String> updateStatusOrder(@PathVariable("id") String orderId,
+                                                 @RequestParam("status") int status) {
+        return orderService.updateOrderStatus(UUID.fromString(orderId), status);
+    }
 
 }
