@@ -43,6 +43,7 @@ public enum ErrorCode {
     ORDER_NOT_FOUND("Order not found!", HttpStatus.NOT_FOUND),
     ORDER_ITEM_NOT_FOUND("Order item not found!", HttpStatus.NOT_FOUND),
     ORDER_IS_EMPTY("Order is empty!", HttpStatus.NO_CONTENT),
+    ORDER_REPAYMENT_CONDITION_NOT_MET("Repayment condition not met!", HttpStatus.BAD_REQUEST),
 
     // ===== STAFF =====
     STAFF_ALREADY_BOOKED("Staff already booked!", HttpStatus.BAD_REQUEST),

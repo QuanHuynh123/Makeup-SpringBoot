@@ -1,4 +1,4 @@
-package com.example.Makeup.controller.api.admin;
+package com.example.Makeup.controller.api.web;
 
 import com.example.Makeup.dto.request.LoginRequest;
 import com.example.Makeup.dto.request.RegisterRequest;

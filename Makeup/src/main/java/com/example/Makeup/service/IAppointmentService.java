@@ -1,7 +1,7 @@
 package com.example.Makeup.service;
 
 import com.example.Makeup.dto.model.AppointmentDTO;
-import com.example.Makeup.dto.model.WeekAppointmentsDTO;
+import com.example.Makeup.dto.response.WeekAppointmentsDTO;
 import com.example.Makeup.dto.request.AppointmentRequest;
 import com.example.Makeup.dto.response.AppointmentsAdminResponse;
 import com.example.Makeup.dto.response.common.ApiResponse;
