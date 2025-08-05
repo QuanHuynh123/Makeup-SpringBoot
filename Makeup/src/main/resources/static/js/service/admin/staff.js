@@ -51,6 +51,11 @@ export const StaffModule = {
             });
     },
 
+    formatDate(dateStr) {
+        if (!dateStr) return '';
+        return new Date(dateStr).toLocaleDateString('vi-VN');
+    },
+
     renderStaff(list) {
         const tbody = document.querySelector('#table-content-staff');
         tbody.innerHTML = '';
@@ -66,8 +71,8 @@ export const StaffModule = {
                     <td>${i + 1}</td>
                     <td>${staff.nameStaff || 'N/A'}</td>
                     <td>${staff.phone || 'N/A'}</td>
-                    <td>${staff.username || 'N/A'}</td>
                     <td>${roleName}</td>
+                    <td>${this.formatDate(staff.createdAt)}</td>
                     <td>
                         <button class="btn btn-warning btn-sm btn-edit" data-id="${staff.id}">
                             <i class="fa-solid fa-pen-to-square"></i>
@@ -104,7 +109,7 @@ export const StaffModule = {
         const filtered = this.staffList.filter(s =>
             this.removeDiacritics(s.nameStaff || '').includes(text) ||
             (s.phone || '').includes(text) ||
-            this.removeDiacritics(s.username || '').includes(text) ||
+            this.removeDiacritics(s.createAt || '').includes(text) ||
             (s.id || '').toString().includes(text)
         );
         this.renderStaff(filtered);
@@ -178,7 +183,7 @@ export const StaffModule = {
                 document.getElementById('addStaffId').value = staff.id;
                 document.getElementById('addStaffName').value = staff.nameStaff;
                 document.getElementById('addPhoneNumber').value = staff.phone;
-                document.getElementById('addUsername').value = staff.username;
+                document.getElementById('addUsername').value = staff.userName;
                 document.getElementById('addRole').value = staff.role;
                 document.getElementById('saveButton').setAttribute('data-action', 'edit');
                 const editModal = new bootstrap.Modal(document.getElementById('addModal'));

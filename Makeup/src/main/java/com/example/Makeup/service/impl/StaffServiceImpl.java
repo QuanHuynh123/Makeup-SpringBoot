@@ -1,5 +1,6 @@
 package com.example.Makeup.service.impl;
 import com.example.Makeup.dto.request.CreateStaffRequest;
+import com.example.Makeup.dto.response.StaffAccountResponse;
 import com.example.Makeup.dto.response.common.ApiResponse;
 import com.example.Makeup.dto.model.StaffDTO;
 import com.example.Makeup.entity.Account;
@@ -73,23 +74,11 @@ public class StaffServiceImpl implements IStaffService {
     }
 
     @Override
-    public ApiResponse<List<StaffDTO>> getAllStaffDetail() {
-        List<StaffDTO> staffDetailList =  staffRepository.findAllStaff();
-        if (staffDetailList.isEmpty()) {
-            throw new AppException(ErrorCode.STAFF_IS_EMPTY);
-        }
-        return ApiResponse.success("Get all staff details success", staffDetailList);
-    }
-
-    @Override
-    public ApiResponse<StaffDTO> getStaffById(UUID staffId) {
-        Staff staff = staffRepository.findById(staffId)
+    public ApiResponse<StaffAccountResponse> getStaffById(UUID staffId) {
+        System.out.println("Fetching staff by ID: " + staffId);
+        StaffAccountResponse staff = staffRepository.findStaffAccountById(staffId)
                 .orElseThrow(() -> new AppException(ErrorCode.STAFF_NOT_FOUND));
-        return ApiResponse.<StaffDTO>builder()
-                .code(200)
-                .message("Get staff by ID success")
-                .result(staffMapper.toStaffDTO(staff))
-                .build();
+        return ApiResponse.success("Get staff by ID success",staff);
     }
 
     @Override

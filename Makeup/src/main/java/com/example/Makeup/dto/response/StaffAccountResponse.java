@@ -15,6 +15,8 @@ public class StaffAccountResponse {
     private String nameStaff;
     private String phone;
     private String accountId;
+    private String role = "STAFF"; // Default role for staff accounts
+    private String userName;
     private String createdAt;
     private String updatedAt;
 }

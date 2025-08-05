@@ -2,6 +2,7 @@ package com.example.Makeup.controller.api.admin;
 
 import com.example.Makeup.dto.model.StaffDTO;
 import com.example.Makeup.dto.request.CreateStaffRequest;
+import com.example.Makeup.dto.response.StaffAccountResponse;
 import com.example.Makeup.dto.response.common.ApiResponse;
 import com.example.Makeup.service.IStaffService;
 import lombok.RequiredArgsConstructor;
@@ -23,8 +24,8 @@ public class StaffAdminRestController {
     }
 
     @GetMapping("/{id}")
-    public ApiResponse<StaffDTO> getStaffById(@PathVariable UUID staffId) {
-        return staffService.getStaffById(staffId);
+    public ApiResponse<StaffAccountResponse> getStaff(@PathVariable UUID id) {
+        return staffService.getStaffById(id);
     }
 
     @PostMapping("/create")
