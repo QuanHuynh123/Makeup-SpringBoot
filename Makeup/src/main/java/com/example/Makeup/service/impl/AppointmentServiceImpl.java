@@ -2,6 +2,7 @@ package com.example.Makeup.service.impl;
 
 import com.example.Makeup.dto.model.AppointmentDTO;
 import com.example.Makeup.dto.model.UserDTO;
+import com.example.Makeup.dto.request.UpdateAppointmentRequest;
 import com.example.Makeup.dto.response.WeekAppointmentsDTO;
 import com.example.Makeup.dto.request.AppointmentRequest;
 import com.example.Makeup.dto.response.AppointmentsAdminResponse;
@@ -25,7 +26,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
+import java.sql.Time;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.temporal.WeekFields;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -72,57 +75,44 @@ public class AppointmentServiceImpl implements IAppointmentService {
     }
 
     @Override
-    public ApiResponse<AppointmentDTO> updateAppointment(UUID idAppointment, AppointmentDTO appointmentDTO) {
-        Appointment appointment = appointmentRepository.findById(idAppointment)
+    public ApiResponse<AppointmentDTO> updateAppointment(UUID appointmentId, UpdateAppointmentRequest appointmentDTO) {
+        Appointment appointment = appointmentRepository.findById(appointmentId)
+                .orElseThrow(() -> new AppException(ErrorCode.APPOINTMENT_NOT_FOUND));
+
+        TypeMakeup typeMakeup = typeMakeupRepository.findById(appointmentDTO.getTypeMakeupId())
                 .orElseThrow(() -> new AppException(ErrorCode.COMMON_RESOURCE_NOT_FOUND));
 
-        AppointmentDTO asd = appointmentMapper.toAppointmentDTO(appointment);
+        Time startTime = appointmentDTO.getStartTime();
+        Time endTime = Time.valueOf(startTime.toLocalTime().plusHours(typeMakeup.getTimeMakeup()));
 
-        // Kiểm tra xem status có thay đổi từ 0 thành 1 không
-        boolean isStatusChangedToActive = asd.isStatus() == false && appointmentDTO.isStatus() == true;
+        List<Appointment> conflictingAppointments = appointmentRepository.findConflictingAppointments(
+                appointmentDTO.getStaffId(),
+                appointmentDTO.getMakeupDate(),
+                startTime,
+                endTime
+        );
 
-        // Nếu status thay đổi từ 0 thành 1, kiểm tra có bị trùng lịch với nhân viên không
-        if (isStatusChangedToActive) {
-            List<Appointment> conflictingAppointments = appointmentRepository.findConflictingAppointments(
-                    appointmentDTO.getStaffId(),
-                    appointmentDTO.getMakeupDate(),
-                    appointmentDTO.getStartTime(),
-                    appointmentDTO.getEndTime()
-            );
-
-            // Nếu có cuộc hẹn xung đột
-            if (!conflictingAppointments.isEmpty()) {
-                throw new RuntimeException("Có cuộc hẹn xung đột với nhân viên vào cùng thời gian này!");
-            }
+        if (!conflictingAppointments.isEmpty()) {
+            throw new AppException(ErrorCode.STAFF_ALREADY_BOOKED);
         }
 
-        // Cập nhật các thuộc tính từ appointmentDTO
-        appointment.setStartTime(appointmentDTO.getStartTime());
-        appointment.setEndTime(appointmentDTO.getEndTime());
+        appointment.setStartTime(startTime);
+        appointment.setEndTime(endTime);
         appointment.setMakeupDate(appointmentDTO.getMakeupDate());
         appointment.setStatus(appointmentDTO.isStatus());
 
-        User user = userRepository.findById(appointmentDTO.getUserId())
-                .orElseThrow(() -> new RuntimeException("User not found with ID: " + appointmentDTO.getUserId()));
-        appointment.setUser(user);
-
-        TypeMakeup typeMakeup = typeMakeupRepository.findById(appointmentDTO.getTypeMakeupId())
-                .orElseThrow(() -> new RuntimeException("Service Makeup not found with ID: " + appointmentDTO.getTypeMakeupId()));
         appointment.setTypeMakeup(typeMakeup);
 
         Staff staff = staffRepository.findById(appointmentDTO.getStaffId())
-                .orElseThrow(() -> new RuntimeException("Staff not found with ID: " + appointmentDTO.getStaffId()));
+                .orElseThrow(() -> new AppException(ErrorCode.STAFF_NOT_FOUND));
         appointment.setStaff(staff);
 
-        // Lưu cuộc hẹn đã cập nhật
         Appointment updatedAppointment = appointmentRepository.save(appointment);
-
-        // Chuyển đổi sang DTO
         AppointmentDTO updatedAppointmentDTO = appointmentMapper.toAppointmentDTO(updatedAppointment);
 
-        // Trả về phản hồi thành công
         return ApiResponse.success("Update appointment success", updatedAppointmentDTO);
     }
+
 
     @Override
     @Transactional

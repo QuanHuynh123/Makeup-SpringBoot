@@ -1,6 +1,8 @@
 package com.example.Makeup.controller.api.web;
 
+import com.example.Makeup.dto.model.AppointmentDTO;
 import com.example.Makeup.dto.model.UserDTO;
+import com.example.Makeup.dto.request.AppointmentRequest;
 import com.example.Makeup.dto.response.AppointmentsAdminResponse;
 import com.example.Makeup.dto.response.common.ApiResponse;
 import com.example.Makeup.service.IAppointmentService;
@@ -23,5 +25,10 @@ public class AppointmentRestController {
         UserDTO userDTO = SecurityUserUtil.getCurrentUser();
 
         return appointmentService.getAppointmentByUserId(userDTO.getId());
+    }
+
+    @PostMapping("/create")
+    public ApiResponse<AppointmentDTO> createAppointment(@RequestBody AppointmentRequest appointment) {
+        return appointmentService.createAppointment(appointment);
     }
 }

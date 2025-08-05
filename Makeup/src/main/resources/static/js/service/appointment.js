@@ -26,7 +26,7 @@ export const AppointmentModule = {
             return;
         }
 
-        appointments.forEach((appointment,index) => {
+        appointments.forEach((appointment, index) => {
             const row = document.createElement('tr');
             row.innerHTML = `
                 <td>${index + 1}</td>
@@ -36,7 +36,7 @@ export const AppointmentModule = {
                 <td>${appointment.makeupDate}</td>
                 <td>${appointment.startTime}</td>
                 <td>${appointment.endTime}</td>
-                <td>${appointment.status ? 'Hoàn thành' : 'Chưa hoàn thành'}</td>
+                <td>${appointment.status ? 'Đã chốt lịch' : 'Chưa duyệt'}</td>
                 <td>
                     <button type="button" class="btn btn-warning btn-sm" data-id="${appointment.id}">
                         <i class="fa-solid fa-pen-to-square"></i>
@@ -73,23 +73,19 @@ export const AppointmentModule = {
 
     saveChangesAppointment() {
         const id = document.getElementById('addAppointmentId').value;
-        const userId = this.tmpAppointment.userID;
         const staffId = document.getElementById('addNhanVien').value;
-        const serviceMakeupId = document.getElementById('addServiceMakeupName').value;
+        const typeMakeupId = document.getElementById('addServiceMakeupName').value;
         const makeupDate = document.getElementById('addMakeupDate').value;
         let startTime = document.getElementById('addStartTime').value;
-        let endTime = document.getElementById('addEndTime').value;
         const status = document.getElementById('addStatus').value;
 
-        if (!userId || !staffId || !serviceMakeupId || !makeupDate || !startTime || !endTime || !status) {
+        if ( !staffId || !typeMakeupId || !makeupDate || !startTime || !status) {
             this.showAlert('danger', 'Vui lòng điền đầy đủ thông tin!');
             return;
         }
 
-        startTime = startTime.match(/^\d{2}:\d{2}:\d{2}$/) ? startTime : `${startTime}:00`;
-        endTime = endTime.match(/^\d{2}:\d{2}:\d{2}$/) ? endTime : `${endTime}:00`;
-
-        const requestData = { userId, staffId, serviceMakeupId, makeupDate, startTime, endTime, status: parseInt(status) };
+        startTime = startTime.length === 5 ? `${startTime}:00` : startTime;
+        const requestData = {  staffId, typeMakeupId, makeupDate, startTime, status: parseInt(status) };
         const url = id ? `/api/admin/appointments/${id}` : '/api/admin/appointments';
         const method = id ? 'PUT' : 'POST';
 
@@ -106,8 +102,10 @@ export const AppointmentModule = {
                     this.loadAppointments();
                     bootstrap.Modal.getInstance(document.getElementById('addModalAppointment')).hide();
                     this.clearFormSearchAppointment();
+                } else if (response.status === 400) {
+                    this.showAlert('danger', data.message || 'Xung đột lịch hẹn! Vui lòng chọn thời gian khác.');
                 } else {
-                    this.showAlert('danger', data.message || 'Lỗi từ máy chủ!');
+                    this.showAlert('danger', data.message || 'Lỗi từ máy chủ! Vui lòng thử lại.');
                 }
             })
             .catch(error => {
@@ -121,7 +119,7 @@ export const AppointmentModule = {
         document.getElementById('addModalAppointmentLabel').innerHTML = 'Chỉnh sửa lịch hẹn';
         document.getElementById('appointmentId').classList.remove('d-none');
 
-        fetch(`/api/admin/appointments/appointmentDetail/${id}`)
+        fetch(`/api/admin/appointments/${id}`)
             .then(response => response.ok ? response.json() : Promise.reject(response))
             .then(data => {
                 const appointment = data.result;
@@ -132,12 +130,10 @@ export const AppointmentModule = {
 
                 this.tmpAppointment = appointment;
                 document.getElementById('addAppointmentId').value = appointment.id;
-                document.getElementById('addKhachHang').value = appointment.nameUser || '';
                 document.getElementById('addNhanVien').value = appointment.staffId || '';
-                document.getElementById('addServiceMakeupName').value = appointment.serviceMakeupId || '';
+                document.getElementById('addServiceMakeupName').value = appointment.typeMakeupId || '';
                 document.getElementById('addMakeupDate').value = appointment.makeupDate;
                 document.getElementById('addStartTime').value = appointment.startTime;
-                document.getElementById('addEndTime').value = appointment.endTime;
                 document.getElementById('addStatus').value = appointment.status ? '1' : '0';
 
                 const fields = ['addNhanVien', 'addMakeupDate', 'addStartTime', 'addStatus', 'addServiceMakeupName'];
@@ -146,7 +142,6 @@ export const AppointmentModule = {
                 });
 
                 document.getElementById('saveButtonAppointment').setAttribute('data-action', 'edit');
-                this.findAvailableStaff();
                 new bootstrap.Modal(document.getElementById('addModalAppointment')).show();
             })
             .catch(error => {
@@ -220,7 +215,7 @@ export const AppointmentModule = {
     },
 
     loadMakeUpServices() {
-        fetch('/api/admin/makeup-services')
+        fetch('/api/typeMakeups')
             .then(response => response.json())
             .then(data => {
                 const select = document.getElementById('addServiceMakeupName');
@@ -228,7 +223,7 @@ export const AppointmentModule = {
                 data.result.forEach(service => {
                     const option = document.createElement('option');
                     option.value = service.id;
-                    option.textContent = service.name;
+                    option.textContent = service.nameMakeup;
                     select.appendChild(option);
                 });
             })
@@ -236,7 +231,7 @@ export const AppointmentModule = {
     },
 
     loadStaffSelect() {
-        fetch('/api/admin/staff')
+        fetch('/api/admin/staffs')
             .then(response => response.json())
             .then(data => {
                 const select = document.getElementById('addNhanVien');
@@ -244,54 +239,11 @@ export const AppointmentModule = {
                 data.result.forEach(staff => {
                     const option = document.createElement('option');
                     option.value = staff.id;
-                    option.textContent = staff.name;
+                    option.textContent = staff.nameStaff;
                     select.appendChild(option);
                 });
             })
             .catch(error => console.error('Error loading staff:', error));
-    },
-
-    loadEndtime() {
-        const serviceId = document.getElementById('addServiceMakeupName').value;
-        const startTime = document.getElementById('addStartTime').value;
-
-        if (!serviceId || !startTime) {
-            document.getElementById('addEndTime').value = '';
-            return;
-        }
-
-        fetch(`/api/makeup-services/${serviceId}`)
-            .then(response => response.json())
-            .then(data => {
-                const duration = data.result.duration;
-                const [hours, minutes] = startTime.split(':').map(Number);
-                const endTime = new Date();
-                endTime.setHours(hours, minutes + duration);
-                document.getElementById('addEndTime').value = endTime.toTimeString().slice(0, 5);
-            })
-            .catch(error => console.error('Error loading end time:', error));
-    },
-
-    findAvailableStaff() {
-        const makeupDate = document.getElementById('addMakeupDate').value;
-        const startTime = document.getElementById('addStartTime').value;
-        const serviceId = document.getElementById('addServiceMakeupName').value;
-
-        if (!makeupDate || !startTime || !serviceId) return;
-
-        fetch(`/api/staff/available?makeupDate=${makeupDate}&startTime=${startTime}&serviceId=${serviceId}`)
-            .then(response => response.json())
-            .then(data => {
-                const select = document.getElementById('addNhanVien');
-                select.innerHTML = '<option value="" disabled selected>Chọn nhân viên</option>';
-                data.result.forEach(staff => {
-                    const option = document.createElement('option');
-                    option.value = staff.id;
-                    option.textContent = staff.name;
-                    select.appendChild(option);
-                });
-            })
-            .catch(error => console.error('Error loading available staff:', error));
     },
 
     init() {
@@ -305,7 +257,6 @@ export const AppointmentModule = {
             const deleteButton = e.target.closest('.btn-danger.btn-sm');
             if (editButton) {
                 this.editAppointment(editButton);
-                this.loadEndtime();
             } else if (deleteButton) {
                 this.deleteAppointment(deleteButton);
             }
@@ -319,19 +270,9 @@ export const AppointmentModule = {
             saveButton.addEventListener('click', () => this.saveChangesAppointment());
         }
         const serviceSelect = document.getElementById('addServiceMakeupName');
-        const startTimeInput = document.getElementById('addStartTime');
         const makeupDateInput = document.getElementById('addMakeupDate');
         if (serviceSelect) {
-            serviceSelect.addEventListener('change', () => {
-                this.loadEndtime();
-                this.findAvailableStaff();
-            });
-        }
-        if (startTimeInput) {
-            startTimeInput.addEventListener('change', () => {
-                this.loadEndtime();
-                this.findAvailableStaff();
-            });
+            serviceSelect.addEventListener('change', () => this.findAvailableStaff());
         }
         if (makeupDateInput) {
             makeupDateInput.addEventListener('change', () => this.findAvailableStaff());

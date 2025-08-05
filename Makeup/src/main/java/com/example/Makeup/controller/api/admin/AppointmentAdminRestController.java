@@ -1,6 +1,7 @@
 package com.example.Makeup.controller.api.admin;
 
 import com.example.Makeup.dto.model.AppointmentDTO;
+import com.example.Makeup.dto.request.UpdateAppointmentRequest;
 import com.example.Makeup.dto.response.WeekAppointmentsDTO;
 import com.example.Makeup.dto.request.AppointmentRequest;
 import com.example.Makeup.dto.response.AppointmentsAdminResponse;
@@ -24,8 +25,13 @@ public class AppointmentAdminRestController {
         return appointmentService.getAllAppointments();
     }
 
+    @GetMapping("/{id}")
+    public ApiResponse<AppointmentDTO> getAppointment(@PathVariable("id") UUID appointmentId) {
+        return appointmentService.getAppointmentById(appointmentId);
+    }
+
     @GetMapping("/by-month")
-    public ApiResponse<List<WeekAppointmentsDTO>> getAppointmentsByMonth(
+    public ApiResponse<List<WeekAppointmentsDTO>> getApepointmentsByMonth(
             @RequestParam int month,
             @RequestParam int year,
             @RequestParam(required = false ) UUID staffID) {
@@ -33,8 +39,8 @@ public class AppointmentAdminRestController {
     }
 
     @DeleteMapping("/{id}")
-    public ApiResponse<Boolean> deleteAppointment(@PathVariable UUID appointmentId) {
-        return appointmentService.deleteAppointment(appointmentId);
+    public ApiResponse<Boolean> deleteAppointment(@PathVariable UUID id) {
+        return appointmentService.deleteAppointment(id);
     }
 
     @GetMapping("/by-date")
@@ -45,21 +51,12 @@ public class AppointmentAdminRestController {
         return appointmentService.getAppointmentsByDateAndStaff(staffId, makeupDate);
     }
 
-    @GetMapping("/{id}")
-    public ApiResponse<AppointmentDTO> getAppointmentById(@PathVariable("id") UUID appointmentId) {
-        return appointmentService.getAppointmentById(appointmentId);
-    }
-
     @PutMapping("/{id}")
     public ApiResponse<AppointmentDTO> updateAppointment(
-            @PathVariable UUID appointmentId,
-            @RequestBody AppointmentDTO appointmentDTO) {
-        return  appointmentService.updateAppointment(appointmentId, appointmentDTO);
+            @PathVariable UUID id,
+            @RequestBody UpdateAppointmentRequest appointmentDTO) {
+        return appointmentService.updateAppointment(id, appointmentDTO);
     }
 
-    @PostMapping("/create")
-    public ApiResponse<AppointmentDTO> createAppointment(@RequestBody AppointmentRequest appointment) {
-        return  appointmentService.createAppointment(appointment);
-    }
 
 }

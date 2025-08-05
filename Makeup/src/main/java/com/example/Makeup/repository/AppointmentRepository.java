@@ -61,9 +61,10 @@ public interface AppointmentRepository extends JpaRepository<Appointment, UUID> 
     List<Appointment> findConflictingAppointments(
             @Param("staffId") UUID staffId,
             @Param("makeupDate") LocalDate makeupDate,
-            @Param("startTime") Time startTime,
+            @Param("startTime")  Time startTime,
             @Param("endTime") Time endTime
     );
+
 
 
     // Truy vấn số lượng appointment theo từng tháng trong năm
