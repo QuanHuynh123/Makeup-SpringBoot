@@ -1,0 +1,4 @@
+Khách hàng có thể đặt lịch thuê đồ cosplay tối đa 7 ngày trước ngày sử dụng.
+Khách được phép huỷ lịch nếu còn cách 2 ngày.
+Thanh toán có thể thực hiện qua tiền mặt hoặc VNPay.
+...
