@@ -21,13 +21,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/admin/")
+@RequestMapping("/admin/products")
 public class ProductAdminController {
 
     private final IProductService productService;
     private final ISubCategoryService subCategoryService;
 
-    @GetMapping("products")
+    @GetMapping("")
     public String getAllProductsAdminPage(Model model){
         return "admin/product-admin";
     }
@@ -40,16 +40,16 @@ public class ProductAdminController {
         return "admin/create-product";
     }
 
-    @GetMapping("/edit/{id}")
-    public String editProductAdminPage(Model model, @PathVariable("id") UUID id){
-        ApiResponse<List<SubCategoryDTO>> subCategories = subCategoryService.getAll();
-        model.addAttribute("subCategories", subCategories.getResult());
-        
-        ApiResponse<ProductDTO> productDTO = productService.findProductById(id);
-        
-        String[] imageList = productDTO.getResult().getImage().split(",");
-        model.addAttribute("product", productDTO.getResult());
-        model.addAttribute("images", imageList);
-        return "admin/edit-product";
-    }
+//    @GetMapping("/edit/{id}")
+//    public String editProductAdminPage(Model model, @PathVariable("id") UUID id){
+//        ApiResponse<List<SubCategoryDTO>> subCategories = subCategoryService.getAll();
+//        model.addAttribute("subCategories", subCategories.getResult());
+//
+//        ApiResponse<ProductDTO> productDTO = productService.findProductById(id);
+//
+//        String[] imageList = productDTO.getResult().getImage().split(",");
+//        model.addAttribute("product", productDTO.getResult());
+//        model.addAttribute("images", imageList);
+//        return "admin/edit-product";
+//    }
 }

@@ -30,7 +30,7 @@ export const ProductModule = {
                 return res.json();
             })
             .then(data => {
-                if (data && data.result ) {
+                if (data && data.result) {
                     this.productsList = data.result.content;
                     this.totalPages = data.result.totalPages || 1;
                     this.renderProduct(this.productsList);
@@ -149,17 +149,45 @@ export const ProductModule = {
     },
 
     editProduct(productId) {
-        Swal.fire({
-            title: 'Chỉnh sửa sản phẩm',
-            text: `Bạn muốn chỉnh sửa sản phẩm với ID: ${productId}?`,
-            icon: 'info',
-            showCancelButton: true,
-            confirmButtonText: 'Chỉnh sửa',
-            cancelButtonText: 'Hủy',
-            reverseButtons: true
-        }).then((result) => {
-            if (result.isConfirmed) {
-                window.location.href = `/admin/products/edit/${productId}`;
+        $('.btn-create').data('product-id', productId);
+        $.ajax({
+            url: `/api/admin/products/${productId}`,
+            type: 'GET',
+            success: function(product) {
+                console.log('Product data:', product); // Debugging
+                // Populate form fields
+                $('#nameProduct').val(product.result.nameProduct);
+                $('#price').val(product.result.price);
+                $('#description').val(product.result.describe);
+                $('#size').val(product.result.size);
+                $('#subCategory').val(product.result.subCategoryId);
+                $('#status').val(product.result.status.toString());
+
+                // Populate existing images
+                $('#image-gallery').html('');
+                if (product.result.image) {
+                    const images = product.result.image.split(',');
+                    images.forEach(image => {
+                        if (image) {
+                            $('#image-gallery').append(`
+                                <div>
+                                    <img src="/images/product/${image.trim()}" alt="Product Image" style="width: 100px; height: auto;">
+                                </div>
+                            `);
+                        }
+                    });
+                }
+
+                // Show modal
+                $('#editProductModal').modal('show');
+            },
+            error: function(xhr) {
+                console.error('Error fetching product:', xhr); // Debugging
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Lỗi',
+                    text: 'Không thể tải thông tin sản phẩm',
+                });
             }
         });
     },

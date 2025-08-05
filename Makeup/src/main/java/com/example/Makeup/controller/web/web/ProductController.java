@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 
 @Controller
 @RequiredArgsConstructor
-public class ProductDetailController {
+public class ProductController {
 
     private final IProductService productService;
 
