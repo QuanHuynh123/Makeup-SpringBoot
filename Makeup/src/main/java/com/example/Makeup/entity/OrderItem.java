@@ -32,7 +32,7 @@ public class OrderItem extends Base {
     @Column(name = "price",  nullable = false)
     double price;
 
-    @Column(name = "rental_date", nullable = false) // ngày bắt đầu thuê
+    @Column(name = "rental_date", nullable = false) // start date of rental
     LocalDateTime rentalDate;
 
     @Enumerated(EnumType.STRING)
@@ -43,7 +43,7 @@ public class OrderItem extends Base {
     @JoinColumn(name = "order_id", nullable = false)
     Order order;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "product_id", nullable = false)
     Product product;
 }

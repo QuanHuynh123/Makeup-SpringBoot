@@ -29,7 +29,7 @@ public class OrderController {
 
     @GetMapping("/my-order")
     public String myOrder() {
-        return "/user/my-order";
+        return "user/my-order";
     }
 
     @GetMapping("/orderDetail/{orderId}")
@@ -38,6 +38,6 @@ public class OrderController {
         model.addAttribute("orderItems",orderItemDTOS.getResult());
         ApiResponse<OrderDTO> orderDTO = orderService.getOrder(orderId);
         model.addAttribute("order",orderDTO.getResult());
-        return "/user/orderDetail";
+        return "user/orderDetail";
     }
 }

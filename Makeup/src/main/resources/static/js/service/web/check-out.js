@@ -158,7 +158,7 @@ $(document).ready(function() {
         }
 
         if (paymentMethod == 1) {
-            callApi('/api/order/place', {
+            callApi('/api/orders/place', {
                 orderInfo: orderInfo,
                 email: email,
                 firstName: firstName,
@@ -189,7 +189,7 @@ $(document).ready(function() {
                 });
             });
         } else if (paymentMethod == 2) {
-            callApi('/api/order/place', {
+            callApi('/api/orders/place', {
                 orderInfo: orderInfo,
                 email: email,
                 firstName: firstName,

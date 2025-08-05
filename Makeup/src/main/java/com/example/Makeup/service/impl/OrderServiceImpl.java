@@ -236,4 +236,17 @@ public class OrderServiceImpl implements IOrderService {
 
         return ApiResponse.success("Check repayment condition successfully", true);
     }
+
+    @Transactional
+    @Override
+    public ApiResponse<Void> clearOrderPaymentExpired() {
+        LocalDateTime expiredTime = LocalDateTime.now().minusDays(7);
+        int clearedOrders = orderRepository.clearOrderPaymentExpired(expiredTime);
+        if (clearedOrders > 0) {
+            log.info("Cleared {} expired orders", clearedOrders);
+        } else {
+            log.info("No expired orders to clear");
+        }
+        return ApiResponse.success("Clear expired orders successfully", null);
+    }
 }

@@ -9,6 +9,7 @@ import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -34,11 +35,11 @@ public class Order extends Base {
     @Column(name = "order_date",  nullable = false)
     LocalDateTime orderDate;
 
-    @Column(name = "pickup_date") // ngày khách đến lấy đồ
-    LocalDateTime pickupDate;
+    @Column(name = "pickup_date")
+    LocalDateTime pickupDate;  // customer get the product at store or delivery date
 
     @Column(name = "return_date")
-    LocalDateTime returnDate; // để null cho đến khi khách trả đồ
+    LocalDateTime returnDate; // set null when customer has not returned the product yet
 
     @Column(name = "receiver_name", length = 40)
     String receiverName;
@@ -70,5 +71,8 @@ public class Order extends Base {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     User user;
+
+    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<OrderItem> orderItems;
 
 }

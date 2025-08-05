@@ -49,6 +49,8 @@ public class RabbitMQConfig {
         factory.setConnectionFactory(connectionFactory);
         factory.setRecoveryInterval(180000L); // 3 minutes
 
+        factory.setMessageConverter(new Jackson2JsonMessageConverter());
+
         // Cấu hình retry
         RetryTemplate retryTemplate = new RetryTemplate();
         FixedBackOffPolicy backOffPolicy = new FixedBackOffPolicy();

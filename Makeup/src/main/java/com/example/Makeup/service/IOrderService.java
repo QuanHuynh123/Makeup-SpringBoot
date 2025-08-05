@@ -23,4 +23,5 @@ public interface IOrderService {
     ApiResponse<List<OrderItemDetailResponse>> getItemsDetail(UUID orderId);
     ApiResponse<String> updateOrderStatus(UUID orderId,int status);
     ApiResponse<Boolean> checkRepaymentCondition(UUID orderId);
+    ApiResponse<Void> clearOrderPaymentExpired();
 }

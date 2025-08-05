@@ -9,6 +9,25 @@
 <p>Số lượng: <strong th:text="${order.totalQuantity}"></strong></p>
 <p>Giá trị: <strong th:text="${order.totalPrice}"></strong></p>
 <p>Ngày đặt: <strong th:text="${order.orderDate}"></strong></p>
+<table border="1" cellpadding="5" cellspacing="0">
+    <thead>
+    <tr>
+        <th>Sản phẩm</th>
+        <th>Số lượng</th>
+        <th>Giá</th>
+        <th>Ngày thuê</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="item : ${order.orderItems}">
+        <td th:text="${item.product.nameProduct}">Tên sản phẩm</td>
+        <td th:text="${item.quantity}">1</td>
+        <td th:text="${item.price}">100.000</td>
+        <td th:text="${#temporals.format(item.rentalDate, 'dd/MM/yyyy')}">01/08/2025</td>
+    </tr>
+    </tbody>
+</table>
+
 <p>Chúng tôi sẽ chuẩn bị hàng và sớm thông báo ngày nhận!</p>
 <p style="color:red;">Xin cảm ơn!</p>
 </body>
