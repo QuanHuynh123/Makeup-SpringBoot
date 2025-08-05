@@ -59,7 +59,7 @@ public enum ErrorCode {
     APPOINTMENT_NOT_CONFIRMED("Appointment not confirmed!", HttpStatus.BAD_REQUEST),
 
     // ===== COMMON =====
-    COMMON_RESOURCE_NOT_FOUND("Can't not found!", HttpStatus.NOT_FOUND),
+    COMMON_RESOURCE_NOT_FOUND("Resource can't not found!", HttpStatus.NOT_FOUND),
     COMMON_RESOURCE_ALREADY_EXISTED("Already existed!", HttpStatus.CONFLICT),
     COMMON_IS_EMPTY("Empty!", HttpStatus.NO_CONTENT),
 

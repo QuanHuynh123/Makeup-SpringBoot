@@ -1,8 +1,7 @@
-package com.example.Makeup.config;
+package com.example.Makeup.schedule;
 
 import com.example.Makeup.service.common.CacheCategoryService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -12,7 +11,7 @@ public class RedisHealthCheckScheduler {
 
     private final CacheCategoryService cacheCategoryService;
 
-    @Scheduled(fixedRate = 6000000) // 100 minutes
+    @Scheduled(fixedRate = 60000) // 1 minutes
     public void checkRedis() {
         cacheCategoryService.checkRedisConnection();
     }

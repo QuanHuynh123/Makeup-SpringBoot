@@ -32,7 +32,7 @@ public class OrderItem extends Base {
     @Column(name = "price",  nullable = false)
     double price;
 
-    @Column(name = "rental_date", nullable = false) // start date of rental
+    @Column(name = "rental_date", nullable = false) // start date of renta
     LocalDateTime rentalDate;
 
     @Enumerated(EnumType.STRING)

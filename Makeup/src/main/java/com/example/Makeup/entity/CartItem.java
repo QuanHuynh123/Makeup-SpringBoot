@@ -31,7 +31,7 @@ public class CartItem extends Base{
     @Column(name = "price",  nullable = false)
     double price;
 
-    @Column(name = "rental_date", nullable = false) // ngày bắt đầu thuê
+    @Column(name = "rental_date", nullable = false)
     LocalDateTime rentalDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
