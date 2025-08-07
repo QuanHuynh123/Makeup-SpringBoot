@@ -1,10 +1,30 @@
+const socket = new SockJS('/ws');
+const stompClient = Stomp.over(socket);
+
 export const OrderModule = {
     ordersList: [],
     currentPage: 0,
     pageSize: 10,
     totalPages: 0,
-    sortDirection: null, // Đổi thành null hoặc string để chỉ lưu một trường sắp xếp
+    sortDirection: null,
     currentStatus: 0,
+
+    connectWebSocket() {
+        this.stompClient = Stomp.over(new SockJS('/ws'));
+        this.stompClient.connect({}, (frame) => {
+            this.stompClient.subscribe('/topic/orders', (message) => {
+                Swal.fire({
+                    toast: true,
+                    position: "top-end",
+                    icon: "success",
+                    title: "Có đơn đặt hàng mới!",
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+                this.loadPagedOrders();
+            });
+        });
+    },
 
     showAlert(type, message) {
         Swal.fire({
@@ -90,7 +110,7 @@ export const OrderModule = {
     },
 
     loadPagedOrders() {
-        const sortStr = this.sortDirection || 'orderDate,desc'; // Chỉ dùng một trường sắp xếp
+        const sortStr = this.sortDirection || 'orderDate,desc';
 
         fetch(`/api/admin/orders?page=${this.currentPage}&size=${this.pageSize}&sort=${sortStr}&status=${this.currentStatus}`)
             .then(res => {
@@ -204,6 +224,7 @@ export const OrderModule = {
     },
 
     init() {
+        this.connectWebSocket();
         this.loadPagedOrders();
 
         document.getElementById('searchOrder')

@@ -27,6 +27,7 @@ import org.springframework.amqp.AmqpConnectException;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 
@@ -49,44 +50,52 @@ public class OrderServiceImpl implements IOrderService {
     private final UserMapper userMapper;
     private final RabbitTemplate rabbitTemplate;
     private final OrderItemServiceImpl orderItemServiceImpl;
+    private final SimpMessagingTemplate messagingTemplate;
 
-    @Override
-    @Transactional
-    public ApiResponse<OrderDTO> createOrder(OrderRequest orderRequest) {
-        Payment payment = paymentRepository.findById(orderRequest.getPaymentMethod()).orElseThrow(()-> new AppException(ErrorCode.COMMON_RESOURCE_NOT_FOUND));
-        UserDTO userDTO = SecurityUserUtil.getCurrentUser();
-        User user = userMapper.toUserEntity(userDTO);
+        @Override
+        @Transactional
+        public ApiResponse<OrderDTO> createOrder(OrderRequest orderRequest) {
+            if (orderRepository.existsByUniqueRequestId(orderRequest.getUniqueRequestId())) {
+                throw new AppException(ErrorCode.DUPLICATE_ORDER);
+            }
 
-        LocalDateTime localDate = LocalDateTime.now();
+            Payment payment = paymentRepository.findById(orderRequest.getPaymentMethod()).orElseThrow(()-> new AppException(ErrorCode.COMMON_RESOURCE_NOT_FOUND));
+            UserDTO userDTO = SecurityUserUtil.getCurrentUser();
+            User user = userMapper.toUserEntity(userDTO);
 
-        ShippingType shippingType = ShippingType.fromId(orderRequest.getTypeShipping());
+            LocalDateTime localDate = LocalDateTime.now();
+
+            ShippingType shippingType = ShippingType.fromId(orderRequest.getTypeShipping());
 
 
-        Order order = new Order();
-        order.setPayment(payment);
-        order.setUser(user);
-        order.setStatus(orderRequest.getPaymentMethod() == 1 ? OrderStatus.PENDING : OrderStatus.PAYMENT_NOT_COMPLETED);
-        order.setOrderDate(localDate);
-        order.setTotalQuantity(orderRequest.getQuantity());
-        order.setTotalPrice(orderRequest.getTotalPrice());
+            Order order = new Order();
+            order.setPayment(payment);
+            order.setUser(user);
+            order.setStatus(orderRequest.getPaymentMethod() == 1 ? OrderStatus.PENDING : OrderStatus.PAYMENT_NOT_COMPLETED);
+            order.setOrderDate(localDate);
+            order.setTotalQuantity(orderRequest.getQuantity());
+            order.setTotalPrice(orderRequest.getTotalPrice());
 
-        order.setReceiverEmail(orderRequest.getEmail());
-        order.setReceiverName(orderRequest.getFirstName());
-        order.setReceiverPhone(orderRequest.getPhoneNumber());
-        order.setReceiverMessage(orderRequest.getMessage());
-        order.setReceiverAddress(orderRequest.getAddress());
-        order.setTypeShipping(shippingType);
+            order.setReceiverEmail(orderRequest.getEmail());
+            order.setReceiverName(orderRequest.getFirstName());
+            order.setReceiverPhone(orderRequest.getPhoneNumber());
+            order.setReceiverMessage(orderRequest.getMessage());
+            order.setReceiverAddress(orderRequest.getAddress());
+            order.setUniqueRequestId(orderRequest.getUniqueRequestId());
+            order.setTypeShipping(shippingType);
 
-        order.setReturnDate(null);
+            order.setReturnDate(null);
 
-        orderRepository.saveAndFlush(order);
+            orderRepository.saveAndFlush(order);
 
-        orderItemServiceImpl.createOrderItem(order.getId(), orderRequest.getOrderItems());
+            orderItemServiceImpl.createOrderItem(order.getId(), orderRequest.getOrderItems());
 
-        sendEmailNotification( new OrderEmailMessage(user.getEmail(), order.getId().toString(), order.getReceiverName()));
+            sendEmailNotification( new OrderEmailMessage(user.getEmail(), order.getId().toString(), order.getReceiverName()));
 
-        return ApiResponse.success("Create order successfully", orderMapper.toOrderDTO(order));
-    }
+            messagingTemplate.convertAndSend("/topic/orders", "NEW_ORDER");
+
+            return ApiResponse.success("Create order successfully", orderMapper.toOrderDTO(order));
+        }
 
     @Transactional(Transactional.TxType.NOT_SUPPORTED)
     public void sendEmailNotification(OrderEmailMessage message) {
@@ -215,13 +224,18 @@ public class OrderServiceImpl implements IOrderService {
     @Override
     @Transactional
     public ApiResponse<String> updateOrderStatus(UUID orderId, int status) {
-        orderRepository.findById(orderId).orElseThrow(() -> new AppException(ErrorCode.ORDER_NOT_FOUND));
-        OrderStatus orderStatus =  OrderStatus.fromId(status); // Validate status
-        int updatedRows = orderRepository.updateOrderStatus(orderId, orderStatus);
+        Order order = orderRepository.findById(orderId).orElseThrow(() -> new AppException(ErrorCode.ORDER_NOT_FOUND));
+        OrderStatus newStatus  =  OrderStatus.fromId(status); // Validate status
+
+        if (order.getStatus() == newStatus) {
+            throw new AppException(ErrorCode.ORDER_ALREADY_IN_THIS_STATUS);
+        }
+
+        int updatedRows = orderRepository.updateOrderStatus(orderId, newStatus);
         if (updatedRows == 0) {
             throw new AppException(ErrorCode.INTERNAL_SERVER_ERROR);
         }
-        return ApiResponse.success("Update order status successfully", "Order status updated to PENDING");
+        return ApiResponse.success("Update order status successfully", "Order status updated");
     }
 
     @Override

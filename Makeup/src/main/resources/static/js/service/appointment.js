@@ -1,6 +1,25 @@
+const socket = new SockJS('/ws');
+const stompClient = Stomp.over(socket);
+
 export const AppointmentModule = {
     appointmentList: [],
     tmpAppointment: {},
+
+    connectWebSocket() {
+        this.stompClient = Stomp.over(new SockJS('/ws'));
+        this.stompClient.connect({}, (frame) => {
+            this.stompClient.subscribe('/topic/appointments', (message) => {
+                Swal.fire({
+                    position: "top-end",
+                    icon: "success",
+                    title: "Có lịch hẹn mới",
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+                this.loadAppointments();
+            });
+        });
+    },
 
     showAlert(type, message) {
         Swal.fire({
@@ -8,7 +27,7 @@ export const AppointmentModule = {
             icon: type === 'success' ? 'success' : 'error',
             title: message,
             showConfirmButton: false,
-            timer: 1500
+            timer: 2000
         });
     },
 
@@ -248,6 +267,7 @@ export const AppointmentModule = {
 
     init() {
         console.log('AppointmentModule initialized');
+        this.connectWebSocket();
         this.loadAppointments();
         this.loadMakeUpServices();
         this.loadStaffSelect();

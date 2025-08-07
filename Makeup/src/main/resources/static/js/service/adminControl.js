@@ -1,6 +1,6 @@
 import { UIManager } from '/js/service/admin-ui-handler.js';
 import { AppointmentModule } from '/js/service/appointment.js';
-import { OrderModule } from '/js/service/order.js';
+import { OrderModule } from '/js/service/admin/order.js';
 import { ProductModule } from '/js/service/admin/product.js';
 import { StaffModule} from '/js/service/admin/staff.js';
 //import { ScheduleModule } from '/js/service/schedule.js';

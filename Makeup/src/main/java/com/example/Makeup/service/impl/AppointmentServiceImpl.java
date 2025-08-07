@@ -21,6 +21,7 @@ import com.example.Makeup.repository.UserRepository;
 import com.example.Makeup.service.IAppointmentService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -42,6 +43,7 @@ public class AppointmentServiceImpl implements IAppointmentService {
     private final StaffRepository staffRepository;
     private final TypeMakeupRepository typeMakeupRepository;
     private final AppointmentMapper appointmentMapper;
+    private final SimpMessagingTemplate messagingTemplate;
 
     @Override
     public ApiResponse<List<WeekAppointmentsDTO>> getAppointmentsByMonth(int month, int year, UUID staffID) {
@@ -170,6 +172,7 @@ public class AppointmentServiceImpl implements IAppointmentService {
         checkAppointmentConflict(appointment);
 
         Appointment savedAppointment = appointmentRepository.save(appointment);
+        messagingTemplate.convertAndSend("/topic/appointments", "NEW_APPOINTMENT");
 
         return ApiResponse.success("Create appointment success", appointmentMapper.toAppointmentDTO(savedAppointment));
     }

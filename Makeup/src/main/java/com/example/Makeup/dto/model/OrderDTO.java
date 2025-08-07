@@ -24,6 +24,7 @@ public class OrderDTO {
     UUID userId;
     int paymentId;
     boolean returnStatus;
+    String uniqueRequestId;
 
     String receiverName;
     String receiverEmail;

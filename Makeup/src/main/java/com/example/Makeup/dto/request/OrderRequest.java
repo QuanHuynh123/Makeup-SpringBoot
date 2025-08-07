@@ -21,6 +21,7 @@ public class OrderRequest {
     private int paymentMethod;
     private int quantity;
     private double totalPrice;
+    private String uniqueRequestId;
 
     List<OrderItemRequest> orderItems;
 }

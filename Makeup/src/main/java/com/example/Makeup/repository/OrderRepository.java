@@ -57,8 +57,8 @@ public interface OrderRepository extends JpaRepository<Order, UUID> {
     Optional<Order> findWithOrderItemsById(UUID id);
 
     @Modifying
-    @Query("DELETE FROM Order o WHERE o.status = 'PAYMENT_NOT_COMPLETED' AND o.createAt < :expiredTime")
+    @Query("DELETE FROM Order o WHERE o.status = 'PAYMENT_NOT_COMPLETED' AND o.createdAt < :expiredTime")
     int clearOrderPaymentExpired(@Param("expiredTime") LocalDateTime expiredTime);
 
-
+    boolean existsByUniqueRequestId(String uniqueRequestId);
 }
