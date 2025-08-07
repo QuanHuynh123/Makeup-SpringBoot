@@ -1,6 +1,17 @@
 $(document).ready(function() {
     let cartData = [];
-    let isShipping = false; // Biến theo dõi trạng thái shipping
+    let isShipping = false;
+    let isProcessing = false; // Biến để ngăn double-click
+
+    // Hàm hiển thị thông báo
+    function showAlert(type, message) {
+        Swal.fire({
+            icon: type,
+            title: message,
+            showConfirmButton: false,
+            timer: 2000
+        });
+    }
 
     // Hàm cập nhật một dòng trong bảng
     function updateRow(itemId, newQuantity) {
@@ -104,8 +115,34 @@ $(document).ready(function() {
         updateSummary(); // Cập nhật summary khi thay đổi shipping
     });
 
+    // Hàm gọi API với xử lý double-click
+    function callApi(url, data, successCallback, errorCallback, placeOrderBtn) {
+        $.ajax({
+            url: url,
+            type: 'POST',
+            data: JSON.stringify(data),
+            contentType: 'application/json',
+            success: successCallback,
+            error: errorCallback,
+            complete: function() {
+                // Kích hoạt lại nút sau khi yêu cầu hoàn tất
+                isProcessing = false;
+                placeOrderBtn.prop('disabled', false).text('Place Order');
+            }
+        });
+    }
+
+    // Xử lý sự kiện nhấn nút Place Order
     $('.btn-place').on('click', function(event) {
         event.preventDefault();
+
+        if (isProcessing) {
+            return; // Ngăn chặn double-click
+        }
+
+        isProcessing = true; // Đánh dấu đang xử lý
+        const placeOrderBtn = $(this);
+        placeOrderBtn.prop('disabled', true).text('Đang xử lý...'); // Vô hiệu hóa nút
 
         var email = $('#email').val();
         var firstName = $('#firstName').val();
@@ -116,22 +153,19 @@ $(document).ready(function() {
         const quantity = $('#cartQuantity').text();
         const totalPrice = parseFloat($('#orderTotal').text().replace('$', ''));
         const shippingType = isShipping ? '1' : '2';
+        const uniqueRequestId = crypto.randomUUID();
 
         if (quantity == 0) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: 'Chưa có sản phẩm nào trong giỏ hàng.'
-            });
+            showAlert('error', 'Chưa có sản phẩm nào trong giỏ hàng.');
+            isProcessing = false;
+            placeOrderBtn.prop('disabled', false).text('Place Order');
             return;
         }
 
         if (!address && isShipping) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: 'Vui lòng nhập địa chỉ khi chọn giao hàng!'
-            });
+            showAlert('error', 'Vui lòng nhập địa chỉ khi chọn giao hàng!');
+            isProcessing = false;
+            placeOrderBtn.prop('disabled', false).text('Place Order');
             return;
         }
 
@@ -145,20 +179,9 @@ $(document).ready(function() {
             rentalDate: item.rentalDate,
         }));
 
-
-        function callApi(url, data, successCallback, errorCallback) {
-            $.ajax({
-                url: url,
-                type: 'POST',
-                data: JSON.stringify(data),
-                contentType: 'application/json',
-                success: successCallback,
-                error: errorCallback
-            });
-        }
-
         if (paymentMethod == 1) {
             callApi('/api/orders/place', {
+                uniqueRequestId: uniqueRequestId,
                 orderInfo: orderInfo,
                 email: email,
                 firstName: firstName,
@@ -172,24 +195,15 @@ $(document).ready(function() {
                 orderItems: orderItems
             }, function(response) {
                 console.log('Order placed successfully:', response);
-                Swal.fire({
-                    position: "top-end",
-                    icon: "success",
-                    title: "Đặt hàng thành công!",
-                    showConfirmButton: false,
-                    timer: 2000
-                }).then(() => {
+                showAlert('success', 'Đặt hàng thành công!').then(() => {
                     window.location.href = "/cosplay/home";
                 });
             }, function(xhr, status, error) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    text: 'Something went wrong during order placement. Please try again.'
-                });
-            });
+                showAlert('error', 'Something went wrong during order placement. Please try again.');
+            }, placeOrderBtn);
         } else if (paymentMethod == 2) {
             callApi('/api/orders/place', {
+                uniqueRequestId: uniqueRequestId,
                 orderInfo: orderInfo,
                 email: email,
                 firstName: firstName,
@@ -204,32 +218,21 @@ $(document).ready(function() {
             }, function(response) {
                 const orderId = response.result.id;
                 callApi('/api/order/submit-order', {
-                //callApi('/submit-order', {
                     orderId: orderId,
                     amount: amount * 24000,
                     orderInfo: orderInfo,
                 }, function(vnpayResponse) {
                     window.location.href = vnpayResponse;
                 }, function(xhr, status, error) {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Oops...',
-                        text: 'Failed to initiate VNPay payment. Please try again.'
-                    });
-                });
+                    showAlert('error', 'Failed to initiate VNPay payment. Please try again.');
+                }, placeOrderBtn);
             }, function(xhr, status, error) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    text: 'Something went wrong during order placement. Please try again.'
-                });
-            });
+                showAlert('error', 'Something went wrong during order placement. Please try again.');
+            }, placeOrderBtn);
         } else {
-            Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: 'Payment method not supported.'
-            });
+            showAlert('error', 'Payment method not supported.');
+            isProcessing = false;
+            placeOrderBtn.prop('disabled', false).text('Place Order');
         }
     });
 });
