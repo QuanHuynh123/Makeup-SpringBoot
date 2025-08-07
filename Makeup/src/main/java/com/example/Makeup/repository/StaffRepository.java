@@ -34,7 +34,7 @@ public interface StaffRepository extends JpaRepository<Staff,UUID> {
 
     @Query("SELECT new com.example.Makeup.dto.response.StaffAccountResponse(" +
             "s.id, s.nameStaff, s.phone, " +
-            "a.id, r.name, a.userName, " +
+            "a.id, r.nameRole, a.userName, " +
             "a.createdAt, a.updatedAt) " +
             "FROM Staff s " +
             "JOIN s.account a " +
