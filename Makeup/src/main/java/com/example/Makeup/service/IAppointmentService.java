@@ -21,4 +21,5 @@ public interface IAppointmentService {
     ApiResponse<Boolean> deleteAppointment(UUID appointmentId);
     ApiResponse<AppointmentDTO> createAppointment(AppointmentRequest newAppointment);
     ApiResponse<List<AppointmentDTO>> getAppointmentsByDateAndStaff(UUID staffId, LocalDate makeupDate);
+    ApiResponse<List<AppointmentDTO>> rateAppointment(UUID appointmentId, UUID userId, int rating);
 }

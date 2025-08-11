@@ -204,6 +204,11 @@ public class AppointmentServiceImpl implements IAppointmentService {
 
     }
 
+    @Override
+    public ApiResponse<List<AppointmentDTO>> rateAppointment(UUID appointmentId, UUID userId, int rating) {
+        return null;
+    }
+
     private List<WeekAppointmentsDTO> groupAppointmentsByWeek(List<AppointmentsAdminResponse> appointments, int month, int year) {
         Map<Integer, List<AppointmentsAdminResponse>> weeklyAppointments = new HashMap<>();
         if (appointments != null) {

@@ -1,11 +1,14 @@
 package com.example.Makeup.controller.api.web;
 
 import com.example.Makeup.dto.model.AppointmentDTO;
+import com.example.Makeup.dto.model.FeedBackDTO;
 import com.example.Makeup.dto.model.UserDTO;
 import com.example.Makeup.dto.request.AppointmentRequest;
+import com.example.Makeup.dto.request.CreateFeedBackRequest;
 import com.example.Makeup.dto.response.AppointmentsAdminResponse;
 import com.example.Makeup.dto.response.common.ApiResponse;
 import com.example.Makeup.service.IAppointmentService;
+import com.example.Makeup.service.IFeedBackService;
 import com.example.Makeup.service.common.RateLimitService;
 import com.example.Makeup.utils.SecurityUserUtil;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.Duration;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
@@ -21,6 +25,7 @@ public class AppointmentRestController {
 
     private final IAppointmentService appointmentService;
     private final RateLimitService rateLimitService;
+    private final IFeedBackService feedBackService;
 
     @GetMapping("/my-appointments")
     public ApiResponse<List<AppointmentsAdminResponse>> getMyAppointments( ) {
@@ -41,5 +46,11 @@ public class AppointmentRestController {
         }
 
         return appointmentService.createAppointment(appointment);
+    }
+
+    @PostMapping("/feedback")
+    public ApiResponse<FeedBackDTO> rateAppointment(@RequestBody CreateFeedBackRequest createFeedBackRequest) {
+        UserDTO userDTO = SecurityUserUtil.getCurrentUser();
+        return feedBackService.createFeedBack(createFeedBackRequest);
     }
 }

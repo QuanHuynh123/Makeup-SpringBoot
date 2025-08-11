@@ -60,6 +60,9 @@ public enum ErrorCode {
     APPOINTMENT_CONFLICT("Appointment conflict!", HttpStatus.CONFLICT),
     APPOINTMENT_NOT_CONFIRMED("Appointment not confirmed!", HttpStatus.BAD_REQUEST),
 
+    // ===== FEEDBACK =====
+    FEEDBACK_NOT_FOUND("Feedback not found!", HttpStatus.NOT_FOUND),
+
     // ===== COMMON =====
     COMMON_RESOURCE_NOT_FOUND("Resource can't not found!", HttpStatus.NOT_FOUND),
     COMMON_RESOURCE_ALREADY_EXISTED("Already existed!", HttpStatus.CONFLICT),

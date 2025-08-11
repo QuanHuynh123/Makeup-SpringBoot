@@ -13,4 +13,5 @@ public interface IUserService {
     ApiResponse<UserDTO> createUser(UserDTO userDTO);
     UserDTO loadUserDTOByUsername(String username);
     UserDTO loadUserDTOById(UUID userId);
+    ApiResponse<UserDTO> getUserById(UUID userId);
 }
