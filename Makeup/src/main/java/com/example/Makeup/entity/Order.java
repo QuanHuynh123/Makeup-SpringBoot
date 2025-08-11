@@ -64,7 +64,7 @@ public class Order extends Base {
     @Column(name = "status")
     OrderStatus status;
 
-    @Column(name = "unique_request_id", length = 50, unique = true)
+    @Column(name = "unique_request_id", length = 36, unique = true, nullable = false)
     String uniqueRequestId; // unique request id for payment gateway
 
     @ManyToOne(fetch = FetchType.LAZY)

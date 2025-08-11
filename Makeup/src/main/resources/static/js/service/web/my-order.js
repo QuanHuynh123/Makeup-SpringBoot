@@ -8,7 +8,7 @@ $(document).ready(function() {
     // Hàm gọi API lấy danh sách đơn hàng
     function loadOrders() {
         $.ajax({
-            url: '/api/order/my-order',
+            url: '/api/orders/my-order',
             method: 'GET',
             success: function(response) {
                 console.log('API Response:', response);
@@ -60,7 +60,7 @@ $(document).ready(function() {
     // Hàm gọi API lấy chi tiết items của đơn hàng
     function loadOrderItems(orderId) {
         $.ajax({
-            url: `/api/order/${orderId}/items`,
+            url: `/api/orders/${orderId}/items`,
             method: 'GET',
             success: function(response) {
                 console.log('Items Response:', response);

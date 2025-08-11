@@ -72,4 +72,11 @@ public class UserServiceImpl implements IUserService {
                 .map(userMapper::toUserDTO)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
     }
+
+    @Override
+    public ApiResponse<UserDTO> getUserById(UUID userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+        return ApiResponse.success("Get user by ID success", userMapper.toUserDTO(user));
+    }
 }

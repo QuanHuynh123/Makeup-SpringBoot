@@ -1,5 +1,7 @@
 package com.example.Makeup.dto.request;
 
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,8 +15,16 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UpdateCartItemRequest {
+
+    @NotNull(message = "Cart item ID is required")
     UUID cartItemId;
+
+    @NotNull(message = "Product ID is required")
     UUID productId;
+
+    @NotNull(message = "Quantity is required")
     Integer quantity;
+
+    @NotNull(message = "Rental date is required")
     LocalDateTime rentalDate;
 }
