@@ -1,11 +1,9 @@
 package com.example.Makeup.dto.model;
 
-import lombok.*;
-import lombok.experimental.FieldDefaults;
-
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.UUID;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Getter
@@ -13,9 +11,9 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CategoryDTO {
-    int id;
-    String name;
-    List<SubCategoryDTO> subCategories;
-    LocalDateTime createdAt;
-    LocalDateTime updatedAt;
+  int id;
+  String name;
+  List<SubCategoryDTO> subCategories;
+  LocalDateTime createdAt;
+  LocalDateTime updatedAt;
 }

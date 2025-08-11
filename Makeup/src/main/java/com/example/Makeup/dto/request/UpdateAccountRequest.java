@@ -9,9 +9,9 @@ import lombok.Setter;
 @Setter
 public class UpdateAccountRequest {
 
-    @NotEmpty(message = "PassWord is required")
-    private String passWord;
+  @NotEmpty(message = "PassWord is required")
+  private String passWord;
 
-    @NotNull(message = "Role ID is required")
-    private int roleId;
+  @NotNull(message = "Role ID is required")
+  private int roleId;
 }

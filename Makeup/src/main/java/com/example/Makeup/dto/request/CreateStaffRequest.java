@@ -9,18 +9,18 @@ import lombok.Setter;
 @Setter
 public class CreateStaffRequest {
 
-    @NotEmpty(message = "Name is required")
-    String nameStaff;
+  @NotEmpty(message = "Name is required")
+  String nameStaff;
 
-    @NotEmpty(message = "Phone number is required")
-    String phone;
+  @NotEmpty(message = "Phone number is required")
+  String phone;
 
-    @NotEmpty(message = "Username is required")
-    String userName;
+  @NotEmpty(message = "Username is required")
+  String userName;
 
-    @NotEmpty(message = "Password is required")
-    String password;
+  @NotEmpty(message = "Password is required")
+  String password;
 
-    @NotNull(message = "Role is required")
-    int role;
+  @NotNull(message = "Role is required")
+  int role;
 }

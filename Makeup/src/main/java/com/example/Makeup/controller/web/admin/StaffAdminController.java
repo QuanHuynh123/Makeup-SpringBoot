@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/admin/")
 public class StaffAdminController {
 
-    @GetMapping("staff")
-    public String staffAdminPage() {
-        return "admin/staff-admin";
-    }
+  @GetMapping("staff")
+  public String staffAdminPage() {
+    return "admin/staff-admin";
+  }
 }

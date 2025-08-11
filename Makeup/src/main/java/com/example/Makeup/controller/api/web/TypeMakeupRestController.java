@@ -12,10 +12,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/typeMakeups")
 public class TypeMakeupRestController {
 
-    private final ITypeMakeupService typeMakeupService;
+  private final ITypeMakeupService typeMakeupService;
 
-    @GetMapping
-    public ApiResponse<?> getAllTypeMakeups() {
-        return  typeMakeupService.getAllTypeMakeup();
-    }
+  @GetMapping
+  public ApiResponse<?> getAllTypeMakeups() {
+    return typeMakeupService.getAllTypeMakeup();
+  }
 }

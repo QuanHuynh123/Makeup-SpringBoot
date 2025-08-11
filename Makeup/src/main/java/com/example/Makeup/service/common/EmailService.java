@@ -14,31 +14,29 @@ import org.thymeleaf.context.Context;
 @Service
 public class EmailService {
 
-    @Autowired
-    private JavaMailSender javaMailSender;
+  @Autowired private JavaMailSender javaMailSender;
 
-    @Autowired
-    private TemplateEngine templateEngine;
+  @Autowired private TemplateEngine templateEngine;
 
-    @Value("${spring.mail.username}")
-    private String fromEmailId;
+  @Value("${spring.mail.username}")
+  private String fromEmailId;
 
-    public void sendEmail(String recipient, Order order, String subject) throws MessagingException {
-        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
+  public void sendEmail(String recipient, Order order, String subject) throws MessagingException {
+    MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+    MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
 
-        helper.setFrom(fromEmailId);
-        helper.setTo(recipient);
-        helper.setSubject(subject);
+    helper.setFrom(fromEmailId);
+    helper.setTo(recipient);
+    helper.setSubject(subject);
 
-        // Create a context for Thymeleaf template
-        Context context = new Context();
-        context.setVariable("order", order);
+    // Create a context for Thymeleaf template
+    Context context = new Context();
+    context.setVariable("order", order);
 
-        String htmlBody = templateEngine.process("email/confirmation", context);
+    String htmlBody = templateEngine.process("email/confirmation", context);
 
-        helper.setText(htmlBody, true);
+    helper.setText(htmlBody, true);
 
-        javaMailSender.send(mimeMessage);
-    }
+    javaMailSender.send(mimeMessage);
+  }
 }

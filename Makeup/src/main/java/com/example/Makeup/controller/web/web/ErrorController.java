@@ -8,13 +8,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/error")
 public class ErrorController {
 
-    @GetMapping("/403")
-    public String accessDenied() {
-        return "error/403";
-    }
+  @GetMapping("/403")
+  public String accessDenied() {
+    return "error/403";
+  }
 
-    @GetMapping("/404")
-    public String notExistPage() {
-        return "error/404";
-    }
+  @GetMapping("/404")
+  public String notExistPage() {
+    return "error/404";
+  }
 }

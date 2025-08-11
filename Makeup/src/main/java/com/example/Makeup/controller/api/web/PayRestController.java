@@ -11,17 +11,17 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("api/order/")
 public class PayRestController {
 
-    private final VNPAYService vnPayService;
+  private final VNPAYService vnPayService;
 
-    @PostMapping("/submit-order")
-    @ResponseBody
-    public String submitOrder(@RequestBody PayRequest payRequest,
-                              HttpServletRequest request) {
+  @PostMapping("/submit-order")
+  @ResponseBody
+  public String submitOrder(@RequestBody PayRequest payRequest, HttpServletRequest request) {
 
-        String orderInfo = payRequest.getOrderInfo() + " - " + payRequest.getOrderId();
-        String baseUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort();
-        String vnpayUrl = vnPayService.createOrder(payRequest.getAmount(), orderInfo, baseUrl, request);
-        //System.out.println("VNPAY URL: " + vnpayUrl);
-        return vnpayUrl;
-    }
+    String orderInfo = payRequest.getOrderInfo() + " - " + payRequest.getOrderId();
+    String baseUrl =
+        request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort();
+    String vnpayUrl = vnPayService.createOrder(payRequest.getAmount(), orderInfo, baseUrl, request);
+    // System.out.println("VNPAY URL: " + vnpayUrl);
+    return vnpayUrl;
+  }
 }

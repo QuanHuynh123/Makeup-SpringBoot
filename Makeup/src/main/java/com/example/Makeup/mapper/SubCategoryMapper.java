@@ -6,8 +6,7 @@ import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
 public interface SubCategoryMapper {
-    SubCategoryDTO toSubCategoryDTO(SubCategory subCategory);
+  SubCategoryDTO toSubCategoryDTO(SubCategory subCategory);
 
-    SubCategory toSubCategoryEntity(SubCategoryDTO subCategoryDTO);
-
+  SubCategory toSubCategoryEntity(SubCategoryDTO subCategoryDTO);
 }

@@ -9,12 +9,10 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class ClearOrderScheduler {
 
-    private final IOrderService orderService;
+  private final IOrderService orderService;
 
-
-    @Scheduled(cron = "0 0 0 */3 * ?")
-    public void clearOrder() {
-        orderService.clearOrderPaymentExpired();
-    }
-
+  @Scheduled(cron = "0 0 0 */3 * ?")
+  public void clearOrder() {
+    orderService.clearOrderPaymentExpired();
+  }
 }

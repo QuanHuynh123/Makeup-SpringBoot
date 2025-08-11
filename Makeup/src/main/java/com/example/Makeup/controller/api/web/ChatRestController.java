@@ -1,14 +1,14 @@
-//package com.example.Makeup.controller.api.web;
+// package com.example.Makeup.controller.api.web;
 //
-//import lombok.RequiredArgsConstructor;
-//import org.springframework.ai.chat.client.ChatClient;
-//import org.springframework.web.bind.annotation.*;
-//import reactor.core.publisher.Flux;
+// import lombok.RequiredArgsConstructor;
+// import org.springframework.ai.chat.client.ChatClient;
+// import org.springframework.web.bind.annotation.*;
+// import reactor.core.publisher.Flux;
 //
-//@RestController
-//@RequiredArgsConstructor
-//@RequestMapping("/api/chat")
-//public class ChatRestController {
+// @RestController
+// @RequiredArgsConstructor
+// @RequestMapping("/api/chat")
+// public class ChatRestController {
 //
 //    private final ChatClient chatClient;
 //
@@ -28,4 +28,4 @@
 //                .stream()
 //                .content();
 //    }
-//}
+// }

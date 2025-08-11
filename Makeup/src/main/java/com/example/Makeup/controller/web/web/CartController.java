@@ -8,13 +8,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/user/my-cart")
 public class CartController {
 
-    @GetMapping("")
-    public String cart() {
-        return "user/cart";
-    }
+  @GetMapping("")
+  public String cart() {
+    return "user/cart";
+  }
 
-    @GetMapping("/check-out")
-    public String checkOut() {
-        return "user/check-out";
-    }
+  @GetMapping("/check-out")
+  public String checkOut() {
+    return "user/check-out";
+  }
 }

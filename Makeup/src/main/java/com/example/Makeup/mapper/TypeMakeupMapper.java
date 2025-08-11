@@ -7,7 +7,7 @@ import org.mapstruct.Mapper;
 @Mapper(componentModel = "spring")
 public interface TypeMakeupMapper {
 
-    TypeMakeupDTO toTypeMakeupDTO(TypeMakeup typeMakeup);
+  TypeMakeupDTO toTypeMakeupDTO(TypeMakeup typeMakeup);
 
-    TypeMakeup toTypeMakeupEntity(TypeMakeupDTO typeMakeupDTO);
+  TypeMakeup toTypeMakeupEntity(TypeMakeupDTO typeMakeupDTO);
 }

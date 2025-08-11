@@ -1,10 +1,8 @@
 package com.example.Makeup.dto.response;
 
+import java.util.UUID;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
-import java.time.LocalDateTime;
-import java.util.UUID;
 
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Getter
@@ -12,8 +10,8 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ShortProductListResponse {
-    UUID id;
-    String nameProduct;
-    double price;
-    String firstImage;
+  UUID id;
+  String nameProduct;
+  double price;
+  String firstImage;
 }

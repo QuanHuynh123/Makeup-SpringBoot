@@ -14,65 +14,64 @@ import org.springframework.http.HttpStatusCode;
 @Getter
 public enum ErrorCode {
 
-    // ===== AUTH & TOKEN =====
-    AUTH_REFRESH_TOKEN_NOT_FOUND("Refresh token not found!", HttpStatus.NOT_FOUND),
-    AUTH_REFRESH_TOKEN_EXPIRED("Refresh token expired!", HttpStatus.UNAUTHORIZED),
+  // ===== AUTH & TOKEN =====
+  AUTH_REFRESH_TOKEN_NOT_FOUND("Refresh token not found!", HttpStatus.NOT_FOUND),
+  AUTH_REFRESH_TOKEN_EXPIRED("Refresh token expired!", HttpStatus.UNAUTHORIZED),
 
-    // ===== USER =====
-    USER_NOT_FOUND("User not found!", HttpStatus.NOT_FOUND),
-    USER_NOT_EXISTED("User not existed!", HttpStatus.NOT_FOUND),
-    USER_ALREADY_EXISTED("User already existed!", HttpStatus.CONFLICT),
-    USER_PASSWORD_NOT_MATCH("Your username or password may be incorrect!", HttpStatus.BAD_REQUEST),
-    USER_IN_AUTHENTICATED_NOT_FOUND("User in authenticated not found!", HttpStatus.NOT_FOUND),
+  // ===== USER =====
+  USER_NOT_FOUND("User not found!", HttpStatus.NOT_FOUND),
+  USER_NOT_EXISTED("User not existed!", HttpStatus.NOT_FOUND),
+  USER_ALREADY_EXISTED("User already existed!", HttpStatus.CONFLICT),
+  USER_PASSWORD_NOT_MATCH("Your username or password may be incorrect!", HttpStatus.BAD_REQUEST),
+  USER_IN_AUTHENTICATED_NOT_FOUND("User in authenticated not found!", HttpStatus.NOT_FOUND),
 
-    // ===== PRODUCT =====
-    PRODUCT_NOT_FOUND("Product not found!", HttpStatus.NOT_FOUND),
-    PRODUCT_ALREADY_EXISTED("Product already existed!", HttpStatus.CONFLICT),
-    PRODUCT_CONFLICT("Product conflict!", HttpStatus.CONFLICT),
-    PRODUCT_QUANTITY_NOT_ENOUGH("Quantity not enough!", HttpStatus.BAD_REQUEST),
-    PRODUCT_IS_EMPTY("Product is empty!", HttpStatus.NO_CONTENT),
+  // ===== PRODUCT =====
+  PRODUCT_NOT_FOUND("Product not found!", HttpStatus.NOT_FOUND),
+  PRODUCT_ALREADY_EXISTED("Product already existed!", HttpStatus.CONFLICT),
+  PRODUCT_CONFLICT("Product conflict!", HttpStatus.CONFLICT),
+  PRODUCT_QUANTITY_NOT_ENOUGH("Quantity not enough!", HttpStatus.BAD_REQUEST),
+  PRODUCT_IS_EMPTY("Product is empty!", HttpStatus.NO_CONTENT),
 
-    // ===== CART =====
-    CART_NOT_FOUND("Cart not found!", HttpStatus.NOT_FOUND),
-    CART_ITEM_NOT_FOUND("Cart item not found!", HttpStatus.NOT_FOUND),
-    CART_IS_EMPTY("Cart is empty!", HttpStatus.NO_CONTENT),
-    CART_ITEM_DELETE_FAILED("Delete cart item failed!", HttpStatus.BAD_REQUEST),
-    CART_IS_LOCKED_FOR_UPDATE("Cart is locked for update!", HttpStatus.CONFLICT),
+  // ===== CART =====
+  CART_NOT_FOUND("Cart not found!", HttpStatus.NOT_FOUND),
+  CART_ITEM_NOT_FOUND("Cart item not found!", HttpStatus.NOT_FOUND),
+  CART_IS_EMPTY("Cart is empty!", HttpStatus.NO_CONTENT),
+  CART_ITEM_DELETE_FAILED("Delete cart item failed!", HttpStatus.BAD_REQUEST),
+  CART_IS_LOCKED_FOR_UPDATE("Cart is locked for update!", HttpStatus.CONFLICT),
 
-    // ===== ORDER =====
-    ORDER_NOT_FOUND("Order not found!", HttpStatus.NOT_FOUND),
-    ORDER_ITEM_NOT_FOUND("Order item not found!", HttpStatus.NOT_FOUND),
-    ORDER_IS_EMPTY("Order is empty!", HttpStatus.NO_CONTENT),
-    ORDER_REPAYMENT_CONDITION_NOT_MET("Repayment condition not met!", HttpStatus.BAD_REQUEST),
-    ORDER_ALREADY_IN_THIS_STATUS("Order already in this status!", HttpStatus.BAD_REQUEST),
-    DUPLICATE_ORDER("Duplicate order", HttpStatus.BAD_REQUEST),
+  // ===== ORDER =====
+  ORDER_NOT_FOUND("Order not found!", HttpStatus.NOT_FOUND),
+  ORDER_ITEM_NOT_FOUND("Order item not found!", HttpStatus.NOT_FOUND),
+  ORDER_IS_EMPTY("Order is empty!", HttpStatus.NO_CONTENT),
+  ORDER_REPAYMENT_CONDITION_NOT_MET("Repayment condition not met!", HttpStatus.BAD_REQUEST),
+  ORDER_ALREADY_IN_THIS_STATUS("Order already in this status!", HttpStatus.BAD_REQUEST),
+  DUPLICATE_ORDER("Duplicate order", HttpStatus.BAD_REQUEST),
 
-    // ===== STAFF =====
-    STAFF_ALREADY_BOOKED("Staff already booked!", HttpStatus.BAD_REQUEST),
-    STAFF_HAS_APPOINTMENTS("Staff has appointments!", HttpStatus.BAD_REQUEST),
-    STAFF_NOT_FOUND("Staff not found!", HttpStatus.NOT_FOUND),
-    STAFF_IS_EMPTY("Staff is empty!", HttpStatus.NO_CONTENT),
+  // ===== STAFF =====
+  STAFF_ALREADY_BOOKED("Staff already booked!", HttpStatus.BAD_REQUEST),
+  STAFF_HAS_APPOINTMENTS("Staff has appointments!", HttpStatus.BAD_REQUEST),
+  STAFF_NOT_FOUND("Staff not found!", HttpStatus.NOT_FOUND),
+  STAFF_IS_EMPTY("Staff is empty!", HttpStatus.NO_CONTENT),
 
-    // ===== APPOINTMENT =====
-    APPOINTMENT_NOT_FOUND("Appointment not found!", HttpStatus.NOT_FOUND),
-    APPOINTMENT_ALREADY_EXISTED("Appointment already existed!", HttpStatus.CONFLICT),
-    APPOINTMENT_IS_EMPTY("Appointment is empty!", HttpStatus.NO_CONTENT),
-    APPOINTMENT_CONFLICT("Appointment conflict!", HttpStatus.CONFLICT),
-    APPOINTMENT_NOT_CONFIRMED("Appointment not confirmed!", HttpStatus.BAD_REQUEST),
+  // ===== APPOINTMENT =====
+  APPOINTMENT_NOT_FOUND("Appointment not found!", HttpStatus.NOT_FOUND),
+  APPOINTMENT_ALREADY_EXISTED("Appointment already existed!", HttpStatus.CONFLICT),
+  APPOINTMENT_IS_EMPTY("Appointment is empty!", HttpStatus.NO_CONTENT),
+  APPOINTMENT_CONFLICT("Appointment conflict!", HttpStatus.CONFLICT),
+  APPOINTMENT_NOT_CONFIRMED("Appointment not confirmed!", HttpStatus.BAD_REQUEST),
 
-    // ===== FEEDBACK =====
-    FEEDBACK_NOT_FOUND("Feedback not found!", HttpStatus.NOT_FOUND),
+  // ===== FEEDBACK =====
+  FEEDBACK_NOT_FOUND("Feedback not found!", HttpStatus.NOT_FOUND),
 
-    // ===== COMMON =====
-    COMMON_RESOURCE_NOT_FOUND("Resource can't not found!", HttpStatus.NOT_FOUND),
-    COMMON_RESOURCE_ALREADY_EXISTED("Already existed!", HttpStatus.CONFLICT),
-    COMMON_IS_EMPTY("Empty!", HttpStatus.NO_CONTENT),
+  // ===== COMMON =====
+  COMMON_RESOURCE_NOT_FOUND("Resource can't not found!", HttpStatus.NOT_FOUND),
+  COMMON_RESOURCE_ALREADY_EXISTED("Already existed!", HttpStatus.CONFLICT),
+  COMMON_IS_EMPTY("Empty!", HttpStatus.NO_CONTENT),
 
-    // ===== DEFAULT / UNKNOWN =====
-    UNKNOWN_ERROR("Unknown error code", HttpStatus.INTERNAL_SERVER_ERROR),
-    INTERNAL_SERVER_ERROR("Internal server error", HttpStatus.INTERNAL_SERVER_ERROR)
+  // ===== DEFAULT / UNKNOWN =====
+  UNKNOWN_ERROR("Unknown error code", HttpStatus.INTERNAL_SERVER_ERROR),
+  INTERNAL_SERVER_ERROR("Internal server error", HttpStatus.INTERNAL_SERVER_ERROR);
 
-;
-    String message;
-    HttpStatusCode statusCode;
+  String message;
+  HttpStatusCode statusCode;
 }

@@ -14,16 +14,16 @@ import lombok.Setter;
 @NoArgsConstructor
 public class UpdateProfileUserRequest {
 
-    @NotNull(message = "Name is required")
-    String name;
+  @NotNull(message = "Name is required")
+  String name;
 
-    @Email(message = "Email should be valid")
-    @NotEmpty(message = "Email is required")
-    String email;
+  @Email(message = "Email should be valid")
+  @NotEmpty(message = "Email is required")
+  String email;
 
-    @NotEmpty(message = "Phone number is required")
-    String phone;
+  @NotEmpty(message = "Phone number is required")
+  String phone;
 
-    @NotEmpty(message = "Address is required")
-    String address;
+  @NotEmpty(message = "Address is required")
+  String address;
 }

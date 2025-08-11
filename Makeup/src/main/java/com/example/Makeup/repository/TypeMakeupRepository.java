@@ -5,6 +5,4 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface TypeMakeupRepository extends JpaRepository<TypeMakeup,Integer> {
-
-}
+public interface TypeMakeupRepository extends JpaRepository<TypeMakeup, Integer> {}

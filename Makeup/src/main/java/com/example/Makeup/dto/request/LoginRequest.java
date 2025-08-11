@@ -11,9 +11,9 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class LoginRequest {
 
-    @NotEmpty(message = "Username is required")
-    private String username;
+  @NotEmpty(message = "Username is required")
+  private String username;
 
-    @NotEmpty(message = "Password is required")
-    private String password;
+  @NotEmpty(message = "Password is required")
+  private String password;
 }

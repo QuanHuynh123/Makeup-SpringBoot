@@ -1,10 +1,9 @@
 package com.example.Makeup.dto.model;
 
-import lombok.*;
-import lombok.experimental.FieldDefaults;
-
 import java.time.LocalDateTime;
 import java.util.UUID;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 @Getter
 @Setter
@@ -12,12 +11,12 @@ import java.util.UUID;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class AccountDTO {
-    UUID id;
-    String userName;
-    String passWord;
-    int roleId;
-    UUID staffId;
-    UUID userId;
-    LocalDateTime createdAt;
-    LocalDateTime updatedAt;
+  UUID id;
+  String userName;
+  String passWord;
+  int roleId;
+  UUID staffId;
+  UUID userId;
+  LocalDateTime createdAt;
+  LocalDateTime updatedAt;
 }

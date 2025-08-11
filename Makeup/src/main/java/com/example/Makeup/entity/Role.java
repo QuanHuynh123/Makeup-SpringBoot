@@ -4,8 +4,6 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import java.util.UUID;
-
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
@@ -13,12 +11,12 @@ import java.util.UUID;
 @Setter
 @Table(name = "role")
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Role extends Base{
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
-    int id;
+public class Role extends Base {
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "id", nullable = false)
+  int id;
 
-    @Column(name = "name_role", length = 40, nullable = false)
-    String nameRole;
+  @Column(name = "name_role", length = 40, nullable = false)
+  String nameRole;
 }

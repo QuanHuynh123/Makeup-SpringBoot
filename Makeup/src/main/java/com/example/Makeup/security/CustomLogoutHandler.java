@@ -13,17 +13,18 @@ import org.springframework.stereotype.Component;
 @Component
 public class CustomLogoutHandler implements LogoutHandler {
 
-    @Override
-    public void logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
+  @Override
+  public void logout(
+      HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
 
-        Cookie cookie = new Cookie("jwt", null);
-        cookie.setHttpOnly(true);
-        cookie.setSecure(false);
-        cookie.setPath("/");
-        cookie.setMaxAge(0);
-        response.addCookie(cookie);
+    Cookie cookie = new Cookie("jwt", null);
+    cookie.setHttpOnly(true);
+    cookie.setSecure(false);
+    cookie.setPath("/");
+    cookie.setMaxAge(0);
+    response.addCookie(cookie);
 
-        SecurityContextHolder.clearContext();
-        log.info("SecurityContext cleared");
-    }
+    SecurityContextHolder.clearContext();
+    log.info("SecurityContext cleared");
+  }
 }

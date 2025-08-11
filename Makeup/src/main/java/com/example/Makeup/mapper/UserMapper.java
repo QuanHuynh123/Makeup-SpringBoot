@@ -8,9 +8,9 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface UserMapper {
 
-    @Mapping(source = "account.id", target = "accountId")
-    UserDTO toUserDTO(User user);
+  @Mapping(source = "account.id", target = "accountId")
+  UserDTO toUserDTO(User user);
 
-    @Mapping(target = "account", ignore = true) // Assuming account is set separately
-    User toUserEntity(UserDTO userDTO);
+  @Mapping(target = "account", ignore = true) // Assuming account is set separately
+  User toUserEntity(UserDTO userDTO);
 }

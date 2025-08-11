@@ -9,13 +9,12 @@ import org.springframework.stereotype.Component;
 @Getter
 public class RedisStatusManager {
 
-    @Getter
-    private static volatile boolean isRedisAvailable = true;
+  @Getter private static volatile boolean isRedisAvailable = true;
 
-    public static void setRedisAvailable(boolean available) {
-        if (isRedisAvailable != available) {
-            log.info("Redis status changed to: {}", available ? "AVAILABLE" : "UNAVAILABLE");
-            isRedisAvailable = available;
-        }
+  public static void setRedisAvailable(boolean available) {
+    if (isRedisAvailable != available) {
+      log.info("Redis status changed to: {}", available ? "AVAILABLE" : "UNAVAILABLE");
+      isRedisAvailable = available;
     }
+  }
 }

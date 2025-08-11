@@ -4,19 +4,15 @@
  */
 package com.example.Makeup.controller.web.admin;
 
-import com.example.Makeup.dto.model.ProductDTO;
 import com.example.Makeup.dto.model.SubCategoryDTO;
-import java.util.List;
-import java.util.UUID;
-
 import com.example.Makeup.dto.response.common.ApiResponse;
 import com.example.Makeup.service.IProductService;
 import com.example.Makeup.service.ISubCategoryService;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
@@ -24,32 +20,32 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/admin/products")
 public class ProductAdminController {
 
-    private final IProductService productService;
-    private final ISubCategoryService subCategoryService;
+  private final IProductService productService;
+  private final ISubCategoryService subCategoryService;
 
-    @GetMapping("")
-    public String getAllProductsAdminPage(Model model){
-        return "admin/product-admin";
-    }
+  @GetMapping("")
+  public String getAllProductsAdminPage(Model model) {
+    return "admin/product-admin";
+  }
 
-    @GetMapping("/create")
-    public String createProductAdminPage(Model model){
-        ApiResponse<List<SubCategoryDTO>> subCategories = subCategoryService.getAll();
-        model.addAttribute("subCategories", subCategories.getResult());
+  @GetMapping("/create")
+  public String createProductAdminPage(Model model) {
+    ApiResponse<List<SubCategoryDTO>> subCategories = subCategoryService.getAll();
+    model.addAttribute("subCategories", subCategories.getResult());
 
-        return "admin/create-product";
-    }
+    return "admin/create-product";
+  }
 
-//    @GetMapping("/edit/{id}")
-//    public String editProductAdminPage(Model model, @PathVariable("id") UUID id){
-//        ApiResponse<List<SubCategoryDTO>> subCategories = subCategoryService.getAll();
-//        model.addAttribute("subCategories", subCategories.getResult());
-//
-//        ApiResponse<ProductDTO> productDTO = productService.findProductById(id);
-//
-//        String[] imageList = productDTO.getResult().getImage().split(",");
-//        model.addAttribute("product", productDTO.getResult());
-//        model.addAttribute("images", imageList);
-//        return "admin/edit-product";
-//    }
+  //    @GetMapping("/edit/{id}")
+  //    public String editProductAdminPage(Model model, @PathVariable("id") UUID id){
+  //        ApiResponse<List<SubCategoryDTO>> subCategories = subCategoryService.getAll();
+  //        model.addAttribute("subCategories", subCategories.getResult());
+  //
+  //        ApiResponse<ProductDTO> productDTO = productService.findProductById(id);
+  //
+  //        String[] imageList = productDTO.getResult().getImage().split(",");
+  //        model.addAttribute("product", productDTO.getResult());
+  //        model.addAttribute("images", imageList);
+  //        return "admin/edit-product";
+  //    }
 }

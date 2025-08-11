@@ -5,41 +5,40 @@ import com.example.Makeup.dto.request.CreateStaffRequest;
 import com.example.Makeup.dto.response.StaffAccountResponse;
 import com.example.Makeup.dto.response.common.ApiResponse;
 import com.example.Makeup.service.IStaffService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 import java.util.UUID;
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/admin/staffs")
 public class StaffAdminRestController {
 
-    private final IStaffService staffService;
+  private final IStaffService staffService;
 
-    @GetMapping("")
-    public ApiResponse<List<StaffDTO>> getAllStaff() {
-        return staffService.getAllStaff();
-    }
+  @GetMapping("")
+  public ApiResponse<List<StaffDTO>> getAllStaff() {
+    return staffService.getAllStaff();
+  }
 
-    @GetMapping("/{id}")
-    public ApiResponse<StaffAccountResponse> getStaff(@PathVariable UUID id) {
-        return staffService.getStaffById(id);
-    }
+  @GetMapping("/{id}")
+  public ApiResponse<StaffAccountResponse> getStaff(@PathVariable UUID id) {
+    return staffService.getStaffById(id);
+  }
 
-    @PostMapping("/create")
-    public ApiResponse<StaffDTO> addStaff(@RequestBody CreateStaffRequest newStaff) {
-        return  staffService.addStaff(newStaff);
-    }
+  @PostMapping("/create")
+  public ApiResponse<StaffDTO> addStaff(@RequestBody CreateStaffRequest newStaff) {
+    return staffService.addStaff(newStaff);
+  }
 
-    @DeleteMapping("/{id}")
-    public ApiResponse<String> deleteStaffById(@PathVariable UUID id) {
-        return staffService.deleteStaffIfNoAppointments(id);
-    }
+  @DeleteMapping("/{id}")
+  public ApiResponse<String> deleteStaffById(@PathVariable UUID id) {
+    return staffService.deleteStaffIfNoAppointments(id);
+  }
 
-    @PutMapping("/{id}")
-    public ApiResponse<StaffDTO> updateStaff(@PathVariable UUID id, @RequestBody StaffDTO staffDTO) {
-        return staffService.updateStaff(staffDTO, id);
-    }
+  @PutMapping("/{id}")
+  public ApiResponse<StaffDTO> updateStaff(@PathVariable UUID id, @RequestBody StaffDTO staffDTO) {
+    return staffService.updateStaff(staffDTO, id);
+  }
 }

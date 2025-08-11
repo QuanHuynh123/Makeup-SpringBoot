@@ -1,17 +1,17 @@
-//package com.example.Makeup.exception;
+// package com.example.Makeup.exception;
 //
-//import com.example.Makeup.dto.response.common.ApiResponse;
-//import com.example.Makeup.enums.ErrorCode;
-//import lombok.extern.slf4j.Slf4j;
-//import org.springframework.http.HttpStatus;
-//import org.springframework.http.ResponseEntity;
-//import org.springframework.web.bind.MethodArgumentNotValidException;
-//import org.springframework.web.bind.annotation.ControllerAdvice;
-//import org.springframework.web.bind.annotation.ExceptionHandler;
+// import com.example.Makeup.dto.response.common.ApiResponse;
+// import com.example.Makeup.enums.ErrorCode;
+// import lombok.extern.slf4j.Slf4j;
+// import org.springframework.http.HttpStatus;
+// import org.springframework.http.ResponseEntity;
+// import org.springframework.web.bind.MethodArgumentNotValidException;
+// import org.springframework.web.bind.annotation.ControllerAdvice;
+// import org.springframework.web.bind.annotation.ExceptionHandler;
 //
-//@ControllerAdvice
-//@Slf4j
-//public class GlobalExceptionHandler {
+// @ControllerAdvice
+// @Slf4j
+// public class GlobalExceptionHandler {
 //
 //    @ExceptionHandler(value = RuntimeException.class)
 //    public ResponseEntity<ApiResponse> handlingRuntimeException(RuntimeException e) {
@@ -35,7 +35,8 @@
 //    }
 //
 //    @ExceptionHandler(MethodArgumentNotValidException.class)
-//    public ResponseEntity<ApiResponse<Object>> handleValidationErrors(MethodArgumentNotValidException ex) {
+//    public ResponseEntity<ApiResponse<Object>>
+// handleValidationErrors(MethodArgumentNotValidException ex) {
 //        String msg = ex.getBindingResult().getFieldError().getDefaultMessage();
 //        return ResponseEntity.badRequest().body(
 //                ApiResponse.builder()
@@ -47,4 +48,4 @@
 //    }
 //
 //
-//}
+// }

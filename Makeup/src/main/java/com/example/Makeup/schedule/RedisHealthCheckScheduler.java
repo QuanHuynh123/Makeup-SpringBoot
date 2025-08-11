@@ -9,10 +9,10 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class RedisHealthCheckScheduler {
 
-    private final CacheCategoryService cacheCategoryService;
+  private final CacheCategoryService cacheCategoryService;
 
-    @Scheduled(fixedRate = 60000) // 1 minutes
-    public void checkRedis() {
-        cacheCategoryService.checkRedisConnection();
-    }
+  @Scheduled(fixedRate = 60000) // 1 minutes
+  public void checkRedis() {
+    cacheCategoryService.checkRedisConnection();
+  }
 }

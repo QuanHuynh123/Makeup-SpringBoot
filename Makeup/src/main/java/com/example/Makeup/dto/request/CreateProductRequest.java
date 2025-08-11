@@ -2,11 +2,10 @@ package com.example.Makeup.dto.request;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
+import java.util.List;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.util.List;
 
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Getter
@@ -15,35 +14,35 @@ import java.util.List;
 @AllArgsConstructor
 public class CreateProductRequest {
 
-    @NotNull(message = "Product name cannot be null")
-    String name;
+  @NotNull(message = "Product name cannot be null")
+  String name;
 
-    @NotNull(message = "Description cannot be null")
-    String description;
+  @NotNull(message = "Description cannot be null")
+  String description;
 
-    @NotNull(message = "Size cannot be null")
-    String size;
+  @NotNull(message = "Size cannot be null")
+  String size;
 
-    @NotNull(message = "Price cannot be null")
-    @Positive(message = "Price must be a positive number")
-    double price;
+  @NotNull(message = "Price cannot be null")
+  @Positive(message = "Price must be a positive number")
+  double price;
 
-    boolean status;
+  boolean status;
 
-    List<MultipartFile> files;
+  List<MultipartFile> files;
 
-    @Positive(message = "Category ID must be a positive number")
-    int subCategoryId;
+  @Positive(message = "Category ID must be a positive number")
+  int subCategoryId;
 
-    @NotNull(message = "Quantity cannot be null")
-    @Positive(message = "Quantity must be a positive number")
-    int quantity;
+  @NotNull(message = "Quantity cannot be null")
+  @Positive(message = "Quantity must be a positive number")
+  int quantity;
 
-    @NotNull(message = "Current quantity cannot be null")
-    @Positive(message = "Current quantity must be a positive number")
-    int currentQuantity;
+  @NotNull(message = "Current quantity cannot be null")
+  @Positive(message = "Current quantity must be a positive number")
+  int currentQuantity;
 
-    @NotNull(message = "Rental count cannot be null")
-    @Positive(message = "Rental count must be a positive number")
-    int rentalCount;
+  @NotNull(message = "Rental count cannot be null")
+  @Positive(message = "Rental count must be a positive number")
+  int rentalCount;
 }

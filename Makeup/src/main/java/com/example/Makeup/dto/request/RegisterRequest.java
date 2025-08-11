@@ -8,10 +8,9 @@ import lombok.Setter;
 @Getter
 public class RegisterRequest {
 
-    @NotEmpty(message = "UserName is required")
-    private String userName;
+  @NotEmpty(message = "UserName is required")
+  private String userName;
 
-    @NotEmpty(message = "Password is required")
-    private String passWord;
+  @NotEmpty(message = "Password is required")
+  private String passWord;
 }
-

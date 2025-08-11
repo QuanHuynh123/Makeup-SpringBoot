@@ -1,13 +1,13 @@
-//package com.example.Makeup;
+// package com.example.Makeup;
 //
-//import org.junit.jupiter.api.Test;
-//import org.springframework.boot.test.context.SpringBootTest;
+// import org.junit.jupiter.api.Test;
+// import org.springframework.boot.test.context.SpringBootTest;
 //
-//@SpringBootTest
-//class MakeupApplicationTests {
+// @SpringBootTest
+// class MakeupApplicationTests {
 //
 //	@Test
 //	void contextLoads() {
 //	}
 //
-//}
+// }
