@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Responsive-->
+    <link rel="stylesheet"  href="/css/responsive.css">
+    <link rel="stylesheet"  href="/css/profile.css">
+    <link rel="stylesheet"  href="/css/myOrder.css">
+    <link rel="stylesheet"  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <title>Profile</title>
+</head>
+<body>
+    <header>
+        <!-- header inner -->
+        <div class="header" style="background-color: rgba(255, 255, 255, 0) !important ;">
+            <div class="col-xl-1 col-lg-2 col-md-3 col-sm-4 div_btn_home">
+                <a href="/home"><button class="btn_home">Makeup</button></a>
+                <a href="/user/myOrder"><button class="btn_home">Đơn hàng</button></a>
+                <a href="/user/myAppointment"><button class="btn_home">Lịch hẹn</button></a>
+                <a href="/user/myCart"><button class="btn_home">Giỏ hàng</button></a>
+            </div>
+        </div>
+    </header>
+<div class='container'>
+    <div class='avatar'>
+        <img src="/images/avt_girl.jpg">
+    </div>
+
+
+    <div class='button'>
+        <div class='button__icon'><i class="fa-solid fa-diamond"></i></div>
+        <div class='button__text'>Tên :  </div>
+        <input type="text" class="input" id="name" th:value="${user != null ? user.fullName : ''}" />
+    </div>
+
+    <div class='button' >
+        <div class='button__icon'><i class='fa-solid fa-phone'></i></div>
+        <div class='button__text'> Số điện thoại :  </div>
+        <input type="text" class="input" id="phone" th:value="${user.phone}" />
+    </div>
+
+
+    <div class='button' >
+        <div class='button__icon'><i class="fa-solid fa-location-dot"></i></div>
+        <div class='button__text'> Địa chỉ :</div>
+        <input type="text" class="input" id="address" th:value="${user != null ? user.address : ''}" />
+    </div>
+
+    <div class='button' >
+        <div class='button__icon'><i class="fa-solid fa-envelope"></i></div>
+        <div class='button__text'>Email :</div>
+        <input type="text" class="input" id="email" th:value="${user != null ? user.email : ''}" />
+    </div>
+
+    <div id="div_button">
+        <button class="btn_save" onclick="getData()">CẬP NHẬT THÔNG TIN</button>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="/js/service/profile.js"></script>
+
+</body>
+
+</html>     

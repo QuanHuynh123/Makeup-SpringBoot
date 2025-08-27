@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Registration</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="css/register.css">
+</head>
+
+<body>
+<div class="wrapper">
+	<div class="inner">
+		<div class="image-holder">
+			<img src="images/registration-form-4.jpg" alt="">
+		</div>
+
+		<form id="registrationForm">
+			<h3>Sign Up</h3>
+			<div class="form-holder">
+				<input type="text" id="username" placeholder="User name" class="form-control"> <!-- Thay đổi đây -->
+			</div>
+			<div class="form-holder">
+				<input type="password" id="password" placeholder="Password" class="form-control" style="font-size: 15px;">
+			</div>
+			<div class="form-holder">
+				<input type="password" id="confirmPassword" placeholder="Confirm Password" class="form-control" style="font-size: 15px;">
+			</div>
+			<div class="checkbox">
+				<label>
+					<input type="checkbox" checked> I agree all statement in <a href="#">Terms & Conditions</a>
+					<span class="checkmark"></span>
+				</label>
+			</div>
+			<div class="form-login">
+				<button id="btn_register" type="submit">Sign up</button>
+				<p>Already Have account? <a href="/login">Login</a></p>
+			</div>
+		</form>
+
+	</div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="/js/service/register.js"> </script>
+</body>
+</html>

@@ -1,0 +1,165 @@
+/* header */
+.header{
+    top: 0;
+    background-color: rgb(63, 58, 58);
+    height: 70px;
+    position: fixed;
+    z-index: 10;
+    width: 100%;
+    display: flex;
+}
+
+.div_btn_home{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.btn_home{
+    background: none;
+    border: none;
+    color: rgb(255, 255, 255);
+    font-size: 22px;
+}
+
+.search-bar {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    max-width: 1000px; /* Đảm bảo kích thước hợp lý */
+    background-color: #ffffff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    overflow: hidden;
+    margin-top: 30px;
+    margin-left: 100px;
+}
+
+.search-input {
+    flex: 1;
+    border: none;
+    padding: 10px;
+    font-size: 16px;
+    outline: none;
+}
+
+.search-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 3px;
+    margin-right: 5px;
+}
+
+.search-button i {
+    font-size: 16px;
+}
+
+.search-button:hover {
+    background-color: #0056b3;
+}
+
+@media (max-width: 768px) {
+    .header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .search-bar {
+        width: 100%;
+    }
+}
+
+.child_content_orderDetail{
+    margin-top: 50px;
+    background-color: #eb633a;
+    display: flex;
+    flex-direction: column;
+    padding: 50px;
+    align-items: center;
+}
+
+/* end-header */
+/* Bố cục lưới với 2 cột */
+.grid-container {
+    display: grid;
+    grid-template-columns: 3fr 2fr; /* 2 cột có kích thước bằng nhau */
+    grid-auto-rows: 1fr;
+    gap: 20px; /* Khoảng cách giữa các cột */
+    width: 80%;
+}
+
+/* Căn chỉnh các phần tử trong từng cột */
+.column-1, .column-2 {
+    display: flex;
+    flex-direction: column; /* Các phần tử trong cột xếp chồng dọc */
+    gap: 10px; /* Khoảng cách giữa các div trong cột */
+}
+
+/* Định dạng cho từng div */
+.box {
+    background-color: rgb(255, 255, 255); /* Màu nền */
+    text-align: center; /* Canh giữa nội dung */
+    padding: 15px; /* Khoảng cách bên trong */
+    border: 1px solid #ccc; /* Viền */
+    border-radius: 10px; /* Bo góc */
+}
+.text-black{
+    color: #f0f0f0;
+    width: 80%;
+}
+
+
+#info-box {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    width: 400px;
+    margin: auto;
+}
+
+.title_box {
+    font-size: 18px;
+    margin-bottom: 15px;
+    border-bottom: 2px solid #f0f0f0;
+    padding-bottom: 10px;
+    color: #333;
+    text-align: left;
+}
+
+.info-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    color: #000000;
+}
+
+.boder-bottom {
+    border-bottom: 1.5px solid #d4d2d2;
+}
+
+.info-row:last-child {
+    border-bottom: none;
+}
+
+.info-row span {
+    font-size: 14px;
+    color: #555;
+}
+
+.info-row span:last-child {
+    font-weight: bold;
+    color: #333;
+}
+
+#box-list-item{
+    max-height: 250px;
+    overflow: scroll;
+
+}

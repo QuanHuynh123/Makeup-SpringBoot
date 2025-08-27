@@ -1,0 +1,2 @@
+ALTER TABLE orders
+ADD COLUMN unique_request_id VARCHAR(36) NOT NULL UNIQUE
