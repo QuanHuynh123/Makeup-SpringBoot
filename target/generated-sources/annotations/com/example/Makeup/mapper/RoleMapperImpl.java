@@ -1,14 +1,14 @@
 package com.example.Makeup.mapper;
 
-import com.example.Makeup.dto.RoleDTO;
+import com.example.Makeup.dto.model.RoleDTO;
 import com.example.Makeup.entity.Role;
 import javax.annotation.processing.Generated;
 import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-11-10T18:08:01+0700",
-    comments = "version: 1.5.5.Final, compiler: javac, environment: Java 21.0.2 (Oracle Corporation)"
+    date = "2025-08-10T21:37:49+0700",
+    comments = "version: 1.5.5.Final, compiler: javac, environment: Java 21.0.6 (Oracle Corporation)"
 )
 @Component
 public class RoleMapperImpl implements RoleMapper {
@@ -23,6 +23,8 @@ public class RoleMapperImpl implements RoleMapper {
 
         roleDTO.setId( role.getId() );
         roleDTO.setNameRole( role.getNameRole() );
+        roleDTO.setCreatedAt( role.getCreatedAt() );
+        roleDTO.setUpdatedAt( role.getUpdatedAt() );
 
         return roleDTO;
     }
@@ -35,6 +37,8 @@ public class RoleMapperImpl implements RoleMapper {
 
         Role role = new Role();
 
+        role.setCreatedAt( roleDTO.getCreatedAt() );
+        role.setUpdatedAt( roleDTO.getUpdatedAt() );
         role.setId( roleDTO.getId() );
         role.setNameRole( roleDTO.getNameRole() );
 

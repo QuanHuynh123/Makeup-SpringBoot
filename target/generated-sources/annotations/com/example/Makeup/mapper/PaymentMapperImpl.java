@@ -1,14 +1,14 @@
 package com.example.Makeup.mapper;
 
-import com.example.Makeup.dto.PaymentDTO;
+import com.example.Makeup.dto.model.PaymentDTO;
 import com.example.Makeup.entity.Payment;
 import javax.annotation.processing.Generated;
 import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-11-10T18:08:01+0700",
-    comments = "version: 1.5.5.Final, compiler: javac, environment: Java 21.0.2 (Oracle Corporation)"
+    date = "2025-08-10T21:37:49+0700",
+    comments = "version: 1.5.5.Final, compiler: javac, environment: Java 21.0.6 (Oracle Corporation)"
 )
 @Component
 public class PaymentMapperImpl implements PaymentMapper {
@@ -24,6 +24,8 @@ public class PaymentMapperImpl implements PaymentMapper {
         paymentDTO.setId( payment.getId() );
         paymentDTO.setNamePaymentMethod( payment.getNamePaymentMethod() );
         paymentDTO.setStatus( payment.isStatus() );
+        paymentDTO.setCreatedAt( payment.getCreatedAt() );
+        paymentDTO.setUpdatedAt( payment.getUpdatedAt() );
 
         return paymentDTO;
     }
@@ -36,6 +38,8 @@ public class PaymentMapperImpl implements PaymentMapper {
 
         Payment payment = new Payment();
 
+        payment.setCreatedAt( paymentDTO.getCreatedAt() );
+        payment.setUpdatedAt( paymentDTO.getUpdatedAt() );
         payment.setId( paymentDTO.getId() );
         payment.setNamePaymentMethod( paymentDTO.getNamePaymentMethod() );
         payment.setStatus( paymentDTO.isStatus() );

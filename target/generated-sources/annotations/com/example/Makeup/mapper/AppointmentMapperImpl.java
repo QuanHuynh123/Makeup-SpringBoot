@@ -1,17 +1,18 @@
 package com.example.Makeup.mapper;
 
-import com.example.Makeup.dto.AppointmentDTO;
+import com.example.Makeup.dto.model.AppointmentDTO;
 import com.example.Makeup.entity.Appointment;
-import com.example.Makeup.entity.ServiceMakeup;
 import com.example.Makeup.entity.Staff;
+import com.example.Makeup.entity.TypeMakeup;
 import com.example.Makeup.entity.User;
+import java.util.UUID;
 import javax.annotation.processing.Generated;
 import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-11-10T18:08:00+0700",
-    comments = "version: 1.5.5.Final, compiler: javac, environment: Java 21.0.2 (Oracle Corporation)"
+    date = "2025-08-10T21:37:49+0700",
+    comments = "version: 1.5.5.Final, compiler: javac, environment: Java 21.0.6 (Oracle Corporation)"
 )
 @Component
 public class AppointmentMapperImpl implements AppointmentMapper {
@@ -25,13 +26,16 @@ public class AppointmentMapperImpl implements AppointmentMapper {
         AppointmentDTO appointmentDTO = new AppointmentDTO();
 
         appointmentDTO.setUserId( appointmentUserId( appointment ) );
-        appointmentDTO.setServiceMakeupId( appointmentServiceMakeupId( appointment ) );
+        appointmentDTO.setTypeMakeupId( appointmentTypeMakeupId( appointment ) );
         appointmentDTO.setStaffId( appointmentStaffId( appointment ) );
         appointmentDTO.setId( appointment.getId() );
         appointmentDTO.setStartTime( appointment.getStartTime() );
         appointmentDTO.setEndTime( appointment.getEndTime() );
+        appointmentDTO.setPrice( appointment.getPrice() );
         appointmentDTO.setMakeupDate( appointment.getMakeupDate() );
         appointmentDTO.setStatus( appointment.isStatus() );
+        appointmentDTO.setCreatedAt( appointment.getCreatedAt() );
+        appointmentDTO.setUpdatedAt( appointment.getUpdatedAt() );
 
         return appointmentDTO;
     }
@@ -45,50 +49,59 @@ public class AppointmentMapperImpl implements AppointmentMapper {
         Appointment appointment = new Appointment();
 
         appointment.setUser( appointmentDTOToUser( appointmentDTO ) );
-        appointment.setServiceMakeup( appointmentDTOToServiceMakeup( appointmentDTO ) );
+        appointment.setTypeMakeup( appointmentDTOToTypeMakeup( appointmentDTO ) );
         appointment.setStaff( appointmentDTOToStaff( appointmentDTO ) );
+        appointment.setCreatedAt( appointmentDTO.getCreatedAt() );
+        appointment.setUpdatedAt( appointmentDTO.getUpdatedAt() );
         appointment.setId( appointmentDTO.getId() );
         appointment.setStartTime( appointmentDTO.getStartTime() );
         appointment.setEndTime( appointmentDTO.getEndTime() );
         appointment.setMakeupDate( appointmentDTO.getMakeupDate() );
+        appointment.setPrice( appointmentDTO.getPrice() );
         appointment.setStatus( appointmentDTO.isStatus() );
 
         return appointment;
     }
 
-    private int appointmentUserId(Appointment appointment) {
+    private UUID appointmentUserId(Appointment appointment) {
         if ( appointment == null ) {
-            return 0;
+            return null;
         }
         User user = appointment.getUser();
         if ( user == null ) {
-            return 0;
+            return null;
         }
-        int id = user.getId();
+        UUID id = user.getId();
+        if ( id == null ) {
+            return null;
+        }
         return id;
     }
 
-    private int appointmentServiceMakeupId(Appointment appointment) {
+    private int appointmentTypeMakeupId(Appointment appointment) {
         if ( appointment == null ) {
             return 0;
         }
-        ServiceMakeup serviceMakeup = appointment.getServiceMakeup();
-        if ( serviceMakeup == null ) {
+        TypeMakeup typeMakeup = appointment.getTypeMakeup();
+        if ( typeMakeup == null ) {
             return 0;
         }
-        int id = serviceMakeup.getId();
+        int id = typeMakeup.getId();
         return id;
     }
 
-    private int appointmentStaffId(Appointment appointment) {
+    private UUID appointmentStaffId(Appointment appointment) {
         if ( appointment == null ) {
-            return 0;
+            return null;
         }
         Staff staff = appointment.getStaff();
         if ( staff == null ) {
-            return 0;
+            return null;
         }
-        int id = staff.getId();
+        UUID id = staff.getId();
+        if ( id == null ) {
+            return null;
+        }
         return id;
     }
 
@@ -104,16 +117,16 @@ public class AppointmentMapperImpl implements AppointmentMapper {
         return user;
     }
 
-    protected ServiceMakeup appointmentDTOToServiceMakeup(AppointmentDTO appointmentDTO) {
+    protected TypeMakeup appointmentDTOToTypeMakeup(AppointmentDTO appointmentDTO) {
         if ( appointmentDTO == null ) {
             return null;
         }
 
-        ServiceMakeup serviceMakeup = new ServiceMakeup();
+        TypeMakeup typeMakeup = new TypeMakeup();
 
-        serviceMakeup.setId( appointmentDTO.getServiceMakeupId() );
+        typeMakeup.setId( appointmentDTO.getTypeMakeupId() );
 
-        return serviceMakeup;
+        return typeMakeup;
     }
 
     protected Staff appointmentDTOToStaff(AppointmentDTO appointmentDTO) {

@@ -1,16 +1,18 @@
 package com.example.Makeup.mapper;
 
-import com.example.Makeup.dto.FeedBackDTO;
+import com.example.Makeup.dto.model.FeedBackDTO;
 import com.example.Makeup.entity.FeedBack;
-import com.example.Makeup.entity.ServiceMakeup;
+import com.example.Makeup.entity.TypeMakeup;
 import com.example.Makeup.entity.User;
+import java.time.LocalDateTime;
+import java.util.UUID;
 import javax.annotation.processing.Generated;
 import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-11-10T18:08:00+0700",
-    comments = "version: 1.5.5.Final, compiler: javac, environment: Java 21.0.2 (Oracle Corporation)"
+    date = "2025-08-10T21:37:49+0700",
+    comments = "version: 1.5.5.Final, compiler: javac, environment: Java 21.0.6 (Oracle Corporation)"
 )
 @Component
 public class FeedbackMapperImpl implements FeedbackMapper {
@@ -21,14 +23,23 @@ public class FeedbackMapperImpl implements FeedbackMapper {
             return null;
         }
 
-        FeedBackDTO feedBackDTO = new FeedBackDTO();
+        UUID userId = null;
+        int typeMakeupId = 0;
+        int rating = 0;
+        String comment = null;
+        LocalDateTime createdAt = null;
+        LocalDateTime updatedAt = null;
+        UUID id = null;
 
-        feedBackDTO.setUserId( feedBackUserId( feedBack ) );
-        feedBackDTO.setServiceMakeupId( feedBackServiceMakeupId( feedBack ) );
-        feedBackDTO.setId( feedBack.getId() );
-        feedBackDTO.setRating( feedBack.getRating() );
-        feedBackDTO.setComment( feedBack.getComment() );
-        feedBackDTO.setReviewDate( feedBack.getReviewDate() );
+        userId = feedBackUserId( feedBack );
+        typeMakeupId = feedBackTypeMakeupId( feedBack );
+        rating = feedBack.getRating();
+        comment = feedBack.getComment();
+        createdAt = feedBack.getCreatedAt();
+        updatedAt = feedBack.getUpdatedAt();
+        id = feedBack.getId();
+
+        FeedBackDTO feedBackDTO = new FeedBackDTO( id, rating, comment, userId, typeMakeupId, createdAt, updatedAt );
 
         return feedBackDTO;
     }
@@ -42,36 +53,40 @@ public class FeedbackMapperImpl implements FeedbackMapper {
         FeedBack feedBack = new FeedBack();
 
         feedBack.setUser( feedBackDTOToUser( feedBackDTO ) );
-        feedBack.setServiceMakeup( feedBackDTOToServiceMakeup( feedBackDTO ) );
+        feedBack.setTypeMakeup( feedBackDTOToTypeMakeup( feedBackDTO ) );
+        feedBack.setCreatedAt( feedBackDTO.getCreatedAt() );
+        feedBack.setUpdatedAt( feedBackDTO.getUpdatedAt() );
         feedBack.setId( feedBackDTO.getId() );
         feedBack.setRating( feedBackDTO.getRating() );
         feedBack.setComment( feedBackDTO.getComment() );
-        feedBack.setReviewDate( feedBackDTO.getReviewDate() );
 
         return feedBack;
     }
 
-    private int feedBackUserId(FeedBack feedBack) {
+    private UUID feedBackUserId(FeedBack feedBack) {
         if ( feedBack == null ) {
-            return 0;
+            return null;
         }
         User user = feedBack.getUser();
         if ( user == null ) {
-            return 0;
+            return null;
         }
-        int id = user.getId();
+        UUID id = user.getId();
+        if ( id == null ) {
+            return null;
+        }
         return id;
     }
 
-    private int feedBackServiceMakeupId(FeedBack feedBack) {
+    private int feedBackTypeMakeupId(FeedBack feedBack) {
         if ( feedBack == null ) {
             return 0;
         }
-        ServiceMakeup serviceMakeup = feedBack.getServiceMakeup();
-        if ( serviceMakeup == null ) {
+        TypeMakeup typeMakeup = feedBack.getTypeMakeup();
+        if ( typeMakeup == null ) {
             return 0;
         }
-        int id = serviceMakeup.getId();
+        int id = typeMakeup.getId();
         return id;
     }
 
@@ -87,15 +102,15 @@ public class FeedbackMapperImpl implements FeedbackMapper {
         return user;
     }
 
-    protected ServiceMakeup feedBackDTOToServiceMakeup(FeedBackDTO feedBackDTO) {
+    protected TypeMakeup feedBackDTOToTypeMakeup(FeedBackDTO feedBackDTO) {
         if ( feedBackDTO == null ) {
             return null;
         }
 
-        ServiceMakeup serviceMakeup = new ServiceMakeup();
+        TypeMakeup typeMakeup = new TypeMakeup();
 
-        serviceMakeup.setId( feedBackDTO.getServiceMakeupId() );
+        typeMakeup.setId( feedBackDTO.getTypeMakeupId() );
 
-        return serviceMakeup;
+        return typeMakeup;
     }
 }

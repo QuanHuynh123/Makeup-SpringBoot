@@ -1,16 +1,18 @@
 package com.example.Makeup.mapper;
 
-import com.example.Makeup.dto.CartItemDTO;
+import com.example.Makeup.dto.model.CartItemDTO;
 import com.example.Makeup.entity.Cart;
 import com.example.Makeup.entity.CartItem;
 import com.example.Makeup.entity.Product;
+import java.time.LocalDateTime;
+import java.util.UUID;
 import javax.annotation.processing.Generated;
 import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-11-10T18:08:01+0700",
-    comments = "version: 1.5.5.Final, compiler: javac, environment: Java 21.0.2 (Oracle Corporation)"
+    date = "2025-08-10T21:37:49+0700",
+    comments = "version: 1.5.5.Final, compiler: javac, environment: Java 21.0.6 (Oracle Corporation)"
 )
 @Component
 public class CartItemMapperImpl implements CartItemMapper {
@@ -21,13 +23,25 @@ public class CartItemMapperImpl implements CartItemMapper {
             return null;
         }
 
-        CartItemDTO cartItemDTO = new CartItemDTO();
+        UUID cartId = null;
+        UUID productId = null;
+        int quantity = 0;
+        double price = 0.0d;
+        LocalDateTime rentalDate = null;
+        LocalDateTime createdAt = null;
+        LocalDateTime updatedAt = null;
+        UUID id = null;
 
-        cartItemDTO.setCartId( cartItemCartId( cartItem ) );
-        cartItemDTO.setProductId( cartItemProductId( cartItem ) );
-        cartItemDTO.setId( cartItem.getId() );
-        cartItemDTO.setQuantity( cartItem.getQuantity() );
-        cartItemDTO.setPrice( cartItem.getPrice() );
+        cartId = cartItemCartId( cartItem );
+        productId = cartItemProductId( cartItem );
+        quantity = cartItem.getQuantity();
+        price = cartItem.getPrice();
+        rentalDate = cartItem.getRentalDate();
+        createdAt = cartItem.getCreatedAt();
+        updatedAt = cartItem.getUpdatedAt();
+        id = cartItem.getId();
+
+        CartItemDTO cartItemDTO = new CartItemDTO( id, quantity, price, rentalDate, cartId, productId, createdAt, updatedAt );
 
         return cartItemDTO;
     }
@@ -42,34 +56,43 @@ public class CartItemMapperImpl implements CartItemMapper {
 
         cartItem.setCart( cartItemDTOToCart( cartItemDTO ) );
         cartItem.setProduct( cartItemDTOToProduct( cartItemDTO ) );
+        cartItem.setCreatedAt( cartItemDTO.getCreatedAt() );
+        cartItem.setUpdatedAt( cartItemDTO.getUpdatedAt() );
         cartItem.setId( cartItemDTO.getId() );
         cartItem.setQuantity( cartItemDTO.getQuantity() );
         cartItem.setPrice( cartItemDTO.getPrice() );
+        cartItem.setRentalDate( cartItemDTO.getRentalDate() );
 
         return cartItem;
     }
 
-    private int cartItemCartId(CartItem cartItem) {
+    private UUID cartItemCartId(CartItem cartItem) {
         if ( cartItem == null ) {
-            return 0;
+            return null;
         }
         Cart cart = cartItem.getCart();
         if ( cart == null ) {
-            return 0;
+            return null;
         }
-        int id = cart.getId();
+        UUID id = cart.getId();
+        if ( id == null ) {
+            return null;
+        }
         return id;
     }
 
-    private int cartItemProductId(CartItem cartItem) {
+    private UUID cartItemProductId(CartItem cartItem) {
         if ( cartItem == null ) {
-            return 0;
+            return null;
         }
         Product product = cartItem.getProduct();
         if ( product == null ) {
-            return 0;
+            return null;
         }
-        int id = product.getId();
+        UUID id = product.getId();
+        if ( id == null ) {
+            return null;
+        }
         return id;
     }
 

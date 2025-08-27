@@ -1,15 +1,17 @@
 package com.example.Makeup.mapper;
 
-import com.example.Makeup.dto.CartDTO;
+import com.example.Makeup.dto.model.CartDTO;
 import com.example.Makeup.entity.Cart;
 import com.example.Makeup.entity.User;
+import java.time.LocalDateTime;
+import java.util.UUID;
 import javax.annotation.processing.Generated;
 import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-11-10T18:08:01+0700",
-    comments = "version: 1.5.5.Final, compiler: javac, environment: Java 21.0.2 (Oracle Corporation)"
+    date = "2025-08-10T21:37:49+0700",
+    comments = "version: 1.5.5.Final, compiler: javac, environment: Java 21.0.6 (Oracle Corporation)"
 )
 @Component
 public class CartMapperImpl implements CartMapper {
@@ -20,13 +22,21 @@ public class CartMapperImpl implements CartMapper {
             return null;
         }
 
-        CartDTO cartDTO = new CartDTO();
+        UUID userId = null;
+        double totalPrice = 0.0d;
+        int totalQuantity = 0;
+        LocalDateTime createdAt = null;
+        LocalDateTime updatedAt = null;
+        UUID id = null;
 
-        cartDTO.setUserId( cartUserId( cart ) );
-        cartDTO.setId( cart.getId() );
-        cartDTO.setTotalPrice( cart.getTotalPrice() );
-        cartDTO.setTotalQuantity( cart.getTotalQuantity() );
-        cartDTO.setCreateDate( cart.getCreateDate() );
+        userId = cartUserId( cart );
+        totalPrice = cart.getTotalPrice();
+        totalQuantity = cart.getTotalQuantity();
+        createdAt = cart.getCreatedAt();
+        updatedAt = cart.getUpdatedAt();
+        id = cart.getId();
+
+        CartDTO cartDTO = new CartDTO( id, totalPrice, totalQuantity, userId, createdAt, updatedAt );
 
         return cartDTO;
     }
@@ -40,23 +50,27 @@ public class CartMapperImpl implements CartMapper {
         Cart cart = new Cart();
 
         cart.setUser( cartDTOToUser( cartDTO ) );
+        cart.setCreatedAt( cartDTO.getCreatedAt() );
+        cart.setUpdatedAt( cartDTO.getUpdatedAt() );
         cart.setId( cartDTO.getId() );
         cart.setTotalPrice( cartDTO.getTotalPrice() );
         cart.setTotalQuantity( cartDTO.getTotalQuantity() );
-        cart.setCreateDate( cartDTO.getCreateDate() );
 
         return cart;
     }
 
-    private int cartUserId(Cart cart) {
+    private UUID cartUserId(Cart cart) {
         if ( cart == null ) {
-            return 0;
+            return null;
         }
         User user = cart.getUser();
         if ( user == null ) {
-            return 0;
+            return null;
         }
-        int id = user.getId();
+        UUID id = user.getId();
+        if ( id == null ) {
+            return null;
+        }
         return id;
     }
 

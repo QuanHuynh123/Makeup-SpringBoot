@@ -1,6 +1,6 @@
 package com.example.Makeup.mapper;
 
-import com.example.Makeup.dto.AccountDTO;
+import com.example.Makeup.dto.model.AccountDTO;
 import com.example.Makeup.entity.Account;
 import com.example.Makeup.entity.Role;
 import javax.annotation.processing.Generated;
@@ -8,8 +8,8 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-11-10T18:08:01+0700",
-    comments = "version: 1.5.5.Final, compiler: javac, environment: Java 21.0.2 (Oracle Corporation)"
+    date = "2025-08-10T21:37:49+0700",
+    comments = "version: 1.5.5.Final, compiler: javac, environment: Java 21.0.6 (Oracle Corporation)"
 )
 @Component
 public class AccountMapperImpl implements AccountMapper {
@@ -26,6 +26,8 @@ public class AccountMapperImpl implements AccountMapper {
         accountDTO.setId( account.getId() );
         accountDTO.setUserName( account.getUserName() );
         accountDTO.setPassWord( account.getPassWord() );
+        accountDTO.setCreatedAt( account.getCreatedAt() );
+        accountDTO.setUpdatedAt( account.getUpdatedAt() );
 
         return accountDTO;
     }
@@ -39,6 +41,8 @@ public class AccountMapperImpl implements AccountMapper {
         Account account1 = new Account();
 
         account1.setRole( accountDTOToRole( account ) );
+        account1.setCreatedAt( account.getCreatedAt() );
+        account1.setUpdatedAt( account.getUpdatedAt() );
         account1.setId( account.getId() );
         account1.setUserName( account.getUserName() );
         account1.setPassWord( account.getPassWord() );

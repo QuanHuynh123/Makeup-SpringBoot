@@ -1,14 +1,14 @@
 package com.example.Makeup.mapper;
 
-import com.example.Makeup.dto.SubCategoryDTO;
+import com.example.Makeup.dto.model.SubCategoryDTO;
 import com.example.Makeup.entity.SubCategory;
 import javax.annotation.processing.Generated;
 import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-11-10T18:08:00+0700",
-    comments = "version: 1.5.5.Final, compiler: javac, environment: Java 21.0.2 (Oracle Corporation)"
+    date = "2025-08-10T21:37:49+0700",
+    comments = "version: 1.5.5.Final, compiler: javac, environment: Java 21.0.6 (Oracle Corporation)"
 )
 @Component
 public class SubCategoryMapperImpl implements SubCategoryMapper {
@@ -23,6 +23,11 @@ public class SubCategoryMapperImpl implements SubCategoryMapper {
 
         subCategoryDTO.setId( subCategory.getId() );
         subCategoryDTO.setName( subCategory.getName() );
+        if ( subCategory.getStatus() != null ) {
+            subCategoryDTO.setStatus( subCategory.getStatus() );
+        }
+        subCategoryDTO.setCreatedAt( subCategory.getCreatedAt() );
+        subCategoryDTO.setUpdatedAt( subCategory.getUpdatedAt() );
 
         return subCategoryDTO;
     }
@@ -35,8 +40,11 @@ public class SubCategoryMapperImpl implements SubCategoryMapper {
 
         SubCategory subCategory = new SubCategory();
 
+        subCategory.setCreatedAt( subCategoryDTO.getCreatedAt() );
+        subCategory.setUpdatedAt( subCategoryDTO.getUpdatedAt() );
         subCategory.setId( subCategoryDTO.getId() );
         subCategory.setName( subCategoryDTO.getName() );
+        subCategory.setStatus( subCategoryDTO.isStatus() );
 
         return subCategory;
     }

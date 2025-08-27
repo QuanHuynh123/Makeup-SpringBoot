@@ -1,16 +1,19 @@
 package com.example.Makeup.mapper;
 
-import com.example.Makeup.dto.OrderItemDTO;
+import com.example.Makeup.dto.model.OrderItemDTO;
 import com.example.Makeup.entity.Order;
 import com.example.Makeup.entity.OrderItem;
 import com.example.Makeup.entity.Product;
+import com.example.Makeup.enums.OrderItemStatus;
+import java.time.LocalDateTime;
+import java.util.UUID;
 import javax.annotation.processing.Generated;
 import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-11-10T18:08:01+0700",
-    comments = "version: 1.5.5.Final, compiler: javac, environment: Java 21.0.2 (Oracle Corporation)"
+    date = "2025-08-10T21:37:49+0700",
+    comments = "version: 1.5.5.Final, compiler: javac, environment: Java 21.0.6 (Oracle Corporation)"
 )
 @Component
 public class OrderItemMapperImpl implements OrderItemMapper {
@@ -21,14 +24,27 @@ public class OrderItemMapperImpl implements OrderItemMapper {
             return null;
         }
 
-        OrderItemDTO orderItemDTO = new OrderItemDTO();
+        UUID orderId = null;
+        UUID productId = null;
+        int quantity = 0;
+        double price = 0.0d;
+        OrderItemStatus status = null;
+        LocalDateTime rentalDate = null;
+        LocalDateTime createdAt = null;
+        LocalDateTime updatedAt = null;
+        UUID id = null;
 
-        orderItemDTO.setOrderId( orderItemOrderId( orderItem ) );
-        orderItemDTO.setProductId( orderItemProductId( orderItem ) );
-        orderItemDTO.setId( orderItem.getId() );
-        orderItemDTO.setQuantity( orderItem.getQuantity() );
-        orderItemDTO.setPrice( orderItem.getPrice() );
-        orderItemDTO.setUseDate( orderItem.getUseDate() );
+        orderId = orderItemOrderId( orderItem );
+        productId = orderItemProductId( orderItem );
+        quantity = orderItem.getQuantity();
+        price = orderItem.getPrice();
+        status = orderItem.getStatus();
+        rentalDate = orderItem.getRentalDate();
+        createdAt = orderItem.getCreatedAt();
+        updatedAt = orderItem.getUpdatedAt();
+        id = orderItem.getId();
+
+        OrderItemDTO orderItemDTO = new OrderItemDTO( id, quantity, price, status, rentalDate, orderId, productId, createdAt, updatedAt );
 
         return orderItemDTO;
     }
@@ -43,35 +59,44 @@ public class OrderItemMapperImpl implements OrderItemMapper {
 
         orderItem.setOrder( orderItemDTOToOrder( orderItemDTO ) );
         orderItem.setProduct( orderItemDTOToProduct( orderItemDTO ) );
+        orderItem.setCreatedAt( orderItemDTO.getCreatedAt() );
+        orderItem.setUpdatedAt( orderItemDTO.getUpdatedAt() );
         orderItem.setId( orderItemDTO.getId() );
         orderItem.setQuantity( orderItemDTO.getQuantity() );
         orderItem.setPrice( orderItemDTO.getPrice() );
-        orderItem.setUseDate( orderItemDTO.getUseDate() );
+        orderItem.setRentalDate( orderItemDTO.getRentalDate() );
+        orderItem.setStatus( orderItemDTO.getStatus() );
 
         return orderItem;
     }
 
-    private int orderItemOrderId(OrderItem orderItem) {
+    private UUID orderItemOrderId(OrderItem orderItem) {
         if ( orderItem == null ) {
-            return 0;
+            return null;
         }
         Order order = orderItem.getOrder();
         if ( order == null ) {
-            return 0;
+            return null;
         }
-        int id = order.getId();
+        UUID id = order.getId();
+        if ( id == null ) {
+            return null;
+        }
         return id;
     }
 
-    private int orderItemProductId(OrderItem orderItem) {
+    private UUID orderItemProductId(OrderItem orderItem) {
         if ( orderItem == null ) {
-            return 0;
+            return null;
         }
         Product product = orderItem.getProduct();
         if ( product == null ) {
-            return 0;
+            return null;
         }
-        int id = product.getId();
+        UUID id = product.getId();
+        if ( id == null ) {
+            return null;
+        }
         return id;
     }
 
