@@ -204,7 +204,7 @@ export const ProductModule = {
             cancelButtonText: 'Hủy'
         }).then((result) => {
             if (result.isConfirmed) {
-                fetch(`/api/products/${productId}/delete`, {
+                fetch(`/api/products/${productId}`, {
                     method: 'DELETE'
                 })
                 .then(res => res.ok ? res.json() : Promise.reject(res))
@@ -247,7 +247,7 @@ export const ProductModule = {
 
         document.getElementById('tab-create-product')
             ?.addEventListener('click', () => {
-                window.location.href = '/admin/products/create';
+                window.location.href = '/admin/products';
             });
     }
 };

@@ -152,7 +152,7 @@ export const StaffModule = {
         if (!id) staffData.password = password;
         if (id) staffData.id = id;
 
-        const url = id ? `/api/admin/staffs/${id}` : '/api/admin/staffs/create';
+        const url = id ? `/api/admin/staffs/${id}` : '/api/admin/staffs';
         const method = id ? 'PUT' : 'POST';
 
         fetch(url, {
