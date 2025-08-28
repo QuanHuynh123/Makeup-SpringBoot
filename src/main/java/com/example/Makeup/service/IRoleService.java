@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface IRoleService {
 
-  ApiResponse<List<Role>> getListRole();
+  List<Role> getListRole();
 }

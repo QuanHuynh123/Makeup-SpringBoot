@@ -22,7 +22,7 @@ public class CacheTypeMakeupService {
 
   public ApiResponse<List<TypeMakeupDTO>> cacheAllTypeMakeup() {
     if (!RedisStatusManager.isRedisAvailable()) {
-      return typeMakeupServiceImpl.getAllTypeMakeup();
+      return ApiResponse.success("Get all services success (from DB)",typeMakeupServiceImpl.getAllTypeMakeup());
     }
     try {
       Object cached = redisTemplate.opsForValue().get(SERVICE_MAKEUP_CACHE_KEY);
@@ -35,6 +35,6 @@ public class CacheTypeMakeupService {
     } catch (Exception e) {
       log.warn("⚠️ Redis GET failed (type makeup), fallback to DB: {}", e.getMessage());
     }
-    return typeMakeupServiceImpl.getAllTypeMakeup();
+    return ApiResponse.success("Get all services success (from DB)",typeMakeupServiceImpl.getAllTypeMakeup());
   }
 }

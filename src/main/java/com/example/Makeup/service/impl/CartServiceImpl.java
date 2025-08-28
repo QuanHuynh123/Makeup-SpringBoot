@@ -2,7 +2,6 @@ package com.example.Makeup.service.impl;
 
 import com.example.Makeup.dto.model.CartDTO;
 import com.example.Makeup.dto.model.UserDTO;
-import com.example.Makeup.dto.response.common.ApiResponse;
 import com.example.Makeup.entity.Cart;
 import com.example.Makeup.entity.CartItem;
 import com.example.Makeup.entity.User;
@@ -31,25 +30,24 @@ public class CartServiceImpl implements ICartService {
   private final CartItemRepository cartItemRepository;
 
   @Override
-  public ApiResponse<CartDTO> getCart(UUID userId) {
+  public CartDTO getCart(UUID userId) {
     System.out.println("Get cart for user: " + userId);
     Cart cart =
         cartRepository
             .findByUserId(userId)
             .orElseThrow(() -> new AppException(ErrorCode.CART_NOT_FOUND));
-    return ApiResponse.success("Get cart success", cartMapper.toCartDTO(cart));
+    return  cartMapper.toCartDTO(cart);
   }
 
   @Override
   @Transactional
-  public ApiResponse<CartDTO> createCart(UUID accountId) {
+  public void createCart(UUID accountId) {
     User user =
         userRepository
             .findByAccountId(accountId)
             .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
     Cart cart = new Cart(null, 0, 0, user);
     cartRepository.save(cart);
-    return ApiResponse.success("Create cart success", cartMapper.toCartDTO(cart));
   }
 
   @Transactional

@@ -30,7 +30,7 @@ public class AppointmentRestController {
 
     UserDTO userDTO = SecurityUserUtil.getCurrentUser();
 
-    return appointmentService.getAppointmentByUserId(userDTO.getId());
+    return ApiResponse.success("Get appointment by ID success",appointmentService.getAppointmentByUserId(userDTO.getId()));
   }
 
   @PostMapping("/create")
@@ -46,13 +46,14 @@ public class AppointmentRestController {
           "You have exceeded the maximum number of appointment bookings. Please try again later.");
     }
 
-    return appointmentService.createAppointment(appointment);
+    return ApiResponse.success(
+            "Create appointment success",appointmentService.createAppointment(appointment));
   }
 
   @PostMapping("/feedback")
   public ApiResponse<FeedBackDTO> rateAppointment(
       @RequestBody CreateFeedBackRequest createFeedBackRequest) {
-    UserDTO userDTO = SecurityUserUtil.getCurrentUser();
-    return feedBackService.createFeedBack(createFeedBackRequest);
+    return ApiResponse.success(
+            "Create feedback success",feedBackService.createFeedBack(createFeedBackRequest));
   }
 }

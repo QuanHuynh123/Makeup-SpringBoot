@@ -20,14 +20,14 @@ public class CacheStaffService {
   private final RedisTemplate<String, Object> redisTemplate;
   private final StaffServiceImpl staffServiceImpl;
 
-  public ApiResponse<List<StaffDTO>> cacheAllStaff() {
+  public List<StaffDTO> cacheAllStaff() {
     if (!RedisStatusManager.isRedisAvailable()) {
       return staffServiceImpl.getAllStaff();
     }
     try {
       Object cached = redisTemplate.opsForValue().get(STAFF_CACHE_KEY);
       if (cached instanceof List<?> list && !list.isEmpty()) {
-        return ApiResponse.success("Staff list (from cache)", (List<StaffDTO>) list);
+        return  (List<StaffDTO>) list;
       }
     } catch (RedisConnectionFailureException e) {
       log.warn("⚠️ Redis connection failed (staff): {}", e.getMessage());

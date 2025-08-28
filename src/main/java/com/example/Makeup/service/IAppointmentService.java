@@ -12,23 +12,23 @@ import java.util.UUID;
 
 public interface IAppointmentService {
 
-  ApiResponse<List<WeekAppointmentsDTO>> getAppointmentsByMonth(int month, int year, UUID staffID);
+  List<WeekAppointmentsDTO> getAppointmentsByMonth(int month, int year, UUID staffID);
 
-  ApiResponse<List<AppointmentsAdminResponse>> getAllAppointments();
+  List<AppointmentsAdminResponse> getAllAppointments();
 
-  ApiResponse<AppointmentDTO> getAppointmentById(UUID appointmentId);
+  AppointmentDTO getAppointmentById(UUID appointmentId);
 
-  ApiResponse<AppointmentDTO> updateAppointment(
+  AppointmentDTO updateAppointment(
       UUID idAppointment, UpdateAppointmentRequest appointmentDTO);
 
-  ApiResponse<List<AppointmentsAdminResponse>> getAppointmentByUserId(UUID userId);
+  List<AppointmentsAdminResponse> getAppointmentByUserId(UUID userId);
 
-  ApiResponse<Boolean> deleteAppointment(UUID appointmentId);
+  Boolean deleteAppointment(UUID appointmentId);
 
-  ApiResponse<AppointmentDTO> createAppointment(AppointmentRequest newAppointment);
+  AppointmentDTO createAppointment(AppointmentRequest newAppointment);
 
-  ApiResponse<List<AppointmentDTO>> getAppointmentsByDateAndStaff(
+  List<AppointmentDTO> getAppointmentsByDateAndStaff(
       UUID staffId, LocalDate makeupDate);
 
-  ApiResponse<List<AppointmentDTO>> rateAppointment(UUID appointmentId, UUID userId, int rating);
+  List<AppointmentDTO> rateAppointment(UUID appointmentId, UUID userId, int rating);
 }

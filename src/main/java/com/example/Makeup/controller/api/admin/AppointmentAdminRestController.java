@@ -20,12 +20,12 @@ public class AppointmentAdminRestController {
 
   @GetMapping
   public ApiResponse<List<AppointmentsAdminResponse>> getAllAppointments() {
-    return appointmentService.getAllAppointments();
+    return ApiResponse.success("Get all appointments success",appointmentService.getAllAppointments());
   }
 
   @GetMapping("/{id}")
   public ApiResponse<AppointmentDTO> getAppointment(@PathVariable("id") UUID appointmentId) {
-    return appointmentService.getAppointmentById(appointmentId);
+    return ApiResponse.success("Get appointment by ID success",appointmentService.getAppointmentById(appointmentId));
   }
 
   @GetMapping("/by-month")
@@ -33,24 +33,25 @@ public class AppointmentAdminRestController {
       @RequestParam int month,
       @RequestParam int year,
       @RequestParam(required = false) UUID staffID) {
-    return appointmentService.getAppointmentsByMonth(month, year, staffID);
+    return ApiResponse.success(
+            "Get appointments by month success",appointmentService.getAppointmentsByMonth(month, year, staffID));
   }
 
   @DeleteMapping("/{id}")
   public ApiResponse<Boolean> deleteAppointment(@PathVariable UUID id) {
-    return appointmentService.deleteAppointment(id);
+    return ApiResponse.success("Delete appointment success",appointmentService.deleteAppointment(id));
   }
 
   @GetMapping("/by-date")
   public ApiResponse<List<AppointmentDTO>> getAppointmentsByDate(
       @RequestParam UUID staffId, @RequestParam LocalDate makeupDate) {
 
-    return appointmentService.getAppointmentsByDateAndStaff(staffId, makeupDate);
+    return ApiResponse.success("Get appointments success",appointmentService.getAppointmentsByDateAndStaff(staffId, makeupDate));
   }
 
   @PutMapping("/{id}")
   public ApiResponse<AppointmentDTO> updateAppointment(
       @PathVariable UUID id, @RequestBody UpdateAppointmentRequest appointmentDTO) {
-    return appointmentService.updateAppointment(id, appointmentDTO);
+    return ApiResponse.success("Update appointment success",appointmentService.updateAppointment(id, appointmentDTO));
   }
 }

@@ -30,8 +30,8 @@ public class ProductAdminController {
 
   @GetMapping("/create")
   public String createProductAdminPage(Model model) {
-    ApiResponse<List<SubCategoryDTO>> subCategories = subCategoryService.getAll();
-    model.addAttribute("subCategories", subCategories.getResult());
+    List<SubCategoryDTO> subCategories = subCategoryService.getAll();
+    model.addAttribute("subCategories", subCategories);
 
     return "admin/create-product";
   }

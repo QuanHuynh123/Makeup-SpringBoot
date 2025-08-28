@@ -6,7 +6,7 @@ import java.util.UUID;
 
 public interface IRefreshTokenService {
 
-  ApiResponse<String> refreshToken(String accessToken, UUID accountId);
+  String refreshToken(String refreshToken);
 
-  RefreshToken getTokenByAccountId(UUID accountId);
+//  RefreshToken getTokenByAccountId(UUID accountId);
 }

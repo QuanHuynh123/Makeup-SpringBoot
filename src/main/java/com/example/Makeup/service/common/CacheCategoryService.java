@@ -20,16 +20,16 @@ public class CacheCategoryService {
   private final RedisTemplate<String, Object> redisTemplate;
   private final CategoryServiceImpl categoryServiceImpl;
 
-  public ApiResponse<List<CategoryDTO>> cacheAllCategory() {
+  public List<CategoryDTO> cacheAllCategory() {
     if (!RedisStatusManager.isRedisAvailable()) {
       log.debug("⚠️ Redis is not available, falling back to DB");
-      return categoryServiceImpl.getAllCategory();
+      return  categoryServiceImpl.getAllCategory();
     }
 
     try {
       Object cached = redisTemplate.opsForValue().get(CATEGORY_CACHE_KEY);
       if (cached instanceof List<?> list && !list.isEmpty()) {
-        return ApiResponse.success("Category list (from cache)", (List<CategoryDTO>) list);
+        return  (List<CategoryDTO>) list;
       }
     } catch (RedisConnectionFailureException e) {
       log.warn("⚠️ Redis connection failed: {}", e.getMessage());

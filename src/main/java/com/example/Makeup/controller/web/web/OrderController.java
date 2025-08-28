@@ -31,10 +31,10 @@ public class OrderController {
 
   @GetMapping("/orderDetail/{orderId}")
   public String orderDetail(@PathVariable("orderId") UUID orderId, Model model) {
-    ApiResponse<List<OrderItemDTO>> orderItemDTOS = orderItemService.getOrderDetail(orderId);
-    model.addAttribute("orderItems", orderItemDTOS.getResult());
-    ApiResponse<OrderDTO> orderDTO = orderService.getOrder(orderId);
-    model.addAttribute("order", orderDTO.getResult());
+    List<OrderItemDTO> orderItemDTOS = orderItemService.getOrderDetail(orderId);
+    model.addAttribute("orderItems", orderItemDTOS);
+    OrderDTO orderDTO = orderService.getOrder(orderId);
+    model.addAttribute("order", orderDTO);
     return "user/orderDetail";
   }
 }

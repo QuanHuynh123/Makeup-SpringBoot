@@ -13,26 +13,26 @@ import org.springframework.data.domain.Pageable;
 
 public interface IProductService {
 
-  ApiResponse<ProductDTO> findProductById(UUID productId);
+  ProductDTO findProductById(UUID productId);
 
-  ApiResponse<Page<ProductDTO>> getAllProducts(Pageable pageable);
+  Page<ProductDTO> getAllProducts(Pageable pageable);
 
-  ApiResponse<List<ShortProductListResponse>> getHotProducts();
+  List<ShortProductListResponse> getHotProducts();
 
-  ApiResponse<List<ShortProductListResponse>> getNewProducts();
+  List<ShortProductListResponse> getNewProducts();
 
-  ApiResponse<List<ShortProductListResponse>> getCustomerShowProducts();
+  List<ShortProductListResponse> getCustomerShowProducts();
 
-  ApiResponse<ProductDTO> createProduct(CreateProductRequest createProduct) throws IOException;
+  ProductDTO createProduct(CreateProductRequest createProduct) throws IOException;
 
-  ApiResponse<String> deleteProduct(UUID productId);
+  String deleteProduct(UUID productId);
 
-  ApiResponse<Page<ProductDTO>> searchProduct(
+  Page<ProductDTO> searchProduct(
       Integer subCategoryId, String search, Pageable pageable);
 
-  ApiResponse<ProductDTO> updateProduct(UpdateProductRequest updateProduct, UUID productId)
+  ProductDTO updateProduct(UpdateProductRequest updateProduct, UUID productId)
       throws IOException;
 
-  ApiResponse<List<ProductDTO>> getRelatedProducts(
+  List<ProductDTO> getRelatedProducts(
       Integer subCategoryId, UUID excludedId, Pageable pageable);
 }

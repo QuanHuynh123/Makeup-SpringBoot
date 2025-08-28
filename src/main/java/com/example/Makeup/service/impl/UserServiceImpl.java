@@ -21,17 +21,17 @@ public class UserServiceImpl implements IUserService {
   private final UserMapper userMapper;
 
   @Override
-  public ApiResponse<UserDTO> getUserDetailByUserName(String userName) {
+  public UserDTO getUserDetailByUserName(String userName) {
     User user =
         userRepository
             .findByAccount_userName(userName)
             .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
-    return ApiResponse.success("Get user detail success", userMapper.toUserDTO(user));
+    return userMapper.toUserDTO(user);
   }
 
   @Override
   @Transactional
-  public ApiResponse<UserDTO> updateUser(
+  public UserDTO updateUser(
       UpdateProfileUserRequest profileUserRequest, UUID accountId) {
     User user =
         userRepository
@@ -43,11 +43,11 @@ public class UserServiceImpl implements IUserService {
     user.setFullName(profileUserRequest.getName());
     user.setPhone(profileUserRequest.getPhone());
     User userUpdateSuccess = userRepository.save(user);
-    return ApiResponse.success("Update user success", userMapper.toUserDTO(userUpdateSuccess));
+    return userMapper.toUserDTO(userUpdateSuccess);
   }
 
   @Override
-  public ApiResponse<UserDTO> createUser(UserDTO userDTO) {
+  public UserDTO createUser(UserDTO userDTO) {
 
     User newUser = new User();
     newUser.setFullName(userDTO.getFullName());
@@ -59,7 +59,7 @@ public class UserServiceImpl implements IUserService {
 
     User savedUser = userRepository.save(newUser);
 
-    return ApiResponse.success("Create user success", userMapper.toUserDTO(savedUser));
+    return userMapper.toUserDTO(savedUser);
   }
 
   @Override

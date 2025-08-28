@@ -24,7 +24,7 @@ public class TypeMakeupServiceImpl implements ITypeMakeupService {
   private final RedisTemplate<String, Object> redisTemplate;
 
   @Override
-  public ApiResponse<List<TypeMakeupDTO>> getAllTypeMakeup() {
+  public List<TypeMakeupDTO> getAllTypeMakeup() {
     List<TypeMakeup> typeMakeups = typeMakeupRepository.findAll();
     List<TypeMakeupDTO> dtos =
         typeMakeups.stream().map(typeMakeupMapper::toTypeMakeupDTO).collect(Collectors.toList());
@@ -35,6 +35,6 @@ public class TypeMakeupServiceImpl implements ITypeMakeupService {
       System.out.println("⚠️ Redis SET failed: " + e.getMessage());
     }
 
-    return ApiResponse.success("Get all services success (from DB)", dtos);
+    return  dtos;
   }
 }

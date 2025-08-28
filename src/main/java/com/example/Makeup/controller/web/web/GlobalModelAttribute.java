@@ -3,6 +3,7 @@ package com.example.Makeup.controller.web.web;
 import com.example.Makeup.dto.model.*;
 import com.example.Makeup.dto.response.CartItemResponse;
 import com.example.Makeup.dto.response.common.ApiResponse;
+import com.example.Makeup.exception.AppException;
 import com.example.Makeup.security.JWTProvider;
 import com.example.Makeup.service.ICartItemService;
 import com.example.Makeup.service.ICartService;
@@ -14,6 +15,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -26,99 +29,61 @@ public class GlobalModelAttribute {
 
   private final ICartService cartService;
   private final ICartItemService cartItemService;
-  private final IUserService userService;
-  private final JWTProvider jwtProvider;
   private final CacheCategoryService cacheCategoryService;
 
   @ModelAttribute
-  public void addInformationUser(Model model, HttpServletRequest request) {
-    log.info("Welcome User");
-    String token = getJwtFromRequest(request);
-    if (token != null
-        && jwtProvider.isTokenValid(token)) { // Use isTokenValid to check if the token is valid
-      log.info("Token is valid, extracting user information");
-      try {
-        String userName = jwtProvider.extractUserName(token);
-        log.info("Extracted username: {}", userName);
-        UserDTO userDTO = userService.getUserDetailByUserName(userName).getResult();
-        model.addAttribute("user", userDTO != null ? userDTO : null);
-      } catch (Exception ex) {
-        log.error("Invalid token or user not found: {}", ex.getMessage());
-        model.addAttribute("user", null);
-      }
-    } else {
-      log.info("Welcome Anonymous");
+  public void addInformationUser(Model model) {
+    try {
+      UserDTO currentUser = SecurityUserUtil.getCurrentUser();
+      model.addAttribute("user", currentUser);
+    } catch (AppException e) {
+      // handle when user don't log in
       model.addAttribute("user", null);
+      log.info("No authenticated user found for web request.");
     }
-  }
-
-  private String getJwtFromRequest(HttpServletRequest request) {
-    String bearerToken = request.getHeader("Authorization");
-    log.debug("get JWT from request");
-    if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
-      return bearerToken.substring(7);
-    }
-
-    log.debug("No JWT found in Authorization header");
-    if (request.getCookies() != null) {
-      for (Cookie cookie : request.getCookies()) {
-        if (cookie != null && "jwt".equals(cookie.getName())) {
-          String value = cookie.getValue();
-          if (value != null) {
-            return value;
-          }
-        }
-      }
-      log.debug("No JWT found in cookies");
-    } else {
-      log.debug("No cookies in request");
-    }
-    return null;
   }
 
   @ModelAttribute("cartAttributes")
   public void addCartAndMiniCart(Model model) {
+    model.addAttribute("cartItems", null);
+    model.addAttribute("cart", null);
+    model.addAttribute("countCart", 0);
+    model.addAttribute("error", "Giỏ hàng trống. Vui lòng thêm sản phẩm.");
+
     UserDTO userDTO = null;
     try {
       userDTO = SecurityUserUtil.getCurrentUser();
-    } catch (Exception e) {
-      userDTO = null;
+    } catch (AppException ex) {
+      log.warn("User not authenticated, cannot load cart.");
+      return;
     }
 
-    if (userDTO != null) {
-      try {
-        CartDTO cart = cartService.getCart(userDTO.getId()).getResult();
-        if (cart != null && cart.getId() != null) {
-          List<CartItemResponse> cartItemDTOS = cartItemService.getCartItemByCartId().getResult();
-          int count = cartItemDTOS != null ? cartItemDTOS.size() : 0;
-          model.addAttribute("cartItems", cartItemDTOS);
-          model.addAttribute("cart", cart);
-          model.addAttribute("countCart", count);
-        } else {
-          model.addAttribute("error", "Bạn chưa có giỏ hàng nào.");
-          model.addAttribute("countCart", 0);
-        }
-      } catch (Exception ex) {
-        log.error(
-            "Error loading cart for userId: {}, exception: {}", userDTO.getId(), ex.getMessage());
-        model.addAttribute("error", "Giỏ hàng trống. Vui lòng thêm sản phẩm vào giỏ hàng.");
+    try {
+      CartDTO cart = cartService.getCart(userDTO.getId());
+      if (cart != null && cart.getId() != null) {
+        List<CartItemResponse> cartItems = cartItemService.getCartItemByCartId();
+        int count = (cartItems != null) ? cartItems.size() : 0;
+
+        model.addAttribute("cartItems", cartItems);
+        model.addAttribute("cart", cart);
+        model.addAttribute("countCart", count);
+        model.addAttribute("error", null);
       }
-    } else {
-      log.warn("User ID is null, cannot load cart");
-      model.addAttribute("error", "Không tìm thấy người dùng.");
-      model.addAttribute("countCart", 0);
+    } catch (Exception ex) {
+      log.error("Error loading cart for userId: {}, exception: {}", userDTO.getId(), ex.getMessage());
+      model.addAttribute("error", "Có lỗi xảy ra khi tải giỏ hàng.");
     }
   }
 
   @ModelAttribute("categoryAttributes")
   public void addCategoryHeaderCosplay(Model model) {
     try {
-      ApiResponse<List<CategoryDTO>> categoryDTOS = cacheCategoryService.cacheAllCategory();
+      List<CategoryDTO> categoryDTOS = cacheCategoryService.cacheAllCategory();
 
-      if (categoryDTOS.getCode() == 200) {
-        model.addAttribute("categories", categoryDTOS.getResult());
+      if (!categoryDTOS.isEmpty()) {
+        model.addAttribute("categories", categoryDTOS);
       } else {
-        log.warn("Failed to load categories: {}", categoryDTOS.getMessage());
+        log.warn("Failed to load categories: {}", categoryDTOS);
       }
     } catch (Exception ex) {
       log.error("Exception while loading categories: {}", ex.getMessage(), ex);

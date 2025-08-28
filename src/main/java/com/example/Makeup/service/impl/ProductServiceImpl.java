@@ -48,26 +48,25 @@ public class ProductServiceImpl implements IProductService {
   private final RedisTemplate<String, Object> redisTemplate;
 
   @Override
-  public ApiResponse<ProductDTO> findProductById(UUID productId) {
+  public ProductDTO findProductById(UUID productId) {
     Product product =
         productRepository
             .findById(productId)
             .orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOT_FOUND));
-    return ApiResponse.success("Get product success", productMapper.toProductDTO(product));
+    return productMapper.toProductDTO(product);
   }
 
   @Override
-  public ApiResponse<Page<ProductDTO>> getAllProducts(Pageable pageable) {
+  public Page<ProductDTO> getAllProducts(Pageable pageable) {
     Page<Product> products = productRepository.findAll(pageable);
     if (products.isEmpty()) {
       throw new AppException(ErrorCode.PRODUCT_NOT_FOUND);
     }
-    return ApiResponse.success(
-        "Get all products success", products.map(productMapper::toProductDTO));
+    return products.map(productMapper::toProductDTO);
   }
 
   @Override
-  public ApiResponse<List<ShortProductListResponse>> getHotProducts() {
+  public List<ShortProductListResponse> getHotProducts() {
     List<Product> products =
         productRepository.findTopRentalCount(PageRequest.of(0, QUANTITY_HOT_PRODUCTS));
     List<ShortProductListResponse> dtos =
@@ -87,11 +86,11 @@ public class ProductServiceImpl implements IProductService {
       log.warn("⚠️ Redis SET failed (hot products): " + e.getMessage());
     }
 
-    return ApiResponse.success("Hot products (from DB)", dtos);
+    return  dtos;
   }
 
   @Override
-  public ApiResponse<List<ShortProductListResponse>> getNewProducts() {
+  public List<ShortProductListResponse> getNewProducts() {
     List<Product> products =
         productRepository.findNewProducts(PageRequest.of(0, QUANTITY_NEW_PRODUCTS));
     List<ShortProductListResponse> dtos =
@@ -111,11 +110,11 @@ public class ProductServiceImpl implements IProductService {
       log.warn("⚠️ Redis SET failed (new products): " + e.getMessage());
     }
 
-    return ApiResponse.success("New products (from DB)", dtos);
+    return  dtos;
   }
 
   @Override
-  public ApiResponse<List<ShortProductListResponse>> getCustomerShowProducts() {
+  public List<ShortProductListResponse> getCustomerShowProducts() {
     List<Product> products = productRepository.findRandomProducts(PageRequest.of(0, 10));
     List<ShortProductListResponse> dtos =
         products.stream()
@@ -134,12 +133,12 @@ public class ProductServiceImpl implements IProductService {
       log.warn("⚠️ Redis SET failed (customer show products): " + e.getMessage());
     }
 
-    return ApiResponse.success("Customer show products (from DB)", dtos);
+    return dtos;
   }
 
   @Override
   @Transactional
-  public ApiResponse<ProductDTO> createProduct(CreateProductRequest createProduct)
+  public ProductDTO createProduct(CreateProductRequest createProduct)
       throws IOException {
     SubCategory subCategory =
         subCategoryRepository
@@ -162,52 +161,46 @@ public class ProductServiceImpl implements IProductService {
     }
     product.setImage(String.join(",", imagePaths));
 
-    return ApiResponse.success(
-        "Product created successfully",
-        productMapper.toProductDTO(productRepository.save(product)));
+    return productMapper.toProductDTO(productRepository.save(product));
   }
 
   @Override
   @Transactional
-  public ApiResponse<String> deleteProduct(UUID productId) {
+  public String deleteProduct(UUID productId) {
     if (productRepository.existsById(productId)) {
       productRepository.deleteById(productId);
-      return ApiResponse.success(
-          "Product deleted successfully",
-          "Product with ID " + productId + " deleted successfully.");
+      return "Product with ID " + productId + " deleted successfully.";
     } else {
       throw new AppException(ErrorCode.PRODUCT_NOT_FOUND);
     }
   }
 
   @Override
-  public ApiResponse<Page<ProductDTO>> searchProduct(
+  public Page<ProductDTO> searchProduct(
       Integer subCategoryId, String search, Pageable pageable) {
     Page<Product> productPage = productRepository.searchProducts(subCategoryId, search, pageable);
     if (productPage.isEmpty()) {
       throw new AppException(ErrorCode.PRODUCT_IS_EMPTY);
     }
 
-    return ApiResponse.success("Product found", productPage.map(productMapper::toProductDTO));
+    return productPage.map(productMapper::toProductDTO);
   }
 
   @Override
-  public ApiResponse<List<ProductDTO>> getRelatedProducts(
+  public List<ProductDTO> getRelatedProducts(
       Integer subCategoryId, UUID excludedId, Pageable pageable) {
     Page<Product> page =
         productRepository.findBySubCategoryIdAndIdNot(subCategoryId, excludedId, pageable);
-    List<ProductDTO> result =
-        page.getContent().stream()
-            .map(productMapper::toProductDTO)
-            .peek(dto -> dto.setImage(dto.getImage().split(",")[0]))
-            .collect(Collectors.toList());
 
-    return ApiResponse.success("Get related products", result);
+      return page.getContent().stream()
+          .map(productMapper::toProductDTO)
+          .peek(dto -> dto.setImage(dto.getImage().split(",")[0]))
+          .collect(Collectors.toList());
   }
 
   @Override
   @Transactional
-  public ApiResponse<ProductDTO> updateProduct(UpdateProductRequest updateProduct, UUID productId)
+  public ProductDTO updateProduct(UpdateProductRequest updateProduct, UUID productId)
       throws IOException {
     SubCategory subCategory =
         subCategoryRepository
@@ -240,9 +233,7 @@ public class ProductServiceImpl implements IProductService {
       product.setImage(String.join(",", imagePaths));
     }
 
-    return ApiResponse.success(
-        "Product updated successfully",
-        productMapper.toProductDTO(productRepository.save(product)));
+    return productMapper.toProductDTO(productRepository.save(product));
   }
 
   private String saveImage(MultipartFile file) throws IOException {

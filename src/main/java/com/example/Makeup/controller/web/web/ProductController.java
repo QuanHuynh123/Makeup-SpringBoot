@@ -21,7 +21,7 @@ public class ProductController {
 
   @GetMapping("/productDetail/{id}")
   public String home(Model model, @PathVariable("id") UUID idProduct) {
-    ProductDTO product = productService.findProductById(idProduct).getResult();
+    ProductDTO product = productService.findProductById(idProduct);
     model.addAttribute("product", product);
 
     List<String> images =
@@ -30,8 +30,7 @@ public class ProductController {
 
     List<ProductDTO> relatedProducts =
         productService
-            .getRelatedProducts(product.getSubCategoryId(), idProduct, PageRequest.of(0, 4))
-            .getResult();
+            .getRelatedProducts(product.getSubCategoryId(), idProduct, PageRequest.of(0, 4));
     model.addAttribute("relatedProducts", relatedProducts);
 
     return "user/productDetail";

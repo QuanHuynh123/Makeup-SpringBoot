@@ -17,11 +17,11 @@ public class RoleServiceImpl implements IRoleService {
   private final RoleRepository roleRepository;
 
   @Override
-  public ApiResponse<List<Role>> getListRole() {
+  public List<Role> getListRole() {
     List<Role> roleList = roleRepository.findAll();
     if (roleList.isEmpty()) {
       throw new AppException(ErrorCode.COMMON_RESOURCE_NOT_FOUND);
     }
-    return ApiResponse.success("List of roles", roleList);
+    return roleList;
   }
 }

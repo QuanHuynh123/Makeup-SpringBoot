@@ -25,27 +25,24 @@ public class SubCategoryServiceImpl implements ISubCategoryService {
   private final SubCategoryMapper subCategoryMapper;
 
   @Override
-  public ApiResponse<SubCategoryDTO> findById(int id) {
+  public SubCategoryDTO findById(int id) {
     SubCategory optSubCategory =
         subCategoryRepository
             .findById(id)
             .orElseThrow(() -> new AppException(ErrorCode.COMMON_RESOURCE_NOT_FOUND));
 
-    return ApiResponse.success(
-        "Subcategory found", subCategoryMapper.toSubCategoryDTO(optSubCategory));
+    return  subCategoryMapper.toSubCategoryDTO(optSubCategory);
   }
 
   @Override
-  public ApiResponse<List<SubCategoryDTO>> getAll() {
+  public List<SubCategoryDTO> getAll() {
     List<SubCategory> subCategories = subCategoryRepository.findAll();
     if (subCategories.isEmpty()) {
       throw new AppException(ErrorCode.COMMON_RESOURCE_NOT_FOUND);
     }
 
-    List<SubCategoryDTO> subCategoryDTOs =
-        subCategories.stream()
-            .map(subCategoryMapper::toSubCategoryDTO)
-            .collect(Collectors.toList());
-    return ApiResponse.success("List of subcategories", subCategoryDTOs);
+      return subCategories.stream()
+          .map(subCategoryMapper::toSubCategoryDTO)
+          .collect(Collectors.toList());
   }
 }

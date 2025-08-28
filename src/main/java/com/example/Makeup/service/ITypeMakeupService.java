@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface ITypeMakeupService {
 
-  ApiResponse<List<TypeMakeupDTO>> getAllTypeMakeup();
+  List<TypeMakeupDTO> getAllTypeMakeup();
 }

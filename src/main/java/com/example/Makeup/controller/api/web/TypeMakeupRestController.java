@@ -16,6 +16,6 @@ public class TypeMakeupRestController {
 
   @GetMapping
   public ApiResponse<?> getAllTypeMakeups() {
-    return typeMakeupService.getAllTypeMakeup();
+    return ApiResponse.success("Get all services success (from DB)",typeMakeupService.getAllTypeMakeup());
   }
 }

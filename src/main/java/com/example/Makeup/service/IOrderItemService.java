@@ -8,7 +8,7 @@ import java.util.UUID;
 
 public interface IOrderItemService {
 
-  ApiResponse<String> createOrderItem(UUID orderId, List<OrderItemRequest> orderItemRequest);
+  boolean createOrderItem(UUID orderId, List<OrderItemRequest> orderItemRequest);
 
-  ApiResponse<List<OrderItemDTO>> getOrderDetail(UUID orderId);
+  List<OrderItemDTO> getOrderDetail(UUID orderId);
 }

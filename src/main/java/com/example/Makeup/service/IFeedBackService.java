@@ -8,13 +8,13 @@ import java.util.UUID;
 
 public interface IFeedBackService {
 
-  ApiResponse<List<FeedBackDTO>> getGoodFeedBack(int minRating);
+  List<FeedBackDTO> getGoodFeedBack(int minRating);
 
-  ApiResponse<List<FeedBackDTO>> getAllFeedBack();
+  List<FeedBackDTO> getAllFeedBack();
 
-  ApiResponse<String> deleteFeedBack(UUID id);
+  String deleteFeedBack(UUID id);
 
-  ApiResponse<FeedBackDTO> getFeedBackById(UUID id);
+  FeedBackDTO getFeedBackById(UUID id);
 
-  ApiResponse<FeedBackDTO> createFeedBack(CreateFeedBackRequest createFeedBackRequest);
+  FeedBackDTO createFeedBack(CreateFeedBackRequest createFeedBackRequest);
 }

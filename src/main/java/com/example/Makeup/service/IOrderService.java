@@ -12,23 +12,23 @@ import org.springframework.data.domain.Pageable;
 
 public interface IOrderService {
 
-  ApiResponse<OrderDTO> createOrder(OrderRequest orderRequest);
+  OrderDTO createOrder(OrderRequest orderRequest);
 
-  ApiResponse<OrderDTO> getOrder(UUID orderId);
+  OrderDTO getOrder(UUID orderId);
 
-  ApiResponse<Boolean> checkOrder(UUID orderId);
+  Boolean checkOrder(UUID orderId);
 
-  ApiResponse<Page<OrdersAdminResponse>> getAllOrder(Pageable pageable, Integer status);
+  Page<OrdersAdminResponse> getAllOrder(Pageable pageable, Integer status);
 
-  ApiResponse<Boolean> returnProductOfOrder(UUID orderId);
+  Boolean returnProductOfOrder(UUID orderId);
 
-  ApiResponse<List<OrderDTO>> getMyOrders();
+  List<OrderDTO> getMyOrders();
 
-  ApiResponse<List<OrderItemDetailResponse>> getItemsDetail(UUID orderId);
+  List<OrderItemDetailResponse> getItemsDetail(UUID orderId);
 
-  ApiResponse<String> updateOrderStatus(UUID orderId, int status);
+  String updateOrderStatus(UUID orderId, int status);
 
-  ApiResponse<Boolean> checkRepaymentCondition(UUID orderId);
+  Boolean checkRepaymentCondition(UUID orderId);
 
-  ApiResponse<Void> clearOrderPaymentExpired();
+  void clearOrderPaymentExpired();
 }

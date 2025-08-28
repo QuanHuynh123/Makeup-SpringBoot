@@ -7,7 +7,6 @@ import com.example.Makeup.dto.request.OrderRequest;
 import com.example.Makeup.dto.response.OrderEmailMessage;
 import com.example.Makeup.dto.response.OrderItemDetailResponse;
 import com.example.Makeup.dto.response.OrdersAdminResponse;
-import com.example.Makeup.dto.response.common.ApiResponse;
 import com.example.Makeup.entity.*;
 import com.example.Makeup.enums.ErrorCode;
 import com.example.Makeup.enums.OrderStatus;
@@ -51,7 +50,7 @@ public class OrderServiceImpl implements IOrderService {
 
   @Override
   @Transactional
-  public ApiResponse<OrderDTO> createOrder(OrderRequest orderRequest) {
+  public OrderDTO createOrder(OrderRequest orderRequest) {
     if (orderRepository.existsByUniqueRequestId(orderRequest.getUniqueRequestId())) {
       throw new AppException(ErrorCode.DUPLICATE_ORDER);
     }
@@ -97,7 +96,7 @@ public class OrderServiceImpl implements IOrderService {
 
     messagingTemplate.convertAndSend("/topic/orders", "NEW_ORDER");
 
-    return ApiResponse.success("Create order successfully", orderMapper.toOrderDTO(order));
+    return  orderMapper.toOrderDTO(order);
   }
 
   @Transactional(Transactional.TxType.NOT_SUPPORTED)
@@ -119,17 +118,17 @@ public class OrderServiceImpl implements IOrderService {
   }
 
   @Override
-  public ApiResponse<OrderDTO> getOrder(UUID orderId) {
+  public OrderDTO getOrder(UUID orderId) {
     Order order =
         orderRepository
             .findById(orderId)
             .orElseThrow(() -> new AppException(ErrorCode.ORDER_NOT_FOUND));
-    return ApiResponse.success("Get order successfully", orderMapper.toOrderDTO(order));
+    return  orderMapper.toOrderDTO(order);
   }
 
   @Override
   @Transactional
-  public ApiResponse<Boolean> checkOrder(UUID orderId) {
+  public Boolean checkOrder(UUID orderId) {
     Order order =
         orderRepository
             .findById(orderId)
@@ -163,11 +162,11 @@ public class OrderServiceImpl implements IOrderService {
       }
     }
 
-    return ApiResponse.success("Check order successfully", true);
+    return  true;
   }
 
   @Override
-  public ApiResponse<Page<OrdersAdminResponse>> getAllOrder(Pageable pageable, Integer statusId) {
+  public Page<OrdersAdminResponse> getAllOrder(Pageable pageable, Integer statusId) {
     OrderStatus status = null;
     if (statusId != null && statusId > 0) status = OrderStatus.fromId(statusId);
 
@@ -175,12 +174,12 @@ public class OrderServiceImpl implements IOrderService {
     if (orders.isEmpty()) {
       throw new AppException(ErrorCode.ORDER_IS_EMPTY);
     }
-    return ApiResponse.success("Get all order successfully", orders);
+    return  orders;
   }
 
   @Override
   @Transactional
-  public ApiResponse<Boolean> returnProductOfOrder(UUID orderId) {
+  public Boolean returnProductOfOrder(UUID orderId) {
     orderRepository
         .findById(orderId)
         .orElseThrow(() -> new AppException(ErrorCode.ORDER_NOT_FOUND));
@@ -201,22 +200,20 @@ public class OrderServiceImpl implements IOrderService {
       }
     }
 
-    return ApiResponse.success("Return product of order successfully", true);
+    return  true;
   }
 
   @Override
-  public ApiResponse<List<OrderDTO>> getMyOrders() {
+  public List<OrderDTO> getMyOrders() {
     UserDTO userDTO = SecurityUserUtil.getCurrentUser();
     List<Order> orders = orderRepository.findByUserId(userDTO.getId());
     Collections.reverse(orders);
 
-    List<OrderDTO> orderDTOs =
-        orders.stream().map(orderMapper::toOrderDTO).collect(Collectors.toList());
-    return ApiResponse.success("Get my order success", orderDTOs);
+    return orders.stream().map(orderMapper::toOrderDTO).collect(Collectors.toList());
   }
 
   @Override
-  public ApiResponse<List<OrderItemDetailResponse>> getItemsDetail(UUID orderId) {
+  public List<OrderItemDetailResponse> getItemsDetail(UUID orderId) {
     List<OrderItemDetailResponse> orderItemDetailResponses =
         orderItemRepository.findOrderItemsDetailByOrderId(orderId);
     if (orderItemDetailResponses.isEmpty()) {
@@ -240,12 +237,12 @@ public class OrderServiceImpl implements IOrderService {
                         orderItemDetailResponse.getCreatedAt(),
                         orderItemDetailResponse.getUpdatedAt()))
             .toList();
-    return ApiResponse.success("Get order items detail successfully", responses);
+    return  responses;
   }
 
   @Override
   @Transactional
-  public ApiResponse<String> updateOrderStatus(UUID orderId, int status) {
+  public String updateOrderStatus(UUID orderId, int status) {
     Order order =
         orderRepository
             .findById(orderId)
@@ -260,11 +257,11 @@ public class OrderServiceImpl implements IOrderService {
     if (updatedRows == 0) {
       throw new AppException(ErrorCode.INTERNAL_SERVER_ERROR);
     }
-    return ApiResponse.success("Update order status successfully", "Order status updated");
+    return  "Order status updated";
   }
 
   @Override
-  public ApiResponse<Boolean> checkRepaymentCondition(UUID orderId) {
+  public Boolean checkRepaymentCondition(UUID orderId) {
     Order order =
         orderRepository
             .findById(orderId)
@@ -276,12 +273,12 @@ public class OrderServiceImpl implements IOrderService {
       throw new AppException(ErrorCode.ORDER_REPAYMENT_CONDITION_NOT_MET);
     }
 
-    return ApiResponse.success("Check repayment condition successfully", true);
+    return true;
   }
 
   @Transactional
   @Override
-  public ApiResponse<Void> clearOrderPaymentExpired() {
+  public void clearOrderPaymentExpired() {
     LocalDateTime expiredTime = LocalDateTime.now().minusDays(7);
     int clearedOrders = orderRepository.clearOrderPaymentExpired(expiredTime);
     if (clearedOrders > 0) {
@@ -289,6 +286,5 @@ public class OrderServiceImpl implements IOrderService {
     } else {
       log.info("No expired orders to clear");
     }
-    return ApiResponse.success("Clear expired orders successfully", null);
   }
 }

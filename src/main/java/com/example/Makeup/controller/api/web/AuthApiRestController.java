@@ -2,8 +2,10 @@ package com.example.Makeup.controller.api.web;
 
 import com.example.Makeup.dto.request.LoginRequest;
 import com.example.Makeup.dto.request.RegisterRequest;
+import com.example.Makeup.dto.response.AuthResponse;
 import com.example.Makeup.dto.response.common.ApiResponse;
 import com.example.Makeup.service.IAccountService;
+import com.example.Makeup.service.IRefreshTokenService;
 import com.example.Makeup.service.common.RateLimitService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
@@ -23,43 +25,45 @@ public class AuthApiRestController {
   private int cookieMaxAge;
 
   private final IAccountService accountService;
-  private final RateLimitService rateLimitService;
+  private final IRefreshTokenService refreshTokenService;
+
 
   @PostMapping("/login")
-  public ApiResponse<?> createToken(
-      @RequestBody LoginRequest loginRequest, HttpServletResponse response) {
-    String username = loginRequest.getUsername();
-    // String ip = "";
-    String rateLimitKey = "login:" + username;
+  public ApiResponse<String> login(
+          @RequestBody LoginRequest loginRequest, HttpServletResponse response) {
 
-    if (rateLimitService.isRateLimited(rateLimitKey, 5, Duration.ofMinutes(1))) {
-      log.warn("Too many login attempts for user: {}", username);
-      return ApiResponse.error(
-          HttpStatus.TOO_MANY_REQUESTS.value(), "Too many login attempts. Please try again later.");
-    }
+    AuthResponse apiResponse =
+            accountService.authenticate(loginRequest.getUsername(), loginRequest.getPassword());
+    String accessToken = apiResponse.getAccessToken();
+    String refreshToken = apiResponse.getRefreshToken();
 
-    ApiResponse<String> apiResponse =
-        accountService.authenticate(loginRequest.getUsername(), loginRequest.getPassword());
-    String token = apiResponse.getResult();
+    Cookie refreshCookie = new Cookie("refresh_token", refreshToken);
+    refreshCookie.setHttpOnly(true);
+    refreshCookie.setSecure(false);
+    refreshCookie.setPath("/");
+    refreshCookie.setMaxAge(cookieMaxAge);
+    response.addCookie(refreshCookie);
 
-    Cookie cookie = new Cookie("jwt", token);
-    cookie.setHttpOnly(true);
-    cookie.setSecure(false);
-    cookie.setPath("/");
-    cookie.setMaxAge(cookieMaxAge);
-    response.addCookie(cookie);
-    return apiResponse;
+    Cookie accessCookie = new Cookie("access_token", accessToken);
+    accessCookie.setHttpOnly(true);
+    accessCookie.setSecure(false);
+    accessCookie.setPath("/");
+    accessCookie.setMaxAge(cookieMaxAge);
+    accessCookie.setAttribute("SameSite", "Strict");
+    response.addCookie(accessCookie);
+
+
+    return ApiResponse.success("Login success", accessToken) ;
   }
 
   @PostMapping("/register")
-  public ApiResponse<String> createAccount(@RequestBody RegisterRequest registerRequest) {
-    return accountService.signUp(registerRequest);
+  public ApiResponse<String> regis(@RequestBody RegisterRequest registerRequest) {
+    return ApiResponse.success("Sign up success",accountService.signUp(registerRequest));
   }
 
-  //    @PostMapping("/refresh-token")
-  //    public ApiResponse<String> refreshToken(@RequestBody RefreshTokenRequest
-  // refreshTokenRequest) {
-  //        return refreshTokenService.refreshToken(refreshTokenRequest.getRefreshToken());
-  //    }
+  @PostMapping("/refresh")
+  public ApiResponse<?> refreshToken(@CookieValue("refresh_token") String refreshToken){
+    return ApiResponse.success("Refresh success",refreshTokenService.refreshToken(refreshToken));
+  }
 
 }

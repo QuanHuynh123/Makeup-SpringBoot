@@ -26,7 +26,7 @@ public class CosplayRestController {
       @RequestParam(value = "searchKey", required = false) String search) {
 
     Pageable pageable = PageRequest.of(page, size);
-    Page<ProductDTO> productsPage = productService.searchProduct(id, search, pageable).getResult();
+    Page<ProductDTO> productsPage = productService.searchProduct(id, search, pageable);
 
     Map<String, Object> response = new HashMap<>();
     response.put("products", productsPage.getContent());

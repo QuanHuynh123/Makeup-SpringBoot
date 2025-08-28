@@ -1,5 +1,6 @@
 package com.example.Makeup.entity;
 
+import com.example.Makeup.listener.ProductEntityListener;
 import jakarta.persistence.*;
 import java.util.UUID;
 import lombok.*;
@@ -13,6 +14,7 @@ import org.hibernate.type.SqlTypes;
 @Setter
 @Table(name = "product")
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@EntityListeners(ProductEntityListener.class)
 public class Product extends Base {
   @Id
   @GeneratedValue(strategy = GenerationType.UUID)

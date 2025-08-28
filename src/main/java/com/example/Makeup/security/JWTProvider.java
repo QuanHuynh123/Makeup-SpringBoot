@@ -26,7 +26,7 @@ public class JWTProvider {
   @Value("${jwt.expiration}")
   private long expirationMs;
 
-  public String generateToken(String username, Integer role, UUID accountId) {
+  public String generateToken(String username, String role, UUID accountId) {
     log.info("Generating JWT token for user: {}", username);
     Map<String, Object> claims = new HashMap<>();
     claims.put("role", role);
@@ -60,14 +60,10 @@ public class JWTProvider {
     return Jwts.parser().verifyWith(getKey()).build().parseSignedClaims(token).getPayload();
   }
 
-  public Integer extractRole(String token) {
-    return extractClaim(token, claims -> (Integer) claims.get("role"));
+  public String extractRole(String token) {
+    return extractClaim(token, claims -> claims.get("role", String.class));
   }
 
-  public boolean validateToken(String token, UserDetails userDetails) {
-    final String userName = extractUserName(token);
-    return (userName.equals(userDetails.getUsername()) && !isTokenExpired(token));
-  }
 
   public boolean isTokenValid(String token) {
     if (token == null) return false;
@@ -88,24 +84,4 @@ public class JWTProvider {
     return extractClaim(token, Claims::getExpiration);
   }
 
-  public String extractUserNameAllowExpired(String token) {
-    return extractAllClaimsAllowExpired(token).getSubject();
-  }
-
-  public UUID extractAccountIdAllowExpired(String token) {
-    String accountIdStr = extractAllClaimsAllowExpired(token).get("accountId", String.class);
-    return UUID.fromString(accountIdStr);
-  }
-
-  public Integer extractRoleAllowExpired(String token) {
-    return extractAllClaimsAllowExpired(token).get("role", Integer.class);
-  }
-
-  private Claims extractAllClaimsAllowExpired(String token) {
-    try {
-      return Jwts.parser().verifyWith(getKey()).build().parseSignedClaims(token).getPayload();
-    } catch (ExpiredJwtException e) {
-      return e.getClaims();
-    }
-  }
 }

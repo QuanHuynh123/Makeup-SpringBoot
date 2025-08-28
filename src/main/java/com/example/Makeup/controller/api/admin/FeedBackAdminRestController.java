@@ -20,16 +20,17 @@ public class FeedBackAdminRestController {
 
   @GetMapping("")
   public ApiResponse<List<FeedBackDTO>> getAllFeedBack() {
-    return feedBackService.getAllFeedBack();
+    return ApiResponse.success("Get all feedbacks success",feedBackService.getAllFeedBack());
   }
 
   @DeleteMapping("/{id}/delete")
   public ApiResponse<String> deleteFeedBack(UUID id) {
-    return feedBackService.deleteFeedBack(id);
+    return ApiResponse.success(
+            "Delete feedback success",feedBackService.deleteFeedBack(id));
   }
 
   @GetMapping("/{id}")
   public ApiResponse<FeedBackDTO> getFeedBackById(UUID id) {
-    return feedBackService.getFeedBackById(id);
+    return ApiResponse.success("Get feedback by ID success",feedBackService.getFeedBackById(id));
   }
 }

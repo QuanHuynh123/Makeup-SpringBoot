@@ -10,13 +10,13 @@ import java.util.UUID;
 
 public interface ICartItemService {
 
-  ApiResponse<List<CartItemResponse>> getCartItemByCartId();
+  List<CartItemResponse> getCartItemByCartId();
 
-  ApiResponse<Boolean> addCartItem(CartItemDTO cartItemDTO);
+  Boolean addCartItem(CartItemDTO cartItemDTO);
 
-  ApiResponse<Boolean> deleteCartItem(UUID cartItemId);
+  Boolean deleteCartItem(UUID cartItemId);
 
-  ApiResponse<CartDTO> updateCartItem(UpdateCartItemRequest cartItemRequest);
+  CartDTO updateCartItem(UpdateCartItemRequest cartItemRequest);
 
-  ApiResponse<Boolean> deleteAllCartItem();
+  Boolean deleteAllCartItem();
 }

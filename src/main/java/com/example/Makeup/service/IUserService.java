@@ -7,11 +7,11 @@ import java.util.UUID;
 
 public interface IUserService {
 
-  ApiResponse<UserDTO> getUserDetailByUserName(String userName);
+  UserDTO getUserDetailByUserName(String userName);
 
-  ApiResponse<UserDTO> updateUser(UpdateProfileUserRequest profileUserRequest, UUID accountId);
+  UserDTO updateUser(UpdateProfileUserRequest profileUserRequest, UUID accountId);
 
-  ApiResponse<UserDTO> createUser(UserDTO userDTO);
+  UserDTO createUser(UserDTO userDTO);
 
   UserDTO loadUserDTOByUsername(String username);
 

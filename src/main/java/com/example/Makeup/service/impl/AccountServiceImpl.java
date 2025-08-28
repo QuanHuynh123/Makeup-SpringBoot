@@ -3,6 +3,7 @@ package com.example.Makeup.service.impl;
 import com.example.Makeup.dto.model.AccountDTO;
 import com.example.Makeup.dto.request.RegisterRequest;
 import com.example.Makeup.dto.request.UpdateAccountRequest;
+import com.example.Makeup.dto.response.AuthResponse;
 import com.example.Makeup.dto.response.common.ApiResponse;
 import com.example.Makeup.entity.Account;
 import com.example.Makeup.entity.RefreshToken;
@@ -17,14 +18,17 @@ import com.example.Makeup.repository.RoleRepository;
 import com.example.Makeup.repository.UserRepository;
 import com.example.Makeup.security.JWTProvider;
 import com.example.Makeup.service.IAccountService;
+import com.example.Makeup.service.IRefreshTokenService;
 import jakarta.transaction.Transactional;
+
+import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -44,6 +48,7 @@ public class AccountServiceImpl implements UserDetailsService, IAccountService {
   private final UserRepository userRepository;
   private final RefreshTokenRepository refreshTokenRepository;
   private final CartServiceImpl cartServiceImpl;
+  private final RedisTemplate<String, Object> redisTemplate;
 
   @Value("${refresh.expiration}")
   private long expiredRefreshToken;
@@ -71,10 +76,9 @@ public class AccountServiceImpl implements UserDetailsService, IAccountService {
 
   @Override
   @Transactional
-  public ApiResponse<String> authenticate(String username, String password) {
+  public AuthResponse authenticate(String username, String password) {
 
-    Account account =
-        accountRepository
+    Account account = accountRepository
             .findByUserName(username)
             .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
 
@@ -83,41 +87,52 @@ public class AccountServiceImpl implements UserDetailsService, IAccountService {
     }
 
     log.info("Pass authentication for user: {}", username);
-    log.debug("Checking existing refresh token for user: {}", username);
 
-    RefreshToken refreshToken;
+    refreshTokenRepository.revokeAllByAccount(account.getId());
 
-    Optional<RefreshToken> optionalToken =
-        refreshTokenRepository.findLatestValidTokenByAccount(account.getId());
+    RefreshToken refreshToken = new RefreshToken();
+    refreshToken.setToken(UUID.randomUUID().toString());
+    refreshToken.setExpiryDate(
+            LocalDateTime.now().plusDays(expiredRefreshToken / (1000 * 60 * 60 * 24)));
+    refreshToken.setAccount(account);
+    refreshToken.setRevoked(false);
 
-    if (optionalToken.isPresent()
-        && optionalToken.get().getExpiryDate().isAfter(LocalDateTime.now())) {
-      // Using existing valid token
-      log.info("Using existing valid refresh token for user: {}", username);
-      refreshToken = optionalToken.get();
-    } else {
-      // If no valid token exists, revoke all existing tokens
-      refreshTokenRepository.revokeAllByAccount(account.getId());
+    // save DB for fallback
+    refreshTokenRepository.save(refreshToken);
 
-      // Create a new refresh token
-      refreshToken = new RefreshToken();
-      refreshToken.setToken(UUID.randomUUID().toString());
-      refreshToken.setExpiryDate(
-          LocalDateTime.now().plusDays(expiredRefreshToken / (1000 * 60 * 60 * 24)));
-      refreshToken.setAccount(account);
-      refreshToken.setRevoked(false);
-      refreshTokenRepository.save(refreshToken);
+    try {
+      String redisKey = "refreshToken:" + refreshToken.getToken();
+
+      Map<String, Object> refreshData = new HashMap<>();
+      refreshData.put("accountId", account.getId().toString());
+      refreshData.put("username", username);
+      refreshData.put("roles", account.getRole().getNameRole());
+      refreshData.put("device", "web"); // detect from request
+      refreshData.put("expiryDate", refreshToken.getExpiryDate().toString());
+
+      redisTemplate.opsForHash().putAll(redisKey, refreshData);
+      redisTemplate.expire(redisKey,
+              Duration.between(LocalDateTime.now(), refreshToken.getExpiryDate())
+      );
+
+      log.info("Cached refresh token in Redis with key={}", redisKey);
+    } catch (Exception e) {
+      log.warn("Could not cache refresh token in Redis for account {}. Error: {}",
+              account.getId(), e.getMessage());
     }
 
-    // Generate JWT token
-    String token = jwtProvider.generateToken(username, account.getRole().getId(), account.getId());
+    String accessToken = jwtProvider.generateToken(
+            username,
+            account.getRole().getNameRole(),
+            account.getId()
+    );
 
-    return ApiResponse.success("Login success", token);
+    return new AuthResponse(accessToken, refreshToken.getToken());
   }
 
   @Override
   @Transactional
-  public ApiResponse<String> signUp(RegisterRequest registerRequest) {
+  public String signUp(RegisterRequest registerRequest) {
     if (accountRepository.existsByUserName(registerRequest.getUserName())) {
       throw new AppException(ErrorCode.USER_ALREADY_EXISTED);
     }
@@ -138,12 +153,12 @@ public class AccountServiceImpl implements UserDetailsService, IAccountService {
     userRepository.saveAndFlush(user);
 
     cartServiceImpl.createCart(account.getId());
-    return ApiResponse.success("Sign up success", account.getUserName());
+    return  account.getUserName();
   }
 
   @Override
   @Transactional
-  public ApiResponse<AccountDTO> createAccount(AccountDTO account) {
+  public AccountDTO createAccount(AccountDTO account) {
     if (accountRepository.existsByUserName(account.getUserName())) {
       throw new AppException(ErrorCode.USER_ALREADY_EXISTED);
     }
@@ -154,41 +169,40 @@ public class AccountServiceImpl implements UserDetailsService, IAccountService {
     Account saveAccount = accountMapper.toEntity(account);
     saveAccount.setRole(role);
     accountRepository.save(saveAccount);
-    return ApiResponse.success("Create account success", accountMapper.toDTO(saveAccount));
+    return  accountMapper.toDTO(saveAccount);
   }
 
-  public ApiResponse<List<AccountDTO>> getAllAccounts() {
+  public List<AccountDTO> getAllAccounts() {
     if (accountRepository.findAll().isEmpty()) {
       throw new AppException(ErrorCode.USER_NOT_FOUND);
     }
     List<Account> accounts = accountRepository.findAll();
-    List<AccountDTO> accountDTOs = accounts.stream().map(accountMapper::toDTO).toList();
-    return ApiResponse.success("Get all accounts success", accountDTOs);
+      return accounts.stream().map(accountMapper::toDTO).toList();
   }
 
   @Override
-  public ApiResponse<AccountDTO> getAccountById(UUID id) {
+  public AccountDTO getAccountById(UUID id) {
     Account account =
         accountRepository
             .findById(id)
             .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
-    return ApiResponse.success("Get account by ID success", accountMapper.toDTO(account));
+    return  accountMapper.toDTO(account);
   }
 
   @Override
   @Transactional
-  public ApiResponse<Boolean> deleteAccount(UUID userId) {
+  public Boolean deleteAccount(UUID userId) {
     Account account =
         accountRepository
             .findById(userId)
             .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
     accountRepository.delete(account);
-    return ApiResponse.success("Delete account success", true);
+    return true;
   }
 
   @Override
   @Transactional
-  public ApiResponse<Account> updateAccount(
+  public Account updateAccount(
       UpdateAccountRequest updateAccountRequest, int accountId) {
     //        Account existingAccountOpt = accountRepository.findById(accountId)
     //                .orElseThrow(()-> new AppException(ErrorCode.USER_NOT_EXISTED));

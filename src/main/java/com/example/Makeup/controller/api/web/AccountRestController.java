@@ -11,7 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/accounts") // Đường dẫn API
+@RequestMapping("/api/accounts")
 @RequiredArgsConstructor
 public class AccountRestController {
 
@@ -20,19 +20,19 @@ public class AccountRestController {
   /** Get all accounts */
   @GetMapping
   public ApiResponse<List<AccountDTO>> getAllAccounts() {
-    return accountService.getAllAccounts();
+    return ApiResponse.success("Get all accounts success",accountService.getAllAccounts());
   }
 
   /** Get account by ID */
   @GetMapping("/{id}")
   public ApiResponse<AccountDTO> getAccountById(@PathVariable("id") UUID accountId) {
-    return accountService.getAccountById(accountId);
+    return ApiResponse.success("Get account by ID success",accountService.getAccountById(accountId));
   }
 
   /** Create account */
   @PostMapping("/create")
   public ApiResponse<AccountDTO> createAccount(@RequestBody AccountDTO accountDTO) {
-    return accountService.createAccount(accountDTO);
+    return ApiResponse.success("Create account success",accountService.createAccount(accountDTO));
   }
 
   /** Update account */
@@ -45,6 +45,6 @@ public class AccountRestController {
   /** Delete account */
   @DeleteMapping("/delete/{id}")
   public ApiResponse<Boolean> deleteAccount(@PathVariable("id") UUID accountId) {
-    return accountService.deleteAccount(accountId);
+    return ApiResponse.success("Delete account success",accountService.deleteAccount(accountId));
   }
 }

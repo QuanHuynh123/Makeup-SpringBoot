@@ -23,7 +23,7 @@ public class CosplayController {
     List<ShortProductListResponse> hotProducts = cacheProductService.cacheHotProducts().getResult();
     List<ShortProductListResponse> newProducts = cacheProductService.cacheNewProducts().getResult();
     List<ShortProductListResponse> customerShowProducts =
-        cacheProductService.cacheCustomerShow().getResult();
+        cacheProductService.cacheCustomerShow();
     model.addAttribute("hotProducts", hotProducts);
     model.addAttribute("newProducts", newProducts);
     model.addAttribute("customerShowProducts", customerShowProducts);
@@ -38,7 +38,7 @@ public class CosplayController {
       @RequestParam(value = "size", defaultValue = "10") int size,
       @RequestParam(value = "searchKey", required = false) String search) {
     SubCategoryDTO categoryDTO = null;
-    if (id != null) categoryDTO = subCategoryServiceImpl.findById(id).getResult();
+    if (id != null) categoryDTO = subCategoryServiceImpl.findById(id);
 
     model.addAttribute("nameSub", categoryDTO != null ? categoryDTO.getName() : search);
     model.addAttribute("currentPage", 0);

@@ -32,7 +32,7 @@ public class OrderItemServiceImpl implements IOrderItemService {
 
   @Override
   @Transactional
-  public ApiResponse<String> createOrderItem(
+  public boolean createOrderItem(
       UUID orderId, List<OrderItemRequest> orderItemRequest) {
 
     Order order =
@@ -56,18 +56,16 @@ public class OrderItemServiceImpl implements IOrderItemService {
     }
 
     cartItemService.deleteAllCartItem();
-    return ApiResponse.success("Order items created successfully", null);
+    return true;
   }
 
   @Override
-  public ApiResponse<List<OrderItemDTO>> getOrderDetail(UUID orderId) {
+  public List<OrderItemDTO> getOrderDetail(UUID orderId) {
     List<OrderItem> orderItems = orderItemRepository.findAllByOrderId(orderId);
     if (orderItems.isEmpty()) {
       throw new AppException(ErrorCode.ORDER_IS_EMPTY);
     }
 
-    List<OrderItemDTO> orderItemDTOs =
-        orderItems.stream().map(orderItemMapper::toOrderItemDTO).collect(Collectors.toList());
-    return ApiResponse.success("Order items retrieved successfully", orderItemDTOs);
+      return orderItems.stream().map(orderItemMapper::toOrderItemDTO).collect(Collectors.toList());
   }
 }

@@ -44,45 +44,42 @@ public class AppointmentServiceImpl implements IAppointmentService {
   private final SimpMessagingTemplate messagingTemplate;
 
   @Override
-  public ApiResponse<List<WeekAppointmentsDTO>> getAppointmentsByMonth(
+  public List<WeekAppointmentsDTO> getAppointmentsByMonth(
       int month, int year, UUID staffID) {
     List<AppointmentsAdminResponse> appointments =
         appointmentRepository.findAppointmentsByMonth(month, year, staffID);
     if (appointments.isEmpty()) {
       appointments = new ArrayList<>();
     }
-    return ApiResponse.success(
-        "Get appointments by month success", groupAppointmentsByWeek(appointments, month, year));
+    return  groupAppointmentsByWeek(appointments, month, year);
   }
 
   @Override
-  public ApiResponse<List<AppointmentsAdminResponse>> getAllAppointments() {
+  public List<AppointmentsAdminResponse> getAllAppointments() {
     List<AppointmentsAdminResponse> appointments = appointmentRepository.findAllAppointments();
     if (appointments.isEmpty()) {
       throw new AppException(ErrorCode.COMMON_IS_EMPTY);
     }
-    return ApiResponse.success("Get all appointments success", appointments);
+    return  appointments;
   }
 
   @Override
-  public ApiResponse<AppointmentDTO> getAppointmentById(UUID appointmentId) {
+  public AppointmentDTO getAppointmentById(UUID appointmentId) {
     Appointment appointment =
         appointmentRepository
             .findById(appointmentId)
             .orElseThrow(() -> new AppException(ErrorCode.COMMON_RESOURCE_NOT_FOUND));
 
-    return ApiResponse.success(
-        "Get appointment by ID success", appointmentMapper.toAppointmentDTO(appointment));
+    return  appointmentMapper.toAppointmentDTO(appointment);
   }
 
   @Override
-  public ApiResponse<List<AppointmentsAdminResponse>> getAppointmentByUserId(UUID userId) {
-    List<AppointmentsAdminResponse> appointment = appointmentRepository.findAllByUserId(userId);
-    return ApiResponse.success("Get appointment by ID success", appointment);
+  public List<AppointmentsAdminResponse> getAppointmentByUserId(UUID userId) {
+      return appointmentRepository.findAllByUserId(userId);
   }
 
   @Override
-  public ApiResponse<AppointmentDTO> updateAppointment(
+  public AppointmentDTO updateAppointment(
       UUID appointmentId, UpdateAppointmentRequest appointmentDTO) {
     Appointment appointment =
         appointmentRepository
@@ -121,22 +118,22 @@ public class AppointmentServiceImpl implements IAppointmentService {
     Appointment updatedAppointment = appointmentRepository.save(appointment);
     AppointmentDTO updatedAppointmentDTO = appointmentMapper.toAppointmentDTO(updatedAppointment);
 
-    return ApiResponse.success("Update appointment success", updatedAppointmentDTO);
+    return  updatedAppointmentDTO;
   }
 
   @Override
   @Transactional
-  public ApiResponse<Boolean> deleteAppointment(UUID appointmentId) {
+  public Boolean deleteAppointment(UUID appointmentId) {
     if (!appointmentRepository.existsById(appointmentId)) {
       throw new AppException(ErrorCode.APPOINTMENT_NOT_FOUND);
     }
     appointmentRepository.deleteById(appointmentId);
-    return ApiResponse.success("Delete appointment success", true);
+    return  true;
   }
 
   @Override
   @Transactional
-  public ApiResponse<AppointmentDTO> createAppointment(AppointmentRequest newAppointment) {
+  public AppointmentDTO createAppointment(AppointmentRequest newAppointment) {
 
     Appointment appointment = new Appointment();
     appointment.setStartTime(newAppointment.getStartTime());
@@ -188,8 +185,7 @@ public class AppointmentServiceImpl implements IAppointmentService {
     Appointment savedAppointment = appointmentRepository.save(appointment);
     messagingTemplate.convertAndSend("/topic/appointments", "NEW_APPOINTMENT");
 
-    return ApiResponse.success(
-        "Create appointment success", appointmentMapper.toAppointmentDTO(savedAppointment));
+    return  appointmentMapper.toAppointmentDTO(savedAppointment);
   }
 
   private void checkAppointmentConflict(Appointment appointment) {
@@ -205,7 +201,7 @@ public class AppointmentServiceImpl implements IAppointmentService {
   }
 
   @Override
-  public ApiResponse<List<AppointmentDTO>> getAppointmentsByDateAndStaff(
+  public List<AppointmentDTO> getAppointmentsByDateAndStaff(
       UUID staffId, LocalDate makeupDate) {
     List<Appointment> appointments =
         appointmentRepository.findAppointmentsByDateAndStaff(staffId, makeupDate);
@@ -213,14 +209,11 @@ public class AppointmentServiceImpl implements IAppointmentService {
       throw new AppException(ErrorCode.APPOINTMENT_IS_EMPTY);
     }
 
-    List<AppointmentDTO> appointmentDTOs =
-        appointments.stream().map(appointmentMapper::toAppointmentDTO).collect(Collectors.toList());
-
-    return ApiResponse.success("Get appointments success", appointmentDTOs);
+      return appointments.stream().map(appointmentMapper::toAppointmentDTO).collect(Collectors.toList());
   }
 
   @Override
-  public ApiResponse<List<AppointmentDTO>> rateAppointment(
+  public List<AppointmentDTO> rateAppointment(
       UUID appointmentId, UUID userId, int rating) {
     return null;
   }

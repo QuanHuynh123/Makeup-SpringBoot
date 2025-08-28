@@ -25,12 +25,12 @@ public class OrderAdminRestController {
     Pageable pageable =
         PageRequest.of(
             page, size, Sort.by(Sort.Direction.fromString(sort.split(",")[1]), sort.split(",")[0]));
-    return orderService.getAllOrder(pageable, statusId);
+    return ApiResponse.success("Get all order successfully",orderService.getAllOrder(pageable, statusId));
   }
 
   @PutMapping("{id}/update-status")
   public ApiResponse<String> updateStatusOrder(
       @PathVariable("id") String orderId, @RequestParam("status") int status) {
-    return orderService.updateOrderStatus(UUID.fromString(orderId), status);
+    return ApiResponse.success("Update order status successfully",orderService.updateOrderStatus(UUID.fromString(orderId), status));
   }
 }

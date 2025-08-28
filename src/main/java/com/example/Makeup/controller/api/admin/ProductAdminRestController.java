@@ -32,28 +32,30 @@ public class ProductAdminRestController {
     Pageable pageable =
         PageRequest.of(
             page, size, Sort.by(Sort.Direction.fromString(sort.split(",")[1]), sort.split(",")[0]));
-    return productService.getAllProducts(pageable);
+    return ApiResponse.success("Get all products success",productService.getAllProducts(pageable));
   }
 
-  @PostMapping("/create")
+  @PostMapping()
   public ApiResponse<ProductDTO> createProduct(@ModelAttribute CreateProductRequest createProduct)
       throws IOException {
-    return productService.createProduct(createProduct);
+    return ApiResponse.success("Product created successfully",productService.createProduct(createProduct));
   }
 
-  @PutMapping("{id}/update")
+  @PutMapping("{id}")
   public ApiResponse<ProductDTO> updateProduct(
       UpdateProductRequest productDTO, @PathVariable("id") UUID productId) throws IOException {
-    return productService.updateProduct(productDTO, productId);
+    return ApiResponse.success("Product updated successfully",productService.updateProduct(productDTO, productId));
   }
 
-  @DeleteMapping("{id}/delete")
+  @DeleteMapping("{id}")
   public ApiResponse<String> deleteProduct(@PathVariable("id") UUID productId) {
-    return productService.deleteProduct(productId);
+    return ApiResponse.success(
+            "Product deleted successfully",
+            productService.deleteProduct(productId));
   }
 
   @GetMapping("{id}")
   public ApiResponse<ProductDTO> findProductById(@PathVariable("id") UUID productId) {
-    return productService.findProductById(productId);
+    return ApiResponse.success("Get product success", productService.findProductById(productId));
   }
 }

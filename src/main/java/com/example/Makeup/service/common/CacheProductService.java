@@ -25,7 +25,8 @@ public class CacheProductService {
 
   public ApiResponse<List<ShortProductListResponse>> cacheHotProducts() {
     if (!RedisStatusManager.isRedisAvailable()) {
-      return productServiceImpl.getHotProducts();
+      return ApiResponse.success(
+              "Get all products success",productServiceImpl.getHotProducts());
     }
 
     try {
@@ -41,12 +42,12 @@ public class CacheProductService {
       log.warn("⚠️ Redis GET failed (hot products), fallback to DB: {}", e.getMessage());
     }
 
-    return productServiceImpl.getHotProducts();
+    return ApiResponse.success("Hot products (from DB)",productServiceImpl.getHotProducts());
   }
 
   public ApiResponse<List<ShortProductListResponse>> cacheNewProducts() {
     if (!RedisStatusManager.isRedisAvailable()) {
-      return productServiceImpl.getNewProducts();
+      return ApiResponse.success("New products (from DB)",productServiceImpl.getNewProducts());
     }
 
     try {
@@ -62,19 +63,20 @@ public class CacheProductService {
       log.warn("⚠️ Redis GET failed (new products), fallback to DB: {}", e.getMessage());
     }
 
-    return productServiceImpl.getNewProducts();
+    return ApiResponse.success("New products (from DB)",productServiceImpl.getNewProducts());
   }
 
-  public ApiResponse<List<ShortProductListResponse>> cacheCustomerShow() {
+  public List<ShortProductListResponse> cacheCustomerShow() {
     if (!RedisStatusManager.isRedisAvailable()) {
-      return productServiceImpl.getCustomerShowProducts();
+      return  productServiceImpl.getCustomerShowProducts();
     }
 
     try {
       Object cached = redisTemplate.opsForValue().get(CUSTOMER_SHOW_CACHE_KEY);
-      if (cached instanceof List<?> list && !list.isEmpty()) {
-        return ApiResponse.success(
-            "Customer show products (from cache)", (List<ShortProductListResponse>) list);
+      if (cached instanceof List<?> l && !l.isEmpty()) {
+        @SuppressWarnings("unchecked")
+        List<ShortProductListResponse> result = (List<ShortProductListResponse>) l;
+        return result;
       }
     } catch (RedisConnectionFailureException e) {
       log.warn("⚠️ Redis connection failed (customer show products): {}", e.getMessage());

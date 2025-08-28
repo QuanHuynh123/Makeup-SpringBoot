@@ -33,7 +33,7 @@ public class FeedBackServiceImpl implements IFeedBackService {
   private final UserRepository userRepository;
 
   @Override
-  public ApiResponse<List<FeedBackDTO>> getGoodFeedBack(int minRating) {
+  public List<FeedBackDTO> getGoodFeedBack(int minRating) {
     List<FeedBack> feedBacks = feedBackRepository.findByRatingGreaterThanEqual(minRating);
     List<FeedBackDTO> dtos =
         feedBacks.stream().map(feedbackMapper::toFeedBackDTO).collect(Collectors.toList());
@@ -44,45 +44,37 @@ public class FeedBackServiceImpl implements IFeedBackService {
       System.out.println("⚠️ Redis SET failed: " + e.getMessage());
     }
 
-    return ApiResponse.<List<FeedBackDTO>>builder()
-        .code(200)
-        .message(dtos.isEmpty() ? "No feedback found" : "Feedbacks found")
-        .result(dtos)
-        .build();
+    return dtos;
   }
 
   @Override
-  public ApiResponse<List<FeedBackDTO>> getAllFeedBack() {
+  public List<FeedBackDTO> getAllFeedBack() {
     List<FeedBack> feedBacks = feedBackRepository.findAll();
     if (feedBacks.isEmpty()) throw new AppException(ErrorCode.COMMON_IS_EMPTY);
-    List<FeedBackDTO> feedBackDTOS =
-        feedBacks.stream().map(feedbackMapper::toFeedBackDTO).collect(Collectors.toList());
-    return ApiResponse.success("Get all feedbacks success", feedBackDTOS);
+    return feedBacks.stream().map(feedbackMapper::toFeedBackDTO).collect(Collectors.toList());
   }
 
   @Override
-  public ApiResponse<String> deleteFeedBack(UUID id) {
+  public String deleteFeedBack(UUID id) {
     FeedBack feedBack =
         feedBackRepository
             .findById(id)
             .orElseThrow(() -> new AppException(ErrorCode.FEEDBACK_NOT_FOUND));
     feedBackRepository.delete(feedBack);
-    return ApiResponse.success(
-        "Delete feedback success", "Feedback with ID " + id + " has been deleted");
+    return  "Feedback with ID " + id + " has been deleted";
   }
 
   @Override
-  public ApiResponse<FeedBackDTO> getFeedBackById(UUID id) {
+  public FeedBackDTO getFeedBackById(UUID id) {
     FeedBack feedBack =
         feedBackRepository
             .findById(id)
             .orElseThrow(() -> new AppException(ErrorCode.FEEDBACK_NOT_FOUND));
-    FeedBackDTO feedBackDTO = feedbackMapper.toFeedBackDTO(feedBack);
-    return ApiResponse.success("Get feedback by ID success", feedBackDTO);
+      return feedbackMapper.toFeedBackDTO(feedBack);
   }
 
   @Override
-  public ApiResponse<FeedBackDTO> createFeedBack(CreateFeedBackRequest createFeedBackRequest) {
+  public FeedBackDTO createFeedBack(CreateFeedBackRequest createFeedBackRequest) {
     UserDTO currentUser = SecurityUserUtil.getCurrentUser();
     User user =
         userRepository
@@ -94,8 +86,6 @@ public class FeedBackServiceImpl implements IFeedBackService {
     newFeedBack.setRating(createFeedBackRequest.getRating());
     newFeedBack.setUser(user);
 
-    return ApiResponse.success(
-        "Create feedback success",
-        feedbackMapper.toFeedBackDTO(feedBackRepository.save(newFeedBack)));
+    return feedbackMapper.toFeedBackDTO(feedBackRepository.save(newFeedBack));
   }
 }

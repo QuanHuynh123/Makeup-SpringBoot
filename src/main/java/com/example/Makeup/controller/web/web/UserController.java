@@ -13,4 +13,5 @@ public class UserController {
   public String profile(ModelMap modelMap) {
     return "user/profile";
   }
+
 }

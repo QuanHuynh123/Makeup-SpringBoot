@@ -20,7 +20,7 @@ public class CacheFeedBackService {
   private final RedisTemplate<String, Object> redisTemplate;
   private final FeedBackServiceImpl feedBackServiceImpl;
 
-  public ApiResponse<List<FeedBackDTO>> cacheGoodFeedback() {
+  public List<FeedBackDTO> cacheGoodFeedback() {
 
     if (!RedisStatusManager.isRedisAvailable()) {
       return feedBackServiceImpl.getGoodFeedBack(4);
@@ -29,7 +29,7 @@ public class CacheFeedBackService {
     try {
       Object cached = redisTemplate.opsForValue().get(GOOD_FEEDBACK_CACHE_KEY);
       if (cached instanceof List<?> list && !list.isEmpty()) {
-        return ApiResponse.success("Category list (from cache)", (List<FeedBackDTO>) list);
+        return  (List<FeedBackDTO>) list;
       }
     } catch (RedisConnectionFailureException e) {
       log.warn("⚠️ Redis connection failed: {}", e.getMessage());

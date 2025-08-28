@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface ISubCategoryService {
 
-  ApiResponse<SubCategoryDTO> findById(int id);
+  SubCategoryDTO findById(int id);
 
-  ApiResponse<List<SubCategoryDTO>> getAll();
+  List<SubCategoryDTO> getAll();
 }

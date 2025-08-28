@@ -25,8 +25,8 @@ public class HomeController {
   @RequestMapping({"/home", "/"})
   public String home(ModelMap model) {
     List<TypeMakeupDTO> serviceList = cacheTypeMakeupService.cacheAllTypeMakeup().getResult();
-    List<StaffDTO> staffList = cacheStaffService.cacheAllStaff().getResult();
-    List<FeedBackDTO> feedBackDTOS = cacheFeedBackService.cacheGoodFeedback().getResult();
+    List<StaffDTO> staffList = cacheStaffService.cacheAllStaff();
+    List<FeedBackDTO> feedBackDTOS = cacheFeedBackService.cacheGoodFeedback();
 
     model.addAttribute("typeMakeupList", serviceList);
     model.addAttribute("staffList", staffList);

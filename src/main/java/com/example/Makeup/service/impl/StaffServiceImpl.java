@@ -3,7 +3,6 @@ package com.example.Makeup.service.impl;
 import com.example.Makeup.dto.model.StaffDTO;
 import com.example.Makeup.dto.request.CreateStaffRequest;
 import com.example.Makeup.dto.response.StaffAccountResponse;
-import com.example.Makeup.dto.response.common.ApiResponse;
 import com.example.Makeup.entity.Account;
 import com.example.Makeup.entity.Appointment;
 import com.example.Makeup.entity.Role;
@@ -44,14 +43,14 @@ public class StaffServiceImpl implements IStaffService {
   private final RedisTemplate<String, Object> redisTemplate;
 
   @Override
-  public ApiResponse<List<StaffDTO>> getAllStaff() {
+  public List<StaffDTO> getAllStaff() {
     if (RedisStatusManager.isRedisAvailable()) {
       try {
         Object cached = redisTemplate.opsForValue().get(STAFF_CACHE_KEY);
         if (cached != null) {
           List<StaffDTO> staffList = (List<StaffDTO>) cached;
           log.info("Lấy danh sách nhân viên thành công (từ Redis)");
-          return ApiResponse.success("Lấy danh sách nhân viên thành công (từ Redis)", staffList);
+          return staffList;
         } else {
           log.info("Cache staff not found, fetching from DB");
         }
@@ -64,23 +63,19 @@ public class StaffServiceImpl implements IStaffService {
     }
 
     List<Staff> staffList = staffRepository.findAll();
-    List<StaffDTO> dtos =
-        staffList.stream().map(staffMapper::toStaffDTO).collect(Collectors.toList());
-    return ApiResponse.success("Lấy danh sách nhân viên thành công (từ DB)", dtos);
+    return staffList.stream().map(staffMapper::toStaffDTO).collect(Collectors.toList());
   }
 
   @Override
-  public ApiResponse<StaffAccountResponse> getStaffById(UUID staffId) {
+  public StaffAccountResponse getStaffById(UUID staffId) {
     System.out.println("Fetching staff by ID: " + staffId);
-    StaffAccountResponse staff =
-        staffRepository
-            .findStaffAccountById(staffId)
-            .orElseThrow(() -> new AppException(ErrorCode.STAFF_NOT_FOUND));
-    return ApiResponse.success("Get staff by ID success", staff);
+      return staffRepository
+          .findStaffAccountById(staffId)
+          .orElseThrow(() -> new AppException(ErrorCode.STAFF_NOT_FOUND));
   }
 
   @Override
-  public ApiResponse<StaffDTO> addStaff(CreateStaffRequest newStaff) {
+  public StaffDTO addStaff(CreateStaffRequest newStaff) {
 
     if (accountRepository.existsByUserName(newStaff.getUserName()))
       throw new AppException(ErrorCode.USER_ALREADY_EXISTED);
@@ -103,15 +98,11 @@ public class StaffServiceImpl implements IStaffService {
 
     createStaff.setAccount(savedAccount);
 
-    return ApiResponse.<StaffDTO>builder()
-        .code(200)
-        .message("Create staff success")
-        .result(staffMapper.toStaffDTO(staffRepository.save(createStaff)))
-        .build();
+    return staffMapper.toStaffDTO(staffRepository.save(createStaff));
   }
 
   @Override
-  public ApiResponse<String> deleteStaffIfNoAppointments(UUID staffId) {
+  public String deleteStaffIfNoAppointments(UUID staffId) {
     Staff staff =
         staffRepository
             .findById(staffId)
@@ -124,26 +115,22 @@ public class StaffServiceImpl implements IStaffService {
     }
 
     staffRepository.delete(staff);
-    return ApiResponse.<String>builder()
-        .code(200)
-        .message("Delete staff success")
-        .result("Staff with ID " + staffId + " has been deleted.")
-        .build();
+    return "Staff with ID " + staffId + " has been deleted.";
   }
 
   @Override
-  public ApiResponse<StaffDTO> getStaffDetailById(UUID staffId) {
+  public StaffDTO getStaffDetailById(UUID staffId) {
     StaffDTO staffDetailDTO = staffRepository.findStaffDetailById(staffId);
     if (staffDetailDTO == null) {
       throw new AppException(ErrorCode.STAFF_NOT_FOUND);
     }
 
-    return ApiResponse.success("Get staff detail by ID success", staffDetailDTO);
+    return  staffDetailDTO;
   }
 
   @Override
   @Transactional
-  public ApiResponse<StaffDTO> updateStaff(StaffDTO staffDTO, UUID staffId) {
+  public StaffDTO updateStaff(StaffDTO staffDTO, UUID staffId) {
 
     Staff staff =
         staffRepository
@@ -154,6 +141,6 @@ public class StaffServiceImpl implements IStaffService {
     staff.setPhone(staffDTO.getPhone());
     staffRepository.save(staff);
 
-    return ApiResponse.success("Update staff success", staffMapper.toStaffDTO(staff));
+    return  staffMapper.toStaffDTO(staff);
   }
 }

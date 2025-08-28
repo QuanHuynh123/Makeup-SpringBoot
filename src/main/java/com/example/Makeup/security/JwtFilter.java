@@ -30,36 +30,33 @@ import org.springframework.web.filter.OncePerRequestFilter;
 public class JwtFilter extends OncePerRequestFilter {
 
   private final JWTProvider jwtProvider;
-  private final RefreshTokenService refreshTokenService;
   private final IUserService userService;
 
   @Override
   protected void doFilterInternal(
-      HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
-      throws ServletException, IOException {
+          HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+          throws ServletException, IOException {
 
     String token = resolveToken(request);
+
+    // If there is no token, skip and continue.
     if (token == null) {
       filterChain.doFilter(request, response);
       return;
     }
 
     try {
-      String username = null;
-
+      // Only process the token if it is valid
       if (jwtProvider.isTokenValid(token)) {
-        username = jwtProvider.extractUserName(token);
-      } else {
-        token = tryRefreshToken(token, response);
-        username = jwtProvider.extractUserName(token); // re-extract username after refreshing token
-      }
+        String username = jwtProvider.extractUserName(token);
 
-      if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-        setupAuthenticationContext(token, username, request);
+        // Make sure not to overwrite existing authentication context
+        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+          setupAuthenticationContext(token, username, request);
+        }
       }
-
     } catch (Exception e) {
-      log.warn("Cannot set user authentication: {}", e.getMessage());
+      log.warn("Invalid JWT token: {}", e.getMessage());
       SecurityContextHolder.clearContext();
     }
 
@@ -74,7 +71,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
     if (request.getCookies() != null) {
       for (Cookie cookie : request.getCookies()) {
-        if ("jwt".equals(cookie.getName())) {
+        if ("access_token".equals(cookie.getName())) {
           return cookie.getValue();
         }
       }
@@ -82,52 +79,18 @@ public class JwtFilter extends OncePerRequestFilter {
     return null;
   }
 
-  private String tryRefreshToken(String expiredToken, HttpServletResponse response) {
-    UUID accountId = jwtProvider.extractAccountIdAllowExpired(expiredToken);
-    RefreshToken refreshToken = refreshTokenService.getTokenByAccountId(accountId);
-    if (refreshToken == null
-        || refreshToken.isRevoked()
-        || refreshToken.getExpiryDate().isBefore(LocalDateTime.now())) {
-      throw new RuntimeException("Refresh token invalid or expired");
-    }
-
-    String newAccessToken = refreshTokenService.refreshToken(expiredToken, accountId).getResult();
-
-    Cookie cookie = new Cookie("jwt", newAccessToken);
-    cookie.setHttpOnly(true);
-    cookie.setSecure(false);
-    cookie.setPath("/");
-    cookie.setMaxAge(7200);
-    response.addCookie(cookie);
-
-    return newAccessToken;
-  }
-
   private void setupAuthenticationContext(
-      String token, String username, HttpServletRequest request) {
-    Integer roleId = jwtProvider.extractRole(token);
-    String role = mapRoleToAuthority(roleId);
+          String token, String username, HttpServletRequest request) {
+    String role = jwtProvider.extractRole(token);
     List<GrantedAuthority> authorities =
-        Collections.singletonList(new SimpleGrantedAuthority(role));
+            Collections.singletonList(new SimpleGrantedAuthority(role));
 
     UserDTO userDTO = userService.loadUserDTOByUsername(username);
 
     UsernamePasswordAuthenticationToken authToken =
-        new UsernamePasswordAuthenticationToken(userDTO, null, authorities);
+            new UsernamePasswordAuthenticationToken(userDTO, null, authorities);
     authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
     SecurityContextHolder.getContext().setAuthentication(authToken);
   }
 
-  private String mapRoleToAuthority(Integer roleId) {
-    switch (roleId) {
-      case 1:
-        return "ROLE_ADMIN";
-      case 2:
-        return "ROLE_USER";
-      case 3:
-        return "ROLE_STAFF";
-      default:
-        throw new IllegalArgumentException("Unknown role ID: " + roleId);
-    }
-  }
 }

@@ -17,28 +17,28 @@ public class StaffAdminRestController {
 
   private final IStaffService staffService;
 
-  @GetMapping("")
+  @GetMapping()
   public ApiResponse<List<StaffDTO>> getAllStaff() {
-    return staffService.getAllStaff();
+    return ApiResponse.success("Lấy danh sách nhân viên thành công (từ DB)",staffService.getAllStaff());
   }
 
   @GetMapping("/{id}")
   public ApiResponse<StaffAccountResponse> getStaff(@PathVariable UUID id) {
-    return staffService.getStaffById(id);
+    return ApiResponse.success("Get staff by ID success",staffService.getStaffById(id));
   }
 
-  @PostMapping("/create")
+  @PostMapping()
   public ApiResponse<StaffDTO> addStaff(@RequestBody CreateStaffRequest newStaff) {
-    return staffService.addStaff(newStaff);
+    return ApiResponse.success("Create staff success",staffService.addStaff(newStaff));
   }
 
   @DeleteMapping("/{id}")
   public ApiResponse<String> deleteStaffById(@PathVariable UUID id) {
-    return staffService.deleteStaffIfNoAppointments(id);
+    return ApiResponse.success("Delete staff success",staffService.deleteStaffIfNoAppointments(id));
   }
 
   @PutMapping("/{id}")
   public ApiResponse<StaffDTO> updateStaff(@PathVariable UUID id, @RequestBody StaffDTO staffDTO) {
-    return staffService.updateStaff(staffDTO, id);
+    return ApiResponse.success("Update staff success",staffService.updateStaff(staffDTO, id));
   }
 }

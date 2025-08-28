@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface ICategoryService {
 
-  ApiResponse<List<CategoryDTO>> getAllCategory();
+  List<CategoryDTO> getAllCategory();
 }

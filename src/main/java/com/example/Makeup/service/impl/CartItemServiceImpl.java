@@ -31,49 +31,47 @@ public class CartItemServiceImpl implements ICartItemService {
 
   @Override
   @Transactional
-  public ApiResponse<List<CartItemResponse>> getCartItemByCartId() {
+  public List<CartItemResponse> getCartItemByCartId() {
     Cart cart = cartServiceImpl.checkCartAndUser();
     List<CartItemResponse> cartItems = cartItemRepository.findAllCartItem(cart.getId());
     if (cartItems.isEmpty()) {
       throw new AppException(ErrorCode.CART_IS_EMPTY);
     }
-    List<CartItemResponse> dtos =
-        cartItems.stream()
-            .map(
-                cartItem ->
-                    new CartItemResponse(
-                        cartItem.getId(),
-                        cartItem.getQuantity(),
-                        cartItem.getPrice(),
-                        cartItem.getRentalDate(),
-                        cartItem.getCartId(),
-                        cartItem.getProductId(),
-                        cartItem.getProductName(),
-                        cartItem.getFirstImage().split(",")[0],
-                        cartItem.getCreatedAt(),
-                        cartItem.getUpdatedAt()))
-            .collect(Collectors.toList());
 
-    return ApiResponse.success("Get cart items by cart ID success", dtos);
+      return cartItems.stream()
+          .map(
+              cartItem ->
+                  new CartItemResponse(
+                      cartItem.getId(),
+                      cartItem.getQuantity(),
+                      cartItem.getPrice(),
+                      cartItem.getRentalDate(),
+                      cartItem.getCartId(),
+                      cartItem.getProductId(),
+                      cartItem.getProductName(),
+                      cartItem.getFirstImage().split(",")[0],
+                      cartItem.getCreatedAt(),
+                      cartItem.getUpdatedAt()))
+          .collect(Collectors.toList());
   }
 
   @Override
   @Transactional
-  public ApiResponse<Boolean> addCartItem(CartItemDTO cartItemDTO) {
+  public Boolean addCartItem(CartItemDTO cartItemDTO) {
     Cart cart = cartServiceImpl.checkCartAndUser();
 
     ProductDTO productDTO =
-        productServiceImpl.findProductById(cartItemDTO.getProductId()).getResult();
+        productServiceImpl.findProductById(cartItemDTO.getProductId());
     cartItemDTO.setPrice(productDTO.getPrice() * cartItemDTO.getQuantity());
     cartItemDTO.setCartId(cart.getId());
     cartItemRepository.saveAndFlush(cartItemMapper.toCartItemEntity(cartItemDTO));
     cartServiceImpl.updateCartTotals(cart);
-    return ApiResponse.success("Add cart item success", true);
+    return  true;
   }
 
   @Override
   @Transactional
-  public ApiResponse<Boolean> deleteCartItem(UUID cartItemId) {
+  public Boolean deleteCartItem(UUID cartItemId) {
     Cart cart = cartServiceImpl.checkCartAndUser();
     CartItem cartItem =
         cartItemRepository
@@ -83,14 +81,14 @@ public class CartItemServiceImpl implements ICartItemService {
     cartItemRepository.delete(cartItem);
     cartItemRepository.flush();
     cartServiceImpl.updateCartTotals(cart);
-    return ApiResponse.success("Delete cart item success", true);
+    return true;
   }
 
   @Override
   @Transactional
-  public ApiResponse<CartDTO> updateCartItem(UpdateCartItemRequest cartItem) {
+  public CartDTO updateCartItem(UpdateCartItemRequest cartItem) {
     Cart cart = cartServiceImpl.checkCartAndUser();
-    ApiResponse<ProductDTO> productDTO =
+    ProductDTO productDTO =
         productServiceImpl.findProductById(cartItem.getProductId());
 
     CartItem existingCartItem =
@@ -98,15 +96,15 @@ public class CartItemServiceImpl implements ICartItemService {
             .findById(cartItem.getCartItemId())
             .orElseThrow(() -> new AppException(ErrorCode.CART_ITEM_NOT_FOUND));
     existingCartItem.setQuantity(cartItem.getQuantity());
-    existingCartItem.setPrice(productDTO.getResult().getPrice() * cartItem.getQuantity());
+    existingCartItem.setPrice(productDTO.getPrice() * cartItem.getQuantity());
     existingCartItem.setRentalDate(cartItem.getRentalDate());
     cartItemRepository.saveAndFlush(existingCartItem);
-    return ApiResponse.success("Cart update success !", cartServiceImpl.updateCartTotals(cart));
+    return cartServiceImpl.updateCartTotals(cart);
   }
 
   @Override
   @Transactional
-  public ApiResponse<Boolean> deleteAllCartItem() {
+  public Boolean deleteAllCartItem() {
     Cart cart = cartServiceImpl.checkCartAndUser();
     List<CartItem> cartItems = cartItemRepository.findAllByCartId(cart.getId());
     if (cartItems.isEmpty()) {
@@ -115,6 +113,6 @@ public class CartItemServiceImpl implements ICartItemService {
     cartItemRepository.deleteAll(cartItems);
     cartItemRepository.flush();
     cartServiceImpl.updateCartTotals(cart);
-    return ApiResponse.success("Delete all cart items success", true);
+    return true;
   }
 }

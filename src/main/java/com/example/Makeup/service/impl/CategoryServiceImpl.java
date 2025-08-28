@@ -24,7 +24,7 @@ public class CategoryServiceImpl implements ICategoryService {
   private static final String CATEGORY_CACHE_KEY = "categories";
 
   @Override
-  public ApiResponse<List<CategoryDTO>> getAllCategory() {
+  public List<CategoryDTO> getAllCategory() {
     List<CategoryDTO> result =
         categoryRepository.findAll().stream().map(categoryMapper::toCategoryDTO).toList();
 
@@ -34,7 +34,7 @@ public class CategoryServiceImpl implements ICategoryService {
       System.out.println("⚠️ Redis SET failed: " + e.getMessage());
     }
 
-    return ApiResponse.success("Get all categories success (from DB)", result);
+    return result;
   }
 
   public void invalidateCategoryCache() {
