@@ -227,6 +227,7 @@
 				</configuration>
 			</plugin>
 		</plugins>
+		<finalName>makeup-images</finalName>
 	</build>
 
 

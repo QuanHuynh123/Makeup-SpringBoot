@@ -1,6 +1,6 @@
 FROM openjdk:17-jdk-slim
 
-ARG JAR_FILE=target/Makeup-0.0.1-SNAPSHOT.jar
+ARG JAR_FILE=target/makeup-images.jar
 
 COPY ${JAR_FILE} app.jar
 COPY secrets.env secrets.env
