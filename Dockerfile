@@ -1,4 +1,4 @@
-FROM openjdk:21-jdk-slim
+FROM openjdk:17-jdk-slim
 
 ARG JAR_FILE=target/Makeup-0.0.1-SNAPSHOT.jar
 
