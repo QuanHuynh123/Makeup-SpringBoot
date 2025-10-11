@@ -49,6 +49,7 @@ public class AccountServiceImpl implements UserDetailsService, IAccountService {
   private final RefreshTokenRepository refreshTokenRepository;
   private final CartServiceImpl cartServiceImpl;
   private final RedisTemplate<String, Object> redisTemplate;
+  public static final String REFRESH_TOKEN_PREFIX = "refresh-token:";
 
   @Value("${refresh.expiration}")
   private long expiredRefreshToken;
@@ -101,7 +102,7 @@ public class AccountServiceImpl implements UserDetailsService, IAccountService {
     refreshTokenRepository.save(refreshToken);
 
     try {
-      String redisKey = "refreshToken:" + refreshToken.getToken();
+      String redisKey = REFRESH_TOKEN_PREFIX + refreshToken.getToken();
 
       Map<String, Object> refreshData = new HashMap<>();
       refreshData.put("accountId", account.getId().toString());
@@ -111,9 +112,10 @@ public class AccountServiceImpl implements UserDetailsService, IAccountService {
       refreshData.put("expiryDate", refreshToken.getExpiryDate().toString());
 
       redisTemplate.opsForHash().putAll(redisKey, refreshData);
-      redisTemplate.expire(redisKey,
-              Duration.between(LocalDateTime.now(), refreshToken.getExpiryDate())
-      );
+      Duration ttl = Duration.between(LocalDateTime.now(), refreshToken.getExpiryDate());
+      if (!ttl.isNegative() && !ttl.isZero()) {
+          redisTemplate.expire(redisKey, ttl);
+      }
 
       log.info("Cached refresh token in Redis with key={}", redisKey);
     } catch (Exception e) {

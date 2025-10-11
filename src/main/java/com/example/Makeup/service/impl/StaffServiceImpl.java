@@ -15,7 +15,7 @@ import com.example.Makeup.repository.AppointmentRepository;
 import com.example.Makeup.repository.RoleRepository;
 import com.example.Makeup.repository.StaffRepository;
 import com.example.Makeup.service.IStaffService;
-import com.example.Makeup.utils.RedisStatusManager;
+import com.example.Makeup.service.common.RedisHealthCheckService;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -41,29 +41,46 @@ public class StaffServiceImpl implements IStaffService {
   private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
   private final RoleRepository roleRepository;
   private final RedisTemplate<String, Object> redisTemplate;
+  private final RedisHealthCheckService redisHealthCheckService;
 
   @Override
   public List<StaffDTO> getAllStaff() {
-    if (RedisStatusManager.isRedisAvailable()) {
-      try {
-        Object cached = redisTemplate.opsForValue().get(STAFF_CACHE_KEY);
-        if (cached != null) {
-          List<StaffDTO> staffList = (List<StaffDTO>) cached;
-          log.info("Lấy danh sách nhân viên thành công (từ Redis)");
-          return staffList;
-        } else {
-          log.info("Cache staff not found, fetching from DB");
-        }
-      } catch (RedisConnectionFailureException e) {
-        log.warn("⚠️ Redis connection failed: {}", e.getMessage());
-        RedisStatusManager.setRedisAvailable(false);
-      } catch (Exception e) {
-        log.warn("⚠️ Redis GET failed, fallback to DB: {}", e.getMessage());
-      }
+    // Fallback to DB
+    if (!redisHealthCheckService.isRedisAvailable()) {
+      log.debug("⚠️ Redis not available — fallback to DB");
+      return staffRepository.findAll()
+              .stream()
+              .map(staffMapper::toStaffDTO)
+              .collect(Collectors.toList());
     }
 
-    List<Staff> staffList = staffRepository.findAll();
-    return staffList.stream().map(staffMapper::toStaffDTO).collect(Collectors.toList());
+    // Try cache data
+    try {
+      Object cached = redisTemplate.opsForValue().get(STAFF_CACHE_KEY);
+      if (cached instanceof List<?> list && !list.isEmpty()) {
+        return (List<StaffDTO>) list;
+      }
+
+      log.info("ℹ️ Cache staff null - fetching from DB");
+    } catch (RedisConnectionFailureException e) {
+      log.warn("⚠️ Redis connection failed: {}", e.getMessage());
+    } catch (Exception e) {
+      log.warn("⚠️ Redis GET fail — fallback DB: {}", e.getMessage());
+    }
+
+    // Get from DB when redis cache miss or error
+    List<StaffDTO> staffList = staffRepository.findAll()
+            .stream()
+            .map(staffMapper::toStaffDTO)
+            .collect(Collectors.toList());
+
+    try {
+      redisTemplate.opsForValue().set(STAFF_CACHE_KEY, staffList);
+    } catch (Exception e) {
+      log.debug("⚠️ Can't cache Redis (staff): {}", e.getMessage());
+    }
+
+    return staffList;
   }
 
   @Override

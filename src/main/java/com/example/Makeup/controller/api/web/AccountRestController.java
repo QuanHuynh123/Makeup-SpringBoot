@@ -30,20 +30,20 @@ public class AccountRestController {
   }
 
   /** Create account */
-  @PostMapping("/create")
+  @PostMapping("")
   public ApiResponse<AccountDTO> createAccount(@RequestBody AccountDTO accountDTO) {
     return ApiResponse.success("Create account success",accountService.createAccount(accountDTO));
   }
 
   /** Update account */
-  @PutMapping("/edit/{id}")
+  @PutMapping("/{id}")
   public ResponseEntity<Boolean> updateAccount(
       @RequestBody UpdateAccountRequest updateAccountRequest, @PathVariable("id") UUID accountId) {
     return null; // accountService.updateAccount(updateAccountRequest, accountId);
   }
 
   /** Delete account */
-  @DeleteMapping("/delete/{id}")
+  @DeleteMapping("/{id}")
   public ApiResponse<Boolean> deleteAccount(@PathVariable("id") UUID accountId) {
     return ApiResponse.success("Delete account success",accountService.deleteAccount(accountId));
   }

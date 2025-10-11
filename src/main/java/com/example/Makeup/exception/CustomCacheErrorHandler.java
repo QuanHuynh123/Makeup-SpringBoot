@@ -39,7 +39,7 @@ public class CustomCacheErrorHandler implements CacheErrorHandler {
     log.warn("Cache {} error for key {}: {}", operation, key != null ? key : "N/A", e.getMessage());
     if (e instanceof RedisConnectionFailureException) {
       log.error("⚠ Redis connection failure detected!");
-      redisStatusManager.setRedisAvailable(false);
+      RedisStatusManager.setRedisAvailable(false);
     }
   }
 }

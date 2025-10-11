@@ -27,18 +27,27 @@ public class RefreshTokenService implements IRefreshTokenService {
 
   private final JWTProvider jwtProvider;
   private final RedisTemplate<String, Object> redisTemplate;
+  public static final String REFRESH_TOKEN_PREFIX = "refresh-token:";
 
   @Transactional
   public String refreshToken(String refreshToken) {
 
     log.info("Refreshing token for access token");
 
-    String redisKey = "refreshToken:" + refreshToken;
+    String redisKey = REFRESH_TOKEN_PREFIX + refreshToken;
 
     Map<Object, Object> refreshData = redisTemplate.opsForHash().entries(redisKey);
+    if (refreshData.isEmpty()) {
+      throw new AppException(ErrorCode.AUTH_REFRESH_TOKEN_EXPIRED);
+    }
 
-    if (refreshData == null || refreshData.isEmpty()) {
-      log.error("Refresh token not found or expired in Redis");
+    Boolean isBlacklisted = redisTemplate.hasKey("blacklist:" + refreshToken);
+    if (isBlacklisted != null && isBlacklisted) {
+      throw new AppException(ErrorCode.AUTH_REFRESH_TOKEN_EXPIRED);
+    }
+
+    String expiry = (String) refreshData.get("expiryDate");
+    if (LocalDateTime.parse(expiry).isBefore(LocalDateTime.now())) {
       throw new AppException(ErrorCode.AUTH_REFRESH_TOKEN_EXPIRED);
     }
 
@@ -59,15 +68,20 @@ public class RefreshTokenService implements IRefreshTokenService {
   }
 
   public void revokeRefreshToken(String refreshToken) {
-    String redisKey = "refreshToken:" + refreshToken;
-    redisTemplate.delete(redisKey);
+    String redisKey = REFRESH_TOKEN_PREFIX + refreshToken;
+    redisTemplate.opsForValue().set(
+            "blacklist:" + refreshToken,
+            "revoked",
+            Duration.ofDays(7)
+    );
+    //redisTemplate.delete(redisKey);
     log.info("Revoked refresh token in Redis: {}", redisKey);
   }
 
   public void saveRefreshToken(String refreshToken, UUID accountId,
                                String username, String role, LocalDateTime expiryDate) {
 
-    String redisKey = "refreshToken:" + refreshToken;
+    String redisKey = REFRESH_TOKEN_PREFIX + refreshToken;
 
     Map<String, Object> refreshData = new HashMap<>();
     refreshData.put("accountId", accountId.toString());

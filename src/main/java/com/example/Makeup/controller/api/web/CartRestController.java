@@ -18,29 +18,29 @@ public class CartRestController {
 
   private final ICartItemService cartItemService;
 
-  @GetMapping()
+  @GetMapping
   public ApiResponse<List<CartItemResponse>> getCartItemByCartId() {
     return ApiResponse.success("Get cart items by cart ID success", cartItemService.getCartItemByCartId());
   }
 
-  @PostMapping("/add")
+  @PostMapping("/items")
   public ApiResponse<Boolean> addItemToCart(@RequestBody CartItemDTO cartRequest) {
     return ApiResponse.success("Add cart item success",cartItemService.addCartItem(cartRequest));
   }
 
-  @PostMapping("/update")
+  @PutMapping
   public ApiResponse<CartDTO> updateToCart(
       @RequestBody UpdateCartItemRequest updateCartItemRequest) {
     return ApiResponse.success("Cart update success !",cartItemService.updateCartItem(updateCartItemRequest));
   }
 
-  @DeleteMapping("/delete")
-  public ApiResponse<Boolean> deleteToCart(@RequestParam UUID cartItemId) {
+  @DeleteMapping("/items/{cartItemId}")
+  public ApiResponse<Boolean> deleteCartItem(@PathVariable  UUID cartItemId) {
     return ApiResponse.success("Delete cart item success",cartItemService.deleteCartItem(cartItemId));
   }
 
-  @DeleteMapping("/delete-all")
-  public ApiResponse<Boolean> deleteAllToCart() {
+  @DeleteMapping
+  public ApiResponse<Boolean> deleteAllCartItems() {
     return ApiResponse.success("Delete all cart items success",cartItemService.deleteAllCartItem());
   }
 }

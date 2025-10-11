@@ -42,6 +42,7 @@ public class AuthApiRestController {
     refreshCookie.setSecure(false);
     refreshCookie.setPath("/");
     refreshCookie.setMaxAge(cookieMaxAge);
+    refreshCookie.setAttribute("SameSite", "Strict");
     response.addCookie(refreshCookie);
 
     Cookie accessCookie = new Cookie("access_token", accessToken);

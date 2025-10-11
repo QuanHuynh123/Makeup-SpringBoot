@@ -1,7 +1,5 @@
 package com.example.Makeup.config;
 
-import com.example.Makeup.exception.CustomCacheErrorHandler;
-import com.example.Makeup.utils.RedisStatusManager;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -9,7 +7,6 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.cache.annotation.EnableCaching;
-import org.springframework.cache.interceptor.CacheErrorHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
@@ -27,8 +24,7 @@ public class RedisConfig {
     RedisTemplate<String, Object> template = new RedisTemplate<>();
     template.setConnectionFactory(connectionFactory);
 
-    ObjectMapper mapper =
-        new ObjectMapper()
+    ObjectMapper mapper = new ObjectMapper()
             .registerModule(new JavaTimeModule())
             .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
             .setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
@@ -45,10 +41,5 @@ public class RedisConfig {
 
     template.afterPropertiesSet();
     return template;
-  }
-
-  @Bean
-  public CacheErrorHandler cacheErrorHandler(RedisStatusManager redisStatusManager) {
-    return new CustomCacheErrorHandler(redisStatusManager);
   }
 }

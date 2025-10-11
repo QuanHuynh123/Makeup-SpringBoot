@@ -16,21 +16,23 @@ public class RateLimitService {
   public boolean isRateLimited(String key, int limit, Duration windowDuration) {
     try {
       String redisKey = "rate_limit:" + key;
-      Long currentCount = stringRedisTemplate.opsForValue().increment(redisKey);
+      Boolean isNewKey = stringRedisTemplate.opsForValue()
+              .setIfAbsent(redisKey, "1", windowDuration);
 
-      if (currentCount != null && currentCount == 1) {
-        stringRedisTemplate.expire(redisKey, windowDuration);
+      if (Boolean.FALSE.equals(isNewKey)) {
+        Long currentCount = stringRedisTemplate.opsForValue().increment(redisKey);
+
+        if (currentCount != null && currentCount > limit) {
+          log.warn("Rate limit exceeded for key:{}, count: {}", key, currentCount);
+          return true;
+        }
       }
 
-      boolean limited = currentCount != null && currentCount > limit;
-
-      if (limited) {
-        log.warn("Rate limit exceeded for key:{}, count: {}", key, currentCount);
-      }
-      return limited;
+      return false;
     } catch (Exception e) {
       log.error("Error checking rate limit for key: {}", key, e);
       return false; // In case of error, do not limit
     }
   }
+
 }

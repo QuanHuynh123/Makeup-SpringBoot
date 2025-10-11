@@ -7,6 +7,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 public class SecurityUserUtil {
+
   public static UserDTO getCurrentUser() {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     if (authentication == null || !authentication.isAuthenticated()) {
@@ -18,4 +19,5 @@ public class SecurityUserUtil {
     }
     throw new AppException(ErrorCode.USER_IN_AUTHENTICATED_NOT_FOUND);
   }
+
 }

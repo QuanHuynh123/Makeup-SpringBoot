@@ -23,7 +23,7 @@ public class FeedBackAdminRestController {
     return ApiResponse.success("Get all feedbacks success",feedBackService.getAllFeedBack());
   }
 
-  @DeleteMapping("/{id}/delete")
+  @DeleteMapping("/{id}")
   public ApiResponse<String> deleteFeedBack(UUID id) {
     return ApiResponse.success(
             "Delete feedback success",feedBackService.deleteFeedBack(id));

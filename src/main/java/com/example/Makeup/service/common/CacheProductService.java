@@ -3,11 +3,9 @@ package com.example.Makeup.service.common;
 import com.example.Makeup.dto.response.ShortProductListResponse;
 import com.example.Makeup.dto.response.common.ApiResponse;
 import com.example.Makeup.service.impl.ProductServiceImpl;
-import com.example.Makeup.utils.RedisStatusManager;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.redis.RedisConnectionFailureException;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -24,67 +22,61 @@ public class CacheProductService {
   private final ProductServiceImpl productServiceImpl;
 
   public ApiResponse<List<ShortProductListResponse>> cacheHotProducts() {
-    if (!RedisStatusManager.isRedisAvailable()) {
-      return ApiResponse.success(
-              "Get all products success",productServiceImpl.getHotProducts());
+    List<ShortProductListResponse> result = getListFromCache(HOT_PRODUCTS_CACHE_KEY);
+    if (result != null && !result.isEmpty()) {
+      return ApiResponse.success("Hot products (from cache)", result);
     }
 
-    try {
-      Object cached = redisTemplate.opsForValue().get(HOT_PRODUCTS_CACHE_KEY);
-      if (cached instanceof List<?> list && !list.isEmpty()) {
-        return ApiResponse.success(
-            "Hot products (from cache)", (List<ShortProductListResponse>) list);
-      }
-    } catch (RedisConnectionFailureException e) {
-      log.warn("⚠️ Redis connection failed (hot products): {}", e.getMessage());
-      RedisStatusManager.setRedisAvailable(false);
-    } catch (Exception e) {
-      log.warn("⚠️ Redis GET failed (hot products), fallback to DB: {}", e.getMessage());
-    }
-
-    return ApiResponse.success("Hot products (from DB)",productServiceImpl.getHotProducts());
+    result = productServiceImpl.getHotProducts();
+    cacheData(HOT_PRODUCTS_CACHE_KEY, result);
+    return ApiResponse.success("Hot products (from DB)", result);
   }
 
   public ApiResponse<List<ShortProductListResponse>> cacheNewProducts() {
-    if (!RedisStatusManager.isRedisAvailable()) {
-      return ApiResponse.success("New products (from DB)",productServiceImpl.getNewProducts());
+    List<ShortProductListResponse> result = getListFromCache(NEW_PRODUCTS_CACHE_KEY);
+    if (result != null && !result.isEmpty()) {
+      return ApiResponse.success("New products (from cache)", result);
     }
 
-    try {
-      Object cached = redisTemplate.opsForValue().get(NEW_PRODUCTS_CACHE_KEY);
-      if (cached instanceof List<?> list && !list.isEmpty()) {
-        return ApiResponse.success(
-            "New products (from cache)", (List<ShortProductListResponse>) list);
-      }
-    } catch (RedisConnectionFailureException e) {
-      log.warn("⚠️ Redis connection failed (new products): {}", e.getMessage());
-      RedisStatusManager.setRedisAvailable(false);
-    } catch (Exception e) {
-      log.warn("⚠️ Redis GET failed (new products), fallback to DB: {}", e.getMessage());
-    }
-
-    return ApiResponse.success("New products (from DB)",productServiceImpl.getNewProducts());
+    result = productServiceImpl.getNewProducts();
+    cacheData(NEW_PRODUCTS_CACHE_KEY, result);
+    return ApiResponse.success("New products (from DB)", result);
   }
 
   public List<ShortProductListResponse> cacheCustomerShow() {
-    if (!RedisStatusManager.isRedisAvailable()) {
-      return  productServiceImpl.getCustomerShowProducts();
+    List<ShortProductListResponse> result = getListFromCache(CUSTOMER_SHOW_CACHE_KEY);
+    if (result != null && !result.isEmpty()) {
+      return result;
     }
 
+    result = productServiceImpl.getCustomerShowProducts();
+    cacheData(CUSTOMER_SHOW_CACHE_KEY, result);
+    return result;
+  }
+
+  // --- Helpers ---
+
+  @SuppressWarnings("unchecked")
+  private List<ShortProductListResponse> getListFromCache(String key) {
     try {
-      Object cached = redisTemplate.opsForValue().get(CUSTOMER_SHOW_CACHE_KEY);
-      if (cached instanceof List<?> l && !l.isEmpty()) {
-        @SuppressWarnings("unchecked")
-        List<ShortProductListResponse> result = (List<ShortProductListResponse>) l;
-        return result;
+      Object cached = redisTemplate.opsForValue().get(key);
+      if (cached instanceof List<?> list) {
+        log.debug("✅ Cache hit for key: {}", key);
+        return (List<ShortProductListResponse>) list;
       }
-    } catch (RedisConnectionFailureException e) {
-      log.warn("⚠️ Redis connection failed (customer show products): {}", e.getMessage());
-      RedisStatusManager.setRedisAvailable(false);
     } catch (Exception e) {
-      log.warn("⚠️ Redis GET failed (customer show products), fallback to DB: {}", e.getMessage());
+      log.warn("⚠️ Redis GET failed for key {}: {}", key, e.getMessage());
     }
+    return null;
+  }
 
-    return productServiceImpl.getCustomerShowProducts();
+  private void cacheData(String key, List<?> data) {
+    try {
+      redisTemplate.opsForValue().set(key, data);
+      log.debug("💾 Cached data for key: {}", key);
+    } catch (Exception e) {
+      log.warn("⚠️ Failed to cache data for key {}: {}", key, e.getMessage());
+    }
   }
 }
+
