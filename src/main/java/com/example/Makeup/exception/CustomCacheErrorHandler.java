@@ -1,6 +1,5 @@
 package com.example.Makeup.exception;
 
-import com.example.Makeup.utils.RedisStatusManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.Cache;
@@ -12,8 +11,6 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class CustomCacheErrorHandler implements CacheErrorHandler {
-
-  private final RedisStatusManager redisStatusManager;
 
   @Override
   public void handleCacheGetError(RuntimeException e, Cache cache, Object key) {
@@ -39,7 +36,6 @@ public class CustomCacheErrorHandler implements CacheErrorHandler {
     log.warn("Cache {} error for key {}: {}", operation, key != null ? key : "N/A", e.getMessage());
     if (e instanceof RedisConnectionFailureException) {
       log.error("⚠ Redis connection failure detected!");
-      RedisStatusManager.setRedisAvailable(false);
     }
   }
 }
