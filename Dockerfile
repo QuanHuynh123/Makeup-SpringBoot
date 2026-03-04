@@ -1,4 +1,4 @@
-FROM openjdk:17-jdk-slim
+FROM eclipse-temurin:17-jdk-focal
 
 ARG JAR_FILE=target/makeup-images.jar
 
