@@ -20,7 +20,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class JWTProvider {
 
-  @Value("${jwt.secret}")
+  @Value("${JWT_SECRET}")
   private String secretkey;
 
   @Value("${jwt.expiration}")
