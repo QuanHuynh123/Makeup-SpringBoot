@@ -41,10 +41,10 @@ public class CartServiceImpl implements ICartService {
 
   @Override
   @Transactional
-  public void createCart(UUID accountId) {
+  public void createCart(UUID userId) {
     User user =
         userRepository
-            .findByAccountId(accountId)
+                .findById(userId)
             .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
     Cart cart = new Cart(null, 0, 0, user);
     cartRepository.save(cart);

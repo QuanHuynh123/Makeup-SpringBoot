@@ -4,6 +4,9 @@ import com.example.Makeup.dto.response.OrdersAdminResponse;
 import com.example.Makeup.dto.response.common.ApiResponse;
 import com.example.Makeup.service.IOrderService;
 import java.util.UUID;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -11,11 +14,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
+@Tag(name = "Order Admin API", description = "API for admin order operations")
 @RestController
 @RequestMapping("api/admin/orders")
 public class OrderAdminRestController {
   @Autowired IOrderService orderService;
 
+  @Operation(summary = "Get all orders", description = "Retrieve a paginated list of all orders with optional status filtering")
   @GetMapping
   public ApiResponse<Page<OrdersAdminResponse>> getOrders(
       @RequestParam(value = "page", defaultValue = "0") Integer page,
@@ -28,6 +33,7 @@ public class OrderAdminRestController {
     return ApiResponse.success("Get all order successfully",orderService.getAllOrder(pageable, statusId));
   }
 
+  @Operation(summary = "Update order status", description = "Update the status of an order by order ID")
   @PutMapping("{id}/update-status")
   public ApiResponse<String> updateStatusOrder(
       @PathVariable("id") String orderId, @RequestParam("status") int status) {

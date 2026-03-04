@@ -6,6 +6,8 @@ import com.example.Makeup.dto.response.common.ApiResponse;
 import com.example.Makeup.security.JWTProvider;
 import com.example.Makeup.service.IUserService;
 import com.example.Makeup.utils.SecurityUserUtil;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.UUID;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+@Tag(name = "User API", description = "API for user operations")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/users")
@@ -22,11 +25,13 @@ public class UserRestController {
 
   private final IUserService userService;
 
+  @Operation(summary = "Create a new user", description = "Create a new user with the provided details")
   @PostMapping("/create")
   public ApiResponse<UserDTO> createUser(@RequestBody UserDTO userDTO) {
     return ApiResponse.success("Create user success",userService.createUser(userDTO));
   }
 
+  @Operation(summary = "Update user profile", description = "Update the profile of the current user")
   @PostMapping("/profile/update")
   public ApiResponse<UserDTO> updateProfile( @RequestBody UpdateProfileUserRequest profileUserRequest) {
     UserDTO currentUser = SecurityUserUtil.getCurrentUser();

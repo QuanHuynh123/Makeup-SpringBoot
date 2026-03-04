@@ -154,7 +154,7 @@ public class AccountServiceImpl implements UserDetailsService, IAccountService {
     user.setPhone("000-000-0000"); // Normalize phone number or set a default value
     userRepository.saveAndFlush(user);
 
-    cartServiceImpl.createCart(account.getId());
+    cartServiceImpl.createCart(user.getId());
     return  account.getUserName();
   }
 

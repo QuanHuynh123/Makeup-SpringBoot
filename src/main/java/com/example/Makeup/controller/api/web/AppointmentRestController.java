@@ -13,9 +13,12 @@ import com.example.Makeup.service.common.RateLimitService;
 import com.example.Makeup.utils.SecurityUserUtil;
 import java.time.Duration;
 import java.util.List;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+@Tag(name = "Appointment API", description = "API for appointment operations")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/appointments")
@@ -25,14 +28,17 @@ public class AppointmentRestController {
   private final RateLimitService rateLimitService;
   private final IFeedBackService feedBackService;
 
+  @Operation(summary = "Get my appointments", description = "Retrieve a list of my appointments")
   @GetMapping("/my-appointments")
   public ApiResponse<List<AppointmentsAdminResponse>> getMyAppointments() {
 
     UserDTO userDTO = SecurityUserUtil.getCurrentUser();
 
     return ApiResponse.success("Get appointment by ID success",appointmentService.getAppointmentByUserId(userDTO.getId()));
+
   }
 
+  @Operation(summary = "Create an appointment", description = "Create a new appointment")
   @PostMapping("/create")
   public ApiResponse<AppointmentDTO> createAppointment(
       @RequestBody AppointmentRequest appointment) {
@@ -50,6 +56,7 @@ public class AppointmentRestController {
             "Create appointment success",appointmentService.createAppointment(appointment));
   }
 
+  @Operation(summary = "Rate an appointment", description = "Create feedback for an appointment")
   @PostMapping("/feedback")
   public ApiResponse<FeedBackDTO> rateAppointment(
       @RequestBody CreateFeedBackRequest createFeedBackRequest) {

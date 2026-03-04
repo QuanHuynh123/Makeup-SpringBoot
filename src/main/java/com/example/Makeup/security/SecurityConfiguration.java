@@ -3,6 +3,8 @@ package com.example.Makeup.security;
 import com.example.Makeup.service.impl.AccountServiceImpl;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
+
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,10 +26,12 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfiguration {
   @Autowired private AccountServiceImpl accountServiceImpl;
 
-  @Autowired private JwtFilter jwtFilter;
+  private final JwtFilter jwtFilter;
+  private final CustomLogoutHandler customLogoutHandler;
 
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -55,7 +59,9 @@ public class SecurityConfiguration {
                         "/fonts/**",
                         "api/appointments/create",
                         "api/appointments/by-date/**",
-                        "/api/category/**")
+                        "/api/category/**",
+                        "/swagger-ui/**",
+                        "/v3/swagger-ui/**")
                     .permitAll()
                     .requestMatchers("/admin/**", "/api/admin/order/**")
                     .hasAnyRole("ADMIN", "STAFF")
@@ -84,7 +90,7 @@ public class SecurityConfiguration {
             logout ->
                 logout
                     .logoutUrl("/logout")
-                    .addLogoutHandler(new CustomLogoutHandler()) // Use custom logout handler
+                    .addLogoutHandler(customLogoutHandler) // Use custom logout handler
                     .logoutSuccessHandler(
                         (request, response, authentication) -> {
                           response.sendRedirect("/login"); // Redirect to login page after logout

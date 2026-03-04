@@ -6,16 +6,16 @@ import com.example.Makeup.dto.response.AuthResponse;
 import com.example.Makeup.dto.response.common.ApiResponse;
 import com.example.Makeup.service.IAccountService;
 import com.example.Makeup.service.IRefreshTokenService;
-import com.example.Makeup.service.common.RateLimitService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
-import java.time.Duration;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+@Tag(name = "Authentication API", description = "API for user authentication and registration")
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -27,7 +27,7 @@ public class AuthApiRestController {
   private final IAccountService accountService;
   private final IRefreshTokenService refreshTokenService;
 
-
+  @Operation(summary = "User login", description = "Authenticate user and set tokens in cookies")
   @PostMapping("/login")
   public ApiResponse<String> login(
           @RequestBody LoginRequest loginRequest, HttpServletResponse response) {
@@ -57,11 +57,13 @@ public class AuthApiRestController {
     return ApiResponse.success("Login success", accessToken) ;
   }
 
+  @Operation(summary = "User registration", description = "Register a new user account")
   @PostMapping("/register")
   public ApiResponse<String> regis(@RequestBody RegisterRequest registerRequest) {
     return ApiResponse.success("Sign up success",accountService.signUp(registerRequest));
   }
 
+  @Operation(summary = "Refresh token", description = "Refresh access token using refresh token from cookie")
   @PostMapping("/refresh")
   public ApiResponse<?> refreshToken(@CookieValue("refresh_token") String refreshToken){
     return ApiResponse.success("Refresh success",refreshTokenService.refreshToken(refreshToken));

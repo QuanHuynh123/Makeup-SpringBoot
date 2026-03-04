@@ -83,7 +83,9 @@ public class JwtFilter extends OncePerRequestFilter {
           String token, String username, HttpServletRequest request) {
     String role = jwtProvider.extractRole(token);
     List<GrantedAuthority> authorities =
-            Collections.singletonList(new SimpleGrantedAuthority(role));
+            Collections.singletonList(new SimpleGrantedAuthority("ROLE_"+role));
+
+    System.out.println("debug role in jwtfilter: " + role);
 
     UserDTO userDTO = userService.loadUserDTOByUsername(username);
 

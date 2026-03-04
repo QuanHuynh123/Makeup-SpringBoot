@@ -5,12 +5,16 @@ import com.example.Makeup.dto.response.common.ApiResponse;
 import com.example.Makeup.service.IProductService;
 import java.util.HashMap;
 import java.util.Map;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
+@Tag(name = "Cosplay Category API", description = "API for retrieving products by category")
 @RestController
 @RequestMapping("/api/category")
 @RequiredArgsConstructor
@@ -18,6 +22,7 @@ public class CosplayRestController {
 
   private final IProductService productService;
 
+  @Operation(summary = "Get products by category with pagination and search", description = "Retrieve products filtered by category ID, with pagination and optional search keyword")
   @GetMapping("")
   public ApiResponse<Map<String, Object>> getCategoryProducts(
       @RequestParam(value = "id", required = false) Integer id,
