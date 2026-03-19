@@ -1,16 +1,18 @@
+import { ProductModule } from '/js/service/admin/product.js';
+
 $(document).ready(function(){
     let fileList = [];
 
-    console.log('edit-product.js loaded');
-
     $(document).on('click', '#modal-cancel-btn', function(e) {
         e.preventDefault();
-        $('#editProductModal').modal('hide');
+        const modalElement = document.getElementById('editProductModal');
+        if (modalElement) {
+            bootstrap.Modal.getOrCreateInstance(modalElement).hide();
+        }
     });
 
     // Manage overlay and aria-hidden when modal opens
-    $('#editProductModal').on('show.bs.modal', function() {
-        console.log('Modal show event triggered'); // Debugging
+    $(document).on('show.bs.modal', '#editProductModal', function() {
         $('.admin-content-overlay').addClass('show-overlay');
         $(this).removeAttr('aria-hidden');
         setTimeout(() => {
@@ -19,8 +21,7 @@ $(document).ready(function(){
     });
 
     // Reset modal and overlay when closed
-    $('#editProductModal').on('hidden.bs.modal', function () {
-        console.log('Modal hidden event triggered'); // Debugging
+    $(document).on('hidden.bs.modal', '#editProductModal', function () {
         $('.admin-content-overlay').removeClass('show-overlay');
         $(this).attr('aria-hidden', 'true');
 
@@ -122,7 +123,7 @@ $(document).ready(function(){
         }
 
         $.ajax({
-            url: `/api/admin/products/${id}/update`,
+            url: `/api/admin/products/${id}`,
             type: 'PUT',
             data: formData,
             processData: false,
@@ -133,7 +134,10 @@ $(document).ready(function(){
                     title: response,
                     text: 'Thông tin sản phẩm đã được sửa',
                 }).then(() => {
-                    $('#editProductModal').modal('hide');
+                    const modalElement = document.getElementById('editProductModal');
+                    if (modalElement) {
+                        bootstrap.Modal.getOrCreateInstance(modalElement).hide();
+                    }
                     ProductModule.loadPagedProducts();
                 });
             },

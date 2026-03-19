@@ -1,3 +1,5 @@
+import { getNextSortDirection, renderPagination } from '/js/service/admin/list-utils.js';
+
 export const ProductModule = {
     productsList: [],
     currentPage: 0,
@@ -5,6 +7,7 @@ export const ProductModule = {
     totalPages: 0,
     sortDirection: null,
     currentStatus: null,
+    isBoundEvents: false,
 
     showAlert(type, message) {
         Swal.fire({
@@ -24,7 +27,7 @@ export const ProductModule = {
         const sortStr = this.sortDirection || 'createdAt,desc';
         const statusParam = this.currentStatus !== null ? `&status=${this.currentStatus}` : '';
 
-        fetch(`/api/admin/products?page=${this.currentPage}&size=${this.pageSize}&sort=${sortStr}${statusParam}`)
+        return fetch(`/api/admin/products?page=${this.currentPage}&size=${this.pageSize}&sort=${sortStr}${statusParam}`)
             .then(res => {
                 if (!res.ok) throw new Error('Lỗi kết nối API');
                 return res.json();
@@ -83,44 +86,14 @@ export const ProductModule = {
     },
 
     updatePagination() {
-        const pagination = document.querySelector('#pagination');
-        pagination.innerHTML = '';
-
-        const prev = `<li class="page-item ${this.currentPage === 0 ? 'disabled' : ''}">
-                        <a class="page-link" href="#">Trước</a></li>`;
-        pagination.innerHTML += prev;
-
-        for (let i = 0; i < this.totalPages; i++) {
-            pagination.innerHTML += `<li class="page-item ${i === this.currentPage ? 'active' : ''}">
-                <a class="page-link" href="#">${i + 1}</a></li>`;
-        }
-
-        const next = `<li class="page-item ${this.currentPage === this.totalPages - 1 ? 'disabled' : ''}">
-                        <a class="page-link" href="#">Sau</a></li>`;
-        pagination.innerHTML += next;
-
-        document.querySelectorAll('#pagination .page-link').forEach((el, idx) => {
-            if (idx === 0 || idx === this.totalPages + 1) {
-                el.addEventListener('click', e => {
-                    e.preventDefault();
-                    if (idx === 0 && this.currentPage > 0) this.currentPage--;
-                    else if (idx === this.totalPages + 1 && this.currentPage < this.totalPages - 1) this.currentPage++;
-                    this.loadPagedProducts();
-                });
-            } else {
-                el.addEventListener('click', e => {
-                    e.preventDefault();
-                    this.currentPage = idx - 1;
-                    this.loadPagedProducts();
-                });
-            }
+        renderPagination('#pagination', this.currentPage, this.totalPages, (nextPage) => {
+            this.currentPage = nextPage;
+            this.loadPagedProducts();
         });
     },
 
     sortTable(column) {
-        const direction = this.sortDirection && this.sortDirection.startsWith(column + ',')
-            ? (this.sortDirection.endsWith('asc') ? 'desc' : 'asc')
-            : 'asc';
+        const direction = getNextSortDirection(this.sortDirection, column);
         this.sortDirection = `${column},${direction}`;
         this.currentPage = 0;
         this.loadPagedProducts();
@@ -154,8 +127,6 @@ export const ProductModule = {
             url: `/api/admin/products/${productId}`,
             type: 'GET',
             success: function(product) {
-                console.log('Product data:', product); // Debugging
-                // Populate form fields
                 $('#nameProduct').val(product.result.nameProduct);
                 $('#price').val(product.result.price);
                 $('#description').val(product.result.describe);
@@ -179,10 +150,12 @@ export const ProductModule = {
                 }
 
                 // Show modal
-                $('#editProductModal').modal('show');
+                const modalElement = document.getElementById('editProductModal');
+                if (modalElement) {
+                    bootstrap.Modal.getOrCreateInstance(modalElement).show();
+                }
             },
             error: function(xhr) {
-                console.error('Error fetching product:', xhr); // Debugging
                 Swal.fire({
                     icon: 'error',
                     title: 'Lỗi',
@@ -223,21 +196,26 @@ export const ProductModule = {
     init() {
         this.loadPagedProducts();
 
+        if (this.isBoundEvents) {
+            return;
+        }
+        this.isBoundEvents = true;
+
         document.getElementById('searchProduct')
-            ?.addEventListener('input', () => this.searchProduct());
+            && (document.getElementById('searchProduct').oninput = () => this.searchProduct());
 
         document.getElementById('productFilter')
-            ?.addEventListener('change', () => this.filterProducts());
+            && (document.getElementById('productFilter').onchange = () => this.filterProducts());
 
         document.querySelectorAll('th.sortable').forEach(th => {
-            th.addEventListener('click', () => {
+            th.onclick = () => {
                 const column = th.getAttribute('data-sort');
                 this.sortTable(column);
-            });
+            };
         });
 
         document.getElementById('table-content-products')
-            ?.addEventListener('click', e => {
+            && (document.getElementById('table-content-products').onclick = e => {
                 const editBtn = e.target.closest('.btn-edit');
                 const deleteBtn = e.target.closest('.btn-delete');
                 const id = (editBtn || deleteBtn)?.getAttribute('data-id');
@@ -245,12 +223,5 @@ export const ProductModule = {
                 else if (deleteBtn) this.deleteProduct(id);
             });
 
-        document.getElementById('tab-create-product')
-            ?.addEventListener('click', () => {
-                window.location.href = '/admin/products';
-            });
     }
 };
-document.addEventListener("DOMContentLoaded", () => {
-    ProductModule.init();
-});

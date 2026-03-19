@@ -14,6 +14,7 @@ export const UIManager = {
     toggleButton: document.querySelector(".btnToggleSidebar"),
     isSmallScreen: window.matchMedia("(max-width: 992px)").matches,
     activePopup: null,
+    boundClickOutsideHandler: null,
 
     // Hàm toggle sidebar
     toggleSidebar() {
@@ -50,7 +51,10 @@ export const UIManager = {
             popup.classList.remove("d-none");
             popup.classList.add("d-block");
             this.activePopup = popupKey;
-            document.addEventListener("click", this.handleClickOutside.bind(this));
+            if (!this.boundClickOutsideHandler) {
+                this.boundClickOutsideHandler = this.handleClickOutside.bind(this);
+            }
+            document.addEventListener("click", this.boundClickOutsideHandler);
         }
     },
 
@@ -61,7 +65,33 @@ export const UIManager = {
             popup.classList.add("d-none");
         }
         this.activePopup = null;
-        document.removeEventListener("click", this.handleClickOutside.bind(this));
+        if (this.boundClickOutsideHandler) {
+            document.removeEventListener("click", this.boundClickOutsideHandler);
+        }
+    },
+
+    registerPopupMenuItems(selector, type, containerId) {
+        document.querySelectorAll(selector).forEach((item) => {
+            item.addEventListener("click", async () => {
+                const apiEndpoint = item.getAttribute("data-api");
+                const isCustomRange = item.getAttribute("data-custom-range");
+
+                if (isCustomRange) {
+                    this.handleCustomRange(type, this.displayChart.bind(this));
+                } else if (apiEndpoint) {
+                    try {
+                        const response = await fetch(apiEndpoint);
+                        if (!response.ok) throw new Error("API call failed");
+                        const data = await response.json();
+                        this.displayChart(data, containerId);
+                    } catch (error) {
+                        console.error("Error fetching API:", error);
+                        alert("Failed to fetch data");
+                    }
+                }
+                this.closePopup();
+            });
+        });
     },
 
     // Hàm xử lý click ngoài popup
@@ -149,7 +179,7 @@ export const UIManager = {
     toggleTabContent(tabId) {
         const tabs = [
             'dashboard', 'schedule', 'staff', 'appointment', 'product',
-            'order', 'approveOrder', 'create-product', 'edit-product'
+            'order', 'approveOrder'
         ];
         tabs.forEach(tab => {
             const element = document.getElementById(tab);
@@ -194,48 +224,7 @@ export const UIManager = {
         }
 
         // Gắn sự kiện cho popup menu items
-        document.querySelectorAll(".popup-menu-item").forEach((item) => {
-            item.addEventListener("click", async (event) => {
-                const apiEndpoint = item.getAttribute("data-api");
-                const isCustomRange = item.getAttribute("data-custom-range");
-
-                if (isCustomRange) {
-                    this.handleCustomRange("appointments", this.displayChart.bind(this));
-                } else if (apiEndpoint) {
-                    try {
-                        const response = await fetch(apiEndpoint);
-                        if (!response.ok) throw new Error("API call failed");
-                        const data = await response.json();
-                        this.displayChart(data, "chartContainer");
-                    } catch (error) {
-                        console.error("Error fetching API:", error);
-                        alert("Failed to fetch data");
-                    }
-                }
-                this.closePopup();
-            });
-        });
-
-        document.querySelectorAll(".popup-menu-item-order").forEach((item) => {
-            item.addEventListener("click", async (event) => {
-                const apiEndpoint = item.getAttribute("data-api");
-                const isCustomRange = item.getAttribute("data-custom-range");
-
-                if (isCustomRange) {
-                    handleCustomRange("orders");
-                } else if (apiEndpoint) {
-                    try {
-                        const response = await fetch(apiEndpoint);
-                        if (!response.ok) throw new Error("API call failed");
-                        const data = await response.json();
-                        displayChart(data, "chartContainerOrder");
-                    } catch (error) {
-                        console.error("Error fetching API:", error);
-                        alert("Failed to fetch data");
-                    }
-                }
-                closePopup();
-            });
-        });
+        this.registerPopupMenuItems(".popup-menu-item", "appointments", "chartContainer");
+        this.registerPopupMenuItems(".popup-menu-item-order", "orders", "chartContainerOrder");
     }
 };

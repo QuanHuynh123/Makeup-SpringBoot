@@ -1,13 +1,15 @@
-const socket = new SockJS('/ws');
-const stompClient = Stomp.over(socket);
-
 export const AppointmentModule = {
     appointmentList: [],
     tmpAppointment: {},
+    stompClient: null,
+    isSocketConnected: false,
+    appointmentClickHandler: null,
 
     connectWebSocket() {
+        if (this.isSocketConnected) return;
         this.stompClient = Stomp.over(new SockJS('/ws'));
         this.stompClient.connect({}, (frame) => {
+            this.isSocketConnected = true;
             this.stompClient.subscribe('/topic/appointments', (message) => {
                 Swal.fire({
                     position: "top-end",
@@ -266,13 +268,16 @@ export const AppointmentModule = {
     },
 
     init() {
-        console.log('AppointmentModule initialized');
         this.connectWebSocket();
         this.loadAppointments();
         this.loadMakeUpServices();
         this.loadStaffSelect();
 
-        document.getElementById('appointment').addEventListener('click', (e) => {
+        const appointmentRoot = document.getElementById('appointment');
+        if (appointmentRoot && this.appointmentClickHandler) {
+            appointmentRoot.removeEventListener('click', this.appointmentClickHandler);
+        }
+        this.appointmentClickHandler = (e) => {
             const editButton = e.target.closest('.btn-warning.btn-sm');
             const deleteButton = e.target.closest('.btn-danger.btn-sm');
             if (editButton) {
@@ -280,22 +285,16 @@ export const AppointmentModule = {
             } else if (deleteButton) {
                 this.deleteAppointment(deleteButton);
             }
-        });
+        };
+        appointmentRoot?.addEventListener('click', this.appointmentClickHandler);
+
         const searchInput = document.getElementById('searchAppointment');
         if (searchInput) {
-            searchInput.addEventListener('input', () => this.searchAppointment());
+            searchInput.oninput = () => this.searchAppointment();
         }
         const saveButton = document.getElementById('saveButtonAppointment');
         if (saveButton) {
-            saveButton.addEventListener('click', () => this.saveChangesAppointment());
-        }
-        const serviceSelect = document.getElementById('addServiceMakeupName');
-        const makeupDateInput = document.getElementById('addMakeupDate');
-        if (serviceSelect) {
-            serviceSelect.addEventListener('change', () => this.findAvailableStaff());
-        }
-        if (makeupDateInput) {
-            makeupDateInput.addEventListener('change', () => this.findAvailableStaff());
+            saveButton.onclick = () => this.saveChangesAppointment();
         }
     }
 };

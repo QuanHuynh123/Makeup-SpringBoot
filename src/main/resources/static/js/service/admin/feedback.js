@@ -1,19 +1,17 @@
-$(document).ready(function() {
-    let feedbackList = [];
-    let isProcessing = false; // Ngăn double-click
+export const FeedbackModule = {
+    feedbackList: [],
+    isProcessing: false,
 
-    // Hàm hiển thị thông báo
-    function showAlert(type, message) {
+    showAlert(type, message) {
         Swal.fire({
             icon: type,
             title: message,
             showConfirmButton: false,
             timer: 1500
         });
-    }
+    },
 
-    // Hàm định dạng ngày giờ
-    function formatDateTime(dateTime) {
+    formatDateTime(dateTime) {
         if (!dateTime) return '';
         return new Date(dateTime).toLocaleString('vi-VN', {
             day: '2-digit',
@@ -22,156 +20,150 @@ $(document).ready(function() {
             hour: '2-digit',
             minute: '2-digit'
         });
-    }
+    },
 
-    // Hàm render danh sách phản hồi
-    function renderFeedbacks(list) {
-        const tbody = $('#table-content-feedbacks');
-        tbody.empty();
+    renderFeedbacks(list) {
+        const tbody = document.getElementById('table-content-feedbacks');
+        if (!tbody) return;
+
+        tbody.innerHTML = '';
         if (!list || list.length === 0) {
-            tbody.append('<tr><td colspan="8" class="text-center">Không có phản hồi nào</td></tr>');
+            tbody.innerHTML = '<tr><td colspan="8" class="text-center">Không có phản hồi nào</td></tr>';
             return;
         }
 
-        list.forEach((feedback, index) => {
-            tbody.append(`
-                <tr>
-                    <td>${feedback.id}</td>
-                    <td>${feedback.rating}</td>
-                    <td>${feedback.comment}</td>
-                    <td>${feedback.userId}</td>
-                    <td>${feedback.typeMakeupId}</td>
-                    <td>${formatDateTime(feedback.createdAt)}</td>
-                    <td>${formatDateTime(feedback.updatedAt)}</td>
-                    <td>
-                        <button class="btn btn-warning btn-sm btn-edit" data-id="${feedback.id}">
-                            <i class="fa-solid fa-pen-to-square"></i>
-                        </button>
-                        <button class="btn btn-danger btn-sm btn-delete" data-id="${feedback.id}">
-                            <i class="fa-solid fa-trash"></i>
-                        </button>
-                    </td>
-                </tr>
-            `);
-        });
-    }
+        const rows = list.map((feedback) => `
+            <tr>
+                <td>${feedback.id}</td>
+                <td>${feedback.rating}</td>
+                <td>${feedback.comment}</td>
+                <td>${feedback.userId}</td>
+                <td>${feedback.typeMakeupId}</td>
+                <td>${this.formatDateTime(feedback.createdAt)}</td>
+                <td>${this.formatDateTime(feedback.updatedAt)}</td>
+                <td>
+                    <button class="btn btn-warning btn-sm btn-edit" data-id="${feedback.id}">
+                        <i class="fa-solid fa-pen-to-square"></i>
+                    </button>
+                    <button class="btn btn-danger btn-sm btn-delete" data-id="${feedback.id}">
+                        <i class="fa-solid fa-trash"></i>
+                    </button>
+                </td>
+            </tr>
+        `).join('');
 
-    // Hàm tải danh sách phản hồi
-    function loadFeedbacks() {
-        $.ajax({
-            url: '/api/admin/feedbacks',
-            method: 'GET',
-            success: function(response) {
-                if (response && response.result) {
-                    feedbackList = response.result;
-                    renderFeedbacks(feedbackList);
+        tbody.innerHTML = rows;
+    },
+
+    loadFeedbacks() {
+        return fetch('/api/admin/feedbacks')
+            .then((response) => response.ok ? response.json() : Promise.reject(response))
+            .then((data) => {
+                if (data && Array.isArray(data.result)) {
+                    this.feedbackList = data.result;
+                    this.renderFeedbacks(this.feedbackList);
                 } else {
-                    showAlert('error', 'Không thể tải danh sách phản hồi!');
-                    renderFeedbacks([]);
+                    this.feedbackList = [];
+                    this.renderFeedbacks([]);
+                    this.showAlert('error', 'Không thể tải danh sách phản hồi!');
                 }
-            },
-            error: function(xhr) {
-                console.error('Lỗi:', xhr);
-                showAlert('error', 'Lỗi khi tải danh sách phản hồi!');
-                renderFeedbacks([]);
-            }
-        });
-    }
+            })
+            .catch((error) => {
+                console.error('Lỗi:', error);
+                this.feedbackList = [];
+                this.renderFeedbacks([]);
+                this.showAlert('error', 'Lỗi khi tải danh sách phản hồi!');
+            });
+    },
 
-    // Hàm tải danh sách khách hàng
-    function loadUsers() {
-        $.ajax({
-            url: '/api/users',
-            method: 'GET',
-            success: function(response) {
-                const select = $('#addUserId');
-                select.find('option:not(:first)').remove();
-                if (response && response.result) {
-                    response.result.forEach(user => {
-                        select.append(`<option value="${user.id}">${user.fullName}</option>`);
-                    });
-                }
-            }
-        });
-    }
+    searchFeedback() {
+        const searchInput = document.getElementById('searchFeedback');
+        const text = (searchInput?.value || '').toLowerCase();
 
-    // Hàm tải danh sách dịch vụ makeup
-    function loadTypeMakeups() {
-        $.ajax({
-            url: '/api/type-makeups',
-            method: 'GET',
-            success: function(response) {
-                const select = $('#addTypeMakeupId');
-                select.find('option:not(:first)').remove();
-                if (response && response.result) {
-                    response.result.forEach(type => {
-                        select.append(`<option value="${type.id}">${type.name}</option>`);
-                    });
-                }
-            }
-        });
-    }
-
-    // Hàm tìm kiếm phản hồi
-    function searchFeedback() {
-        const text = $('#searchFeedback').val().toLowerCase();
-        const filtered = feedbackList.filter(f =>
-            f.comment?.toLowerCase().includes(text) ||
-            f.userId?.toLowerCase().includes(text) ||
-            f.typeMakeupId?.toLowerCase().includes(text)
+        const filtered = this.feedbackList.filter((feedback) =>
+            feedback.comment?.toLowerCase().includes(text) ||
+            String(feedback.userId || '').toLowerCase().includes(text) ||
+            String(feedback.typeMakeupId || '').toLowerCase().includes(text)
         );
-        renderFeedbacks(filtered);
+
+        this.renderFeedbacks(filtered);
+    },
+
+    deleteFeedback(id) {
+        if (this.isProcessing) return;
+        this.isProcessing = true;
+
+        const deleteButton = document.getElementById('confirmDeleteButton');
+        if (deleteButton) {
+            deleteButton.disabled = true;
+            deleteButton.textContent = 'Đang xóa...';
+        }
+
+        fetch(`/api/feedbacks/${id}`, { method: 'DELETE' })
+            .then((response) => {
+                if (!response.ok) throw new Error('Delete failed');
+                this.showAlert('success', 'Xóa phản hồi thành công!');
+                bootstrap.Modal.getInstance(document.getElementById('confirmDeleteModal'))?.hide();
+                return this.loadFeedbacks();
+            })
+            .catch((error) => {
+                console.error('Lỗi:', error);
+                this.showAlert('error', 'Lỗi khi xóa phản hồi!');
+            })
+            .finally(() => {
+                this.isProcessing = false;
+                if (deleteButton) {
+                    deleteButton.disabled = false;
+                    deleteButton.textContent = 'Xóa';
+                }
+            });
+    },
+
+    bindEvents() {
+        const searchInput = document.getElementById('searchFeedback');
+        if (searchInput) {
+            searchInput.oninput = () => this.searchFeedback();
+        }
+
+        const tableBody = document.getElementById('table-content-feedbacks');
+        if (tableBody) {
+            tableBody.onclick = (event) => {
+                const editBtn = event.target.closest('.btn-edit');
+                const deleteBtn = event.target.closest('.btn-delete');
+
+                if (editBtn) {
+                    this.showAlert('info', 'Tính năng chỉnh sửa phản hồi chưa được bật.');
+                    return;
+                }
+
+                if (deleteBtn) {
+                    const id = deleteBtn.getAttribute('data-id');
+                    const confirmDeleteButton = document.getElementById('confirmDeleteButton');
+                    if (confirmDeleteButton) {
+                        confirmDeleteButton.setAttribute('data-id', id);
+                    }
+                    new bootstrap.Modal(document.getElementById('confirmDeleteModal')).show();
+                }
+            };
+        }
+
+        const confirmDeleteButton = document.getElementById('confirmDeleteButton');
+        if (confirmDeleteButton) {
+            confirmDeleteButton.onclick = () => {
+                const id = confirmDeleteButton.getAttribute('data-id');
+                if (id) {
+                    this.deleteFeedback(id);
+                }
+            };
+        }
+    },
+
+    init() {
+        this.bindEvents();
+        this.loadFeedbacks();
     }
+};
 
-
-    // Hàm xóa phản hồi
-    function deleteFeedback(id) {
-        if (isProcessing) return;
-        isProcessing = true;
-        const deleteButton = $('#confirmDeleteButton');
-        deleteButton.prop('disabled', true).text('Đang xóa...');
-
-        $.ajax({
-            url: `/api/feedbacks/${id}`,
-            method: 'DELETE',
-            success: function() {
-                showAlert('success', 'Xóa phản hồi thành công!');
-                $('#confirmDeleteModal').modal('hide');
-                loadFeedbacks();
-            },
-            error: function(xhr) {
-                showAlert('error', 'Lỗi khi xóa phản hồi!');
-            },
-            complete: function() {
-                isProcessing = false;
-                deleteButton.prop('disabled', false).text('Xóa');
-            }
-        });
-    }
-
-    // Sự kiện
-    $('#searchFeedback').on('input', searchFeedback);
-
-    $('#table-content-feedbacks').on('click', '.btn-edit', function() {
-        const id = $(this).data('id');
-        const feedback = feedbackList.find(f => f.id === id);
-        showAddEditModal(feedback);
-    });
-
-    $('#table-content-feedbacks').on('click', '.btn-delete', function() {
-        const id = $(this).data('id');
-        $('#confirmDeleteButton').data('id', id);
-        $('#confirmDeleteModal').modal('show');
-    });
-
-    $('#confirmDeleteButton').on('click', function() {
-        const id = $(this).data('id');
-        deleteFeedback(id);
-    });
-
-
-    // Khởi tạo
-    loadFeedbacks();
-    loadUsers();
-    loadTypeMakeups();
+document.addEventListener('DOMContentLoaded', () => {
+    FeedbackModule.init();
 });

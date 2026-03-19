@@ -1,5 +1,4 @@
-const socket = new SockJS('/ws');
-const stompClient = Stomp.over(socket);
+import { getNextSortDirection, renderPagination } from '/js/service/admin/list-utils.js';
 
 export const OrderModule = {
     ordersList: [],
@@ -8,10 +7,15 @@ export const OrderModule = {
     totalPages: 0,
     sortDirection: null,
     currentStatus: 0,
+    stompClient: null,
+    isSocketConnected: false,
+    isBoundEvents: false,
 
     connectWebSocket() {
+        if (this.isSocketConnected) return;
         this.stompClient = Stomp.over(new SockJS('/ws'));
         this.stompClient.connect({}, (frame) => {
+            this.isSocketConnected = true;
             this.stompClient.subscribe('/topic/orders', (message) => {
                 Swal.fire({
                     toast: true,
@@ -75,44 +79,16 @@ export const OrderModule = {
     },
 
     updatePagination() {
-        const pagination = document.querySelector('#pagination');
-        pagination.innerHTML = '';
-
-        const prev = `<li class="page-item ${this.currentPage === 0 ? 'disabled' : ''}">
-                        <a class="page-link" href="#">Trước</a></li>`;
-        pagination.innerHTML += prev;
-
-        for (let i = 0; i < this.totalPages; i++) {
-            pagination.innerHTML += `<li class="page-item ${i === this.currentPage ? 'active' : ''}">
-                <a class="page-link" href="#">${i + 1}</a></li>`;
-        }
-
-        const next = `<li class="page-item ${this.currentPage === this.totalPages - 1 ? 'disabled' : ''}">
-                        <a class="page-link" href="#">Sau</a></li>`;
-        pagination.innerHTML += next;
-
-        document.querySelectorAll('#pagination .page-link').forEach((el, idx) => {
-            if (idx === 0 || idx === this.totalPages + 1) {
-                el.addEventListener('click', e => {
-                    e.preventDefault();
-                    if (idx === 0 && this.currentPage > 0) this.currentPage--;
-                    else if (idx === this.totalPages + 1 && this.currentPage < this.totalPages - 1) this.currentPage++;
-                    this.loadPagedOrders();
-                });
-            } else {
-                el.addEventListener('click', e => {
-                    e.preventDefault();
-                    this.currentPage = idx - 1;
-                    this.loadPagedOrders();
-                });
-            }
+        renderPagination('#pagination', this.currentPage, this.totalPages, (nextPage) => {
+            this.currentPage = nextPage;
+            this.loadPagedOrders();
         });
     },
 
     loadPagedOrders() {
         const sortStr = this.sortDirection || 'orderDate,desc';
 
-        fetch(`/api/admin/orders?page=${this.currentPage}&size=${this.pageSize}&sort=${sortStr}&status=${this.currentStatus}`)
+        return fetch(`/api/admin/orders?page=${this.currentPage}&size=${this.pageSize}&sort=${sortStr}&status=${this.currentStatus}`)
             .then(res => {
                 if (!res.ok) throw new Error('Lỗi kết nối API');
                 return res.json();
@@ -138,10 +114,7 @@ export const OrderModule = {
     },
 
     sortTable(column) {
-        // Chỉ giữ một trường sắp xếp
-        const direction = this.sortDirection && this.sortDirection.startsWith(column + ',')
-            ? (this.sortDirection.endsWith('asc') ? 'desc' : 'asc')
-            : 'asc';
+        const direction = getNextSortDirection(this.sortDirection, column);
         this.sortDirection = `${column},${direction}`;
         this.currentPage = 0;
         this.loadPagedOrders();
@@ -227,26 +200,31 @@ export const OrderModule = {
         this.connectWebSocket();
         this.loadPagedOrders();
 
+        if (this.isBoundEvents) {
+            return;
+        }
+        this.isBoundEvents = true;
+
         document.getElementById('searchOrder')
-            .addEventListener('input', () => this.searchOrder());
+            .oninput = () => this.searchOrder();
 
         document.querySelectorAll('th.sortable').forEach(th => {
-            th.addEventListener('click', () => {
+            th.onclick = () => {
                 const column = th.getAttribute('data-sort');
                 this.sortTable(column);
-            });
+            };
         });
 
         document.getElementById('orderFilter')
-            .addEventListener('change', () => this.filterOrders());
+            .onchange = () => this.filterOrders();
 
         document.getElementById('table-content-orders')
-            .addEventListener('click', e => {
+            .onclick = e => {
                 const approveBtn = e.target.closest('.btn-approve');
                 const deleteBtn = e.target.closest('.btn-delete');
                 const id = (approveBtn || deleteBtn)?.getAttribute('data-id');
                 if (approveBtn) this.approveOrder(id);
                 else if (deleteBtn) this.cancelOrder(id);
-            });
+            };
     }
 };

@@ -29,7 +29,7 @@ export const StaffModule = {
         const sortStr = this.sortDirection || 'nameStaff,asc';
         const roleParam = this.currentRole !== null ? `&role=${this.currentRole}` : '';
 
-        fetch(`/api/admin/staffs?sort=${sortStr}${roleParam}`)
+        return fetch(`/api/admin/staffs?sort=${sortStr}${roleParam}`)
             .then(res => {
                 if (!res.ok) throw new Error('Lỗi kết nối API');
                 return res.json();
@@ -58,6 +58,7 @@ export const StaffModule = {
 
     renderStaff(list) {
         const tbody = document.querySelector('#table-content-staff');
+        if (!tbody) return;
         tbody.innerHTML = '';
         if (!list || list.length === 0) {
             tbody.innerHTML = `<tr><td colspan="6" class="text-center">Chưa có nhân viên nào!</td></tr>`;
@@ -65,7 +66,8 @@ export const StaffModule = {
         }
 
         list.forEach((staff, i) => {
-            const roleName = staff.role === 1 ? 'Admin' : staff.role === 3 ? 'Staff' : 'Unknown';
+            const roleValue = Number(staff.role);
+            const roleName = roleValue === 1 ? 'Admin' : roleValue === 3 ? 'Staff' : 'Unknown';
             tbody.innerHTML += `
                 <tr>
                     <td>${i + 1}</td>
@@ -109,14 +111,14 @@ export const StaffModule = {
         const filtered = this.staffList.filter(s =>
             this.removeDiacritics(s.nameStaff || '').includes(text) ||
             (s.phone || '').includes(text) ||
-            this.removeDiacritics(s.createAt || '').includes(text) ||
+            this.removeDiacritics(s.createdAt || '').includes(text) ||
             (s.id || '').toString().includes(text)
         );
         this.renderStaff(filtered);
     },
 
     filterStaff() {
-        this.currentRole = document.getElementById('staffFilter').value;
+        this.currentRole = document.getElementById('staffFilter').value || null;
         this.loadStaff();
     },
 
@@ -153,7 +155,7 @@ export const StaffModule = {
         if (id) staffData.id = id;
 
         const url = id ? `/api/admin/staffs/${id}` : '/api/admin/staffs';
-        const method = id ? 'PUT' : 'POST';
+        const method = id ? 'PATCH' : 'POST';
 
         fetch(url, {
             method,
@@ -218,32 +220,43 @@ export const StaffModule = {
         this.loadStaff();
 
         document.getElementById('searchStaff')
-            ?.addEventListener('input', () => this.searchStaff());
+            && (document.getElementById('searchStaff').oninput = () => this.searchStaff());
 
         document.getElementById('staffFilter')
-            ?.addEventListener('change', () => this.filterStaff());
+            && (document.getElementById('staffFilter').onchange = () => this.filterStaff());
 
-        document.querySelectorAll('th.sortable').forEach(th => {
-            th.addEventListener('click', () => {
-                const column = th.getAttribute('data-sort');
-                this.sortTable(column);
-            });
-        });
+        const staffRoot = document.getElementById('staff');
+        if (staffRoot) {
+            staffRoot.onclick = (e) => {
+                const sortTh = e.target.closest('th.sortable');
+                if (sortTh) {
+                    const column = sortTh.getAttribute('data-sort');
+                    this.sortTable(column);
+                    return;
+                }
 
-        document.getElementById('table-content-staff')
-            ?.addEventListener('click', e => {
-                const editBtn = e.target.closest('.btn-edit');
-                const deleteBtn = e.target.closest('.btn-delete');
-                const id = (editBtn || deleteBtn)?.getAttribute('data-id');
-                if (editBtn) this.editStaff(id);
-                else if (deleteBtn) this.deleteStaff(id);
-            });
+                const createBtn = e.target.closest('#tab-create-staff');
+                if (createBtn) {
+                    this.showAddModal();
+                    return;
+                }
 
-        document.getElementById('tab-create-staff')
-            ?.addEventListener('click', () => this.showAddModal());
+                const editBtn = e.target.closest('#table-content-staff .btn-edit');
+                if (editBtn) {
+                    this.editStaff(editBtn.getAttribute('data-id'));
+                    return;
+                }
+
+                const deleteBtn = e.target.closest('#table-content-staff .btn-delete');
+                if (deleteBtn) {
+                    this.deleteStaff(deleteBtn.getAttribute('data-id'));
+                }
+            };
+        }
+
+        const saveButton = document.getElementById('saveButton');
+        if (saveButton) {
+            saveButton.onclick = () => this.saveStaff();
+        }
     }
 };
-
-$(document).ready(function () {
-    StaffModule.init();
-});
