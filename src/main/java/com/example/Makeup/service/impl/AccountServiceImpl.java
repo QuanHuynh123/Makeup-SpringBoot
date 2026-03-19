@@ -4,7 +4,6 @@ import com.example.Makeup.dto.model.AccountDTO;
 import com.example.Makeup.dto.request.RegisterRequest;
 import com.example.Makeup.dto.request.UpdateAccountRequest;
 import com.example.Makeup.dto.response.AuthResponse;
-import com.example.Makeup.dto.response.common.ApiResponse;
 import com.example.Makeup.entity.Account;
 import com.example.Makeup.entity.RefreshToken;
 import com.example.Makeup.entity.Role;
@@ -18,7 +17,6 @@ import com.example.Makeup.repository.RoleRepository;
 import com.example.Makeup.repository.UserRepository;
 import com.example.Makeup.security.JWTProvider;
 import com.example.Makeup.service.IAccountService;
-import com.example.Makeup.service.IRefreshTokenService;
 import jakarta.transaction.Transactional;
 
 import java.time.Duration;

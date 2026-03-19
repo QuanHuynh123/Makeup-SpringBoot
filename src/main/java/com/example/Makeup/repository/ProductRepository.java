@@ -6,6 +6,7 @@ import java.util.UUID;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -35,4 +36,16 @@ public interface ProductRepository extends JpaRepository<Product, UUID> {
 
   @Query(value = "SELECT * FROM product ORDER BY RAND()", nativeQuery = true)
   List<Product> findRandomProducts(Pageable pageable);
+
+    @Modifying
+    @Query(
+            "UPDATE Product p SET p.currentQuantity = p.currentQuantity - :quantity "
+                    + "WHERE p.id = :productId AND p.currentQuantity >= :quantity")
+    int decreaseQuantityIfEnough(@Param("productId") UUID productId, @Param("quantity") int quantity);
+
+    @Modifying
+    @Query(
+            "UPDATE Product p SET p.currentQuantity = p.currentQuantity + :quantity "
+                    + "WHERE p.id = :productId")
+    int increaseQuantity(@Param("productId") UUID productId, @Param("quantity") int quantity);
 }

@@ -25,6 +25,8 @@ public class ProductAdminController {
 
   @GetMapping("")
   public String getAllProductsAdminPage(Model model) {
+    List<SubCategoryDTO> subCategories = subCategoryService.getAll();
+    model.addAttribute("subCategories", subCategories);
     return "admin/product-admin";
   }
 

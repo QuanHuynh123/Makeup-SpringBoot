@@ -37,21 +37,26 @@ public class RabbitMQConfig {
   }
 
   @Bean
-  public RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory) {
+  public Jackson2JsonMessageConverter messageConverter() {
+    return new Jackson2JsonMessageConverter();
+  }
+
+  @Bean
+  public RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory,
+      Jackson2JsonMessageConverter messageConverter) {
     RabbitTemplate template = new RabbitTemplate(connectionFactory);
-    template.setMessageConverter(
-        new Jackson2JsonMessageConverter()); // Use Jackson for JSON conversion
+    template.setMessageConverter(messageConverter);
     return template;
   }
 
   @Bean
   public SimpleRabbitListenerContainerFactory rabbitListenerContainerFactory(
-      ConnectionFactory connectionFactory) {
+      ConnectionFactory connectionFactory, Jackson2JsonMessageConverter messageConverter) {
     SimpleRabbitListenerContainerFactory factory = new SimpleRabbitListenerContainerFactory();
     factory.setConnectionFactory(connectionFactory);
-    factory.setRecoveryInterval(180000L); // 3 minutes
+    factory.setRecoveryInterval(10000L); // 10 seconds
 
-    factory.setMessageConverter(new Jackson2JsonMessageConverter());
+    factory.setMessageConverter(messageConverter);
 
     // Cấu hình retry
     RetryTemplate retryTemplate = new RetryTemplate();

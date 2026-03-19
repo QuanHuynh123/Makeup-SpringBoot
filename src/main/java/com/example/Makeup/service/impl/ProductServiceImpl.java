@@ -4,7 +4,6 @@ import com.example.Makeup.dto.model.ProductDTO;
 import com.example.Makeup.dto.request.CreateProductRequest;
 import com.example.Makeup.dto.request.UpdateProductRequest;
 import com.example.Makeup.dto.response.ShortProductListResponse;
-import com.example.Makeup.dto.response.common.ApiResponse;
 import com.example.Makeup.entity.Product;
 import com.example.Makeup.entity.SubCategory;
 import com.example.Makeup.enums.ErrorCode;
@@ -16,36 +15,27 @@ import com.example.Makeup.service.IProductService;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
-import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class ProductServiceImpl implements IProductService {
-
-  private static final String HOT_PRODUCTS_CACHE_KEY = "products-hot";
-  private static final String NEW_PRODUCTS_CACHE_KEY = "products-new";
-  private static final String CUSTOMER_SHOW_CACHE_KEY = "products-customer-show";
   private static final int QUANTITY_NEW_PRODUCTS = 10;
   private static final int QUANTITY_HOT_PRODUCTS = 15;
 
   private final ProductRepository productRepository;
   private final SubCategoryRepository subCategoryRepository;
   private final ProductMapper productMapper;
-  private final RedisTemplate<String, Object> redisTemplate;
 
   @Override
   public ProductDTO findProductById(UUID productId) {
@@ -80,12 +70,6 @@ public class ProductServiceImpl implements IProductService {
                         product.getImage().split(",")[0]))
             .collect(Collectors.toList());
 
-    try {
-      redisTemplate.opsForValue().set(HOT_PRODUCTS_CACHE_KEY, dtos, Duration.ofMinutes(30));
-    } catch (Exception e) {
-      log.warn("⚠️ Redis SET failed (hot products): " + e.getMessage());
-    }
-
     return  dtos;
   }
 
@@ -104,12 +88,6 @@ public class ProductServiceImpl implements IProductService {
                         product.getImage().split(",")[0]))
             .collect(Collectors.toList());
 
-    try {
-      redisTemplate.opsForValue().set(NEW_PRODUCTS_CACHE_KEY, dtos, Duration.ofMinutes(30));
-    } catch (Exception e) {
-      log.warn("⚠️ Redis SET failed (new products): " + e.getMessage());
-    }
-
     return  dtos;
   }
 
@@ -126,12 +104,6 @@ public class ProductServiceImpl implements IProductService {
                         product.getPrice(),
                         product.getImage().split(",")[0]))
             .collect(Collectors.toList());
-
-    try {
-      redisTemplate.opsForValue().set(CUSTOMER_SHOW_CACHE_KEY, dtos, Duration.ofMinutes(30));
-    } catch (Exception e) {
-      log.warn("⚠️ Redis SET failed (customer show products): " + e.getMessage());
-    }
 
     return dtos;
   }

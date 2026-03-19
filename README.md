@@ -38,3 +38,34 @@ The project was completed with the following key features:
 - ✅ **Efficient performance** through Redis caching  
 - ✅ **Asynchronous task handling** using RabbitMQ  
 - ✅ **Environment consistency** with Docker containerization  
+
+## ⚙️ Spring Profiles (local/dev/prod)
+
+The project now uses profile-based configuration to separate environments cleanly.
+
+- `application.properties`: shared defaults for all environments
+- `application-local.properties`: local machine setup (`localhost` services)
+- `application-dev.properties`: Docker Compose development setup (`mysql`, `redis-dev`, `rabbitmq`)
+- `application-prod.properties`: production-safe setup (all critical hosts/credentials from environment variables)
+
+### Run with profile
+
+- Local (default):
+	- `./mvnw spring-boot:run`
+- Explicit local:
+	- `./mvnw spring-boot:run -Dspring-boot.run.profiles=local`
+- Dev:
+	- `./mvnw spring-boot:run -Dspring-boot.run.profiles=dev`
+- Prod:
+	- `./mvnw spring-boot:run -Dspring-boot.run.profiles=prod`
+
+### Environment variables
+
+At minimum, set these values before running:
+
+- `MYSQL_USERNAME`
+- `MYSQL_PASSWORD`
+- `MAIL_USERNAME`
+- `MAIL_PASSWORD`
+- `JWT_SECRET`
+- `OPENAI_API_KEY`

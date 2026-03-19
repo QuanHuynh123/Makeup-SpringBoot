@@ -28,6 +28,9 @@ public interface IOrderService {
 
   String updateOrderStatus(UUID orderId, int status);
 
+  Boolean finalizePaymentFromVnpay(
+      UUID orderId, String transactionId, String vnpTxnRef, long paidAmount);
+
   Boolean checkRepaymentCondition(UUID orderId);
 
   void clearOrderPaymentExpired();

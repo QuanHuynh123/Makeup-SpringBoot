@@ -6,6 +6,7 @@ import com.example.Makeup.dto.request.UpdateCartItemRequest;
 import com.example.Makeup.dto.response.CartItemResponse;
 import com.example.Makeup.dto.response.common.ApiResponse;
 import com.example.Makeup.service.ICartItemService;
+import jakarta.validation.Valid;
 import java.util.List;
 import java.util.UUID;
 
@@ -35,9 +36,9 @@ public class CartRestController {
   }
 
   @Operation(summary = "Update cart item", description = "Update an existing item in the cart")
-  @PutMapping
+  @PatchMapping
   public ApiResponse<CartDTO> updateToCart(
-      @RequestBody UpdateCartItemRequest updateCartItemRequest) {
+      @Valid @RequestBody UpdateCartItemRequest updateCartItemRequest) {
     return ApiResponse.success("Cart update success !",cartItemService.updateCartItem(updateCartItemRequest));
   }
 

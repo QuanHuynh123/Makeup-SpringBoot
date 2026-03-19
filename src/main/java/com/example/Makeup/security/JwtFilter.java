@@ -1,19 +1,15 @@
 package com.example.Makeup.security;
 
 import com.example.Makeup.dto.model.UserDTO;
-import com.example.Makeup.entity.RefreshToken;
 import com.example.Makeup.service.IUserService;
-import com.example.Makeup.service.common.RefreshTokenService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
-import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -84,8 +80,6 @@ public class JwtFilter extends OncePerRequestFilter {
     String role = jwtProvider.extractRole(token);
     List<GrantedAuthority> authorities =
             Collections.singletonList(new SimpleGrantedAuthority("ROLE_"+role));
-
-    System.out.println("debug role in jwtfilter: " + role);
 
     UserDTO userDTO = userService.loadUserDTOByUsername(username);
 

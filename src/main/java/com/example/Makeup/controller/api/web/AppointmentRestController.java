@@ -11,6 +11,7 @@ import com.example.Makeup.service.IAppointmentService;
 import com.example.Makeup.service.IFeedBackService;
 import com.example.Makeup.service.common.RateLimitService;
 import com.example.Makeup.utils.SecurityUserUtil;
+import jakarta.servlet.http.HttpServletRequest;
 import java.time.Duration;
 import java.util.List;
 import io.swagger.v3.oas.annotations.Operation;
@@ -38,22 +39,35 @@ public class AppointmentRestController {
 
   }
 
+  private static final int BOOKING_LIMIT = 5;
+  private static final Duration BOOKING_WINDOW = Duration.ofMinutes(1);
+
   @Operation(summary = "Create an appointment", description = "Create a new appointment")
   @PostMapping("/create")
   public ApiResponse<AppointmentDTO> createAppointment(
-      @RequestBody AppointmentRequest appointment) {
+      @RequestBody AppointmentRequest appointment, HttpServletRequest request) {
 
-    UserDTO userDTO = SecurityUserUtil.getCurrentUser();
-    String key = "booking:" + userDTO.getId();
+    UserDTO userDTO = SecurityUserUtil.getCurrentUserOrNull();
+    String key = userDTO != null
+        ? "booking:user:" + userDTO.getId()
+        : "booking:ip:" + getClientIp(request);
 
-    if (rateLimitService.isRateLimited(key, 5, Duration.ofMinutes(1))) {
+    if (rateLimitService.isRateLimited(key, BOOKING_LIMIT, BOOKING_WINDOW)) {
       return ApiResponse.error(
           429,
           "You have exceeded the maximum number of appointment bookings. Please try again later.");
     }
 
     return ApiResponse.success(
-            "Create appointment success",appointmentService.createAppointment(appointment));
+            "Create appointment success", appointmentService.createAppointment(appointment));
+  }
+
+  private static String getClientIp(HttpServletRequest request) {
+    String forwarded = request.getHeader("X-Forwarded-For");
+    if (forwarded != null && !forwarded.isBlank()) {
+      return forwarded.split(",")[0].trim();
+    }
+    return request.getRemoteAddr();
   }
 
   @Operation(summary = "Rate an appointment", description = "Create feedback for an appointment")

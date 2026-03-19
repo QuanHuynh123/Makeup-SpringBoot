@@ -15,14 +15,10 @@ import com.example.Makeup.repository.AppointmentRepository;
 import com.example.Makeup.repository.RoleRepository;
 import com.example.Makeup.repository.StaffRepository;
 import com.example.Makeup.service.IStaffService;
-import com.example.Makeup.service.common.RedisHealthCheckService;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.redis.RedisConnectionFailureException;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -30,65 +26,48 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class StaffServiceImpl implements IStaffService {
 
-  private static final String STAFF_CACHE_KEY = "staffs";
   private final StaffRepository staffRepository;
   private final AppointmentRepository appointmentRepository;
   private final StaffMapper staffMapper;
   private final AccountRepository accountRepository;
   private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
   private final RoleRepository roleRepository;
-  private final RedisTemplate<String, Object> redisTemplate;
-  private final RedisHealthCheckService redisHealthCheckService;
 
   @Override
   public List<StaffDTO> getAllStaff() {
-    // Fallback to DB
-    if (!redisHealthCheckService.isRedisAvailable()) {
-      log.debug("⚠️ Redis not available — fallback to DB");
-      return staffRepository.findAll()
-              .stream()
-              .map(staffMapper::toStaffDTO)
-              .collect(Collectors.toList());
-    }
-
-    // Try cache data
-    try {
-      Object cached = redisTemplate.opsForValue().get(STAFF_CACHE_KEY);
-      if (cached instanceof List<?> list && !list.isEmpty()) {
-        return (List<StaffDTO>) list;
-      }
-
-      log.info("ℹ️ Cache staff null - fetching from DB");
-    } catch (RedisConnectionFailureException e) {
-      log.warn("⚠️ Redis connection failed: {}", e.getMessage());
-    } catch (Exception e) {
-      log.warn("⚠️ Redis GET fail — fallback DB: {}", e.getMessage());
-    }
-
-    // Get from DB when redis cache miss or error
-    List<StaffDTO> staffList = staffRepository.findAll()
+    return staffRepository.findAll()
             .stream()
             .map(staffMapper::toStaffDTO)
             .collect(Collectors.toList());
-
-    try {
-      redisTemplate.opsForValue().set(STAFF_CACHE_KEY, staffList);
-    } catch (Exception e) {
-      log.debug("⚠️ Can't cache Redis (staff): {}", e.getMessage());
-    }
-
-    return staffList;
   }
 
   @Override
+    @Transactional(readOnly = true)
   public StaffAccountResponse getStaffById(UUID staffId) {
-    System.out.println("Fetching staff by ID: " + staffId);
-      return staffRepository
-          .findStaffAccountById(staffId)
-          .orElseThrow(() -> new AppException(ErrorCode.STAFF_NOT_FOUND));
+    Staff staff =
+      staffRepository.findById(staffId).orElseThrow(() -> new AppException(ErrorCode.STAFF_NOT_FOUND));
+
+    Account account = staff.getAccount();
+    String accountId = account != null && account.getId() != null ? account.getId().toString() : null;
+    String roleName =
+      account != null && account.getRole() != null ? account.getRole().getNameRole() : "UNKNOWN";
+    String userName = account != null ? account.getUserName() : null;
+    String createdAt =
+      account != null && account.getCreatedAt() != null ? account.getCreatedAt().toString() : null;
+    String updatedAt =
+      account != null && account.getUpdatedAt() != null ? account.getUpdatedAt().toString() : null;
+
+    return new StaffAccountResponse(
+      staff.getId().toString(),
+      staff.getNameStaff(),
+      staff.getPhone(),
+      accountId,
+      roleName,
+      userName,
+      createdAt,
+      updatedAt);
   }
 
   @Override
@@ -102,7 +81,7 @@ public class StaffServiceImpl implements IStaffService {
 
     // Create AccountDTO
     Account account = new Account();
-    account.setUserName(createStaff.getNameStaff());
+    account.setUserName(newStaff.getUserName());
     account.setPassWord(encodedPassword);
 
     Role role =

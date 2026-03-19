@@ -8,6 +8,18 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 public class SecurityUserUtil {
 
+  public static UserDTO getCurrentUserOrNull() {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    if (authentication == null || !authentication.isAuthenticated()) {
+      return null;
+    }
+    Object principal = authentication.getPrincipal();
+    if (principal instanceof UserDTO user) {
+      return user;
+    }
+    return null;
+  }
+
   public static UserDTO getCurrentUser() {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     if (authentication == null || !authentication.isAuthenticated()) {

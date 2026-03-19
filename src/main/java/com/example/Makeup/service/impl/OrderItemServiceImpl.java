@@ -2,7 +2,6 @@ package com.example.Makeup.service.impl;
 
 import com.example.Makeup.dto.model.OrderItemDTO;
 import com.example.Makeup.dto.request.OrderItemRequest;
-import com.example.Makeup.dto.response.common.ApiResponse;
 import com.example.Makeup.entity.Order;
 import com.example.Makeup.entity.OrderItem;
 import com.example.Makeup.entity.Product;

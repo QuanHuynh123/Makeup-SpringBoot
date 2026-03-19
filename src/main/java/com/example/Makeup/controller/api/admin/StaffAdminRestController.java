@@ -46,7 +46,7 @@ public class StaffAdminRestController {
   }
 
   @Operation(summary = "Update staff", description = "Update an existing staff member by staff ID")
-  @PutMapping("/{id}")
+  @PatchMapping("/{id}")
   public ApiResponse<StaffDTO> updateStaff(@PathVariable UUID id, @RequestBody StaffDTO staffDTO) {
     return ApiResponse.success("Update staff success",staffService.updateStaff(staffDTO, id));
   }

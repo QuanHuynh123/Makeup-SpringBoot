@@ -48,7 +48,7 @@ public class ProductAdminRestController {
   }
 
   @Operation(summary = "Update a product", description = "Update an existing product by product ID")
-  @PutMapping("{id}")
+  @PatchMapping("{id}")
   public ApiResponse<ProductDTO> updateProduct(
       UpdateProductRequest productDTO, @PathVariable("id") UUID productId) throws IOException {
     return ApiResponse.success("Product updated successfully",productService.updateProduct(productDTO, productId));

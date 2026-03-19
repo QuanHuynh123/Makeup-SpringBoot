@@ -6,7 +6,6 @@ import com.example.Makeup.dto.request.AppointmentRequest;
 import com.example.Makeup.dto.request.UpdateAppointmentRequest;
 import com.example.Makeup.dto.response.AppointmentsAdminResponse;
 import com.example.Makeup.dto.response.WeekAppointmentsDTO;
-import com.example.Makeup.dto.response.common.ApiResponse;
 import com.example.Makeup.entity.Appointment;
 import com.example.Makeup.entity.Staff;
 import com.example.Makeup.entity.TypeMakeup;

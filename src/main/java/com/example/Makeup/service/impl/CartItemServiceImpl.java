@@ -5,7 +5,6 @@ import com.example.Makeup.dto.model.CartItemDTO;
 import com.example.Makeup.dto.model.ProductDTO;
 import com.example.Makeup.dto.request.UpdateCartItemRequest;
 import com.example.Makeup.dto.response.CartItemResponse;
-import com.example.Makeup.dto.response.common.ApiResponse;
 import com.example.Makeup.entity.Cart;
 import com.example.Makeup.entity.CartItem;
 import com.example.Makeup.enums.ErrorCode;

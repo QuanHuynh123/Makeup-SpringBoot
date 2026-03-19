@@ -56,6 +56,28 @@ public interface OrderRepository extends JpaRepository<Order, UUID> {
   @Query("UPDATE Order o SET o.status = :status WHERE o.id = :orderId")
   int updateOrderStatus(@Param("orderId") UUID orderId, @Param("status") OrderStatus status);
 
+  @Modifying
+  @Query(
+      "UPDATE Order o SET o.status = :newStatus WHERE o.id = :orderId AND o.status = :currentStatus")
+  int updateOrderStatusIfCurrentStatus(
+      @Param("orderId") UUID orderId,
+      @Param("currentStatus") OrderStatus currentStatus,
+      @Param("newStatus") OrderStatus newStatus);
+
+  @Modifying
+  @Query(
+      "UPDATE Order o SET o.status = :newStatus, o.pickupDate = :pickupDate "
+          + "WHERE o.id = :orderId AND o.status = :currentStatus")
+  int updateOrderStatusAndPickupDateIfCurrentStatus(
+      @Param("orderId") UUID orderId,
+      @Param("currentStatus") OrderStatus currentStatus,
+      @Param("newStatus") OrderStatus newStatus,
+      @Param("pickupDate") LocalDateTime pickupDate);
+
+  @Modifying
+  @Query("UPDATE Order o SET o.returnDate = :returnDate WHERE o.id = :orderId AND o.returnDate IS NULL")
+  int markOrderReturnedIfNotYet(@Param("orderId") UUID orderId, @Param("returnDate") LocalDateTime returnDate);
+
   @EntityGraph(attributePaths = "orderItems") // name attribute in Order entity
   Optional<Order> findWithOrderItemsById(UUID id);
 

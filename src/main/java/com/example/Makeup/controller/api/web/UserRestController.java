@@ -3,15 +3,14 @@ package com.example.Makeup.controller.api.web;
 import com.example.Makeup.dto.model.UserDTO;
 import com.example.Makeup.dto.request.UpdateProfileUserRequest;
 import com.example.Makeup.dto.response.common.ApiResponse;
-import com.example.Makeup.security.JWTProvider;
 import com.example.Makeup.service.IUserService;
 import com.example.Makeup.utils.SecurityUserUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletRequest;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,7 +31,7 @@ public class UserRestController {
   }
 
   @Operation(summary = "Update user profile", description = "Update the profile of the current user")
-  @PostMapping("/profile/update")
+  @PatchMapping("/profile/update")
   public ApiResponse<UserDTO> updateProfile( @RequestBody UpdateProfileUserRequest profileUserRequest) {
     UserDTO currentUser = SecurityUserUtil.getCurrentUser();
     UUID accountId = currentUser.getId();

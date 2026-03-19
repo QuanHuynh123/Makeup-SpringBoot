@@ -1,6 +1,5 @@
 package com.example.Makeup.service.impl;
 
-import com.example.Makeup.config.RabbitMQConfig;
 import com.example.Makeup.dto.model.OrderDTO;
 import com.example.Makeup.dto.model.UserDTO;
 import com.example.Makeup.dto.request.OrderRequest;
@@ -16,8 +15,8 @@ import com.example.Makeup.mapper.OrderMapper;
 import com.example.Makeup.mapper.UserMapper;
 import com.example.Makeup.repository.*;
 import com.example.Makeup.service.IOrderService;
+import com.example.Makeup.service.common.OrderEmailPublisher;
 import com.example.Makeup.utils.SecurityUserUtil;
-import jakarta.persistence.OptimisticLockException;
 import jakarta.transaction.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -27,9 +26,13 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.amqp.AmqpConnectException;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.data.domain.Page;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.transaction.support.TransactionSynchronization;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 import org.springframework.data.domain.Pageable;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
@@ -44,7 +47,7 @@ public class OrderServiceImpl implements IOrderService {
   private final OrderMapper orderMapper;
   private final ProductRepository productRepository;
   private final UserMapper userMapper;
-  private final RabbitTemplate rabbitTemplate;
+  private final OrderEmailPublisher orderEmailPublisher;
   private final OrderItemServiceImpl orderItemServiceImpl;
   private final SimpMessagingTemplate messagingTemplate;
 
@@ -87,43 +90,45 @@ public class OrderServiceImpl implements IOrderService {
 
     order.setReturnDate(null);
 
-    orderRepository.saveAndFlush(order);
+    try {
+      orderRepository.saveAndFlush(order);
+    } catch (DataIntegrityViolationException ex) {
+      throw new AppException(ErrorCode.DUPLICATE_ORDER);
+    }
 
     orderItemServiceImpl.createOrderItem(order.getId(), orderRequest.getOrderItems());
 
-    sendEmailNotification(
-        new OrderEmailMessage(user.getEmail(), order.getId().toString(), order.getReceiverName()));
+    final OrderEmailMessage emailMessage =
+        new OrderEmailMessage(user.getEmail(), order.getId().toString(), order.getReceiverName());
+    TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
+      @Override
+      public void afterCommit() {
+        orderEmailPublisher.publish(emailMessage);
+      }
+    });
 
-    messagingTemplate.convertAndSend("/topic/orders", "NEW_ORDER");
+    final SimpMessagingTemplate wsTemplate = messagingTemplate;
+    TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
+      @Override
+      public void afterCommit() {
+        wsTemplate.convertAndSend("/topic/orders", "NEW_ORDER");
+      }
+    });
 
-    return  orderMapper.toOrderDTO(order);
-  }
-
-  @Transactional(Transactional.TxType.NOT_SUPPORTED)
-  public void sendEmailNotification(OrderEmailMessage message) {
-    try {
-      rabbitTemplate.convertAndSend(RabbitMQConfig.EXCHANGE, RabbitMQConfig.ROUTING_KEY, message);
-      log.info("Order email message sent successfully for orderId: {}", message.getOrderId());
-    } catch (AmqpConnectException e) {
-      log.warn(
-          "Failed to connect to RabbitMQ, skipping email notification for orderId: {}. Error: {}",
-          message.getOrderId(),
-          e.getMessage());
-    } catch (Exception e) {
-      log.error(
-          "Unexpected error while sending email notification for orderId: {}. Error: {}",
-          message.getOrderId(),
-          e.getMessage());
-    }
+    return orderMapper.toOrderDTO(order);
   }
 
   @Override
   public OrderDTO getOrder(UUID orderId) {
+    UserDTO currentUser = SecurityUserUtil.getCurrentUser();
     Order order =
-        orderRepository
-            .findById(orderId)
-            .orElseThrow(() -> new AppException(ErrorCode.ORDER_NOT_FOUND));
-    return  orderMapper.toOrderDTO(order);
+      orderRepository
+        .findById(orderId)
+        .orElseThrow(() -> new AppException(ErrorCode.ORDER_NOT_FOUND));
+    if (!order.getUser().getId().equals(currentUser.getId())) {
+      throw new AppException(ErrorCode.ACCESS_DENIED);
+    }
+    return orderMapper.toOrderDTO(order);
   }
 
   @Override
@@ -133,31 +138,38 @@ public class OrderServiceImpl implements IOrderService {
         orderRepository
             .findById(orderId)
             .orElseThrow(() -> new AppException(ErrorCode.ORDER_NOT_FOUND));
-    order.setStatus(OrderStatus.IN_PROGRESS);
+
+    if (order.getStatus() == OrderStatus.IN_PROGRESS) {
+      return true;
+    }
+    if (order.getStatus() != OrderStatus.PENDING) {
+      throw new AppException(ErrorCode.ORDER_CONFLICT);
+    }
 
     // set pickup date to tomorrow
     LocalDateTime time = LocalDate.now().plusDays(1).atStartOfDay();
-    order.setPickupDate(time);
-    orderRepository.save(order);
+    int updatedOrderRows =
+        orderRepository.updateOrderStatusAndPickupDateIfCurrentStatus(
+            orderId, OrderStatus.PENDING, OrderStatus.IN_PROGRESS, time);
+    if (updatedOrderRows == 0) {
+      throw new AppException(ErrorCode.ORDER_CONFLICT);
+    }
 
     List<OrderItem> orderItems =
-        orderItemRepository.findAllById(Collections.singleton(order.getId()));
+        orderItemRepository.findAllByOrderId(order.getId());
 
     for (OrderItem orderItem : orderItems) {
-      Product product =
-          productRepository
-              .findById(orderItem.getProduct().getId())
-              .orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOT_FOUND));
-
-      int remaining = product.getCurrentQuantity() - orderItem.getQuantity();
-      if (remaining < 0) {
-        throw new AppException(ErrorCode.PRODUCT_QUANTITY_NOT_ENOUGH);
-      }
-      product.setCurrentQuantity(remaining);
-
       try {
-        productRepository.save(product);
-      } catch (OptimisticLockException e) {
+        int updatedProductRows =
+            productRepository.decreaseQuantityIfEnough(
+                orderItem.getProduct().getId(), orderItem.getQuantity());
+        if (updatedProductRows == 0) {
+          if (!productRepository.existsById(orderItem.getProduct().getId())) {
+            throw new AppException(ErrorCode.PRODUCT_NOT_FOUND);
+          }
+          throw new AppException(ErrorCode.PRODUCT_QUANTITY_NOT_ENOUGH);
+        }
+      } catch (ObjectOptimisticLockingFailureException e) {
         throw new AppException(ErrorCode.PRODUCT_CONFLICT);
       }
     }
@@ -180,22 +192,25 @@ public class OrderServiceImpl implements IOrderService {
   @Override
   @Transactional
   public Boolean returnProductOfOrder(UUID orderId) {
-    orderRepository
-        .findById(orderId)
-        .orElseThrow(() -> new AppException(ErrorCode.ORDER_NOT_FOUND));
+    if (!orderRepository.existsById(orderId)) {
+      throw new AppException(ErrorCode.ORDER_NOT_FOUND);
+    }
+
+    int markedRows = orderRepository.markOrderReturnedIfNotYet(orderId, LocalDateTime.now());
+    if (markedRows == 0) {
+      return true;
+    }
+
     List<OrderItem> orderItems = orderItemRepository.findAllByOrderId(orderId);
 
     for (OrderItem orderItem : orderItems) {
-      Product product =
-          productRepository
-              .findById(orderItem.getProduct().getId())
-              .orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOT_FOUND));
-
-      product.setCurrentQuantity(product.getCurrentQuantity() + orderItem.getQuantity());
-
       try {
-        productRepository.save(product);
-      } catch (OptimisticLockException e) {
+        int updatedProductRows =
+            productRepository.increaseQuantity(orderItem.getProduct().getId(), orderItem.getQuantity());
+        if (updatedProductRows == 0) {
+          throw new AppException(ErrorCode.PRODUCT_NOT_FOUND);
+        }
+      } catch (ObjectOptimisticLockingFailureException e) {
         throw new AppException(ErrorCode.PRODUCT_CONFLICT);
       }
     }
@@ -214,6 +229,14 @@ public class OrderServiceImpl implements IOrderService {
 
   @Override
   public List<OrderItemDetailResponse> getItemsDetail(UUID orderId) {
+    UserDTO currentUser = SecurityUserUtil.getCurrentUser();
+    Order order =
+        orderRepository
+            .findById(orderId)
+            .orElseThrow(() -> new AppException(ErrorCode.ORDER_NOT_FOUND));
+    if (!order.getUser().getId().equals(currentUser.getId())) {
+      throw new AppException(ErrorCode.ACCESS_DENIED);
+    }
     List<OrderItemDetailResponse> orderItemDetailResponses =
         orderItemRepository.findOrderItemsDetailByOrderId(orderId);
     if (orderItemDetailResponses.isEmpty()) {
@@ -243,21 +266,77 @@ public class OrderServiceImpl implements IOrderService {
   @Override
   @Transactional
   public String updateOrderStatus(UUID orderId, int status) {
+    UserDTO currentUser = SecurityUserUtil.getCurrentUser();
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     Order order =
         orderRepository
             .findById(orderId)
             .orElseThrow(() -> new AppException(ErrorCode.ORDER_NOT_FOUND));
+
+    boolean isAdminOrStaff =
+        authentication != null
+            && authentication.getAuthorities().stream()
+                .anyMatch(
+                    authority ->
+                        "ROLE_ADMIN".equals(authority.getAuthority())
+                            || "ROLE_STAFF".equals(authority.getAuthority()));
+    if (!isAdminOrStaff && !order.getUser().getId().equals(currentUser.getId())) {
+      throw new AppException(ErrorCode.ACCESS_DENIED);
+    }
+
     OrderStatus newStatus = OrderStatus.fromId(status); // Validate status
 
     if (order.getStatus() == newStatus) {
       throw new AppException(ErrorCode.ORDER_ALREADY_IN_THIS_STATUS);
     }
 
-    int updatedRows = orderRepository.updateOrderStatus(orderId, newStatus);
+    int updatedRows =
+        orderRepository.updateOrderStatusIfCurrentStatus(orderId, order.getStatus(), newStatus);
     if (updatedRows == 0) {
-      throw new AppException(ErrorCode.INTERNAL_SERVER_ERROR);
+      throw new AppException(ErrorCode.ORDER_CONFLICT);
     }
     return  "Order status updated";
+  }
+
+  @Override
+  @Transactional
+  public Boolean finalizePaymentFromVnpay(
+      UUID orderId, String transactionId, String vnpTxnRef, long paidAmount) {
+    Order order =
+        orderRepository
+            .findById(orderId)
+            .orElseThrow(() -> new AppException(ErrorCode.ORDER_NOT_FOUND));
+
+    if (order.getStatus() == OrderStatus.PENDING) {
+      return true;
+    }
+    if (order.getStatus() != OrderStatus.PAYMENT_NOT_COMPLETED) {
+      throw new AppException(ErrorCode.ORDER_CONFLICT);
+    }
+    if (paidAmount <= 0) {
+      throw new AppException(ErrorCode.PAYMENT_VERIFY_FAILED);
+    }
+
+    int updatedRows =
+        orderRepository.updateOrderStatusIfCurrentStatus(
+            orderId, OrderStatus.PAYMENT_NOT_COMPLETED, OrderStatus.PENDING);
+    if (updatedRows == 0) {
+      Order reloaded =
+          orderRepository
+              .findById(orderId)
+              .orElseThrow(() -> new AppException(ErrorCode.ORDER_NOT_FOUND));
+      if (reloaded.getStatus() == OrderStatus.PENDING) {
+        return true;
+      }
+      throw new AppException(ErrorCode.ORDER_CONFLICT);
+    }
+
+    log.info(
+        "Finalized VNPAY payment for order {} (txnRef={}, transactionId={})",
+        orderId,
+        vnpTxnRef,
+        transactionId);
+    return true;
   }
 
   @Override
@@ -269,7 +348,7 @@ public class OrderServiceImpl implements IOrderService {
     if (order.getStatus() != OrderStatus.PAYMENT_NOT_COMPLETED) {
       throw new AppException(ErrorCode.ORDER_REPAYMENT_CONDITION_NOT_MET);
     }
-    if (order.getCreatedAt().isAfter(LocalDateTime.now().minusDays(7))) {
+    if (order.getCreatedAt().isBefore(LocalDateTime.now().minusDays(7))) {
       throw new AppException(ErrorCode.ORDER_REPAYMENT_CONDITION_NOT_MET);
     }
 

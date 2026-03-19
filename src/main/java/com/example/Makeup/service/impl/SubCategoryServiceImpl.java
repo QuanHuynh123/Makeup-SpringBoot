@@ -5,7 +5,6 @@
 package com.example.Makeup.service.impl;
 
 import com.example.Makeup.dto.model.SubCategoryDTO;
-import com.example.Makeup.dto.response.common.ApiResponse;
 import com.example.Makeup.entity.SubCategory;
 import com.example.Makeup.enums.ErrorCode;
 import com.example.Makeup.exception.AppException;
