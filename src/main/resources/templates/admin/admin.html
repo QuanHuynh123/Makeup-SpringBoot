@@ -16,7 +16,7 @@
 
     <script>document.getElementsByTagName("html")[0].className += " js";</script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="/js/service/loadSchedule.js"></script>
+    <script src="/js/service/admin/load-schedule.js"></script>
     <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -618,7 +618,7 @@
                                     }
 
                                     // Gọi hàm để vẽ chart cho năm 2024
-                                    loadChartData(2024);
+                                        loadChartData(new Date().getFullYear());
                                 </script>
                             </div>
                         </div>
@@ -654,7 +654,7 @@
                                 </div>
                                 <script>
                                     // Lấy dữ liệu appointment stats từ server
-                                    function loadChartData(year) {
+                                        function loadOrderChartData(year) {
                                         $.ajax({
                                             url: '/orders/stats/' + year, // Đường dẫn API
                                             method: 'GET',
@@ -687,7 +687,7 @@
                                     }
 
                                     // Gọi hàm để vẽ chart cho năm 2024
-                                    loadChartData(2024);
+                                        loadOrderChartData(new Date().getFullYear());
                                 </script>
                             </div>
                         </div>
@@ -821,8 +821,6 @@
             <div id="appointment" class="d-none mt-3"></div>
             <div id="product" class="d-none mt-3"></div>
             <div id="order" class="d-none mt-3"></div>
-            <div id="create-product" class="d-none mt-3"></div>
-            <div id="edit-product" class="d-none mt-3"></div>
         </div>
     </div>
 </div>
@@ -832,11 +830,10 @@
 <!--****************** SERVICE TAB *****************-->
 <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
-<script src="/js/service/util.js"></script>
-<script src="/js/service/main.js"></script>
-<script type="module" src="/js/service/admin-ui-handler.js"></script>
-<script type="module" src="/js/service/adminControl.js"></script>
-<script src="/js/service/admin/edit-product.js"></script>
+<script src="/js/service/common/util.js"></script>
+<script src="/js/service/common/main.js"></script>
+<script type="module" src="/js/service/admin/controller.js"></script>
+<script type="module" src="/js/service/admin/edit-product.js"></script>
 </body>
 
 </html>

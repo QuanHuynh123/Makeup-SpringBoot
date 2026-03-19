@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="nav(activeTab)" class="account-nav-shell">
+    <nav class="account-nav">
+        <div class="account-home-switcher">
+            <a href="#" class="account-nav__item account-nav__item--home">Home</a>
+            <div class="account-home-switcher__menu">
+                <a href="/home" class="account-home-switcher__link">Makeup</a>
+                <a href="/cosplay/home" class="account-home-switcher__link">Cosplay</a>
+            </div>
+        </div>
+        <a href="/user/my-order"
+           class="account-nav__item"
+           th:classappend="${activeTab == 'order'} ? ' is-active' : ''">Orders</a>
+        <a href="/user/my-appointment"
+           class="account-nav__item"
+           th:classappend="${activeTab == 'appointment'} ? ' is-active' : ''">Appointments</a>
+        <a href="/user/my-cart"
+           class="account-nav__item"
+           th:classappend="${activeTab == 'cart'} ? ' is-active' : ''">Cart</a>
+        <a href="/user/profile"
+           class="account-nav__item"
+           th:classappend="${activeTab == 'profile'} ? ' is-active' : ''">Profile</a>
+    </nav>
+</div>
+</body>
+</html>

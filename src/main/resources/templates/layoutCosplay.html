@@ -29,28 +29,31 @@
     <!-- header inner -->
     <div class="container_top_header">
         <div class="custom-header">
-            <div class="header-left">
-                <a href="/cosplay/home" class="header-link">Home</a>
-                <a href="/home" class="header-link">Makeup</a>
-                <a href="/login" class="header-link">Login</a>
-            </div>
-            <div class="header-right">
+            <nav class="header-nav" aria-label="Top navigation">
+                <div class="service-switcher">
+                    <a href="#" class="header-link service-switcher__toggle">Home <i class="fa-solid fa-caret-down"></i></a>
+                    <ul class="service-switcher__menu">
+                        <li><a href="/home">Makeup</a></li>
+                        <li><a href="/cosplay/home">Cosplay</a></li>
+                    </ul>
+                </div>
                 <a href="/contact-us" class="header-link">Contact Us</a>
-                <a href="#" class="header-link account">Account</a>
-                    <th:block th:if="${user == null }">
-                        <ul class="profile_menu">
-                            <li><a href="/login">Đăng nhập</a></li>
-                        </ul>
-                    </th:block>
-                    <th:block th:if="${user != null}">
-                        <ul class="profile_menu">
+                <div class="account-wrap">
+                    <a href="#" class="header-link account">
+                        <span th:text="${user == null ? 'Đăng nhập' : 'Account'}">Account</span>
+                        <i class="fa-solid fa-caret-down"></i>
+                    </a>
+                    <ul class="profile_menu">
+                        <li th:if="${user == null}"><a href="/login">Đăng nhập</a></li>
+                        <th:block th:if="${user != null}">
                             <li><a href="/user/profile">Thông tin  </a></li>
                             <li><a href="/user/my-order">Đơn hàng của tôi</a></li>
                             <li><a href="/user/my-cart">Giỏ hàng</a></li>
                             <li><a href="/logout">Đăng xuất</a></li>
-                        </ul>
-                    </th:block>
-            </div>
+                        </th:block>
+                    </ul>
+                </div>
+            </nav>
         </div>
     </div>
     <!-- end header inner -->
@@ -196,8 +199,17 @@
     <script>
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
           anchor.addEventListener('click', function (e) {
-            e.preventDefault();
-            const target = document.querySelector(this.getAttribute('href'));
+                        const targetSelector = this.getAttribute('href');
+                        if (!targetSelector || targetSelector === '#') {
+                            return;
+                        }
+
+                        const target = document.querySelector(targetSelector);
+                        if (!target) {
+                            return;
+                        }
+
+                        e.preventDefault();
             window.scrollTo({
               top: target.offsetTop,
               behavior: 'smooth'
@@ -207,20 +219,33 @@
     </script>
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-    const accountLink = document.querySelector(".account"); // Lấy phần tử tài khoản
-    const profileMenu = document.querySelector(".profile_menu"); // Lấy menu profile
+    const accountLink = document.querySelector(".account");
+    const accountWrap = document.querySelector(".account-wrap");
+    const serviceToggle = document.querySelector(".service-switcher__toggle");
+    const serviceSwitcher = document.querySelector(".service-switcher");
 
-    accountLink.addEventListener("click", function (event) {
-        event.preventDefault();  // Ngừng hành động mặc định của link (nếu có)
+    if (accountLink && accountWrap) {
+        accountLink.addEventListener("click", function (event) {
+            event.preventDefault();
+            accountWrap.classList.toggle("active");
+        });
+    }
 
-        // Toggle lớp active
-        this.classList.toggle("active");
-    });
+    if (serviceToggle && serviceSwitcher) {
+        serviceToggle.addEventListener("click", function (event) {
+            event.preventDefault();
+            serviceSwitcher.classList.toggle("active");
+        });
+    }
 
     // Đóng menu khi click bên ngoài
     document.addEventListener("click", function (event) {
-        if (!accountLink.contains(event.target) && !profileMenu.contains(event.target)) {
-            accountLink.classList.remove("active");
+        if (accountWrap && !accountWrap.contains(event.target)) {
+            accountWrap.classList.remove("active");
+        }
+
+        if (serviceSwitcher && !serviceSwitcher.contains(event.target)) {
+            serviceSwitcher.classList.remove("active");
         }
     });
 });

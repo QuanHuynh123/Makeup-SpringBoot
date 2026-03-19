@@ -32,6 +32,9 @@ build/
 ### VS Code ###
 .vscode/
 
+### macOS ###
+.DS_Store
+
 src/main/resources/notification-*.json
 
 ### Env Files ###

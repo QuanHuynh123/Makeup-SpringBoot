@@ -1,51 +1,59 @@
 <!DOCTYPE html>
-<html layout:decorate="layoutCosplay"
-      xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <layout:fragment name="header">
-        <link rel="stylesheet" href="/css/cart.css">
-        <link rel="stylesheet" href="/css/cosplay.css">
-        <link rel="stylesheet" href="/css/productDetail.css">
-        <link rel="stylesheet" href="/css/footer.css">
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    </layout:fragment>
+    <meta charset="utf-8">
+    <title>Cart</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/css/myOrder.css">
+    <link rel="stylesheet" href="/css/account-nav.css">
+    <link rel="stylesheet" href="/css/cart.css">
+    <link rel="stylesheet" href="/css/responsive.css">
+    <link rel="icon" href="/images/fevicon.png" type="image/gif" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body class="main-layout">
 
-<div layout:fragment="content">
+<div>
     <input type="hidden" id="searchContext" value="cart">
-    <!-- cart -->
+    <div th:replace="~{fragments/account-section-nav :: nav('cart')}"></div>
     <div class="cart-container">
         <div class="cart-items">
-
-            <!-- Hiển thị lỗi nếu có -->
-            <div th:if="${error != null and error != ''}" class="alert alert-warning" role="alert">
-                <span th:text="${error}"></span>
-            </div>
-
-            <h4 style="font-weight: 600;">Your Cart</h4>
+            <h4 class="cart-title">Your Cart</h4>
             <table class="cart-table">
-                <tr style="border-bottom: 1px solid #ccc; border-top: 1px solid #ccc;">
-                    <th style="width: 40%;">Products</th>
-                    <th class="align-th" style="width: 13%;">Price</th>
-                    <th class="align-th" style="width: 15%;">Quantity</th>
-                    <th class="align-th" style="width: 13%;">Total</th>
-                    <th class="align-th" style="width: 4%;"></th>
-                    <th class="align-th" style="width: 4%;"></th>
+                <thead>
+                <tr>
+                    <th class="col-product">Products</th>
+                    <th class="align-th col-price">Price</th>
+                    <th class="align-th col-quantity">Quantity</th>
+                    <th class="align-th col-total">Total</th>
+                    <th class="align-th col-action"></th>
+                    <th class="align-th col-action"></th>
+                </tr>
+                </thead>
+                <tbody class="cart-table-body">
+                <tr th:if="${error != null and error != ''}">
+                    <td colspan="6" class="cart-notice-row">
+                        <div class="alert alert-warning" role="alert">
+                            <span th:text="${error}"></span>
+                        </div>
+                    </td>
                 </tr>
 
-            <!-- Hiển thị giỏ hàng nếu không có lỗi -->
-            <div class="content-cart-table" th:if="${error == null or error == ''}">
-                <tr style="vertical-align: middle;" th:each="item : ${cartItems}" th:attr="cart-id=${item.id}">
+                <tr th:if="${(error == null or error == '') and (cartItems == null or #lists.isEmpty(cartItems))}">
+                    <td colspan="6" class="cart-notice-row">Giỏ hàng của bạn đang trống.</td>
+                </tr>
+
+                <tr class="cart-item-row" th:if="${error == null or error == ''}" th:each="item : ${cartItems}" th:attr="cart-id=${item.id}">
                     <td class="align-th cart-item-infor">
-                        <div style="display: flex;">
+                        <div class="cart-product">
                             <img th:src="@{'/images/product/' + ${item.firstImage}}" alt="Product Image"
-                                 style="width: 100px; height: 100px; object-fit: cover; object-position: center; display: block; border-radius: 2px;">
-                            <input class="product-id" style="display:none;" th:value="${item.productId}">
+                                 class="cart-product-image">
+                            <input class="product-id" style="display: none;" th:value="${item.productId}">
                             <div class="infor">
-                                <p style="margin: 0; font-weight: 600;" th:text="${item.productName}">Product Name</p>
-                                <p style="margin: 2px 0; font-size: 14px;">Size : S</p>
+                                <p class="cart-product-name" th:text="${item.productName}">Product Name</p>
+                                <p class="cart-product-size">Size : S</p>
                                 <input type="date" class="use-date"
                                        th:value="${#temporals.format(item.rentalDate, 'yyyy-MM-dd')}">
                             </div>
@@ -53,15 +61,15 @@
                     </td>
                     <td class="align-th unit-price" th:text="${item.price}">$45.90</td>
                     <td class="align-th">
-                        <div style="display: flex; justify-content: center;">
+                        <div class="quantity-control">
                             <button class="button-update-quantity quantity-decrease">-</button>
-                            <input class="quantity-input" th:value="${item.quantity}" style="width: 40px; text-align: center; border: 1px solid black;">
+                            <input class="quantity-input" th:value="${item.quantity}">
                             <button class="button-update-quantity quantity-increase">+</button>
                         </div>
                     </td>
-                    <td class="align-th" >$100.90</td>
+                    <td class="align-th" th:text="${item.price * item.quantity}">$100.90</td>
                     <td class="align-th">
-                        <button class="btn-update-cart-item" >
+                        <button class="btn-update-cart-item">
                             <i class="fa fa-rotate-right"></i>
                         </button>
                     </td>
@@ -71,76 +79,57 @@
                         </button>
                     </td>
                 </tr>
-
-                <!-- Nếu giỏ hàng rỗng -->
-                <div th:if="${cartItems == null or #lists.isEmpty(cartItems)}">
-                    <p>Giỏ hàng của bạn đang trống.</p>
-                </div>
-            </div>
+                </tbody>
             </table>
         </div>
 
-        <!-- Cart Summary -->
-        <div class="cart-summary">
-            <h3 style="font-weight: 700;">ORDER SUMMARY</h3>
+        <aside class="cart-summary">
+            <h3>Order Summary</h3>
             <div class="shipping-info">
-                <p style="font-size: 14px; margin-bottom: 15px;">Free Shipping Progress: $135.00/$300</p>
-                <div class="progress-bar">
-                    <div style="width: 100%; background-color: #aaaaaa; height: 10px; border-radius: 5px;">
-                        <div style="width: 45%; background-color: #000; height: 100%; border-radius: 5px;"></div>
-                    </div>
+                <div class="shipping-progress-head">
+                    <span>Free Shipping Progress</span>
+                    <strong class="js-free-progress-text">$0.00 / $300.00</strong>
                 </div>
-                <p style="font-size: 12px;">You's so close! Spend another $165.00 and let us pay for your shipping charges!</p>
+                <div class="progress-bar-track">
+                    <div class="progress-bar-fill js-free-progress-bar" style="width: 0%;"></div>
+                </div>
+                <p class="shipping-note js-free-progress-note">Add items to unlock free shipping.</p>
             </div>
-            <div style="max-width: 400px; font-family: Arial, sans-serif; font-size: 16px; color: #111;">
 
+            <div class="summary-lines">
                 <div class="cart-subtotal">
-                    <span><strong>Cart subtotal</strong></span>
-                    <span>$135.00</span>
+                    <span>Cart subtotal</span>
+                    <span class="js-subtotal">$0.00</span>
                 </div>
 
-                <div style="display: flex; justify-content: space-between;">
-                    <div>
-                        <strong>Shipping & Handling</strong><br>
-                        <span style="font-size: 14px;">India</span><br>
-                        <a href="#" style="font-size: 13px; text-decoration: underline; color: #0073e6;">Change address</a>
+                <div class="shipping-line">
+                    <div class="shipping-text">
+                        <strong>Shipping & Handling</strong>
+                        <span>India</span>
+                        <a href="#">Change address</a>
                     </div>
-                    <div style="text-align: right;">$46.15</div>
+                    <div class="shipping-value js-shipping-fee">$46.15</div>
                 </div>
 
-                <hr style="margin: 20px 0; border: none; border-top: 1px solid #ccc;">
+                <hr>
 
                 <div class="grand-total">
-                    <span style="font-weight: 500;">GRAND TOTAL</span>
-                    <span style="font-size: 30px;" th:if="${cart != null}" th:text="${cart.totalPrice}">$181.15</span>
+                    <span>Grand total</span>
+                    <span class="js-grand-total" th:if="${cart != null}" th:text="${cart.totalPrice}">$181.15</span>
+                    <span class="js-grand-total" th:unless="${cart != null}">$0.00</span>
                 </div>
             </div>
 
-            <a href="#" ><button class="checkout-btn" onclick="checkout()">Proceed to Checkout</button></a>
-            <button class="clear-cart-btn" onclick="clearCart()">Clear Cart</button>
-        </div>
+            <div class="summary-actions">
+                <button class="checkout-btn" onclick="checkout()">Proceed to Checkout</button>
+                <button class="clear-cart-btn" onclick="clearCart()">Clear Cart</button>
+            </div>
+        </aside>
     </div>
-    <!-- end cart -->
 </div>
 
-<!-- JS -->
-<div th:fragment="js">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="/js/libs/bootstrap.bundle.min.js"></script>
-    <script src="/js/service/custom.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script>
-        $('a[href^="#"]').on('click', function (event) {
-            var target = $(this.getAttribute('href'));
-            if (target.length) {
-                event.preventDefault();
-                $('html, body').stop().animate({
-                    scrollTop: target.offset().top
-                }, 2000);
-            }
-        });
-    </script>
-</div>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="/js/service/cart.js"></script>
 
 </body>
 </html>

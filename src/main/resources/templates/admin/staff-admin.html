@@ -10,20 +10,10 @@
     <link rel="stylesheet" href="/css/adminStyle.css">
     <link rel="stylesheet" href="/css/style-custom.css">
     <link href="/css/sb-admin-2.min.css" rel="stylesheet">
-
-    <style>
-        .admin-content-overlay.show-overlay {
-            display: none !important;
-        }
-    </style>
 </head>
 
 <body>
-<div class="admin-container">
-    <div class="admin-content">
-        <div class="admin-content-overlay show-overlay"></div>
-
-        <div class="container-fluid mt-2">
+<div class="container-fluid mt-2">
             <h1 class="h3 mb-4 text-gray-800">Danh sách nhân viên</h1>
 
             <div class="d-flex justify-content-between mb-4">
@@ -66,8 +56,6 @@
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
 </div>
 
 <!-- Modal for Add/Edit Staff -->
@@ -110,7 +98,7 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" id="saveButton" onclick="StaffModule.saveStaff()">Lưu</button>
+                <button type="button" class="btn btn-primary" id="saveButton">Lưu</button>
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
             </div>
         </div>

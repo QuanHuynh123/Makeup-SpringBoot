@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <script>document.getElementsByTagName("html")[0].className += " js";</script>
-  <link rel="stylesheet" href="css/scheduleStyle.css">
+  <link rel="stylesheet" href="/css/scheduleStyle.css">
   <title>Schedule Template | CodyHouse</title>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <!--  <script src="js/loadSchedule.js"></script>-->
@@ -106,7 +106,8 @@
       <script>
         $(document).ready(function () {
           // Gọi loadAppointment và xử lý dữ liệu sau khi nhận được
-          loadAppointment(11, 2024);
+          var now = new Date();
+          loadAppointment(now.getMonth() + 1, now.getFullYear());
         });
       </script>
       <div class="cd-schedule-modal">
@@ -131,9 +132,8 @@
     </div> <!-- .cd-schedule.js -->
 
   </div>
-  <script src="js/service/util.js"></script>
-  <!-- util functions included in the CodyHouse framework -->
-  <script src="js/service/main.js"></script>
+  <script src="/js/service/common/util.js"></script>
+  <script src="/js/service/common/main.js"></script>
 
 </body>
 

@@ -11,21 +11,13 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        .admin-content-overlay {
-            display: none;
-            background: rgba(0, 0, 0, 0.5);
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1040; /* Below modal (z-index: 1050) */
+        .modal.modal-admin-product {
+            overflow-y: auto;
         }
-        .admin-content-overlay.show-overlay {
-            display: block;
-        }
-        .modal {
-            z-index: 1050;
+
+        .modal.modal-admin-product .modal-dialog {
+            margin-top: 88px;
+            margin-bottom: 24px;
         }
     </style>
 </head>
@@ -83,14 +75,12 @@
             </nav>
 
             <!-- Edit Product Modal -->
-            <div class="modal fade" id="editProductModal" tabindex="-1" role="dialog" aria-labelledby="editProductModalLabel" aria-hidden="true">
+            <div class="modal fade modal-admin-product" id="editProductModal" tabindex="-1" role="dialog" aria-labelledby="editProductModalLabel" aria-hidden="true">
                 <div class="modal-dialog modal-lg" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title" id="editProductModalLabel">Sửa sản phẩm</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
                             <div class="row">
@@ -150,8 +140,82 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-light btn-cancel" id="modal-cancel-btn" data-dismiss="modal">Hủy</button>
+                            <button type="button" class="btn btn-light btn-cancel" id="modal-cancel-btn" data-bs-dismiss="modal">Hủy</button>
                             <button type="button" class="btn btn-primary btn-create">Sửa</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Create Product Modal -->
+            <div class="modal fade modal-admin-product" id="createProductModal" tabindex="-1" role="dialog" aria-labelledby="createProductModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="createProductModalLabel">Thêm sản phẩm mới</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-lg-7">
+                                    <div class="form-group">
+                                        <label for="create-name">Tên sản phẩm</label>
+                                        <input type="text" class="form-control" id="create-name"/>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="create-subCategory">Loại sản phẩm</label>
+                                        <select id="create-subCategory" class="form-control">
+                                            <option value="" selected disabled>-- Chọn loại sản phẩm --</option>
+                                            <th:block th:each="subCategory : ${subCategories}">
+                                                <option th:value="${subCategory.id}" th:text="${subCategory.name}"></option>
+                                            </th:block>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="create-price">Giá</label>
+                                        <input type="number" class="form-control" id="create-price" min="1">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="create-quantity">Số lượng</label>
+                                        <input type="number" class="form-control" id="create-quantity" min="1">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Kích thước</label>
+                                        <br>
+                                        <label><input type="checkbox" name="createSize" value="S"> S</label>
+                                        <label class="ml-3"><input type="checkbox" name="createSize" value="M"> M</label>
+                                        <label class="ml-3"><input type="checkbox" name="createSize" value="L"> L</label>
+                                        <label class="ml-3"><input type="checkbox" name="createSize" value="X"> X</label>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="create-description">Mô tả sản phẩm</label>
+                                        <textarea class="form-control" id="create-description" rows="4"></textarea>
+                                    </div>
+                                </div>
+                                <div class="col-lg-5">
+                                    <div class="wrapper">
+                                        <div class="upload">
+                                            <div class="upload-wrapper">
+                                                <div class="upload-img" id="create-upload-preview"></div>
+                                                <div class="upload-info">
+                                                    <p><span id="create-upload-count">0</span> file(s) uploaded.</p>
+                                                </div>
+                                                <div class="upload-area" id="create-upload-area">
+                                                    <div class="upload-area-img">
+                                                        <img src="/images/upload.png" alt="">
+                                                    </div>
+                                                    <p class="upload-area-text">Select images or <span>browse</span>.</p>
+                                                </div>
+                                                <input type="file" class="visually-hidden" id="create-upload-input" multiple>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-light" id="btn-cancel-create-product" data-bs-dismiss="modal">Hủy</button>
+                            <button type="button" class="btn btn-primary" id="btn-save-create-product">Thêm mới</button>
                         </div>
                     </div>
                 </div>
@@ -164,7 +228,7 @@
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script src="/js/service/admin/product.js"></script>
-<script src="/js/service/admin/edit-product.js"></script>
+<script type="module" src="/js/service/admin/product.js"></script>
+<script type="module" src="/js/service/admin/edit-product.js"></script>
 </body>
 </html>

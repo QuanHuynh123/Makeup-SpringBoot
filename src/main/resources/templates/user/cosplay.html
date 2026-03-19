@@ -5,96 +5,110 @@
           <link rel="stylesheet" href="/css/cosplay.css">
           <link rel="stylesheet" href="/css/footer.css">
           <link rel="stylesheet" href="/css/contact.css">
+          <link rel="preconnect" href="https://fonts.googleapis.com">
+          <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+          <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet">
        </layout:fragment>
    </head>
 
    <body class="main-layout" >
    <div layout:fragment="content">
    <input type="hidden" id="searchContext" value="cosplay">
-    <!-- banner -->
-        <div id="banner_cosplay">
-        <div class="carousel">
-            <div class="slides">
-                <div class="slide active">
-                    <img class="img_banner_cosplay" src="/images/banner_cosplay_1.jpg" alt="Cosplay 1">
-                </div>
-                <div class="slide">
-                    <img class="img_banner_cosplay" src="/images/banner_cosplay_2.jpg" alt="Cosplay 2">
-                </div>
-                <div class="slide">
-                    <img class="img_banner_cosplay" src="/images/banner_cosplay_3.jpg" alt="Cosplay 2">
-                </div>
-                <button class="prev" onclick="prevSlide()">&#10094;</button>
-                <button class="next" onclick="nextSlide()">&#10095;</button>
+    <!-- Hero -->
+    <section class="cosplay-hero">
+        <div class="cosplay-hero__glow"></div>
+        <div class="cosplay-hero__main">
+            <p class="cosplay-hero__kicker">Season Drop 2026</p>
+            <h1>Build Your Character
+                <span>Own The Scene</span>
+            </h1>
+            <p class="cosplay-hero__desc">
+                Premium cosplay outfits for anime, game and movie fandoms.
+                Tailored cuts, bold details, and ready-to-rent styles for spotlight moments.
+            </p>
+            <div class="cosplay-hero__actions">
+                <a href="#new" class="hero-btn hero-btn--primary">Shop New Arrivals</a>
+                <a href="#hot" class="hero-btn hero-btn--ghost">Trending Costumes</a>
+            </div>
+            <div class="cosplay-hero__chips">
+                <button class="hero-chip" onclick="quickSearch('Anime')">Anime</button>
+                <button class="hero-chip" onclick="quickSearch('Game')">Game</button>
+                <button class="hero-chip" onclick="quickSearch('Movie')">Movie</button>
+                <button class="hero-chip" onclick="quickSearch('Festival')">Festival</button>
             </div>
         </div>
-    </div>
 
-    <hr class="line">
+        <aside class="cosplay-hero__aside">
+            <article class="hero-card hero-card--large">
+                <img src="/images/banner_cosplay_1.jpg" alt="Cosplay Collection">
+                <div class="hero-card__caption">
+                    <h3>Editor Picks</h3>
+                    <p>Street-to-stage statement looks</p>
+                </div>
+            </article>
+            <div class="hero-card-grid">
+                <article class="hero-card">
+                    <img src="/images/small_banner_anime.jpg" alt="Anime Costumes">
+                    <div class="hero-card__caption"><h3>Anime Core</h3></div>
+                </article>
+                <article class="hero-card">
+                    <img src="/images/small_banner_game.png" alt="Game Costumes">
+                    <div class="hero-card__caption"><h3>Game Mode</h3></div>
+                </article>
+            </div>
+        </aside>
+    </section>
 
-    <div id="small_banner" class="row">
-        <a href="#"> <img class="img_small_banner" src="/images/small_banner_anime.jpg"> </a>
-        <a href="#"> <img class="img_small_banner" src="/images/small_banner_movie.png"> </a>
-        <a href="#"> <img class="img_small_banner" src="/images/small_banner_game.png"> </a>
-        <a href="#"> <img class="img_small_banner" src="/images/small_banner_festival.jpg"> </a>
-    </div>
-    <!-- end banner -->
+    <div class="hero-divider"></div>
+    <!-- end hero -->
 
     <!-- product-->
      <div id="container_product">
 
          <div id="new">
              <h1 class="title_product">New</h1>
-             <th:block th:if="${newProducts != null}" >
-                 <th:block th:each="product, state : ${newProducts}">
-                     <th:block th:if="${state.first}"><ul class="row"></th:block>
-                         <a th:href="@{/productDetail/{id}(id=${product.id})}">
-                            <li class="product-card">
-                                <div class="product-image">
-                                    <img th:src="@{'/images/product/' + ${product.firstImage}}" alt="Product Image">
-                                </div>
+             <ul class="row product-grid" th:if="${newProducts != null and !#lists.isEmpty(newProducts)}">
+                 <li class="product-card" th:each="product : ${newProducts}" th:attr="data-product-id=${product.id}">
+                    <a class="product-link" th:href="@{/productDetail/{id}(id=${product.id})}">
+                        <div class="product-image">
+                            <img th:src="@{'/images/product/' + ${product.firstImage}}" alt="Product Image">
+                        </div>
 
-                                <div class="product-info">
-                                     <h4 class="product-title" th:text="${product.nameProduct ?: 'No name available'}"></h4>
-                                     <p class="product-price" th:text="${product.price ?: 'N/A'}"></p>
-                                 </div>
-                             </li>
-                         </a>
-                     <!-- Nếu index chia hết cho 4 và không phải phần tử cuối thì đóng và mở `<ul>` mới -->
-                     <th:block th:if="${((state.index + 1) % 5 == 0) or (state.index + 1 == state.size)}">
-                     </ul>
-                        <th:block th:if="${( state.index + 1) < state.size}"> <ul class="row"> </th:block>
-                     </th:block>
-                 </th:block>
-             </th:block>
-             <p th:if="${hotProducts == null}">No products available</p>
+                        <div class="product-info">
+                             <h4 class="product-title" th:text="${product.nameProduct ?: 'No name available'}"></h4>
+                             <p class="product-price" th:text="${product.price ?: 'N/A'}"></p>
+                         </div>
+                    </a>
+                    <button class="product-add-btn" data-product-id-add="" onclick="handleQuickAddToCart(this, this.closest('.product-card').getAttribute('data-product-id'))">
+                        <i class="fa fa-shopping-cart"></i>
+                        Add to Cart
+                    </button>
+                 </li>
+             </ul>
+             <p th:if="${newProducts == null or #lists.isEmpty(newProducts)}">No products available</p>
          </div>
 
 
         <div id="hot">
             <h1 class="title_product">Hot</h1>
-            <th:block th:if="${hotProducts != null}" >
-                <th:block th:each="product, state : ${hotProducts}">
-                    <th:block th:if="${state.first}"><ul class="row"></th:block>
-                        <a th:href="@{/productDetail/{id}(id=${product.id})}">
-                            <li class="product-card">
-                                <div class="product-image">
-                                    <img th:src="@{'/images/product/' + ${product.firstImage}}" alt="Product Image">
-                                </div>
-                                <div class="product-info">
-                                    <h4 class="product-title" th:text="${product.nameProduct ?: 'No name available'}"></h4>
-                                    <p class="product-price" th:text="${product.price ?: 'N/A'}"></p>
-                                </div>
-                            </li>
-                        </a>
-                    <!-- Nếu index chia hết cho 4 và không phải phần tử cuối thì đóng và mở `<ul>` mới -->
-                    <th:block th:if="${((state.index + 1) % 5 == 0) or (state.index + 1 == state.size)}">
-                        </ul>
-                        <th:block th:if="${( state.index + 1) < state.size}"> <ul class="row"> </th:block>
-                    </th:block>
-                </th:block>
-            </th:block>
-            <p th:if="${newProducts == null}">No products available</p>
+            <ul class="row product-grid" th:if="${hotProducts != null and !#lists.isEmpty(hotProducts)}">
+                <li class="product-card" th:each="product : ${hotProducts}" th:attr="data-product-id=${product.id}">
+                    <a class="product-link" th:href="@{/productDetail/{id}(id=${product.id})}">
+                        <div class="product-image">
+                            <img th:src="@{'/images/product/' + ${product.firstImage}}" alt="Product Image">
+                        </div>
+                        <div class="product-info">
+                            <h4 class="product-title" th:text="${product.nameProduct ?: 'No name available'}"></h4>
+                            <p class="product-price" th:text="${product.price ?: 'N/A'}"></p>
+                        </div>
+                    </a>
+                    <button class="product-add-btn" data-product-id-add="" onclick="handleQuickAddToCart(this, this.closest('.product-card').getAttribute('data-product-id'))">
+                        <i class="fa fa-shopping-cart"></i>
+                        Add to Cart
+                    </button>
+                </li>
+            </ul>
+            <p th:if="${hotProducts == null or #lists.isEmpty(hotProducts)}">No products available</p>
         </div>
      </div>
      <!-- end product -->
@@ -132,33 +146,25 @@
 
    <div th:fragment="js">
    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-   <script src="/js/service/custom.js"></script>
+    <script src="/js/service/common/custom.js"></script>
 
       <script>
-        let currentSlide = 0;
-        const slides = document.querySelectorAll('.slide');
+          function quickSearch(keyword) {
+              const searchInput = document.getElementById('searchInput');
+              if (!searchInput) return;
+              searchInput.value = keyword;
+              if (typeof performSearch === 'function') {
+                  performSearch();
+              }
+          }
 
-        function showSlide(index) {
-            slides.forEach((slide, i) => {
-                slide.classList.remove('active');
-                if (i === index) {
-                    slide.classList.add('active');
-                }
-            });
-        }
-
-        function nextSlide() {
-            currentSlide = (currentSlide + 1) % slides.length;
-            showSlide(currentSlide);
-        }
-
-        function prevSlide() {
-            currentSlide = (currentSlide - 1 + slides.length) % slides.length;
-            showSlide(currentSlide);
-        }
-
-        // Auto slide every 5 seconds
-        setInterval(nextSlide, 5000);
+          function handleQuickAddToCart(button, productId) {
+              event.preventDefault();
+              event.stopPropagation();
+              if (!productId) return;
+              // Navigate to product detail page
+              window.location.href = '/productDetail/' + productId;
+          }
       </script>
 
        <script>

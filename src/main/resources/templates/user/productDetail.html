@@ -1,155 +1,169 @@
 <!DOCTYPE html>
 <html layout:decorate="layoutCosplay" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
-    <head>
-        <layout:fragment name="header">
-            <link rel="stylesheet" href="/css/cosplay.css">
-            <link rel="stylesheet" href="/css/productDetail.css">
-            <link rel="stylesheet" href="/css/footer.css">
-            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-        </layout:fragment>
-    </head>
+    <layout:fragment name="header">
+        <link rel="stylesheet" href="/css/cosplay.css">
+        <link rel="stylesheet" href="/css/productDetail.css">
+        <link rel="stylesheet" href="/css/footer.css">
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    </layout:fragment>
 </head>
-<body class="main-layout" >
+<body class="main-layout">
 <div layout:fragment="content">
-<!-- product-->
-<div id="container_product">
-    <div id="productId" style="display:none;" th:attr="product-id=${product.id}"></div>
-    <div class="container" id="container_product_top">
-        <div class="left-column">
-            <div class="image-gallery">
-                <img th:src="@{'/images/product/' + ${product.firstImage}}" alt="Product Image" class="main-image">
+    <!-- Product Detail -->
+    <div class="product-detail-container">
+        <input type="hidden" id="productId" th:attr="product-id=${product.id}">
+
+        <!-- Product Top: Image Gallery + Form -->
+        <section class="product-detail-top">
+            <aside class="product-gallery">
+                <div class="main-image-wrapper">
+                    <img th:src="@{'/images/product/' + ${product.firstImage}}" alt="Product Image" class="main-image">
+                </div>
                 <div class="thumbnail-gallery-container">
-                    <button class="prev" onclick="moveSlide(-1)">&#10094;</button>
-                    <div class="thumbnail-gallery">
-                        <div th:each="image : ${images}">
-                            <img th:src="@{'/images/product/' + ${image}}" alt="Thumbnail">
+                    <button class="gallery-nav gallery-prev" onclick="moveSlide(-1)">
+                        <i class="fa fa-chevron-left"></i>
+                    </button>
+                    <div class="thumbnail-gallery-track">
+                        <div class="thumbnail-gallery">
+                            <img th:each="image : ${images}" th:src="@{'/images/product/' + ${image}}" alt="Thumbnail" class="thumbnail-img">
                         </div>
                     </div>
-                    <button class="next" onclick="moveSlide(1)">&#10095;</button>
+                    <button class="gallery-nav gallery-next" onclick="moveSlide(1)">
+                        <i class="fa fa-chevron-right"></i>
+                    </button>
+                </div>
+            </aside>
+
+            <section class="product-form-section">
+                <div class="product-header">
+                    <h1 class="product-title" th:text="${product.nameProduct ?: 'No name available'}"></h1>
+                    <p class="product-price" th:text="${product.price ?: 'N/A'}"></p>
+                    <div class="product-meta-info">
+                        <div class="meta-item">
+                            <span class="meta-label">SKU:</span>
+                            <span class="meta-value">Shinn Asuka</span>
+                        </div>
+                        <div class="meta-item">
+                            <span class="meta-label">Processing Time:</span>
+                            <span class="meta-value">3-5 days</span>
+                        </div>
+                    </div>
+                </div>
+
+                <form class="product-form">
+                    <div class="form-field">
+                        <label for="gender">Gender</label>
+                        <select id="gender" required>
+                            <option value="">-- Please Select --</option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                        </select>
+                    </div>
+
+                    <div class="form-field">
+                        <label for="size">Size</label>
+                        <select id="size" required>
+                            <option value="">-- Please Select --</option>
+                            <option value="s">S</option>
+                            <option value="m">M</option>
+                            <option value="l">L</option>
+                            <option value="xl">XL</option>
+                        </select>
+                    </div>
+
+                    <div class="form-field">
+                        <label for="use-date">Use Date</label>
+                        <input type="date" id="use-date" required>
+                    </div>
+
+                    <div class="form-field">
+                        <label for="quantity">Quantity</label>
+                        <input type="number" id="quantity" min="1" max="100" value="1" required>
+                    </div>
+
+                    <button type="button" class="btn-add-to-cart" id="add_cart_btn">
+                        <i class="fa fa-shopping-cart"></i>
+                        Add to Cart
+                    </button>
+                </form>
+            </section>
+        </section>
+
+        <!-- Product Bottom: Details -->
+        <section class="product-detail-bottom">
+            <div class="product-details-box">
+                <h2>Details & Features</h2>
+                <div class="details-content">
+                    <p>Comfortable fabric ensures all-day wearability for Feixiao cosplay. Exquisite accessories add authenticity to Feixiao's fanart design. Leather belt adds a bold, stylish touch to the overall look. Perfect for Honkai: Star Rail fans, bring Feixiao to life with ease. Ideal for cosplay events, embody Feixiao's unique, striking style!</p>
+                </div>
+                <div class="product-detail-images">
+                    <img th:each="image : ${images}" th:src="@{'/images/product/' + ${image}}" alt="Product Detail Image">
                 </div>
             </div>
-        </div>
-
-        <div class="right-column">
-            <h1 th:text="${product.nameProduct ?: 'No name available'}"></h1>
-            <p class="price" th:text="${product.price ?: 'N/A'}"></p>
-            <p><strong>SKU:</strong> Shinn Asuka</p>
-            <p><strong>Processing Time:</strong> 3-5 days</p>
-
-            <form>
-                <label for="gender">Gender:</label>
-                <select id="gender">
-                    <option value="">-- Please Select --</option>
-                    <option value="male">Male</option>
-                    <option value="female">Female</option>
-                </select>
-
-                <label for="size">Size:</label>
-                <select id="size">
-                    <option value="">-- Please Select --</option>
-                    <option value="s">S</option>
-                    <option value="m">M</option>
-                    <option value="l">L</option>
-                    <option value="xl">XL</option>
-                </select>
-
-                <label for="use-date">Use Date:</label>
-                <input type="date" id="use-date">
-
-                <label for="quantity">Qty:</label>
-                <input type="number" id="quantity" min="1" value="1">
-
-                <button type="button" class="add-to-cart" id="add_cart_btn">Add to Cart</button>
-            </form>
-        </div>
+        </section>
     </div>
 
-    <div id="container_product_bottom" class="container data items mage-tabs-disabled">
-        <div class="product-data-items-menu" role="tablist">
-
-            <div class="data item title active" aria-labeledby="tab-label-attributedescription-title" data-role="collapsible" id="tab-label-attributedescription" role="tab" data-collapsible="true" aria-controls="attributedescription" aria-selected="false" aria-expanded="true" tabindex="0">
-                <a class="data switch" tabindex="-1" data-toggle="switch" href="#attributedescription" id="tab-label-attributedescription-title">
-                    Details
+    <!-- Related Products -->
+    <section class="related-products-section">
+        <h2>Related Products</h2>
+        <div class="related-products-grid">
+            <th:block th:each="item : ${relatedProducts}">
+                <a th:href="@{/productDetail/{id}(id=${item.id})}" class="related-product-card">
+                    <div class="related-product-image">
+                        <img th:src="@{'/images/product/' + ${item.firstImage}}" alt="Related Product">
+                    </div>
+                    <h4 class="related-product-name" th:text="${item.nameProduct}"></h4>
+                    <p class="related-product-price" th:text="${item.price}"></p>
                 </a>
-            </div>
+            </th:block>
         </div>
-        <div class="product-data-items-content">
-
-            <div class="title-accordion  echo active  accordion-attributedescription" data-toggle="#attributedescription"><span>Details<span></span></span></div>
-            <div class="data item content" id="attributedescription" data-role="content" aria-labelledby="tab-label-attributedescription" role="tabpanel" aria-hidden="false">
-                <div class="product attibute description">
-                    <div class="value">
-                        <p><strong>Features:</strong></p>
-                        <p>Comfortable fabric ensures all-day wearability for Feixiao cosplay.Exquisite accessories add authenticity to Feixiao’s fanart design.Leather belt adds a bold, stylish touch to the overall look.Perfect for Honkai: Star Rail fans, bring Feixiao to life with ease.Ideal for cosplay events, embody Feixiao’s unique, striking style!</p>
-                        <div id="list_img" th:each="image : ${images}">
-                            <img th:src="@{'/images/product/' + ${image}}" alt="Thumbnail">
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    </section>
+    <!-- end product detail -->
 </div>
 
-<div class="related-products-container">
-    <h1>Danh mục liên quan </h1>
-    <!-- Các danh mục đã có -->
-    <div id="list_related_product">
-        <th:block th:each="item : ${relatedProducts}">
-            <a th:href="@{/productDetail/{id}(id=${item.id})}" class="related-product">
-                <img th:src="@{'/images/product/' + ${item.firstImage}}" alt="New Cosplay Costume">
-                <h4 th:text="${item.nameProduct}"></h4>
-                <p th:text="${item.price}"></p>
-            </a>
-        </th:block>
-    </div>
-</div>
+<div th:fragment="js">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="/js/libs/bootstrap.bundle.min.js"></script>
+    <script src="/js/service/common/custom.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="/js/service/cart.js"></script>
+    <script src="/js/service/product.js"></script>
 
-<!-- end product -->
-</div>
+    <script>
+        let currentIndex = 0;
+        
+        function moveSlide(step) {
+            const gallery = document.querySelector('.thumbnail-gallery');
+            const images = gallery.querySelectorAll('img');
+            const totalImages = images.length;
+            const visibleCount = 6;
 
+            currentIndex += step;
 
-    <div th:fragment="js">
-        <script src="/js/libs/bootstrap.bundle.min.js"></script>
-        <script src="/js/service/custom.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-        <script src="/js/service/cart.js"></script>
-        <script src="/js/service/product.js"></script>
-
-        <script>
-            $('a[href^="#"]').on('click', function(event) {
-
-             var target = $(this.getAttribute('href'));
-
-             if( target.length ) {
-                 event.preventDefault();
-                 $('html, body').stop().animate({
-                     scrollTop: target.offset().top
-                 }, 2000);
-             }
-            });
-        </script>
-
-        <script>
-            let currentIndex = 0;
-            function moveSlide(step) {
-                const gallery = document.querySelector('.thumbnail-gallery');
-                const images = gallery.querySelectorAll('img');
-                const totalImages = images.length;
-
-                currentIndex += step;
-
-                // Nếu đi vượt quá số ảnh, quay lại đầu hoặc cuối
-                if (currentIndex < 0) {
-                    currentIndex = totalImages - 1;
-                } else if (currentIndex >= totalImages-6) {
-                    currentIndex = 0;
-                }
-                gallery.style.transform = 'translateX(' + (-currentIndex * 100) + '%)';
+            if (currentIndex < 0) {
+                currentIndex = Math.max(0, totalImages - visibleCount);
+            } else if (currentIndex > totalImages - visibleCount) {
+                currentIndex = 0;
             }
-        </script>
 
-    </div>
+            const offset = currentIndex * -100;
+            gallery.style.transform = `translateX(${offset}%)`;
+        }
+    </script>
+
+    <script>
+        $('a[href^="#"]').on('click', function(event) {
+            var target = $(this.getAttribute('href'));
+            if(target.length) {
+                event.preventDefault();
+                $('html, body').stop().animate({
+                    scrollTop: target.offset().top
+                }, 2000);
+            }
+        });
+    </script>
+</div>
+
 </body>
 </html>
