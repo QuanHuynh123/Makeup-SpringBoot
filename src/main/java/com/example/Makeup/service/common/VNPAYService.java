@@ -12,6 +12,17 @@ import org.springframework.stereotype.Service;
 @Service
 public class VNPAYService {
 
+  public record VnpayReturnResult(
+      boolean signatureValid,
+      boolean paymentSuccess,
+      String responseCode,
+      String transactionStatus,
+      String orderInfo,
+      String transactionId,
+      String txnRef,
+      long amount,
+      String payDate) {}
+
   public String createOrder(
       int total, String orderInfor, String urlReturn, HttpServletRequest request) {
     String vnp_Version = "2.1.0";
@@ -84,40 +95,55 @@ public class VNPAYService {
   }
 
   public int orderReturn(HttpServletRequest request) {
-    Map fields = new HashMap();
-    for (Enumeration params = request.getParameterNames(); params.hasMoreElements(); ) {
-      String fieldName = null;
-      String fieldValue = null;
-      try {
-        fieldName =
-            URLEncoder.encode((String) params.nextElement(), StandardCharsets.US_ASCII.toString());
-        fieldValue =
-            URLEncoder.encode(
-                request.getParameter(fieldName), StandardCharsets.US_ASCII.toString());
-      } catch (UnsupportedEncodingException e) {
-        e.printStackTrace();
-      }
-      if ((fieldValue != null) && (fieldValue.length() > 0)) {
+    VnpayReturnResult result = parseAndVerifyReturn(request);
+    if (!result.signatureValid()) {
+      return -1;
+    }
+    return result.paymentSuccess() ? 1 : 0;
+  }
+
+  public VnpayReturnResult parseAndVerifyReturn(HttpServletRequest request) {
+    Map<String, String> fields = new HashMap<>();
+    Enumeration<String> parameterNames = request.getParameterNames();
+    while (parameterNames.hasMoreElements()) {
+      String fieldName = parameterNames.nextElement();
+      String fieldValue = request.getParameter(fieldName);
+      if (fieldValue != null && !fieldValue.isBlank()) {
         fields.put(fieldName, fieldValue);
       }
     }
 
-    String vnp_SecureHash = request.getParameter("vnp_SecureHash");
-    if (fields.containsKey("vnp_SecureHashType")) {
-      fields.remove("vnp_SecureHashType");
+    String secureHash = fields.remove("vnp_SecureHash");
+    fields.remove("vnp_SecureHashType");
+    String calculatedHash = VNPAYConfig.hashAllFields(fields);
+    boolean signatureValid =
+        secureHash != null && secureHash.equalsIgnoreCase(calculatedHash);
+
+    String responseCode = fields.get("vnp_ResponseCode");
+    String transactionStatus = fields.get("vnp_TransactionStatus");
+    boolean paymentSuccess =
+        signatureValid && "00".equals(responseCode) && "00".equals(transactionStatus);
+
+    return new VnpayReturnResult(
+        signatureValid,
+        paymentSuccess,
+        responseCode,
+        transactionStatus,
+        fields.get("vnp_OrderInfo"),
+        fields.get("vnp_TransactionNo"),
+        fields.get("vnp_TxnRef"),
+        parseLongSafe(fields.get("vnp_Amount")),
+        fields.get("vnp_PayDate"));
+  }
+
+  private long parseLongSafe(String value) {
+    if (value == null || value.isBlank()) {
+      return 0L;
     }
-    if (fields.containsKey("vnp_SecureHash")) {
-      fields.remove("vnp_SecureHash");
-    }
-    String signValue = VNPAYConfig.hashAllFields(fields);
-    if (signValue.equals(vnp_SecureHash)) {
-      if ("00".equals(request.getParameter("vnp_TransactionStatus"))) {
-        return 1;
-      } else {
-        return 0;
-      }
-    } else {
-      return -1;
+    try {
+      return Long.parseLong(value);
+    } catch (NumberFormatException ex) {
+      return 0L;
     }
   }
 }
