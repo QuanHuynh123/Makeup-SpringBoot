@@ -1,94 +1,18 @@
-/* header */
-.header{
-    top: 0;
-    left: 0;
-    background-color: #343a40 !important;
-    height: 70px;
-    position: fixed;
-    z-index: 10;
-    width: 100%;
-    display: flex;
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700&display=swap");
+
+* {
+    box-sizing: border-box;
 }
 
-.div_btn_home{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-left: 15px;
+body {
+    margin: 0;
+    font-family: "Poppins", sans-serif;
+    background-color: #c9c9cc;
 }
-
-.btn_home{
-    background: none;
-    border: none;
-    color: white;
-    font-size: 16px;
-    cursor: pointer;
-    margin-right: 20px;
-}
-
-.btn_home:hover {
-    color: #ff0000;
-}
-
-.search-bar {
-    display: flex;
-    align-items: center;
-    width: 700px;
-    height: 80%;
-    max-width: 1000px;
-    border-radius: 5px;
-    overflow: hidden;
-    margin-left: 100px;
-    background-color: #343a40;
-    padding: 5px;
-}
-
-.search-input {
-    flex: 1;
-    border: none;
-    padding: 10px;
-    font-size: 16px;
-    outline: none;
-    border-radius: 5px 0px 0px 5px;
-}
-
-.search-button {
-    background-color: #007bff;
-    color: white;
-    border: none;
-    padding: 11px 15px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 0px 5px 5px 0;
-    margin-right: 5px;
-}
-
-.search-button i {
-    font-size: 16px;
-}
-
-.search-button:hover {
-    background-color: #0056b3;
-}
-
-@media (max-width: 768px) {
-    .header {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-
-    .search-bar {
-        width: 100%;
-    }
-}
-
-/* end-header */
 
 /* Content */
 #content_order {
-    margin-top: 100px;
+    margin-top: 18px;
     background-color: #c9c9cc;
 }
 
@@ -99,7 +23,7 @@
 
 .text-black {
     margin: 0 0 20px 20px;
-    font-family: Roboto;
+    font-family: "Poppins", sans-serif;
     font-size: 30px;
     padding-top: 20px;
     font-weight: 500;
@@ -243,7 +167,7 @@
 }
 
 #content_order {
-    margin-top: 100px;
+    margin-top: 18px;
     background-color: #c9c9cc;
 }
 
@@ -254,7 +178,7 @@
 
 .text-black {
     margin: 0 0 20px 0px;
-    font-family: Roboto;
+    font-family: "Poppins", sans-serif;
     font-size: 30px;
     padding-top: 20px;
     font-weight: 500;
@@ -383,17 +307,3 @@
 }
 /* End Content */
 
-/* Responsive cho màn hình nhỏ hơn */
-@media (max-width: 768px) {
-    .search-bar {
-        width: auto;
-    }
-}
-
-/* Responsive cho màn hình rất nhỏ (điện thoại) */
-@media (max-width: 480px) {
-
-    .search-bar {
-        width: auto;
-    }
-}
