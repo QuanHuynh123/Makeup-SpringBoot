@@ -44,6 +44,8 @@ public class OrderServiceImpl implements IOrderService {
   private final PaymentRepository paymentRepository;
   private final OrderRepository orderRepository;
   private final OrderItemRepository orderItemRepository;
+  private final CartRepository cartRepository;
+  private final CartItemRepository cartItemRepository;
   private final OrderMapper orderMapper;
   private final ProductRepository productRepository;
   private final UserMapper userMapper;
@@ -97,6 +99,9 @@ public class OrderServiceImpl implements IOrderService {
     }
 
     orderItemServiceImpl.createOrderItem(order.getId(), orderRequest.getOrderItems());
+    if (orderRequest.getPaymentMethod() == 1) {
+      clearCartByUserId(user.getId());
+    }
 
     final OrderEmailMessage emailMessage =
         new OrderEmailMessage(user.getEmail(), order.getId().toString(), order.getReceiverName());
@@ -336,7 +341,21 @@ public class OrderServiceImpl implements IOrderService {
         orderId,
         vnpTxnRef,
         transactionId);
+
+    clearCartByUserId(order.getUser().getId());
     return true;
+  }
+
+  private void clearCartByUserId(UUID userId) {
+    cartRepository
+        .findByUserId(userId)
+        .ifPresent(
+            cart -> {
+              cartItemRepository.deleteAllByCartId(cart.getId());
+              cart.setTotalPrice(0);
+              cart.setTotalQuantity(0);
+              cartRepository.save(cart);
+            });
   }
 
   @Override

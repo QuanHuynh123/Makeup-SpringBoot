@@ -10,8 +10,8 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-03-19T14:14:35+0700",
-    comments = "version: 1.5.5.Final, compiler: javac, environment: Java 21.0.6 (Oracle Corporation)"
+    date = "2026-03-21T00:11:26+0700",
+    comments = "version: 1.5.5.Final, compiler: Eclipse JDT (IDE) 3.45.0.v20260224-0835, environment: Java 21.0.10 (Eclipse Adoptium)"
 )
 @Component
 public class UserMapperImpl implements UserMapper {
@@ -23,20 +23,20 @@ public class UserMapperImpl implements UserMapper {
         }
 
         UUID accountId = null;
-        String fullName = null;
-        String email = null;
         String address = null;
-        String phone = null;
         LocalDateTime createdAt = null;
+        String email = null;
+        String fullName = null;
+        String phone = null;
         LocalDateTime updatedAt = null;
         UUID id = null;
 
         accountId = userAccountId( user );
-        fullName = user.getFullName();
-        email = user.getEmail();
         address = user.getAddress();
-        phone = user.getPhone();
         createdAt = user.getCreatedAt();
+        email = user.getEmail();
+        fullName = user.getFullName();
+        phone = user.getPhone();
         updatedAt = user.getUpdatedAt();
         id = user.getId();
 
@@ -58,10 +58,10 @@ public class UserMapperImpl implements UserMapper {
 
         user.setCreatedAt( userDTO.getCreatedAt() );
         user.setUpdatedAt( userDTO.getUpdatedAt() );
-        user.setId( userDTO.getId() );
-        user.setFullName( userDTO.getFullName() );
-        user.setEmail( userDTO.getEmail() );
         user.setAddress( userDTO.getAddress() );
+        user.setEmail( userDTO.getEmail() );
+        user.setFullName( userDTO.getFullName() );
+        user.setId( userDTO.getId() );
         user.setPhone( userDTO.getPhone() );
 
         return user;

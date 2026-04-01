@@ -11,8 +11,8 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-03-19T14:14:35+0700",
-    comments = "version: 1.5.5.Final, compiler: javac, environment: Java 21.0.6 (Oracle Corporation)"
+    date = "2026-03-21T00:11:26+0700",
+    comments = "version: 1.5.5.Final, compiler: Eclipse JDT (IDE) 3.45.0.v20260224-0835, environment: Java 21.0.10 (Eclipse Adoptium)"
 )
 @Component
 public class CartItemMapperImpl implements CartItemMapper {
@@ -25,19 +25,19 @@ public class CartItemMapperImpl implements CartItemMapper {
 
         UUID cartId = null;
         UUID productId = null;
-        int quantity = 0;
-        double price = 0.0d;
-        LocalDateTime rentalDate = null;
         LocalDateTime createdAt = null;
+        double price = 0.0d;
+        int quantity = 0;
+        LocalDateTime rentalDate = null;
         LocalDateTime updatedAt = null;
         UUID id = null;
 
         cartId = cartItemCartId( cartItem );
         productId = cartItemProductId( cartItem );
-        quantity = cartItem.getQuantity();
-        price = cartItem.getPrice();
-        rentalDate = cartItem.getRentalDate();
         createdAt = cartItem.getCreatedAt();
+        price = cartItem.getPrice();
+        quantity = cartItem.getQuantity();
+        rentalDate = cartItem.getRentalDate();
         updatedAt = cartItem.getUpdatedAt();
         id = cartItem.getId();
 
@@ -59,8 +59,8 @@ public class CartItemMapperImpl implements CartItemMapper {
         cartItem.setCreatedAt( cartItemDTO.getCreatedAt() );
         cartItem.setUpdatedAt( cartItemDTO.getUpdatedAt() );
         cartItem.setId( cartItemDTO.getId() );
-        cartItem.setQuantity( cartItemDTO.getQuantity() );
         cartItem.setPrice( cartItemDTO.getPrice() );
+        cartItem.setQuantity( cartItemDTO.getQuantity() );
         cartItem.setRentalDate( cartItemDTO.getRentalDate() );
 
         return cartItem;

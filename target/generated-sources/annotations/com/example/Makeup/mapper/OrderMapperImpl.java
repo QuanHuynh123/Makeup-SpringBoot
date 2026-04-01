@@ -13,8 +13,8 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-03-19T14:14:35+0700",
-    comments = "version: 1.5.5.Final, compiler: javac, environment: Java 21.0.6 (Oracle Corporation)"
+    date = "2026-03-21T00:11:26+0700",
+    comments = "version: 1.5.5.Final, compiler: Eclipse JDT (IDE) 3.45.0.v20260224-0835, environment: Java 21.0.10 (Eclipse Adoptium)"
 )
 @Component
 public class OrderMapperImpl implements OrderMapper {
@@ -27,39 +27,39 @@ public class OrderMapperImpl implements OrderMapper {
 
         UUID userId = null;
         int paymentId = 0;
-        double totalPrice = 0.0d;
-        int totalQuantity = 0;
+        LocalDateTime createdAt = null;
         LocalDateTime orderDate = null;
         LocalDateTime pickupDate = null;
+        String receiverAddress = null;
+        String receiverEmail = null;
+        String receiverMessage = null;
+        String receiverName = null;
+        String receiverPhone = null;
         LocalDateTime returnDate = null;
         OrderStatus status = null;
-        String uniqueRequestId = null;
-        String receiverName = null;
-        String receiverEmail = null;
-        String receiverPhone = null;
-        String receiverMessage = null;
-        String receiverAddress = null;
+        double totalPrice = 0.0d;
+        int totalQuantity = 0;
         ShippingType typeShipping = null;
-        LocalDateTime createdAt = null;
+        String uniqueRequestId = null;
         LocalDateTime updatedAt = null;
         UUID id = null;
 
         userId = orderUserId( order );
         paymentId = orderPaymentId( order );
-        totalPrice = order.getTotalPrice();
-        totalQuantity = order.getTotalQuantity();
+        createdAt = order.getCreatedAt();
         orderDate = order.getOrderDate();
         pickupDate = order.getPickupDate();
+        receiverAddress = order.getReceiverAddress();
+        receiverEmail = order.getReceiverEmail();
+        receiverMessage = order.getReceiverMessage();
+        receiverName = order.getReceiverName();
+        receiverPhone = order.getReceiverPhone();
         returnDate = order.getReturnDate();
         status = order.getStatus();
-        uniqueRequestId = order.getUniqueRequestId();
-        receiverName = order.getReceiverName();
-        receiverEmail = order.getReceiverEmail();
-        receiverPhone = order.getReceiverPhone();
-        receiverMessage = order.getReceiverMessage();
-        receiverAddress = order.getReceiverAddress();
+        totalPrice = order.getTotalPrice();
+        totalQuantity = order.getTotalQuantity();
         typeShipping = order.getTypeShipping();
-        createdAt = order.getCreatedAt();
+        uniqueRequestId = order.getUniqueRequestId();
         updatedAt = order.getUpdatedAt();
         id = order.getId();
 
@@ -83,18 +83,18 @@ public class OrderMapperImpl implements OrderMapper {
         order.setCreatedAt( orderDTO.getCreatedAt() );
         order.setUpdatedAt( orderDTO.getUpdatedAt() );
         order.setId( orderDTO.getId() );
-        order.setTotalPrice( orderDTO.getTotalPrice() );
-        order.setTotalQuantity( orderDTO.getTotalQuantity() );
         order.setOrderDate( orderDTO.getOrderDate() );
         order.setPickupDate( orderDTO.getPickupDate() );
-        order.setReturnDate( orderDTO.getReturnDate() );
-        order.setReceiverName( orderDTO.getReceiverName() );
-        order.setReceiverEmail( orderDTO.getReceiverEmail() );
-        order.setReceiverPhone( orderDTO.getReceiverPhone() );
-        order.setReceiverMessage( orderDTO.getReceiverMessage() );
         order.setReceiverAddress( orderDTO.getReceiverAddress() );
-        order.setTypeShipping( orderDTO.getTypeShipping() );
+        order.setReceiverEmail( orderDTO.getReceiverEmail() );
+        order.setReceiverMessage( orderDTO.getReceiverMessage() );
+        order.setReceiverName( orderDTO.getReceiverName() );
+        order.setReceiverPhone( orderDTO.getReceiverPhone() );
+        order.setReturnDate( orderDTO.getReturnDate() );
         order.setStatus( orderDTO.getStatus() );
+        order.setTotalPrice( orderDTO.getTotalPrice() );
+        order.setTotalQuantity( orderDTO.getTotalQuantity() );
+        order.setTypeShipping( orderDTO.getTypeShipping() );
         order.setUniqueRequestId( orderDTO.getUniqueRequestId() );
 
         return order;

@@ -13,8 +13,8 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-03-19T14:14:34+0700",
-    comments = "version: 1.5.5.Final, compiler: javac, environment: Java 21.0.6 (Oracle Corporation)"
+    date = "2026-03-21T00:11:26+0700",
+    comments = "version: 1.5.5.Final, compiler: Eclipse JDT (IDE) 3.45.0.v20260224-0835, environment: Java 21.0.10 (Eclipse Adoptium)"
 )
 @Component
 public class StaffMapperImpl implements StaffMapper {
@@ -31,11 +31,11 @@ public class StaffMapperImpl implements StaffMapper {
         if ( id != null ) {
             staffDTO.setAccountId( id.toString() );
         }
+        staffDTO.setAppointments( appointmentListToAppointmentDTOList( staff.getAppointments() ) );
+        staffDTO.setCreatedAt( staff.getCreatedAt() );
         staffDTO.setId( staff.getId() );
         staffDTO.setNameStaff( staff.getNameStaff() );
         staffDTO.setPhone( staff.getPhone() );
-        staffDTO.setAppointments( appointmentListToAppointmentDTOList( staff.getAppointments() ) );
-        staffDTO.setCreatedAt( staff.getCreatedAt() );
         staffDTO.setUpdatedAt( staff.getUpdatedAt() );
 
         return staffDTO;
@@ -52,10 +52,10 @@ public class StaffMapperImpl implements StaffMapper {
         staff.setAccount( staffDTOToAccount( staffDTO ) );
         staff.setCreatedAt( staffDTO.getCreatedAt() );
         staff.setUpdatedAt( staffDTO.getUpdatedAt() );
+        staff.setAppointments( appointmentDTOListToAppointmentList( staffDTO.getAppointments() ) );
         staff.setId( staffDTO.getId() );
         staff.setNameStaff( staffDTO.getNameStaff() );
         staff.setPhone( staffDTO.getPhone() );
-        staff.setAppointments( appointmentDTOListToAppointmentList( staffDTO.getAppointments() ) );
 
         return staff;
     }
@@ -82,13 +82,13 @@ public class StaffMapperImpl implements StaffMapper {
 
         AppointmentDTO appointmentDTO = new AppointmentDTO();
 
-        appointmentDTO.setId( appointment.getId() );
-        appointmentDTO.setStartTime( appointment.getStartTime() );
-        appointmentDTO.setEndTime( appointment.getEndTime() );
-        appointmentDTO.setPrice( appointment.getPrice() );
-        appointmentDTO.setMakeupDate( appointment.getMakeupDate() );
-        appointmentDTO.setStatus( appointment.isStatus() );
         appointmentDTO.setCreatedAt( appointment.getCreatedAt() );
+        appointmentDTO.setEndTime( appointment.getEndTime() );
+        appointmentDTO.setId( appointment.getId() );
+        appointmentDTO.setMakeupDate( appointment.getMakeupDate() );
+        appointmentDTO.setPrice( appointment.getPrice() );
+        appointmentDTO.setStartTime( appointment.getStartTime() );
+        appointmentDTO.setStatus( appointment.isStatus() );
         appointmentDTO.setUpdatedAt( appointment.getUpdatedAt() );
 
         return appointmentDTO;
@@ -130,11 +130,11 @@ public class StaffMapperImpl implements StaffMapper {
 
         appointment.setCreatedAt( appointmentDTO.getCreatedAt() );
         appointment.setUpdatedAt( appointmentDTO.getUpdatedAt() );
-        appointment.setId( appointmentDTO.getId() );
-        appointment.setStartTime( appointmentDTO.getStartTime() );
         appointment.setEndTime( appointmentDTO.getEndTime() );
+        appointment.setId( appointmentDTO.getId() );
         appointment.setMakeupDate( appointmentDTO.getMakeupDate() );
         appointment.setPrice( appointmentDTO.getPrice() );
+        appointment.setStartTime( appointmentDTO.getStartTime() );
         appointment.setStatus( appointmentDTO.isStatus() );
 
         return appointment;

@@ -24,7 +24,7 @@ public class OrderRestController {
 
   // Place an order
   @Operation(summary = "Place an order", description = "Create a new order with the provided order details")
-  @PostMapping
+  @PostMapping("/place")
   public ApiResponse<OrderDTO> placeOrder(@Valid @RequestBody OrderRequest orderRequest) {
     return ApiResponse.success("Create order successfully",orderService.createOrder(orderRequest));
   }

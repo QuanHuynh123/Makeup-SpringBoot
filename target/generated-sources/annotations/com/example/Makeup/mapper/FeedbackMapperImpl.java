@@ -11,8 +11,8 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-03-19T14:14:35+0700",
-    comments = "version: 1.5.5.Final, compiler: javac, environment: Java 21.0.6 (Oracle Corporation)"
+    date = "2026-03-21T00:11:26+0700",
+    comments = "version: 1.5.5.Final, compiler: Eclipse JDT (IDE) 3.45.0.v20260224-0835, environment: Java 21.0.10 (Eclipse Adoptium)"
 )
 @Component
 public class FeedbackMapperImpl implements FeedbackMapper {
@@ -25,17 +25,17 @@ public class FeedbackMapperImpl implements FeedbackMapper {
 
         UUID userId = null;
         int typeMakeupId = 0;
-        int rating = 0;
         String comment = null;
         LocalDateTime createdAt = null;
+        int rating = 0;
         LocalDateTime updatedAt = null;
         UUID id = null;
 
         userId = feedBackUserId( feedBack );
         typeMakeupId = feedBackTypeMakeupId( feedBack );
-        rating = feedBack.getRating();
         comment = feedBack.getComment();
         createdAt = feedBack.getCreatedAt();
+        rating = feedBack.getRating();
         updatedAt = feedBack.getUpdatedAt();
         id = feedBack.getId();
 
@@ -56,9 +56,9 @@ public class FeedbackMapperImpl implements FeedbackMapper {
         feedBack.setTypeMakeup( feedBackDTOToTypeMakeup( feedBackDTO ) );
         feedBack.setCreatedAt( feedBackDTO.getCreatedAt() );
         feedBack.setUpdatedAt( feedBackDTO.getUpdatedAt() );
+        feedBack.setComment( feedBackDTO.getComment() );
         feedBack.setId( feedBackDTO.getId() );
         feedBack.setRating( feedBackDTO.getRating() );
-        feedBack.setComment( feedBackDTO.getComment() );
 
         return feedBack;
     }

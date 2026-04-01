@@ -12,8 +12,8 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-03-19T14:14:35+0700",
-    comments = "version: 1.5.5.Final, compiler: javac, environment: Java 21.0.6 (Oracle Corporation)"
+    date = "2026-03-21T00:11:26+0700",
+    comments = "version: 1.5.5.Final, compiler: Eclipse JDT (IDE) 3.45.0.v20260224-0835, environment: Java 21.0.10 (Eclipse Adoptium)"
 )
 @Component
 public class OrderItemMapperImpl implements OrderItemMapper {
@@ -26,21 +26,21 @@ public class OrderItemMapperImpl implements OrderItemMapper {
 
         UUID orderId = null;
         UUID productId = null;
-        int quantity = 0;
-        double price = 0.0d;
-        OrderItemStatus status = null;
-        LocalDateTime rentalDate = null;
         LocalDateTime createdAt = null;
+        double price = 0.0d;
+        int quantity = 0;
+        LocalDateTime rentalDate = null;
+        OrderItemStatus status = null;
         LocalDateTime updatedAt = null;
         UUID id = null;
 
         orderId = orderItemOrderId( orderItem );
         productId = orderItemProductId( orderItem );
-        quantity = orderItem.getQuantity();
-        price = orderItem.getPrice();
-        status = orderItem.getStatus();
-        rentalDate = orderItem.getRentalDate();
         createdAt = orderItem.getCreatedAt();
+        price = orderItem.getPrice();
+        quantity = orderItem.getQuantity();
+        rentalDate = orderItem.getRentalDate();
+        status = orderItem.getStatus();
         updatedAt = orderItem.getUpdatedAt();
         id = orderItem.getId();
 
@@ -62,8 +62,8 @@ public class OrderItemMapperImpl implements OrderItemMapper {
         orderItem.setCreatedAt( orderItemDTO.getCreatedAt() );
         orderItem.setUpdatedAt( orderItemDTO.getUpdatedAt() );
         orderItem.setId( orderItemDTO.getId() );
-        orderItem.setQuantity( orderItemDTO.getQuantity() );
         orderItem.setPrice( orderItemDTO.getPrice() );
+        orderItem.setQuantity( orderItemDTO.getQuantity() );
         orderItem.setRentalDate( orderItemDTO.getRentalDate() );
         orderItem.setStatus( orderItemDTO.getStatus() );
 

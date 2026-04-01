@@ -10,8 +10,8 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-03-19T14:14:34+0700",
-    comments = "version: 1.5.5.Final, compiler: javac, environment: Java 21.0.6 (Oracle Corporation)"
+    date = "2026-03-21T00:11:26+0700",
+    comments = "version: 1.5.5.Final, compiler: Eclipse JDT (IDE) 3.45.0.v20260224-0835, environment: Java 21.0.10 (Eclipse Adoptium)"
 )
 @Component
 public class ProductMapperImpl implements ProductMapper {
@@ -24,27 +24,27 @@ public class ProductMapperImpl implements ProductMapper {
 
         int subCategoryId = 0;
         String describe = null;
-        String nameProduct = null;
-        String size = null;
-        double price = 0.0d;
-        boolean status = false;
-        String image = null;
-        int currentQuantity = 0;
-        int rentalCount = 0;
         LocalDateTime createdAt = null;
+        int currentQuantity = 0;
+        String image = null;
+        String nameProduct = null;
+        double price = 0.0d;
+        int rentalCount = 0;
+        String size = null;
+        boolean status = false;
         LocalDateTime updatedAt = null;
         UUID id = null;
 
         subCategoryId = productSubCategoryId( product );
         describe = product.getDescription();
-        nameProduct = product.getNameProduct();
-        size = product.getSize();
-        price = product.getPrice();
-        status = product.isStatus();
-        image = product.getImage();
-        currentQuantity = product.getCurrentQuantity();
-        rentalCount = product.getRentalCount();
         createdAt = product.getCreatedAt();
+        currentQuantity = product.getCurrentQuantity();
+        image = product.getImage();
+        nameProduct = product.getNameProduct();
+        price = product.getPrice();
+        rentalCount = product.getRentalCount();
+        size = product.getSize();
+        status = product.isStatus();
         updatedAt = product.getUpdatedAt();
         id = product.getId();
 
@@ -69,14 +69,14 @@ public class ProductMapperImpl implements ProductMapper {
         product.setDescription( productDTO.getDescribe() );
         product.setCreatedAt( productDTO.getCreatedAt() );
         product.setUpdatedAt( productDTO.getUpdatedAt() );
-        product.setId( productDTO.getId() );
-        product.setNameProduct( productDTO.getNameProduct() );
-        product.setSize( productDTO.getSize() );
-        product.setPrice( productDTO.getPrice() );
-        product.setStatus( productDTO.isStatus() );
-        product.setImage( productDTO.getImage() );
         product.setCurrentQuantity( productDTO.getCurrentQuantity() );
+        product.setId( productDTO.getId() );
+        product.setImage( productDTO.getImage() );
+        product.setNameProduct( productDTO.getNameProduct() );
+        product.setPrice( productDTO.getPrice() );
         product.setRentalCount( productDTO.getRentalCount() );
+        product.setSize( productDTO.getSize() );
+        product.setStatus( productDTO.isStatus() );
 
         return product;
     }

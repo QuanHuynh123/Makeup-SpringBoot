@@ -24,7 +24,7 @@ public class CacheProductService {
             CACHE_TTL,
             productServiceImpl::getHotProducts,
             "hot products");
-    return ApiResponse.success("Hot products (from DB)", result);
+    return ApiResponse.success("Hot products", result);
   }
 
   public ApiResponse<List<ShortProductListResponse>> cacheNewProducts() {
@@ -34,7 +34,7 @@ public class CacheProductService {
             CACHE_TTL,
             productServiceImpl::getNewProducts,
             "new products");
-    return ApiResponse.success("New products (from DB)", result);
+    return ApiResponse.success("New products", result);
   }
 
   public List<ShortProductListResponse> cacheCustomerShow() {

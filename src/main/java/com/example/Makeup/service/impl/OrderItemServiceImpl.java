@@ -23,7 +23,6 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class OrderItemServiceImpl implements IOrderItemService {
-  private final CartItemServiceImpl cartItemService;
   private final OrderRepository orderRepository;
   private final OrderItemRepository orderItemRepository;
   private final OrderItemMapper orderItemMapper;
@@ -53,8 +52,6 @@ public class OrderItemServiceImpl implements IOrderItemService {
       orderItem.setOrder(order);
       orderItemRepository.save(orderItem);
     }
-
-    cartItemService.deleteAllCartItem();
     return true;
   }
 

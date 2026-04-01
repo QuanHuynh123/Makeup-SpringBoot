@@ -11,8 +11,8 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-03-19T14:14:35+0700",
-    comments = "version: 1.5.5.Final, compiler: javac, environment: Java 21.0.6 (Oracle Corporation)"
+    date = "2026-03-21T00:11:26+0700",
+    comments = "version: 1.5.5.Final, compiler: Eclipse JDT (IDE) 3.45.0.v20260224-0835, environment: Java 21.0.10 (Eclipse Adoptium)"
 )
 @Component
 public class AppointmentMapperImpl implements AppointmentMapper {
@@ -28,13 +28,13 @@ public class AppointmentMapperImpl implements AppointmentMapper {
         appointmentDTO.setUserId( appointmentUserId( appointment ) );
         appointmentDTO.setTypeMakeupId( appointmentTypeMakeupId( appointment ) );
         appointmentDTO.setStaffId( appointmentStaffId( appointment ) );
-        appointmentDTO.setId( appointment.getId() );
-        appointmentDTO.setStartTime( appointment.getStartTime() );
-        appointmentDTO.setEndTime( appointment.getEndTime() );
-        appointmentDTO.setPrice( appointment.getPrice() );
-        appointmentDTO.setMakeupDate( appointment.getMakeupDate() );
-        appointmentDTO.setStatus( appointment.isStatus() );
         appointmentDTO.setCreatedAt( appointment.getCreatedAt() );
+        appointmentDTO.setEndTime( appointment.getEndTime() );
+        appointmentDTO.setId( appointment.getId() );
+        appointmentDTO.setMakeupDate( appointment.getMakeupDate() );
+        appointmentDTO.setPrice( appointment.getPrice() );
+        appointmentDTO.setStartTime( appointment.getStartTime() );
+        appointmentDTO.setStatus( appointment.isStatus() );
         appointmentDTO.setUpdatedAt( appointment.getUpdatedAt() );
 
         return appointmentDTO;
@@ -53,11 +53,11 @@ public class AppointmentMapperImpl implements AppointmentMapper {
         appointment.setStaff( appointmentDTOToStaff( appointmentDTO ) );
         appointment.setCreatedAt( appointmentDTO.getCreatedAt() );
         appointment.setUpdatedAt( appointmentDTO.getUpdatedAt() );
-        appointment.setId( appointmentDTO.getId() );
-        appointment.setStartTime( appointmentDTO.getStartTime() );
         appointment.setEndTime( appointmentDTO.getEndTime() );
+        appointment.setId( appointmentDTO.getId() );
         appointment.setMakeupDate( appointmentDTO.getMakeupDate() );
         appointment.setPrice( appointmentDTO.getPrice() );
+        appointment.setStartTime( appointmentDTO.getStartTime() );
         appointment.setStatus( appointmentDTO.isStatus() );
 
         return appointment;
