@@ -26,7 +26,12 @@ public class RedisCacheHelper {
         return (List<T>) list;
       }
     } catch (Exception e) {
-      log.warn("Redis GET failed for {} key={}. Fallback to DB: {}", label, key, e.getMessage());
+      log.warn(
+          "Redis GET failed for {} key={}. Fallback to DB. type={} message={}",
+          label,
+          key,
+          e.getClass().getSimpleName(),
+          e.getMessage());
     }
 
     List<T> fromDb = dbSupplier.get();
@@ -35,7 +40,12 @@ public class RedisCacheHelper {
       redisTemplate.opsForValue().set(key, fromDb, ttl);
       log.debug("Cached {} with key={}", label, key);
     } catch (Exception e) {
-      log.warn("Redis SET failed for {} key={}. Returning DB result: {}", label, key, e.getMessage());
+      log.warn(
+          "Redis SET failed for {} key={}. Returning DB result. type={} message={}",
+          label,
+          key,
+          e.getClass().getSimpleName(),
+          e.getMessage());
     }
 
     return fromDb;
@@ -46,7 +56,11 @@ public class RedisCacheHelper {
       redisTemplate.delete(Arrays.asList(keys));
       log.debug("Evicted cache keys: {}", Arrays.toString(keys));
     } catch (Exception e) {
-      log.warn("Redis EVICT failed for keys {}: {}", Arrays.toString(keys), e.getMessage());
+      log.warn(
+          "Redis EVICT failed for keys {}. type={} message={}",
+          Arrays.toString(keys),
+          e.getClass().getSimpleName(),
+          e.getMessage());
     }
   }
 }

@@ -37,21 +37,8 @@ public class AuthApiRestController {
     String accessToken = apiResponse.getAccessToken();
     String refreshToken = apiResponse.getRefreshToken();
 
-    Cookie refreshCookie = new Cookie("refresh_token", refreshToken);
-    refreshCookie.setHttpOnly(true);
-    refreshCookie.setSecure(false);
-    refreshCookie.setPath("/");
-    refreshCookie.setMaxAge(cookieMaxAge);
-    refreshCookie.setAttribute("SameSite", "Strict");
-    response.addCookie(refreshCookie);
-
-    Cookie accessCookie = new Cookie("access_token", accessToken);
-    accessCookie.setHttpOnly(true);
-    accessCookie.setSecure(false);
-    accessCookie.setPath("/");
-    accessCookie.setMaxAge(cookieMaxAge);
-    accessCookie.setAttribute("SameSite", "Strict");
-    response.addCookie(accessCookie);
+      setAuthCookie(response, "refresh_token", refreshToken);
+      setAuthCookie(response, "access_token", accessToken);
 
 
     return ApiResponse.success("Login success", accessToken) ;
@@ -65,8 +52,23 @@ public class AuthApiRestController {
 
   @Operation(summary = "Refresh token", description = "Refresh access token using refresh token from cookie")
   @PostMapping("/refresh")
-  public ApiResponse<?> refreshToken(@CookieValue("refresh_token") String refreshToken){
-    return ApiResponse.success("Refresh success",refreshTokenService.refreshToken(refreshToken));
+  public ApiResponse<String> refreshToken(
+          @CookieValue("refresh_token") String refreshToken,
+          HttpServletResponse response){
+    AuthResponse tokens = refreshTokenService.refreshToken(refreshToken);
+    setAuthCookie(response, "refresh_token", tokens.getRefreshToken());
+    setAuthCookie(response, "access_token", tokens.getAccessToken());
+    return ApiResponse.success("Refresh success", tokens.getAccessToken());
+  }
+
+  private void setAuthCookie(HttpServletResponse response, String name, String token) {
+    Cookie cookie = new Cookie(name, token);
+    cookie.setHttpOnly(true);
+    cookie.setSecure(false);
+    cookie.setPath("/");
+    cookie.setMaxAge(cookieMaxAge);
+    cookie.setAttribute("SameSite", "Strict");
+    response.addCookie(cookie);
   }
 
 }

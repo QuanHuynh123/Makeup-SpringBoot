@@ -1,12 +1,10 @@
 package com.example.Makeup.service;
 
-import com.example.Makeup.dto.response.common.ApiResponse;
-import com.example.Makeup.entity.RefreshToken;
-import java.util.UUID;
+import com.example.Makeup.dto.response.AuthResponse;
 
 public interface IRefreshTokenService {
 
-  String refreshToken(String refreshToken);
+  AuthResponse refreshToken(String refreshToken);
 
 //  RefreshToken getTokenByAccountId(UUID accountId);
 }

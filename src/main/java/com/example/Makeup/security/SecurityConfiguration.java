@@ -28,6 +28,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 public class SecurityConfiguration {
   private final AccountServiceImpl accountServiceImpl;
   private final JwtFilter jwtFilter;
+  private final ApiRateLimitFilter apiRateLimitFilter;
   private final CustomLogoutHandler customLogoutHandler;
 
   private static final String[] PUBLIC_URLS = {
@@ -65,7 +66,8 @@ public class SecurityConfiguration {
         .addFilterBefore(
             jwtFilter,
             UsernamePasswordAuthenticationFilter
-                .class) // Add JWT filter before UsernamePasswordAuthenticationFilter
+            .class) // Add JWT filter before UsernamePasswordAuthenticationFilter
+        .addFilterAfter(apiRateLimitFilter, JwtFilter.class)
         .exceptionHandling(
             exceptionHandling ->
                 exceptionHandling
