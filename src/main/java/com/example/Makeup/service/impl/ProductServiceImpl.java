@@ -151,10 +151,6 @@ public class ProductServiceImpl implements IProductService {
   public Page<ProductDTO> searchProduct(
       Integer subCategoryId, String search, Pageable pageable) {
     Page<Product> productPage = productRepository.searchProducts(subCategoryId, search, pageable);
-    if (productPage.isEmpty()) {
-      throw new AppException(ErrorCode.PRODUCT_IS_EMPTY);
-    }
-
     return productPage.map(productMapper::toProductDTO);
   }
 

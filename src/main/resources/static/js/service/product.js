@@ -1,4 +1,6 @@
 $(document).ready(function () {
+    let currentRequest = null;
+
     // Hàm tạo HTML cho sản phẩm
     function generateProductHtml(products) {
         let html = '';
@@ -34,10 +36,24 @@ $(document).ready(function () {
     }
 
     // Hàm tải sản phẩm bằng AJAX
-    function loadProducts(categoryId, page , searchQuery) {
+    function loadProducts(categoryId, page, searchQuery, sortBy, sortDir) {
+        if (currentRequest && currentRequest.readyState !== 4) {
+            currentRequest.abort();
+        }
 
-        $.ajax({
-            url: `/api/category?id=${categoryId}&page=${page}&searchKey=${searchQuery}`,
+        const params = new URLSearchParams({
+            id: String(categoryId),
+            page: String(page),
+            sortBy: sortBy,
+            sortDir: sortDir
+        });
+
+        if (searchQuery) {
+            params.set('searchKey', searchQuery);
+        }
+
+        currentRequest = $.ajax({
+            url: `/api/category?${params.toString()}`,
             method: 'GET',
             success: function (response) {
                 if (!response || !response.result) {
@@ -57,6 +73,9 @@ $(document).ready(function () {
                 }
             },
             error: function (xhr) {
+                if (xhr.statusText === 'abort') {
+                    return;
+                }
                 $('#paginationContainer').hide();
             }
         });
@@ -68,6 +87,8 @@ $(document).ready(function () {
         const categoryId = $('#categoryId').data('category-id') || -1;
         let currentPage = $('#currentPage').data('current-page');
         const totalPages = $('#totalPages').data('total-pages');
+        const sortBy = $('#sortField').val() || 'createdAt';
+        const sortDir = $('#sortDirection').val() || 'desc';
 
         // Xóa class active khỏi tất cả các page-link
         $('.page-link').removeClass('active');
@@ -87,13 +108,29 @@ $(document).ready(function () {
         }
 
         if (currentPage >= 0 && currentPage < totalPages) {
-            loadProducts(categoryId, currentPage , $('#searchKey').data('search-key') || null);
+            loadProducts(categoryId, currentPage, $('#searchKey').data('search-key') || null, sortBy, sortDir);
         }
+    });
+
+    $('#sortField, #sortDirection').on('change', function () {
+        const categoryId = $('#categoryId').data('category-id') || -1;
+        const searchQuery = $('#searchKey').data('search-key') || null;
+        const sortBy = $('#sortField').val() || 'createdAt';
+        const sortDir = $('#sortDirection').val() || 'desc';
+
+        $('#currentPage').data('current-page', 0);
+        loadProducts(categoryId, 0, searchQuery, sortBy, sortDir);
     });
 
     // Tải sản phẩm khi trang được tải
     const categoryId = $('#categoryId').data('category-id') || -1;
     const currentPage = $('#currentPage').data('current-page') || 0;
     const searchQuery = $('#searchKey').data('search-key') || null;
-    loadProducts(categoryId, currentPage, searchQuery);
+    const defaultSortBy = $('#sortFieldState').data('sort-field') || 'createdAt';
+    const defaultSortDir = $('#sortDirectionState').data('sort-direction') || 'desc';
+
+    $('#sortField').val(defaultSortBy);
+    $('#sortDirection').val(defaultSortDir);
+
+    loadProducts(categoryId, currentPage, searchQuery, defaultSortBy, defaultSortDir);
 });

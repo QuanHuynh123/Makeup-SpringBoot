@@ -8,7 +8,7 @@ $(document).ready(function() {
     // Hàm gọi API lấy danh sách đơn hàng
     function loadOrders() {
         $.ajax({
-            url: '/api/orders/my-order',
+            url: '/api/orders/my-orders',
             method: 'GET',
             success: function(response) {
                 console.log('API Response:', response);

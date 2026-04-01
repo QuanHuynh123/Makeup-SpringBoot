@@ -13,7 +13,7 @@ $(document).ready(function() {
 
     // Hàm hiển thị thông báo
     function showAlert(type, message) {
-        Swal.fire({
+        return Swal.fire({
             icon: type,
             title: message,
             showConfirmButton: false,

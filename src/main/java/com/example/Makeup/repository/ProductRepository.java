@@ -21,8 +21,8 @@ public interface ProductRepository extends JpaRepository<Product, UUID> {
   List<Product> findNewProducts(Pageable pageable);
 
   @Query(
-      "SELECT p FROM Product p WHERE (:subCategoryId IS NULL OR p.subCategory.id = :subCategoryId) OR "
-          + "(:search IS NULL OR LOWER(p.nameProduct) LIKE LOWER(CONCAT('%', :search, '%')))")
+      "SELECT p FROM Product p WHERE (:subCategoryId IS NULL OR p.subCategory.id = :subCategoryId) AND "
+          + "(:search IS NULL OR :search = '' OR LOWER(p.nameProduct) LIKE LOWER(CONCAT('%', :search, '%')))")
   Page<Product> searchProducts(
       @Param("subCategoryId") Integer subCategoryId, // Nullable Integer
       @Param("search") String search,

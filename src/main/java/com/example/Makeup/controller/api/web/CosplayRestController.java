@@ -12,6 +12,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+
+import java.util.Set;
 import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "Cosplay Category API", description = "API for retrieving products by category")
@@ -21,6 +24,8 @@ import org.springframework.web.bind.annotation.*;
 public class CosplayRestController {
 
   private final IProductService productService;
+  private static final Set<String> ALLOWED_SORT_FIELDS =
+      Set.of("createdAt", "price", "nameProduct", "rentalCount");
 
   @Operation(summary = "Get products by category with pagination and search", description = "Retrieve products filtered by category ID, with pagination and optional search keyword")
   @GetMapping("")
@@ -28,9 +33,14 @@ public class CosplayRestController {
       @RequestParam(value = "id", required = false) Integer id,
       @RequestParam(value = "page", defaultValue = "0") int page,
       @RequestParam(value = "size", defaultValue = "10") int size,
-      @RequestParam(value = "searchKey", required = false) String search) {
+      @RequestParam(value = "searchKey", required = false) String search,
+      @RequestParam(value = "sortBy", defaultValue = "createdAt") String sortBy,
+      @RequestParam(value = "sortDir", defaultValue = "desc") String sortDir) {
 
-    Pageable pageable = PageRequest.of(page, size);
+    String safeSortBy = ALLOWED_SORT_FIELDS.contains(sortBy) ? sortBy : "createdAt";
+    Sort.Direction direction = "asc".equalsIgnoreCase(sortDir) ? Sort.Direction.ASC : Sort.Direction.DESC;
+
+    Pageable pageable = PageRequest.of(page, size, Sort.by(direction, safeSortBy));
     Page<ProductDTO> productsPage = productService.searchProduct(id, search, pageable);
 
     Map<String, Object> response = new HashMap<>();

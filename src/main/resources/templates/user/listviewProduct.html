@@ -19,26 +19,25 @@
         <div class="content-container">
             <!-- Bộ lọc -->
             <div class="filters">
-                <button>Bộ lọc</button>
-                <select>
-                    <option>Giá</option>
+                <button type="button">Bộ lọc</button>
+                <select id="sortField">
+                    <option value="createdAt">Mới nhất</option>
+                    <option value="price">Giá</option>
+                    <option value="nameProduct">Tên</option>
+                    <option value="rentalCount">Bán chạy</option>
                 </select>
-                <select>
-                    <option>Tên</option>
+                <select id="sortDirection">
+                    <option value="desc">Giảm dần</option>
+                    <option value="asc">Tăng dần</option>
                 </select>
-                <select>
-                    <option>Bán chạy</option>
-                </select>
-                <select>
-                    <option>Mới</option>
-                </select>
-                <button>Xếp theo: Giá</button>
             </div>
 
             <div id="totalPages" style="display:none;" th:attr="data-total-pages=${totalPages}"></div>
             <div id="categoryId" style="display:none;" th:attr="data-category-id=${categoryId}"></div>
             <div id="currentPage" style="display:none;" th:attr="data-current-page=${currentPage}"></div>
             <div id="searchKey" style="display:none;" th:attr="data-search-key=${searchKey}"></div>
+            <div id="sortFieldState" style="display:none;" data-sort-field="createdAt"></div>
+            <div id="sortDirectionState" style="display:none;" data-sort-direction="desc"></div>
 
             <ul class="product-list" id="productList">
             </ul>
