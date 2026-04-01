@@ -27,85 +27,34 @@
 
 <div layout:fragment="content">
    <!-- banner -->
-   <section  class="banner_main">
-      <div id="banner1" class="carousel slide" data-ride="carousel">
-         <ol class="carousel-indicators">
-            <li data-target="#banner1" data-slide-to="0" class="active"></li>
-            <li data-target="#banner1" data-slide-to="1"></li>
-            <li data-target="#banner1" data-slide-to="2"></li>
-         </ol>
-         <div class="carousel-inner">
-            <div class="carousel-item active">
-               <div class="container-fluid">
-                  <div class="carousel-caption">
-                     <div class="row">
-                        <div class="col-md-6">
-                           <div class="text-bg">
-                              <span>Welcome to</span>
-                              <h1>beautySGU</h1>
-                              <p>Trang điểm và hóa trang không chỉ làm đẹp, mà còn là nghệ thuật biến hóa. Hãy thể hiện cá tính và tỏa sáng theo cách riêng của bạn!</p>
-                              <a href="#banner_2">Read More </a>
-                              <a href="#contact">Book Now</a>
-                           </div>
-                        </div>
-                        <div class="col-md-6">
-                           <div class="text_img">
-                              <figure><img class="img_main_banner" src="images/girl1.png" alt="#"/></figure>
-                           </div>
-                        </div>
-                     </div>
-                  </div>
-               </div>
+   <section class="beauty-hero">
+      <div class="beauty-hero__texture"></div>
+      <div class="container beauty-hero__content">
+         <div class="beauty-hero__left">
+            <span class="beauty-hero__eyebrow">Makeup Atelier</span>
+            <h1>Đẹp theo khí chất của riêng bạn.</h1>
+            <p>
+               Từ layout nhẹ nhàng hằng ngày đến glam cho sự kiện, đội ngũ BeautySGU giúp bạn giữ nét tự nhiên nhưng vẫn đủ nổi bật trước mọi ánh nhìn.
+            </p>
+            <div class="beauty-hero__actions">
+               <a href="#service" class="hero-btn hero-btn--solid">Khám phá dịch vụ</a>
+               <a href="#contact" class="hero-btn hero-btn--ghost">Đặt lịch ngay</a>
             </div>
-            <div class="carousel-item">
-               <div class="container-fluid">
-                  <div class="carousel-caption">
-                     <div class="row">
-                        <div class="col-md-6">
-                           <div class="text-bg">
-                              <span>Welcome to</span>
-                              <h1>BeautySGU</h1>
-                              <p>Trang điểm và hóa trang không chỉ làm đẹp, mà còn là nghệ thuật biến hóa. Hãy thể hiện cá tính và tỏa sáng theo cách riêng của bạn! </p>
-                              <a href="#">Read More </a> <a href="#">Book Now</a>
-                           </div>
-                        </div>
-                        <div class="col-md-6">
-                           <div class="text_img">
-                              <figure><img class="img_main_banner" src="images/girl2.png" alt="#"/></figure>
-                           </div>
-                        </div>
-                     </div>
-                  </div>
-               </div>
-            </div>
-            <div class="carousel-item">
-               <div class="container-fluid">
-                  <div class="carousel-caption">
-                     <div class="row">
-                        <div class="col-md-6">
-                           <div class="text-bg">
-                              <span>Welcome to</span>
-                              <h1>BeautySGU</h1>
-                              <p>Trang điểm và hóa trang không chỉ làm đẹp, mà còn là nghệ thuật biến hóa. Hãy thể hiện cá tính và tỏa sáng theo cách riêng của bạn!</p>
-                              <a href="#">Read More </a> <a href="#">Book Now</a>
-                           </div>
-                        </div>
-                        <div class="col-md-6">
-                           <div class="text_img">
-                              <figure><img class="img_main_banner" src="images/girl3.png" alt="#"/></figure>
-                           </div>
-                        </div>
-                     </div>
-                  </div>
-               </div>
+            <div class="beauty-hero__chips">
+               <span>Bridal Makeup</span>
+               <span>Editorial Look</span>
+               <span>Personal Styling</span>
             </div>
          </div>
-         <a class="carousel-control-prev" href="#banner1" role="button" data-slide="prev">
-            <i class="fa fa-long-arrow-left" aria-hidden="true"></i>
-         </a>
-         <a class="carousel-control-next" href="#banner1" role="button" data-slide="next">
-            <i class="fa fa-long-arrow-right" aria-hidden="true"></i>
-         </a>
+         <div class="beauty-hero__right">
+            <div class="beauty-hero__image-wrap">
+               <img class="img_main_banner" src="images/girl1.png" alt="Beauty hero">
+            </div>
+            <div class="beauty-hero__card">
+               <strong>4.9/5</strong>
+               <p>Đánh giá từ khách hàng đã đặt lịch tại BeautySGU.</p>
+            </div>
+         </div>
       </div>
    </section>
 
