@@ -81,13 +81,30 @@ jobs:
             if [ -z "$APP_DIR" ]; then
               APP_DIR="$HOME/Makeup"
             fi
+            SRC_DIR="$APP_DIR/_src"
             IMAGE="quancoder123/makeup-images:latest"
 
-            if [ ! -d "$APP_DIR/.git" ]; then
-              git clone https://github.com/${{ github.repository }}.git "$APP_DIR"
+            if ! command -v git >/dev/null 2>&1; then
+              echo "git not found. Installing git..."
+              if command -v yum >/dev/null 2>&1; then
+                sudo yum install -y git
+              elif command -v dnf >/dev/null 2>&1; then
+                sudo dnf install -y git
+              elif command -v apt-get >/dev/null 2>&1; then
+                sudo apt-get update -y
+                sudo apt-get install -y git
+              else
+                echo "No supported package manager found to install git"
+                exit 1
+              fi
             fi
 
-            cd "$APP_DIR"
+            mkdir -p "$APP_DIR"
+            if [ ! -d "$SRC_DIR/.git" ]; then
+              git clone https://github.com/${{ github.repository }}.git "$SRC_DIR"
+            fi
+
+            cd "$SRC_DIR"
             git fetch origin main
             git reset --hard origin/main
 
