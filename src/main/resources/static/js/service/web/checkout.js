@@ -2,6 +2,14 @@ $(document).ready(function() {
     let cartData = [];
     let isShipping = false;
     let isProcessing = false; // Biến để ngăn double-click
+    const MIN_QUANTITY = 1;
+    const MAX_QUANTITY = 100;
+
+    function clampQuantity(value) {
+        const parsed = parseInt(value, 10);
+        if (Number.isNaN(parsed)) return MIN_QUANTITY;
+        return Math.min(MAX_QUANTITY, Math.max(MIN_QUANTITY, parsed));
+    }
 
     // Hàm hiển thị thông báo
     function showAlert(type, message) {
@@ -17,10 +25,11 @@ $(document).ready(function() {
     function updateRow(itemId, newQuantity) {
         const item = cartData.find(i => i.id === itemId);
         if (item) {
-            item.quantity = newQuantity;
+            const safeQuantity = clampQuantity(newQuantity);
+            item.quantity = safeQuantity;
             const $row = $(`tr[data-item-id="${itemId}"]`);
-            const subtotal = item.price * newQuantity;
-            $row.find('.quantity-input').val(newQuantity);
+            const subtotal = item.price * safeQuantity;
+            $row.find('.quantity-input').val(safeQuantity);
             $row.find('.subtotal').text(subtotal.toFixed(2));
             updateSummary();
         }
@@ -56,7 +65,7 @@ $(document).ready(function() {
                 tr.setAttribute('data-item-id', item.id);
                 tr.innerHTML = `
                     <td><img src="/images/product/${item.firstImage}" alt="Product Image" style="width: 50px;"><span>${item.productName}</span></td>
-                    <td><input type="number" class="quantity-input" value="${item.quantity}" min="1" style="width: 60px;" data-item-id="${item.id}"></td>
+                    <td><input type="number" class="quantity-input" value="${clampQuantity(item.quantity)}" min="1" max="100" style="width: 60px;" data-item-id="${item.id}"></td>
                     <td><span class="subtotal">${subtotal.toFixed(2)}</span></td>
                 `;
                 fragment.appendChild(tr);
@@ -105,7 +114,8 @@ $(document).ready(function() {
     // Xử lý thay đổi số lượng với event delegation và debounce
     $('#productTableBody').on('change', '.quantity-input', debounce(function() {
         const itemId = $(this).data('item-id');
-        const newQuantity = parseInt($(this).val()) || 1;
+        const newQuantity = clampQuantity($(this).val());
+        $(this).val(newQuantity);
         updateRow(itemId, newQuantity);
     }, 300));
 
@@ -174,10 +184,18 @@ $(document).ready(function() {
 
         const orderItems = cartData.map(item => ({
             productId: item.productId,
-            quantity: item.quantity,
+            quantity: clampQuantity(item.quantity),
             price: item.price,
             rentalDate: item.rentalDate,
         }));
+
+        const invalidQuantity = orderItems.some(item => item.quantity < MIN_QUANTITY || item.quantity > MAX_QUANTITY);
+        if (invalidQuantity) {
+            showAlert('error', 'Số lượng sản phẩm chỉ được từ 1 đến 100.');
+            isProcessing = false;
+            placeOrderBtn.prop('disabled', false).text('Place Order');
+            return;
+        }
 
         if (paymentMethod == 1) {
             callApi('/api/orders/place', {

@@ -197,10 +197,15 @@ function searchCartItems(keyword) {
 
 // Hàm gắn sự kiện xóa
 function attachDeleteEvent() {
-    document.querySelectorAll(".btn-delete-cart-item").forEach(button => {
-        button.removeEventListener("click", deleteCartItem);
-        button.addEventListener("click", deleteCartItem);
+    if (attachDeleteEvent._bound) return;
+
+    document.addEventListener("click", function (event) {
+        const button = event.target.closest(".btn-delete-cart-item");
+        if (!button) return;
+        deleteCartItem({ currentTarget: button });
     });
+
+    attachDeleteEvent._bound = true;
 }
 
 // Hàm gắn sự kiện cập nhật
