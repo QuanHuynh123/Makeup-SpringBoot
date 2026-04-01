@@ -111,6 +111,16 @@ $(document).ready(function() {
         };
     }
 
+    function generateRequestId() {
+        // crypto.randomUUID() may fail on HTTP/non-secure contexts (common on EC2 public IP)
+        if (window.crypto && typeof window.crypto.randomUUID === 'function') {
+            return window.crypto.randomUUID();
+        }
+
+        const randomPart = Math.random().toString(36).slice(2, 10);
+        return `req-${Date.now()}-${randomPart}`;
+    }
+
     // Xử lý thay đổi số lượng với event delegation và debounce
     $('#productTableBody').on('change', '.quantity-input', debounce(function() {
         const itemId = $(this).data('item-id');
@@ -154,101 +164,109 @@ $(document).ready(function() {
         const placeOrderBtn = $(this);
         placeOrderBtn.prop('disabled', true).text('Đang xử lý...'); // Vô hiệu hóa nút
 
-        var email = $('#email').val();
-        var firstName = $('#firstName').val();
-        var phoneNumber = $('#phoneNumber').val();
-        var message = $('#message').val();
-        var address = $('#address').val();
-        const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
-        const quantity = $('#cartQuantity').text();
-        const totalPrice = parseFloat($('#orderTotal').text().replace('$', ''));
-        const shippingType = isShipping ? '1' : '2';
-        const uniqueRequestId = crypto.randomUUID();
+        try {
+            var email = $('#email').val();
+            var firstName = $('#firstName').val();
+            var phoneNumber = $('#phoneNumber').val();
+            var message = $('#message').val();
+            var address = $('#address').val();
+            const selectedPayment = document.querySelector('input[name="paymentMethod"]:checked');
+            const paymentMethod = selectedPayment ? selectedPayment.value : null;
+            const quantity = $('#cartQuantity').text();
+            const totalPrice = parseFloat($('#orderTotal').text().replace('$', ''));
+            const shippingType = isShipping ? '1' : '2';
+            const uniqueRequestId = generateRequestId();
 
-        if (quantity == 0) {
-            showAlert('error', 'Chưa có sản phẩm nào trong giỏ hàng.');
-            isProcessing = false;
-            placeOrderBtn.prop('disabled', false).text('Place Order');
-            return;
-        }
+            if (quantity == 0) {
+                showAlert('error', 'Chưa có sản phẩm nào trong giỏ hàng.');
+                isProcessing = false;
+                placeOrderBtn.prop('disabled', false).text('Place Order');
+                return;
+            }
 
-        if (!address && isShipping) {
-            showAlert('error', 'Vui lòng nhập địa chỉ khi chọn giao hàng!');
-            isProcessing = false;
-            placeOrderBtn.prop('disabled', false).text('Place Order');
-            return;
-        }
+            if (!address && isShipping) {
+                showAlert('error', 'Vui lòng nhập địa chỉ khi chọn giao hàng!');
+                isProcessing = false;
+                placeOrderBtn.prop('disabled', false).text('Place Order');
+                return;
+            }
 
-        const amount = totalPrice;
-        const orderInfo = "Don hang: ";
+            const amount = totalPrice;
+            const orderInfo = "Don hang: ";
 
-        const orderItems = cartData.map(item => ({
-            productId: item.productId,
-            quantity: clampQuantity(item.quantity),
-            price: item.price,
-            rentalDate: item.rentalDate,
-        }));
+            const orderItems = cartData.map(item => ({
+                productId: item.productId,
+                quantity: clampQuantity(item.quantity),
+                price: item.price,
+                rentalDate: item.rentalDate,
+            }));
 
-        const invalidQuantity = orderItems.some(item => item.quantity < MIN_QUANTITY || item.quantity > MAX_QUANTITY);
-        if (invalidQuantity) {
-            showAlert('error', 'Số lượng sản phẩm chỉ được từ 1 đến 100.');
-            isProcessing = false;
-            placeOrderBtn.prop('disabled', false).text('Place Order');
-            return;
-        }
+            const invalidQuantity = orderItems.some(item => item.quantity < MIN_QUANTITY || item.quantity > MAX_QUANTITY);
+            if (invalidQuantity) {
+                showAlert('error', 'Số lượng sản phẩm chỉ được từ 1 đến 100.');
+                isProcessing = false;
+                placeOrderBtn.prop('disabled', false).text('Place Order');
+                return;
+            }
 
-        if (paymentMethod == 1) {
-            callApi('/api/orders/place', {
-                uniqueRequestId: uniqueRequestId,
-                orderInfo: orderInfo,
-                email: email,
-                firstName: firstName,
-                phoneNumber: phoneNumber,
-                message: message,
-                address: address,
-                typeShipping: shippingType,
-                paymentMethod: parseInt(paymentMethod),
-                quantity: parseInt(quantity),
-                totalPrice: totalPrice,
-                orderItems: orderItems
-            }, function(response) {
-                console.log('Order placed successfully:', response);
-                showAlert('success', 'Đặt hàng thành công!').then(() => {
-                    window.location.href = "/cosplay/home";
-                });
-            }, function(xhr, status, error) {
-                showAlert('error', 'Something went wrong during order placement. Please try again.');
-            }, placeOrderBtn);
-        } else if (paymentMethod == 2) {
-            callApi('/api/orders/place', {
-                uniqueRequestId: uniqueRequestId,
-                orderInfo: orderInfo,
-                email: email,
-                firstName: firstName,
-                phoneNumber: phoneNumber,
-                message: message,
-                address: address,
-                typeShipping: shippingType,
-                paymentMethod: parseInt(paymentMethod),
-                quantity: parseInt(quantity),
-                totalPrice: totalPrice,
-                orderItems: orderItems
-            }, function(response) {
-                const orderId = response.result.id;
-                callApi('/api/order/submit-order', {
-                    orderId: orderId,
-                    amount: amount * 24000,
+            if (paymentMethod == 1) {
+                callApi('/api/orders/place', {
+                    uniqueRequestId: uniqueRequestId,
                     orderInfo: orderInfo,
-                }, function(vnpayResponse) {
-                    window.location.href = vnpayResponse;
+                    email: email,
+                    firstName: firstName,
+                    phoneNumber: phoneNumber,
+                    message: message,
+                    address: address,
+                    typeShipping: shippingType,
+                    paymentMethod: parseInt(paymentMethod),
+                    quantity: parseInt(quantity),
+                    totalPrice: totalPrice,
+                    orderItems: orderItems
+                }, function(response) {
+                    console.log('Order placed successfully:', response);
+                    showAlert('success', 'Đặt hàng thành công!').then(() => {
+                        window.location.href = "/cosplay/home";
+                    });
                 }, function(xhr, status, error) {
-                    showAlert('error', 'Failed to initiate VNPay payment. Please try again.');
+                    showAlert('error', 'Something went wrong during order placement. Please try again.');
                 }, placeOrderBtn);
-            }, function(xhr, status, error) {
-                showAlert('error', 'Something went wrong during order placement. Please try again.');
-            }, placeOrderBtn);
-        } else {
-            showAlert('error', 'Payment method not supported.');
+            } else if (paymentMethod == 2) {
+                callApi('/api/orders/place', {
+                    uniqueRequestId: uniqueRequestId,
+                    orderInfo: orderInfo,
+                    email: email,
+                    firstName: firstName,
+                    phoneNumber: phoneNumber,
+                    message: message,
+                    address: address,
+                    typeShipping: shippingType,
+                    paymentMethod: parseInt(paymentMethod),
+                    quantity: parseInt(quantity),
+                    totalPrice: totalPrice,
+                    orderItems: orderItems
+                }, function(response) {
+                    const orderId = response.result.id;
+                    callApi('/api/order/submit-order', {
+                        orderId: orderId,
+                        amount: amount * 24000,
+                        orderInfo: orderInfo,
+                    }, function(vnpayResponse) {
+                        window.location.href = vnpayResponse;
+                    }, function(xhr, status, error) {
+                        showAlert('error', 'Failed to initiate VNPay payment. Please try again.');
+                    }, placeOrderBtn);
+                }, function(xhr, status, error) {
+                    showAlert('error', 'Something went wrong during order placement. Please try again.');
+                }, placeOrderBtn);
+            } else {
+                showAlert('error', 'Payment method not supported.');
+                isProcessing = false;
+                placeOrderBtn.prop('disabled', false).text('Place Order');
+            }
+        } catch (error) {
+            console.error('Checkout error before API call:', error);
+            showAlert('error', 'Lỗi xử lý đơn hàng ở phía trình duyệt. Vui lòng thử lại.');
             isProcessing = false;
             placeOrderBtn.prop('disabled', false).text('Place Order');
         }
