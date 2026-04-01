@@ -111,8 +111,17 @@ jobs:
             echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
             docker pull "$IMAGE"
 
+            if docker compose version >/dev/null 2>&1; then
+              COMPOSE_CMD="docker compose"
+            elif command -v docker-compose >/dev/null 2>&1; then
+              COMPOSE_CMD="docker-compose"
+            else
+              echo "Docker Compose is not available on EC2 (missing both 'docker compose' and 'docker-compose')."
+              exit 1
+            fi
+
             # Keep infra services from compose, but run app with pulled image from Docker Hub.
-            docker compose up -d mysql redis rabbitmq
+            $COMPOSE_CMD up -d mysql redis rabbitmq
 
             cat > docker-compose.deploy.override.yml << 'EOF'
             services:
@@ -121,6 +130,6 @@ jobs:
                 build: null
             EOF
 
-            docker compose -f docker-compose.yml -f docker-compose.deploy.override.yml up -d app --no-deps
+            $COMPOSE_CMD -f docker-compose.yml -f docker-compose.deploy.override.yml up -d app --no-deps
             docker image prune -f
 
