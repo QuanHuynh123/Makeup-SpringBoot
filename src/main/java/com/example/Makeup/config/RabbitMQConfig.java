@@ -8,6 +8,7 @@ import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFacto
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.retry.backoff.FixedBackOffPolicy;
@@ -20,6 +21,9 @@ public class RabbitMQConfig {
   public static final String QUEUE = "order_queue";
   public static final String EXCHANGE = "order_exchange";
   public static final String ROUTING_KEY = "order.email";
+  public static final String APPOINTMENT_QUEUE = "appointment_queue";
+  public static final String APPOINTMENT_EXCHANGE = "appointment_exchange";
+  public static final String APPOINTMENT_ROUTING_KEY = "appointment.booking";
 
   @Bean
   public Queue queue() {
@@ -32,8 +36,25 @@ public class RabbitMQConfig {
   }
 
   @Bean
-  public Binding binding(Queue queue, TopicExchange exchange) {
+  public Binding binding(@Qualifier("queue") Queue queue, @Qualifier("exchange") TopicExchange exchange) {
     return BindingBuilder.bind(queue).to(exchange).with(ROUTING_KEY);
+  }
+
+  @Bean
+  public Queue appointmentQueue() {
+    return new Queue(APPOINTMENT_QUEUE, true);
+  }
+
+  @Bean
+  public TopicExchange appointmentExchange() {
+    return new TopicExchange(APPOINTMENT_EXCHANGE, true, false);
+  }
+
+  @Bean
+  public Binding appointmentBinding(
+      @Qualifier("appointmentQueue") Queue appointmentQueue,
+      @Qualifier("appointmentExchange") TopicExchange appointmentExchange) {
+    return BindingBuilder.bind(appointmentQueue).to(appointmentExchange).with(APPOINTMENT_ROUTING_KEY);
   }
 
   @Bean
@@ -46,6 +67,7 @@ public class RabbitMQConfig {
       Jackson2JsonMessageConverter messageConverter) {
     RabbitTemplate template = new RabbitTemplate(connectionFactory);
     template.setMessageConverter(messageConverter);
+    template.setReplyTimeout(10_000L);
     return template;
   }
 

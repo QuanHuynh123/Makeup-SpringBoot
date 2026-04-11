@@ -57,14 +57,15 @@ public interface AppointmentRepository extends JpaRepository<Appointment, UUID> 
     SELECT a FROM Appointment a
     WHERE a.staff.id = :staffId
     AND a.makeupDate = :makeupDate
-    AND a.status = true
+        AND (:excludeAppointmentId IS NULL OR a.id <> :excludeAppointmentId)
     AND (:startTime < a.endTime AND :endTime > a.startTime)
     """)
   List<Appointment> findConflictingAppointments(
       @Param("staffId") UUID staffId,
       @Param("makeupDate") LocalDate makeupDate,
       @Param("startTime") Time startTime,
-      @Param("endTime") Time endTime);
+            @Param("endTime") Time endTime,
+            @Param("excludeAppointmentId") UUID excludeAppointmentId);
 
   // Truy vấn số lượng appointment theo từng tháng trong năm
   @Query(
@@ -117,8 +118,10 @@ public interface AppointmentRepository extends JpaRepository<Appointment, UUID> 
   AppointmentDTO findAppointmentWithDetailsById(@Param("id") int id);
 
   @Query(
-      "SELECT a FROM Appointment a WHERE a.staff.id = :staffId AND a.status = true "
+      "SELECT a FROM Appointment a WHERE a.staff.id = :staffId "
           + "AND a.makeupDate = :makeupDate")
   List<Appointment> findAppointmentsByDateAndStaff(
       @Param("staffId") UUID staffId, @Param("makeupDate") LocalDate makeupDate);
+
+  java.util.Optional<Appointment> findByBookingToken(UUID bookingToken);
 }

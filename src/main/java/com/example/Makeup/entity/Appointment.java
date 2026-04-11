@@ -35,6 +35,10 @@ public class Appointment extends Base {
   @Column(name = "price", nullable = false)
   Double price;
 
+  @Column(name = "booking_token", unique = true, columnDefinition = "CHAR(36)")
+  @JdbcTypeCode(SqlTypes.CHAR)
+  UUID bookingToken;
+
   @Column(name = "status", nullable = false)
   boolean status;
 

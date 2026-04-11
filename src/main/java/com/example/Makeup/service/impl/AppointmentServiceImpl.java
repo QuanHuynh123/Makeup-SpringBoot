@@ -2,10 +2,12 @@ package com.example.Makeup.service.impl;
 
 import com.example.Makeup.dto.model.AppointmentDTO;
 import com.example.Makeup.dto.model.UserDTO;
+import com.example.Makeup.dto.request.AppointmentBookingMessage;
 import com.example.Makeup.dto.request.AppointmentRequest;
 import com.example.Makeup.dto.request.UpdateAppointmentRequest;
 import com.example.Makeup.dto.response.AppointmentsAdminResponse;
 import com.example.Makeup.dto.response.WeekAppointmentsDTO;
+import com.example.Makeup.config.RabbitMQConfig;
 import com.example.Makeup.entity.Appointment;
 import com.example.Makeup.entity.Staff;
 import com.example.Makeup.entity.TypeMakeup;
@@ -18,7 +20,9 @@ import com.example.Makeup.repository.StaffRepository;
 import com.example.Makeup.repository.TypeMakeupRepository;
 import com.example.Makeup.repository.UserRepository;
 import com.example.Makeup.service.IAppointmentService;
+import com.example.Makeup.utils.SecurityUserUtil;
 import jakarta.transaction.Transactional;
+import java.util.Optional;
 import java.sql.Date;
 import java.sql.Time;
 import java.time.LocalDate;
@@ -26,9 +30,9 @@ import java.time.temporal.WeekFields;
 import java.util.*;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.springframework.amqp.AmqpException;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -41,6 +45,7 @@ public class AppointmentServiceImpl implements IAppointmentService {
   private final TypeMakeupRepository typeMakeupRepository;
   private final AppointmentMapper appointmentMapper;
   private final SimpMessagingTemplate messagingTemplate;
+  private final RabbitTemplate rabbitTemplate;
 
   @Override
   public List<WeekAppointmentsDTO> getAppointmentsByMonth(
@@ -95,7 +100,11 @@ public class AppointmentServiceImpl implements IAppointmentService {
 
     List<Appointment> conflictingAppointments =
         appointmentRepository.findConflictingAppointments(
-            appointmentDTO.getStaffId(), appointmentDTO.getMakeupDate(), startTime, endTime);
+        appointmentDTO.getStaffId(),
+        appointmentDTO.getMakeupDate(),
+        startTime,
+        endTime,
+        appointmentId);
 
     if (!conflictingAppointments.isEmpty()) {
       throw new AppException(ErrorCode.STAFF_ALREADY_BOOKED);
@@ -133,11 +142,40 @@ public class AppointmentServiceImpl implements IAppointmentService {
   @Override
   @Transactional
   public AppointmentDTO createAppointment(AppointmentRequest newAppointment) {
+    UserDTO currentUser = SecurityUserUtil.getCurrentUserOrNull();
+    UUID bookingToken = UUID.randomUUID();
+    AppointmentBookingMessage message =
+        new AppointmentBookingMessage(
+            bookingToken,
+            currentUser != null ? currentUser.getAccountId() : null,
+            newAppointment);
 
+    try {
+      Object response =
+          rabbitTemplate.convertSendAndReceive(
+              RabbitMQConfig.APPOINTMENT_EXCHANGE,
+              RabbitMQConfig.APPOINTMENT_ROUTING_KEY,
+              message);
+
+      if (response instanceof AppointmentDTO appointmentDTO) {
+        return appointmentDTO;
+      }
+    } catch (AmqpException ex) {
+      // Broker unavailable or reply path broken: fall back to direct booking.
+    }
+
+    return createAppointmentDirect(
+        newAppointment, currentUser != null ? currentUser.getAccountId() : null, bookingToken);
+  }
+
+  @Transactional
+  public AppointmentDTO createAppointmentDirect(
+      AppointmentRequest newAppointment, UUID accountId, UUID bookingToken) {
     Appointment appointment = new Appointment();
     appointment.setStartTime(newAppointment.getStartTime());
     appointment.setEndTime(newAppointment.getEndTime());
     appointment.setMakeupDate(LocalDate.from(newAppointment.getMakeupDate()));
+    appointment.setBookingToken(bookingToken);
 
     Staff staff =
         staffRepository
@@ -152,15 +190,9 @@ public class AppointmentServiceImpl implements IAppointmentService {
     appointment.setTypeMakeup(typeMakeup);
     appointment.setPrice(typeMakeup.getPrice());
 
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-    Object principal = authentication.getPrincipal();
-    UserDTO userDTO = null;
-    if (principal instanceof UserDTO) {
-      userDTO = (UserDTO) principal;
-    }
     User user;
 
-    if (userDTO == null) {
+    if (accountId == null) {
       user = new User();
       user.setFullName(newAppointment.getGuestInfo().getFullName());
       user.setEmail(newAppointment.getGuestInfo().getEmail());
@@ -172,7 +204,7 @@ public class AppointmentServiceImpl implements IAppointmentService {
     } else {
       user =
           userRepository
-              .findByAccountId(userDTO.getAccountId())
+              .findByAccountId(accountId)
               .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
     }
 
@@ -181,7 +213,18 @@ public class AppointmentServiceImpl implements IAppointmentService {
     // ✅ Check conflict
     checkAppointmentConflict(appointment);
 
-    Appointment savedAppointment = appointmentRepository.save(appointment);
+    Appointment savedAppointment;
+    try {
+      savedAppointment = appointmentRepository.saveAndFlush(appointment);
+    } catch (org.springframework.dao.DataIntegrityViolationException ex) {
+      if (bookingToken != null) {
+        Optional<Appointment> existing = appointmentRepository.findByBookingToken(bookingToken);
+        if (existing.isPresent()) {
+          return appointmentMapper.toAppointmentDTO(existing.get());
+        }
+      }
+      throw ex;
+    }
     messagingTemplate.convertAndSend("/topic/appointments", "NEW_APPOINTMENT");
 
     return  appointmentMapper.toAppointmentDTO(savedAppointment);
@@ -190,10 +233,11 @@ public class AppointmentServiceImpl implements IAppointmentService {
   private void checkAppointmentConflict(Appointment appointment) {
     List<Appointment> conflicts =
         appointmentRepository.findConflictingAppointments(
-            appointment.getStaff().getId(),
-            appointment.getMakeupDate(),
-            appointment.getStartTime(),
-            appointment.getEndTime());
+        appointment.getStaff().getId(),
+        appointment.getMakeupDate(),
+        appointment.getStartTime(),
+        appointment.getEndTime(),
+        null);
     if (!conflicts.isEmpty()) {
       throw new AppException(ErrorCode.STAFF_ALREADY_BOOKED);
     }
