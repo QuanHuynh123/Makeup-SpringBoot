@@ -26,6 +26,7 @@ public class ApiRateLimitFilter extends OncePerRequestFilter {
   private static final int CART_MUTATION_LIMIT = 50;
   private static final int ORDER_PLACE_LIMIT = 20;
   private static final int ORDER_PAYMENT_LIMIT = 25;
+  private static final int CHAT_LIMIT = 20;
 
   private final ObjectMapper objectMapper;
   private final RateLimitService rateLimitService;
@@ -41,18 +42,16 @@ public class ApiRateLimitFilter extends OncePerRequestFilter {
       HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
       throws ServletException, IOException {
 
-    int limit = resolveLimit(request);
-    if (limit <= 0) {
+    RateLimitRule rule = resolveRule(request);
+    if (rule == null) {
       filterChain.doFilter(request, response);
       return;
     }
 
-    String path = request.getRequestURI();
-    String method = request.getMethod();
     String principal = resolvePrincipal(request);
-    String key = "api:" + principal + "|" + method + "|" + path;
+    String key = "api:" + principal + "|" + rule.bucket();
 
-    if (rateLimitService.isRateLimited(key, limit, Duration.ofMillis(WINDOW_MILLIS))) {
+    if (rateLimitService.isRateLimited(key, rule.limit(), Duration.ofMillis(WINDOW_MILLIS))) {
       writeTooManyRequests(response);
       return;
     }
@@ -60,24 +59,27 @@ public class ApiRateLimitFilter extends OncePerRequestFilter {
     filterChain.doFilter(request, response);
   }
 
-  private int resolveLimit(HttpServletRequest request) {
+  private RateLimitRule resolveRule(HttpServletRequest request) {
     String path = request.getRequestURI();
     String method = request.getMethod();
 
     if ("/api/cart".equals(path) && "GET".equalsIgnoreCase(method)) {
-      return CART_GET_LIMIT;
+      return new RateLimitRule("cart:read", CART_GET_LIMIT);
     }
     if (path.startsWith("/api/cart") && !"GET".equalsIgnoreCase(method)) {
-      return CART_MUTATION_LIMIT;
+      return new RateLimitRule("cart:write", CART_MUTATION_LIMIT);
     }
     if ("/api/orders/place".equals(path) && "POST".equalsIgnoreCase(method)) {
-      return ORDER_PLACE_LIMIT;
+      return new RateLimitRule("order:place", ORDER_PLACE_LIMIT);
     }
     if ("/api/order/submit-order".equals(path) && "POST".equalsIgnoreCase(method)) {
-      return ORDER_PAYMENT_LIMIT;
+      return new RateLimitRule("order:payment", ORDER_PAYMENT_LIMIT);
+    }
+    if (path.startsWith("/api/chat")) {
+      return new RateLimitRule("chat:general", CHAT_LIMIT);
     }
 
-    return 0;
+    return null;
   }
 
   private String resolvePrincipal(HttpServletRequest request) {
@@ -103,4 +105,6 @@ public class ApiRateLimitFilter extends OncePerRequestFilter {
             "message", "Too many requests. Please try again in a moment.",
             "timestamp", Instant.now().toString()));
   }
+
+  private record RateLimitRule(String bucket, int limit) {}
 }
