@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="/css/contact.css">
     <link rel="stylesheet" href="/css/footer.css">
     <link rel="stylesheet" href="/css/contact.css">
+    <link rel="stylesheet" href="/css/chat-widget.css">
     <layout:fragment name="header">
     </layout:fragment>
 </head>
@@ -285,6 +286,26 @@
     </div>
 </footer>
 <!-- end footer -->
+    <button id="ai-chat-fab" class="ai-chat-fab" type="button" aria-label="Open AI chat">AI</button>
+    <section id="ai-chat-panel" class="ai-chat-panel" aria-label="AI Chat">
+        <div class="ai-chat-header">
+            <div>
+                <p class="ai-chat-title">Tro ly Makeup AI</p>
+                <p class="ai-chat-subtitle">Tu van nhanh makeup va cosplay</p>
+            </div>
+            <button id="ai-chat-close" class="ai-chat-close" type="button" aria-label="Close chat">x</button>
+        </div>
+        <div id="ai-chat-messages" class="ai-chat-messages">
+            <div class="ai-chat-row bot">
+                <div class="ai-chat-bubble">Xin chao! Ban can tu van makeup, dat lich hay don cosplay?</div>
+            </div>
+        </div>
+        <form id="ai-chat-form" class="ai-chat-form">
+            <input id="ai-chat-input" class="ai-chat-input" type="text" placeholder="Nhap cau hoi..." autocomplete="off" />
+            <button id="ai-chat-send" class="ai-chat-send" type="submit">Gui</button>
+        </form>
+    </section>
+
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA8eaHt9Dh5H57Zh0xVTqxVdBFCvFMqFjQ&callback=initMap"></script>
     <script>
         document.getElementById('date').min = new Date().toISOString().split('T')[0];
@@ -339,6 +360,8 @@
             });
         }
     </script>
+
+    <script src="/js/service/chat-widget.js"></script>
 
     <div th:replace="~{:: js}"></div>
 
