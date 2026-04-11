@@ -24,6 +24,9 @@ public class AuthApiRestController {
   @Value("${cookie.maxAge}")
   private int cookieMaxAge;
 
+  @Value("${cookie.secure:false}")
+  private boolean cookieSecure;
+
   private final IAccountService accountService;
   private final IRefreshTokenService refreshTokenService;
 
@@ -64,7 +67,7 @@ public class AuthApiRestController {
   private void setAuthCookie(HttpServletResponse response, String name, String token) {
     Cookie cookie = new Cookie(name, token);
     cookie.setHttpOnly(true);
-    cookie.setSecure(false);
+    cookie.setSecure(cookieSecure);
     cookie.setPath("/");
     cookie.setMaxAge(cookieMaxAge);
     cookie.setAttribute("SameSite", "Strict");

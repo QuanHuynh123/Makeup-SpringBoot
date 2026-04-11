@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
@@ -17,6 +18,9 @@ import org.springframework.stereotype.Component;
 public class CustomLogoutHandler implements LogoutHandler {
 
   private final RefreshTokenService refreshTokenService;
+
+  @Value("${cookie.secure:false}")
+  private boolean cookieSecure;
 
   @Override
   public void logout(
@@ -51,9 +55,10 @@ public class CustomLogoutHandler implements LogoutHandler {
   private void clearCookie(HttpServletResponse response, String name) {
     Cookie cookie = new Cookie(name, null);
     cookie.setHttpOnly(true);
-    cookie.setSecure(true); // nếu deploy HTTPS
+    cookie.setSecure(cookieSecure);
     cookie.setPath("/");
     cookie.setMaxAge(0);
+    cookie.setAttribute("SameSite", "Strict");
     response.addCookie(cookie);
   }
 }

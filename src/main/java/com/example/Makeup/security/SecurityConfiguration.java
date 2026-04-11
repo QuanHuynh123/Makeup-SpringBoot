@@ -37,6 +37,7 @@ public class SecurityConfiguration {
     "/vnpay-payment-return",
     "/static/**", "/js/**", "/css/**", "/icon/**", "/images/**", "/fonts/**",
     "/api/appointments/create", "/api/appointments/by-date/**",
+    "/api/chat/**",
     "/api/category/**",
     "/swagger-ui/**", "/swagger-ui.html", "/v3/api-docs/**"
 };
